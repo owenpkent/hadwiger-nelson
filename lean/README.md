@@ -4,7 +4,16 @@ Formal verification skeleton for Hadwiger-Nelson results.
 
 ## Status
 
-Not initialized. The zeta-function repo's `lean/` directory has a working Phase 1 substrate (Lean 4.13.0 + Mathlib v4.13.0) that can be cloned as a starting point.
+Skeleton landed 2026-05-25. Mirrors the zeta-function repo's Phase 1 substrate (Lean 4.13.0 + Mathlib v4.13.0).
+
+Files:
+- `lean-toolchain`, `lakefile.lean` Mathlib v4.13.0 pin
+- `HadwigerNelson.lean` library root, imports all submodules
+- `HadwigerNelson/Basic.lean` `unitDistanceGraph`, `planeUnitDistanceGraph`, `chromaticNumberOfPlane`, statements of `DeGreyLowerBound` and `IsbellUpperBound`
+- `HadwigerNelson/MoserSpindle.lean` stub for HN-2; placeholder `moserSpindle` graph
+- `HadwigerNelson/Controls.lean` Q^2, L^infty, R^1 wrong-approach controls
+
+Not yet built. Requires `elan` to be installed; see Bootstrap below.
 
 ## Planned targets
 
@@ -19,14 +28,17 @@ Not initialized. The zeta-function repo's `lean/` directory has a working Phase 
 
 ## Bootstrap
 
-When ready:
+The lakefile and skeleton are committed. To build for the first time:
 
 ```powershell
+# Install elan (one-time, Windows):
+#   https://github.com/leanprover/elan/blob/master/README.md#windows
+# Then:
 cd lean
-elan default leanprover/lean4:v4.13.0
-lake init HadwigerNelson
-lake update
-lake build
+lake update    # fetches Mathlib v4.13.0 + transitive deps (slow, ~10 min)
+lake build     # compiles HadwigerNelson against Mathlib
 ```
 
-Mirror the zeta-function repo's lakefile and Mathlib pin.
+The first `lake build` after `lake update` downloads Mathlib's prebuilt cache (`lake exe cache get`) if available; otherwise it compiles Mathlib from source (hours). Use the cache when possible.
+
+The current Lean files compile only after `lake build` has finished. Until then, IDE features (lake-server) will show import errors.
