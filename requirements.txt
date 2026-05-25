@@ -1,0 +1,8 @@
+numpy
+scipy
+sympy
+matplotlib
+networkx
+python-sat
+cvxpy
+manim

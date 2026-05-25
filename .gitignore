@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Experiment artifacts
+experiments/**/_cache/
+experiments/**/*.png
+experiments/**/*.pdf
+experiments/**/*.cnf
+experiments/**/*.dimacs
+
+# Lean
+lean/build/
+lean/.lake/
+lean/lake-packages/
+lean/lakefile.olean
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Local config
+.env
