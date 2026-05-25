@@ -48,8 +48,9 @@ open SimpleGraph
 
 /-- Placeholder: the abstract Moser spindle as an unlabeled graph on `Fin 7`.
 
-    Currently a stub. VERIFIER target HN-2 fills this in. -/
-def moserSpindle : SimpleGraph (Fin 7) := SimpleGraph.emptyGraph (Fin 7)
+    Currently the empty graph on 7 vertices (`⊥` in the SimpleGraph lattice).
+    VERIFIER target HN-2 fills this in with the actual 11-edge structure. -/
+def moserSpindle : SimpleGraph (Fin 7) := (⊥ : SimpleGraph (Fin 7))
 
 /-- Placeholder statement: the Moser spindle is 4-chromatic. -/
 def MoserSpindleIsFourChromatic : Prop :=

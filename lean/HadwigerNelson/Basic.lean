@@ -34,13 +34,13 @@ def unitDistanceGraph (α : Type*) [PseudoMetricSpace α] : SimpleGraph α :=
 lemma unitDistanceGraph_adj {α : Type*} [PseudoMetricSpace α] {x y : α} :
     (unitDistanceGraph α).Adj x y ↔ x ≠ y ∧ dist x y = 1 := by
   unfold unitDistanceGraph
-  simp [SimpleGraph.fromRel_adj]
+  rw [SimpleGraph.fromRel_adj]
   constructor
-  · rintro ⟨hne, hxy | hyx⟩
-    · exact ⟨hne, hxy⟩
-    · exact ⟨hne, by rw [dist_comm]; exact hyx⟩
-  · rintro ⟨hne, hxy⟩
-    exact ⟨hne, Or.inl hxy⟩
+  · rintro ⟨hne, h | h⟩
+    · exact ⟨hne, h⟩
+    · exact ⟨hne, by rwa [dist_comm] at h⟩
+  · rintro ⟨hne, h⟩
+    exact ⟨hne, Or.inl h⟩
 
 /-! ### The Euclidean plane and the Hadwiger-Nelson chromatic number. -/
 
@@ -48,8 +48,9 @@ lemma unitDistanceGraph_adj {α : Type*} [PseudoMetricSpace α] {x y : α} :
     `EuclideanSpace ℝ (Fin 2)` to get the standard Euclidean norm. -/
 abbrev EuclideanPlane : Type := EuclideanSpace ℝ (Fin 2)
 
-/-- The unit-distance graph on the Euclidean plane. -/
-def planeUnitDistanceGraph : SimpleGraph EuclideanPlane :=
+/-- The unit-distance graph on the Euclidean plane.
+    Marked `noncomputable` because `dist` on `EuclideanSpace ℝ` involves `Real.sqrt`. -/
+noncomputable def planeUnitDistanceGraph : SimpleGraph EuclideanPlane :=
   unitDistanceGraph EuclideanPlane
 
 /-- The chromatic number of the plane, χ(ℝ²). The Hadwiger-Nelson problem
