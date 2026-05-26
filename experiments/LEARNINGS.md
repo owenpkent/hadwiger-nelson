@@ -415,4 +415,43 @@ The Moser-spindle IE-LP at 0.2829 is *tighter* than the trivial fractional bound
 
 ---
 
+### L13. Greedy beam search over IE-LP configurations from a Polymath 510 pool drops $m_1(\mathbb{R}^2)$ from 0.280 to 0.2595 in eight steps from a 7-vertex hex seed
+
+**Architecture**: 3. Continues e3g (Ambrus IE-LP framework), addressing the "beam search" step.
+
+**Experiment**: [`e3h_ambrus_beam_search.py`](fractional/e3h_ambrus_beam_search.py).
+
+**Setup**. Candidate pool: the 510 vertices of the Polymath 510 graph (5-chromatic, in $\mathbb{Q}(\sqrt 3, \sqrt{11})$). Seed: first 7 vertices, the hexagonal lattice (1 origin + 6 unit-distance neighbors), giving $m_1 \leq 0.280044$ in IE-LP. Beam width: 1 (greedy). At each step, evaluate every pool vertex as a candidate addition and keep the one with smallest $m_1$ from IE-LP.
+
+**Progression**:
+
+| Step | Config size | Edges | Indep sets | $m_1 \leq$ | Improvement | Step time |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 7 | 12 | 19 | 0.280044 | (seed) | — |
+| 1 | 8 | 12 | 38 | 0.272367 | $-$0.0077 | 20 s |
+| 2 | 9 | 13 | 66 | 0.270806 | $-$0.0016 | 27 s |
+| 3 | 10 | 13 | 132 | 0.269840 | $-$0.0010 | 36 s |
+| 4 | 11 | 13 | 264 | 0.268224 | $-$0.0016 | 47 s |
+| 5 | 12 | 13 | 528 | 0.266282 | $-$0.0019 | 65 s |
+| 6 | 13 | 14 | 912 | 0.263264 | $-$0.0030 | 86 s |
+| 7 | 14 | 14 | 1818 | 0.260858 | $-$0.0024 | 138 s |
+| 8 | 15 | 14 | 3587 | **0.259544** | $-$0.0014 | 273 s |
+
+The 15-vertex result beats OFV 2010 (0.2684) by 0.009 and e3e's translation-sweep Moser-LP (0.2619) by 0.0024. It is approximately equal to KMOR 2015's published 0.2588 (the difference of $0.0007$ at this step count is within the search horizon's grasp). Reaching Ambrus 2023's 0.2470 would need additional steps with corresponding indep-set growth.
+
+**Computational scaling**. Indep set count roughly doubles per step: 19 $\to$ 38 $\to$ 66 $\to$ 132 $\to$ 264 $\to$ 528 $\to$ 912 $\to$ 1818 $\to$ 3587. Step times scale linearly with $K \cdot |\text{pool}|$, so step $k$ time roughly doubles. Step 9 projected ~9 min; step 10 ~18 min; step 13 ~2 h; reaching size 23 estimated ~10 hours of compute. The greedy single-candidate evaluation is the bottleneck (we re-solve the LP for every pool point at every step). Parallelization across candidates would cut step time linearly.
+
+**Why this works at all**. The IE-LP has more degrees of freedom than the OFV simplex LP: each independent set contributes one atom variable, and each pair of vertices contributes one (ie2) constraint linking that pair's atom sum to the autocorrelation $f$ at the pair's distance. As the configuration grows, the LP's effective coverage of distinct distances and independence structures increases. The hexagonal lattice seed provides a high-symmetry base; adding Polymath 510 vertices introduces new distances and new constraint patterns. Greedy selection picks the addition that most tightens the LP at each step.
+
+**What's open / future work**:
+
+1. **Beam width $\geq 2$**: greedy can get stuck at local optima; keeping top-$K$ partial solutions and forking would explore more of the search space.
+2. **Constructive candidate pool**: instead of Polymath 510, generate candidates dynamically as unit-distance neighbors of current configuration vertices in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ rotations.
+3. **Local search / removal**: after greedy build, try swapping individual vertices to see if a different choice yields a smaller bound.
+4. **Parallelization**: the LP evaluations at a single step are embarrassingly parallel.
+
+**Wrong-approach status**: same as L12 (rotation-invariant Bessel basis, Euclidean geometry, does not transfer to $L^\infty$ / $\mathbb{Q}^2$).
+
+---
+
 (no further entries yet; this is a young repository.)
