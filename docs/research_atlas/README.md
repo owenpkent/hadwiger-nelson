@@ -41,10 +41,13 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 | Variant | Definition | Status |
 |---------|------------|--------|
 | $\chi(\mathbb{R}^2)$ | full chromatic number, AC available | $5 \leq \chi \leq 7$ |
-| $\chi_m(\mathbb{R}^2)$ | **measurable** chromatic number: color classes must be Lebesgue-measurable | $5 \leq \chi_m$; recent: $\chi_m \geq 6$ |
-| $\chi_f(\mathbb{R}^2)$ | **fractional** chromatic number | $\chi_f \geq 3.6\ldots$ (Cranston-Rabern) |
+| $\chi_m(\mathbb{R}^2)$ | **measurable** chromatic number: color classes must be Lebesgue-measurable | $5 \leq \chi_m$ (Falconer 1981, **no improvement in 45 years**); see arch2 dossier |
+| $m_1(\mathbb{R}^2)$ | density of largest measurable unit-distance-avoiding set; $\chi_m \geq 1/m_1$ | $m_1 \leq 0.2470$ (Ambrus-Csiszárik-Matolcsi-Varga-Zsámboki 2023), settling Erdős's conjecture |
+| $\chi_f(\mathbb{R}^2)$ | **fractional** chromatic number | $\chi_f \geq 4$ (Matolcsi-Ruzsa-Varga-Zsámboki 2023, arXiv:2311.10069); previously $\geq 3.6$ (Cranston-Rabern) |
 | $\chi_B(\mathbb{R}^2)$ | **Borel** chromatic number: color classes Borel | open; sits between $\chi_m$ and $\chi$ |
 | $\chi(\mathbb{R}^2)$ in ZF + DC | without full Choice | **Shelah-Soifer**: can differ from ZFC value |
+| $\chi_m(\mathbb{H}^2(d))$ | measurable, hyperbolic plane, edge distance $d$ | $\geq 6$ for $d \geq 12$ (DeCorte-Golubev 2018). *Does not transfer to $\mathbb{R}^2$* |
+| $\chi$ for convex-tile colorings | color classes are convex polygons of bounded area | $\geq 6$ (Coulson 2002, Townsend-Woodall). Strictly stronger restriction than Lebesgue-measurable |
 
 ## Four candidate proof architectures
 
@@ -66,13 +69,15 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 
 **Goal**: prove lower bounds on $\chi_m(\mathbb{R}^2)$, then either (a) prove $\chi_m = \chi$ under reasonable axioms, or (b) push $\chi_m \geq 6$ or $\geq 7$.
 
-**Lineage**: Falconer 1981 ($\chi_m \geq 5$) $\to$ Bukh, Soifer expositions $\to$ Fourier / autocorrelation bounds $\to$ recent $\chi_m \geq 6$ refinements.
+**Lineage**: Falconer 1981 ($\chi_m \geq 5$) $\to$ Bukh, Soifer expositions $\to$ Fourier / autocorrelation $\to$ Oliveira Filho-Vallentin LP bounds on $m_1(\mathbb{R}^2)$ $\to$ Bachoc-Nebe-Oliveira Filho-Vallentin generalized Lovász $\vartheta$ SDP $\to$ Ambrus-Csiszárik-Matolcsi-Varga-Zsámboki 2023 ($m_1 < 1/4$).
 
-**Tools**: Lebesgue measure on $\mathbb{R}^2$; autocorrelation of indicator functions of color classes; Fourier transform on $\mathbb{R}^2$ and the rotation group $O(2)$; harmonic analysis on the Heisenberg group has been explored.
+**Tools**: Lebesgue density theorem on color classes; autocorrelation of indicator functions; Fourier transform on $\mathbb{R}^2$ and the rotation group $O(2)$; generalized Lovász $\vartheta$ SDP via Jacobi polynomials; LP bounds on $m_1(\mathbb{R}^2)$ via the OFV / AC-MV-Z chain.
 
 **Wrong-approach test**: must use the 2D rotation group, not just dimension; must not reduce to $\mathbb{R}^1$ (where $\chi = 2$ trivially). Measure-zero issues mean this architecture is exempt from the $\mathbb{Q}^2$ test.
 
-**Status**: active. $\chi_m \geq 6$ is recent; the gap to $\chi(\mathbb{R}^2)$ remains.
+**Status**: $\chi_m(\mathbb{R}^2) \geq 5$ since Falconer 1981, **no improvement in 45 years**. The widely-cited "$\chi_m \geq 6$" results live in the hyperbolic plane or in restricted-region variants, not in the canonical $\mathbb{R}^2$. **Cross-architecture coupling** (see LEARNINGS L4): the obstruction to pushing Falconer's $\chi_m \geq 5$ to $\chi_m \geq 6$ is at the lemma level the same as the obstruction to $\chi \geq 6$ in Architecture 1, namely the missing 6-chromatic finite UDG.
+
+**Deep dive**: [`arch2_measurable_lineage.md`](arch2_measurable_lineage.md).
 
 ### Architecture 3: Fractional / Lovász $\vartheta$ / spectral
 

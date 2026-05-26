@@ -52,14 +52,27 @@ In particular, for $\lVert t \rVert = 1$ this gives $0 = 1$, a contradiction. Do
 
 Falconer's original published proof (J. Combin. Theory A 31, 1981) goes through an *autocorrelation-on-the-Fourier-side* refinement that is robust to the density issues. Bukh has expository notes that streamline the argument.
 
-## The push to $\chi_m \geq 6$ (recent)
+## The (non-)push to $\chi_m \geq 6$
 
-Improvements after Falconer used:
-- Spherical harmonic decompositions of the autocorrelation.
-- Higher-order density bounds via the Selberg sieve adapted to $\mathbb{R}^2$.
-- Connections to fractional chromatic numbers and Lovász $\vartheta$.
+There is no published improvement to $\chi_m(\mathbb{R}^2) \geq 5$ since Falconer 1981 (45 years). The Architecture 2 dossier ([`arch2_measurable_lineage.md`](../research_atlas/arch2_measurable_lineage.md)) traces three groups of post-Falconer results that are sometimes mis-cited as "$\chi_m \geq 6$":
 
-The bound $\chi_m \geq 6$ is recent. Anchors and exact references will be filled in by the Architecture 2 SURVEYOR dossier (forthcoming as [`arch2_measurable_lineage.md`](../research_atlas/arch2_measurable_lineage.md)).
+1. **Hyperbolic plane** (DeCorte-Golubev 2018, [arXiv:1708.01081](https://arxiv.org/abs/1708.01081)): $\chi_m(\mathbb{H}^2(d)) \geq 6$ for sufficiently large edge distance $d$ ($d \geq 12$). Method: spectral / Lovász $\vartheta$ on the noncompact symmetric space $\mathrm{PSL}_2(\mathbb{R}) / \mathrm{SO}(2)$, using exponential volume growth. Does not transfer to $\mathbb{R}^2$, which has polynomial growth.
+
+2. **Convex-tile colorings** (Coulson 2002, Townsend-Woodall earlier): if color classes are required to be convex polygons of bounded-away-from-zero area, then $\geq 6$ colors are needed. The measurable category is strictly broader (color classes can be fractal, non-tiling, density-irregular), so this does not imply a measurable lower bound.
+
+3. **Map-type colorings** (Townsend 1981, recent 2025 extension): tile-based / map-type colorings cannot achieve 5. Same strict-restriction issue as (2).
+
+What progress has been made on the measurable side is via the *density* of largest unit-distance-avoiding sets: $m_1(\mathbb{R}^2) \leq 0.2470$ (Ambrus-Csiszárik-Matolcsi-Varga-Zsámboki 2023, [arXiv:2207.14179](https://arxiv.org/abs/2207.14179)), settling Erdős's conjecture. This gives $\chi_m \geq 1/m_1 \geq 5$, recovering Falconer's bound by a different route. To force $\chi_m \geq 6$ via this bridge, one would need $m_1 < 1/5 = 0.200$, which no published method approaches.
+
+## Cross-architecture coupling: why $\chi_m$ and $\chi$ stall together
+
+Falconer's proof at Step 3 needs a *rigid finite Euclidean configuration that is at least 5-chromatic as a UDG in $\mathbb{R}^2$*. To push to $\chi_m \geq 6$, the analogous step would need a *6-chromatic finite UDG in $\mathbb{R}^2$*.
+
+But no such object is known. Architecture 1 has been searching since de Grey 2018; the Polymath16 / Heule / Parts lineage has only produced 5-chromatic graphs (the record-holder Parts 2020 at 509 vertices). The obstruction to $\chi_m \geq 6$ in Architecture 2 is structurally **the same** as the obstruction to $\chi \geq 6$ in Architecture 1: both architectures need a 6-chromatic finite UDG, and the measure-theoretic machinery does not manufacture one.
+
+This is the strongest known cross-architectural coupling in HN. Resolving it would require either (a) finding a 6-chromatic finite UDG (Architecture 1 success), or (b) finding an independent route via $m_1 < 1/5$ density bounds (Architecture 2/3 success, no current method approaches this).
+
+See [`LEARNINGS.md`](../../experiments/LEARNINGS.md) L4.
 
 ## Why $\chi_m$ can differ from $\chi$ (in principle)
 
