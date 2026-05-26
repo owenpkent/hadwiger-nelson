@@ -355,4 +355,64 @@ The graph is therefore the disjoint union (modulo central-vertex identification)
 
 ---
 
+### L12. Ambrus 2023 m_1 <= 0.247 uses inclusion-exclusion atom LP, NOT the Bachoc-Vallentin 2-particle SDP
+
+**Architecture**: 3. Surveyor-style structural reading of two primary sources (Bachoc-Nebe-OFV 2009 + Ambrus et al. 2023) plus implementation framework.
+
+**Experiment**: [`e3g_ambrus_ie_lp.py`](fractional/e3g_ambrus_ie_lp.py).
+
+**Headline correction to my Shot 5 framing**. The Bachoc-Nebe-Oliveira Filho-Vallentin 2009 paper (arXiv:0801.1059) develops a 2-particle SDP via Lovász-theta generalization to compact metric spaces (sphere $S^{n-1}$). At $n = 2$ (Hadwiger-Nelson plane) their SDP reduces to the same Bessel-LP we already implement: BNOFV section 6 page 7 explicitly states "for $n = 2, \ldots, 8$ our bounds are worse than the existing ones." The 2-particle SDP is *only* helpful in high dimensions $n \geq 10$ where the Jacobi-polynomial expansion adds non-trivial structure beyond the 1-particle Hankel basis. **The BV SDP is the wrong target for HN.**
+
+**What Ambrus 2023 actually does**. Their bound $m_1(\mathbb{R}^2) \leq 0.2470$ uses an *inclusion-exclusion atom LP* (Lemma 1 of arXiv:2207.14179):
+
+For finite configuration $X = \{x_1, \ldots, x_n\} \subset \mathbb{R}^2$, define atoms
+
+  $a_X(\varepsilon) = \delta\left( \bigcap_{i: \varepsilon_i = +1} (A - x_i) \cap \bigcap_{i: \varepsilon_i = -1} (A - x_i)^c \right)$
+
+for each $\varepsilon \in \{+1, -1\}^n$. Constraints:
+- $a_X(\varepsilon) \geq 0$;
+- $a_X(\varepsilon) = 0$ if $\{x_i : \varepsilon_i = +1\}$ contains two points at unit distance;
+- $\sum_\varepsilon a_X(\varepsilon) = 1$;
+- $\sum_{\varepsilon : \varepsilon_i = +1} a_X(\varepsilon) = \delta(A)$ for each $i$;
+- $\sum_{\varepsilon : \varepsilon_i = \varepsilon_j = +1} a_X(\varepsilon) = f(x_i - x_j)$ for each pair.
+
+Combined with the Bochner-positive-definite $f(r) = \int J_0(2 \pi r s)\, d\nu(s)$, $\nu \geq 0$, and $f(1) = 0$, this is a 1-particle LP whose maximum value of $\delta(A)$ upper-bounds $m_1$.
+
+The lineage of bounds via this method:
+- Székely 1984: $m_1 \leq 12/43 \approx 0.279$ (using 3 point sets).
+- OFV 2010: $m_1 \leq 0.2684$ (3 regular triangles).
+- KMOR 2015: $m_1 \leq 0.2588$ (more subtle constraints).
+- Ambrus-Matolcsi 2022: $m_1 \leq 0.2544$ (triple correlations).
+- Ambrus-CMVZ 2023: $m_1 \leq 0.2470$ (23-point configuration found by beam search).
+
+The improvement comes entirely from *richer point configurations* in the inclusion-exclusion framework. NOT from a higher-particle SDP.
+
+**Implementation**. e3g implements the IE-LP framework with CVXPY + HiGHS. Tested on three configurations:
+
+| Configuration | $n$ | edges | indep sets | $m_1 \leq$ | $\chi_m \geq$ (real) |
+|---|---:|---:|---:|---:|---:|
+| Moser spindle | 7 | 11 | 18 | 0.2829 | 3.535 |
+| Hex lattice 1 layer | 7 | 12 | 19 | 0.2799 | 3.573 |
+| Moser + hexagon | 11 | 20 | 99 | 0.2719 | 3.678 |
+| Hex lattice 2 layers | 19 | 42 | 1425 | 0.2758 | 3.626 |
+| Hex lattice 3 layers | 37 | 90 | $\approx 8 \times 10^5$ | (LP intractable) | — |
+
+The Moser-spindle IE-LP at 0.2829 is *tighter* than the trivial fractional bound $\alpha/N = 2/7 = 0.2857$, but looser than OFV's 3-triangle LP at 0.2684 (which uses three different sub-configurations) and looser than e3e's Moser-at-translations 0.2619.
+
+**Why e3g doesn't immediately match e3e**:
+
+- e3e applies the Moser inequality at *many translations*, contributing many independent constraints to the LP.
+- e3g applies inclusion-exclusion at a *single fixed configuration*, with translation-invariance built in (configuration shift doesn't change inequalities).
+- The "many-translation" gain in e3e comes from sampling the autocorrelation $f$ at many distances; e3g must cover the same distances through the chosen configuration's *pairwise distances*. Smaller configurations cover fewer distances → looser bound.
+
+**Path to 0.247 in this framework**. Without the explicit Ambrus 23-point coordinates (PDF returned binary-only on WebFetch), the next step is *beam search*: for each candidate configuration of $n = 15$-$25$ points, build the IE-LP, solve, and select greedily. Ambrus et al. spent considerable compute on this search. Future BUILDER work should focus on:
+
+1. Implementing beam search over configurations starting from Moser+hex (11 pts, 0.272).
+2. Including translation orbits of small configurations to combine with the IE-LP atoms.
+3. Reaching out to Ambrus et al. for their 23-point coordinates or a public configuration repository.
+
+**Wrong-approach status**: the IE-LP framework uses only 2D Euclidean geometry (point distances) and the rotation group (via Bessel basis for $f$). It respects rotation invariance and does not transfer to $L^\infty$ or $\mathbb{Q}^2$. Detector passes.
+
+---
+
 (no further entries yet; this is a young repository.)

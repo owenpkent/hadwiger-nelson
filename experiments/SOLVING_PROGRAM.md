@@ -1,4 +1,4 @@
-# Solving Program
+            # Solving Program
 
 Long-range program for substantive contributions to the Hadwiger-Nelson problem.
 
@@ -117,7 +117,8 @@ Find this object once, three barriers collapse.
 | 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | framework built; orbit-only negative (L11) | months |
 | 3 | Ambrus 23-point reproduction | deferred | days |
 | 4 | Lean formalization of de Grey | not started | ~6 months |
-| 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | not started | weeks |
+| 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | reframed: BV-SDP no help at n=2 (L12) | — |
+| 5' | Ambrus IE-LP framework + beam search | implemented (e3g); beam search for 0.247 needed | weeks |
 | 6 | Custom radially-clustered 5-chromatic UDG search | not started | research-grade open |
 
 Update this document after each major milestone.
