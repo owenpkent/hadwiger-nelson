@@ -71,6 +71,7 @@ The experimental thread is organized around the same four-architecture framework
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |
-| e3a fractional small | 3 | not started |
-| e3b Lovász $\vartheta$ | 3 | not started |
+| e3a fractional small | 3 | not started (subsumed by e3a Lovász theta below) |
+| e3a Lovász $\vartheta$ on Polymath16 510 | 3 | done; $\vartheta = 170.24$, loose chi >= 3 (LEARNINGS L5) |
+| e3b Lovász $\vartheta$ | 3 | superseded by e3a above |
 | e3c Bochner continuous | 3 | not started |

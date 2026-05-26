@@ -29,9 +29,10 @@ Task tracker for the Hadwiger-Nelson research repo.
 
 ## Architecture 3: Fractional / Lovász theta
 
-- [ ] Survey: Cranston-Rabern fractional chromatic bounds
-- [ ] Compute chi_f on small UDGs via LP
-- [ ] Explore Lovász theta on graph powers of UDGs
+- [ ] Survey: Cranston-Rabern fractional chromatic bounds + Matolcsi-Ruzsa-Varga-Zsámboki 2023 (chi_f >= 4)
+- [x] Compute Lovász theta on Polymath16 510: theta = 170.24, loose chi >= 3 only (LEARNINGS L5)
+- [ ] Implement OFV / BNOFV rotation-invariant SDP framework (the right relaxation per L5)
+- [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP
 
 ## Architecture 4: Set-theoretic / axiomatic
 
