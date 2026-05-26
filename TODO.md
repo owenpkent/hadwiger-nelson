@@ -11,7 +11,7 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Implement `experiments/_shared/wrong_approach_detectors.py` Q^2 + L-infinity controls
 - [x] Implement `experiments/_shared/smoke_test.py` sanity check on Moser spindle and small UDGs
 - [x] Write `experiments/combinatorial/e1a_moser_spindle.py` verify chi(Moser) = 4 via SAT (cadical195 + glucose4 agree)
-- [x] Write `experiments/combinatorial/e1b_de_grey_skeleton.py` cadical195 + glucose4 agree on UNSAT for 510 / 517 / 529 / 553 / 826; 1585 in progress
+- [x] Write `experiments/combinatorial/e1b_de_grey_skeleton.py` cadical195 + glucose4 agree on UNSAT for 510 / 517 / 529 / 553 / 826 / 1585 (the original de Grey 2018 graph)
 
 ## Architecture 1: Combinatorial / UDG
 

@@ -55,6 +55,7 @@ Format: one entry per finding. Lead with the finding, then context.
 | Heule G8 | Heule 2018 | 529 | 2670 | 82 s | 119 s |
 | Heule G7 (SBP) | Heule 2018 | 553 | 2722 | 2 s | 2 s |
 | Heule intermediate | Heule 2018 | 826 | 4273 | 279 s | 805 s |
+| **de Grey original** | de Grey 2018 | 1585 | 7909 | **5531 s** | **6456 s** |
 
 Symmetry-breaking predicates (the `-sbp` variants) give 10-100× speedup. The 510 case is run without SBP (no pre-built CNF was provided in the repo) and still finishes in ~2 minutes.
 

@@ -65,7 +65,7 @@ The experimental thread is organized around the same four-architecture framework
 | Experiment | Architecture | Status |
 |------------|--------------|--------|
 | e1a Moser spindle | 1 | done (cadical195 + glucose4 agree on chi = 4) |
-| e1b de Grey skeleton | 1 | done for 510/517/553/826 (cadical195 + glucose4 agree on UNSAT); 1585 in progress |
+| e1b de Grey skeleton | 1 | done for 510/517/529/553/826/1585 (cadical195 + glucose4 agree on UNSAT across all six, including the original de Grey 2018 graph) |
 | e1c Polymath16 smallest | 1 | not started |
 | e1d $\chi \geq 6$ search | 1 | not started |
 | e2a Falconer baseline | 2 | not started |

@@ -11,7 +11,7 @@ A research-and-study project on the **chromatic number of the plane**: the small
 
 | Architecture | Thread | Current state |
 |--------------|--------|---------------|
-| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826 |
+| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826/1585 including the original de Grey graph |
 | 2. Measurable / spectral | Falconer 1981; recent autocorrelation bounds | not yet started |
 | 3. Fractional / Lovász $\vartheta$ | Cranston-Rabern; spectral on Cayley graphs of $\mathbb{R}^2$ | not yet started |
 | 4. Set-theoretic / axiomatic | Shelah-Soifer phenomenon | not yet started |
@@ -20,7 +20,7 @@ A research-and-study project on the **chromatic number of the plane**: the small
 
 - **`4 ≤ chromaticNumberOfPlane`** — Lean theorem in [`lean/HadwigerNelson/MoserBridge.lean`](lean/HadwigerNelson/MoserBridge.lean). Full pipeline: explicit 11-edge Moser-spindle graph on `Fin 7` → SAT-witness 4-coloring + `native_decide` non-3-coloring → `chromaticNumber = 4` → graph homomorphism to `planeUnitDistanceGraph` via 7 explicit Euclidean coordinates with $\sqrt{3}, \sqrt{11}, \sqrt{33}$ → `chromaticNumber_le_of_forall_imp`.
 
-- **`χ ≥ 5` via multi-solver SAT** at the 510, 517, 529, 553, and 826-vertex graphs in the Polymath16 / Heule lineage. cadical195 + glucose4 independent agreement. See [`experiments/LEARNINGS.md`](experiments/LEARNINGS.md) L3.
+- **`χ ≥ 5` via multi-solver SAT** at six graphs in the Polymath16 / Heule / de Grey lineage: 510, 517, 529, 553, 826, and 1585 vertices (the last being the original de Grey 2018 graph that established `χ ≥ 5` historically). cadical195 + glucose4 independent agreement throughout. See [`experiments/LEARNINGS.md`](experiments/LEARNINGS.md) L3.
 
 ## Structure (mirrors the zeta-function research repo)
 
