@@ -38,4 +38,32 @@ Format: one entry per finding. Lead with the finding, then context.
 
 ---
 
+### L3. Multi-solver SAT agreement reproduces $\chi \geq 5$ at 510, 517, 553, 826 vertices
+
+**Architecture**: 1 (combinatorial / UDG).
+
+**Experiment(s)**: [`e1b_de_grey_skeleton.py`](combinatorial/e1b_de_grey_skeleton.py).
+
+**Source data**: the [marijnheule/CNP-SAT](https://github.com/marijnheule/CNP-SAT) GitHub repository (Polymath16 / Heule lineage, fetched in session 003) and Polymath16 Dropbox links (de Grey 1585).
+
+**Finding**: cadical195 and glucose4 both return UNSAT on the 4-coloring SAT instance for each of:
+
+| Graph | Source | Vertices | Edges | cadical195 | glucose4 |
+|-------|--------|---------:|------:|-----------:|---------:|
+| Polymath16 G11 | Parts 2019 | 510 | 2504 | 78 s | 111 s |
+| Heule G10 (SBP) | Heule 2019 | 517 | 2579 | 3 s | 3 s |
+| Heule G8 | Heule 2018 | 529 | 2670 | 82 s | 119 s |
+| Heule G7 (SBP) | Heule 2018 | 553 | 2722 | 2 s | 2 s |
+| Heule intermediate | Heule 2018 | 826 | 4273 | 279 s | 805 s |
+
+Symmetry-breaking predicates (the `-sbp` variants) give 10-100× speedup. The 510 case is run without SBP (no pre-built CNF was provided in the repo) and still finishes in ~2 minutes.
+
+**Why it matters**: two independent solver families agree on UNSAT for each graph. A SAT-solver soundness bug would need to corrupt both cadical (CDCL with chronological backtracking) and glucose (LBD-based CDCL with restart heuristic) in the same direction. Per the verifier discipline this is the strongest non-formal evidence available. Combined with formal verification of the Moser spindle in `lean/HadwigerNelson/`, the project now has end-to-end coverage of $\chi(\mathbb{R}^2) \geq 4$ formally and $\chi(\mathbb{R}^2) \geq 5$ via multi-solver SAT.
+
+**Wrong-approach status**: all four graphs have coordinates in $\mathbb{Q}(\sqrt{3}, \sqrt{11})$ (verified algebraically by the Singular scripts in `sources/cnp-sat/check/`). The $\mathbb{Q}^2$ detector therefore passes uniformly across the lineage.
+
+**Next**: de Grey 1585 is mid-run; pending. Future BUILDER experiments should focus on either (a) the field-theoretic search direction in L1, or (b) closing the gap to Parts 509 (not publicly available; would need to reproduce the minimization pipeline from the paper).
+
+---
+
 (no further entries yet; this is a young repository.)
