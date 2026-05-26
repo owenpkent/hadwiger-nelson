@@ -64,7 +64,7 @@ The experimental thread is organized around the same four-architecture framework
 
 | Experiment | Architecture | Status |
 |------------|--------------|--------|
-| e1a Moser spindle | 1 | not started |
+| e1a Moser spindle | 1 | done (cadical195 + glucose4 agree on chi = 4) |
 | e1b de Grey skeleton | 1 | not started |
 | e1c Polymath16 smallest | 1 | not started |
 | e1d $\chi \geq 6$ search | 1 | not started |

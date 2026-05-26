@@ -91,7 +91,7 @@ class UnitDistanceGraph:
         n = self.n
         for k in range(1, k_max + 1):
             cnf = CNF(from_string=self.to_dimacs(k))
-            with Solver(name="cadical", bootstrap_with=cnf.clauses) as s:
+            with Solver(name="cadical195", bootstrap_with=cnf.clauses) as s:
                 if s.solve():
                     model = s.get_model()
                     coloring = [None] * n
