@@ -48,7 +48,7 @@ The project now claims two flagship results from two independent verification pi
 
 ## Pending
 
-- **de Grey 1585 SAT**: running in background. Given the 826-vertex case took 805 s for glucose, 1585 may take an hour or more. Will be reported when done.
+- ~~**de Grey 1585 SAT**: running in background.~~ **Completed** (post-session): cadical 5531 s, glucose 6456 s, both UNSAT. Result integrated into LEARNINGS L3. See session 004 record.
 - **HN-4 in Lean**: still open. Requires either a DRAT-checker-in-Lean (so SAT certificates can be transferred to formal proofs) or a Lean-native enumerative argument. The Python certificates archived under `_cache/` are the inputs.
 - **Sub-509 UDG search** (per LEARNINGS L1 implication): no published progress since 2020. The CNP-SAT pipeline could be re-run with newer kissat variants and better unsat-core extraction.
 - **Field-theoretic search** (LEARNINGS L1): novel direction, designed but not implemented.
