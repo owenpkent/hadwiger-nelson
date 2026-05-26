@@ -64,15 +64,27 @@ Implementation: `experiments/_shared/wrong_approach_detectors.py`.
 ## Running
 
 ```powershell
-# Smoke test the shared infrastructure (once it exists)
-python -m experiments._shared.smoke_test
+# Install Python deps (once)
+pip install -r requirements.txt
 
-# Run an experiment
-python -m experiments.combinatorial.e1a_moser_spindle
+# Smoke test the shared infrastructure
+python -m experiments._shared.smoke_test
+#   expect: 6/6 tests passed (Moser spindle 7 vertices 11 edges; Q^2, L^infty, R^1 controls)
+
+# Build the Lean substrate (once elan is installed)
+cd lean
+lake exe cache get   # fetches Mathlib v4.13.0 oleans
+lake build           # 1859 modules
 ```
+
+The next planned experiment is `experiments/combinatorial/e1a_moser_spindle.py` (verify chi(Moser) = 4 via SAT). See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate.
+
+## Latest session
+
+See [`experiments/orchestrator_sessions/`](experiments/orchestrator_sessions/) for per-session ORCHESTRATOR records. Most recent: `session_001_bootstrap.md`.
 
 ## When in doubt
 
-- The atlas (`docs/research_atlas/README.md`) is the master reference.
-- The plan (`experiments/PROOF_ARCHITECTURES_PLAN.md`) tracks experimental status.
-- The wrong-approach detector ($\mathbb{Q}^2$ + $L^\infty$) is the structural sanity check.
+- The atlas ([`docs/research_atlas/README.md`](docs/research_atlas/README.md)) is the master reference.
+- The plan ([`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md)) tracks experimental status.
+- The wrong-approach detector ($\mathbb{Q}^2$ + $L^\infty$ + $\mathbb{R}^1$) is the structural sanity check.

@@ -41,15 +41,17 @@ Task tracker for the Hadwiger-Nelson research repo.
 
 - [x] Initialize `lean/` with lakefile + lean-toolchain mirroring zeta repo (v4.13.0 + Mathlib v4.13.0)
 - [x] Skeleton modules: `HadwigerNelson.Basic` (UDG type, chromatic number), `HadwigerNelson.MoserSpindle`, `HadwigerNelson.Controls`
-- [ ] Install elan on this Windows machine and run `lake update` + `lake build` to confirm the substrate compiles
-- [ ] Fill in HN-2 Moser spindle chi = 4 (replace stub with explicit vertices and proof)
-- [ ] Fill in HN-5 Q^2 chi = 2 (Woodall parity argument)
+- [x] `lake update` + `lake exe cache get` + `lake build` end-to-end (1859/1859 modules, commit 3b82e91)
+- [x] `unitDistanceGraph_adj` lemma proved (clean iff via `rw [SimpleGraph.fromRel_adj]` + dist_comm)
+- [ ] Fill in HN-2 Moser spindle chi = 4 (replace `(⊥ : SimpleGraph (Fin 7))` stub with explicit 11-edge graph and decide-based proof)
+- [ ] Fill in HN-5 Q^2 chi = 2 (Woodall parity argument; predicate already over ℚ so should be tractable)
 - [ ] Fill in HN-6 L^infty chi = 4 (Chilakamarri construction)
+- [ ] Bridge `moserSpindle` to `planeUnitDistanceGraph` via an injective graph homomorphism (needed to transfer chi >= 4 from finite to the plane)
 
 ## Cross-cutting
 
 - [x] Decide on agent role spec strategy: copy from zeta repo verbatim, or adapt (adapted)
 - [x] Six agent specs written under `.claude/agents/` (surveyor, builder, verifier, adversary, synthesizer, orchestrator)
-- [ ] Set up `orchestrator_sessions/` continuity protocol
+- [x] First session record landed at `experiments/orchestrator_sessions/session_001_bootstrap.md`
 - [x] Write `docs/research_atlas/README.md` master landscape
 - [x] Write `experiments/PROOF_ARCHITECTURES_PLAN.md`

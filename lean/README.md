@@ -4,41 +4,47 @@ Formal verification skeleton for Hadwiger-Nelson results.
 
 ## Status
 
-Skeleton landed 2026-05-25. Mirrors the zeta-function repo's Phase 1 substrate (Lean 4.13.0 + Mathlib v4.13.0).
+Skeleton landed and builds end-to-end 2026-05-25 (commit 3b82e91). Mirrors the zeta-function repo's Phase 1 substrate (Lean 4.13.0 + Mathlib v4.13.0).
 
 Files:
 - `lean-toolchain`, `lakefile.lean` Mathlib v4.13.0 pin
+- `lake-manifest.json` dependency lock (checked in)
 - `HadwigerNelson.lean` library root, imports all submodules
-- `HadwigerNelson/Basic.lean` `unitDistanceGraph`, `planeUnitDistanceGraph`, `chromaticNumberOfPlane`, statements of `DeGreyLowerBound` and `IsbellUpperBound`
-- `HadwigerNelson/MoserSpindle.lean` stub for HN-2; placeholder `moserSpindle` graph
-- `HadwigerNelson/Controls.lean` Q^2, L^infty, R^1 wrong-approach controls
+- `HadwigerNelson/Basic.lean` `unitDistanceGraph` (over any PseudoMetricSpace), `planeUnitDistanceGraph` (Euclidean), `chromaticNumberOfPlane`, statements of `DeGreyLowerBound` and `IsbellUpperBound`, and a proved `unitDistanceGraph_adj` simp lemma
+- `HadwigerNelson/MoserSpindle.lean` HN-2 stub; `moserSpindle = ⊥` placeholder
+- `HadwigerNelson/Controls.lean` Q^2, L^infty, R^1 wrong-approach controls; each defined directly via `SimpleGraph.fromRel` on an explicit edge predicate (Q^2 edge predicate stays in ℚ, no `Real.sqrt`)
 
-Not yet built. Requires `elan` to be installed; see Bootstrap below.
+Build result: `1859/1859` modules including all four `HadwigerNelson` modules.
 
 ## Planned targets
 
-| ID | Statement | Mathlib bridge | Difficulty |
-|----|-----------|----------------|------------|
-| HN-1 | Definition: `UnitDistanceGraph` in a metric space | `MetricSpace`, `SimpleGraph` | easy |
-| HN-2 | Moser spindle is a UDG with $\chi = 4$ | needs explicit 7-vertex graph + brute-force 4-coloring + non-3-colorability | medium |
-| HN-3 | Hexagonal tiling gives $\chi(\mathbb{R}^2) \leq 7$ | needs measure-theoretic tiling + coloring | hard |
-| HN-4 | Statement of de Grey's $\chi(\mathbb{R}^2) \geq 5$ | needs encoding of the 1581-vertex graph + SAT certificate | very hard |
-| HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | direct, but needs the parity argument | medium |
-| HN-6 | $\chi(L^\infty\text{-UDG on } \mathbb{R}^2) = 4$ | direct construction | medium |
+| ID | Statement | Mathlib bridge | Difficulty | Status |
+|----|-----------|----------------|------------|--------|
+| HN-1 | Definition: `unitDistanceGraph` in a pseudo-metric space | `PseudoMetricSpace`, `SimpleGraph.fromRel` | easy | done (Basic.lean) |
+| HN-2 | Moser spindle is a UDG with $\chi = 4$ | explicit 7-vertex `Fin 7` graph, decide-based 4-coloring, decide-based non-3-colorability, homomorphism to `planeUnitDistanceGraph` | medium | stub (MoserSpindle.lean) |
+| HN-3 | Hexagonal tiling gives $\chi(\mathbb{R}^2) \leq 7$ | measure-theoretic tiling + Eisenstein-lattice coloring | hard | not started |
+| HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | not started |
+| HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | parity argument on numerators after clearing denominators | medium | stub (Controls.lean) |
+| HN-6 | $\chi(L^\infty\text{-UDG on } \mathbb{R}^2) = 4$ | direct construction using a unit-square tiling | medium | stub (Controls.lean) |
 
 ## Bootstrap
 
-The lakefile and skeleton are committed. To build for the first time:
+The lakefile, skeleton, and lock file are committed. On a fresh machine:
 
 ```powershell
-# Install elan (one-time, Windows):
+# Install elan (one-time):
 #   https://github.com/leanprover/elan/blob/master/README.md#windows
 # Then:
 cd lean
-lake update    # fetches Mathlib v4.13.0 + transitive deps (slow, ~10 min)
-lake build     # compiles HadwigerNelson against Mathlib
+lake update                # fetches Mathlib v4.13.0 + transitive deps
+lake exe cache get         # pulls prebuilt Mathlib oleans (fast, ~1 GB)
+lake build                 # compiles HadwigerNelson
 ```
 
-The first `lake build` after `lake update` downloads Mathlib's prebuilt cache (`lake exe cache get`) if available; otherwise it compiles Mathlib from source (hours). Use the cache when possible.
+`lake exe cache get` downloads Mathlib's prebuilt cache (much faster than compiling Mathlib from source). On the current Windows dev box this completed in a few minutes; the cache was healthy and reported "No files to download" since all 5370 oleans were already on disk from prior work.
 
-The current Lean files compile only after `lake build` has finished. Until then, IDE features (lake-server) will show import errors.
+After this, `lake build` is incremental and rebuilds only the HadwigerNelson modules (~seconds).
+
+## Editing
+
+Open the project root (the `hadwiger-nelson/` directory containing both `lean/` and the Python code) in VS Code with the Lean 4 extension installed. The Lean server picks up `lean/lakefile.lean` automatically and provides goal view, hover types, and tactic suggestions.
