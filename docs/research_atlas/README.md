@@ -20,9 +20,15 @@ $$
 
 ### Lower bound: $\chi \geq 5$ (de Grey, 2018)
 
-Aubrey de Grey constructed a finite unit-distance graph on $1581$ vertices that is not $4$-colorable. Marijn Heule independently verified the construction with a SAT proof. Polymath16 reduced the size of certified $5$-chromatic UDGs to $\sim 510$ vertices.
+Aubrey de Grey constructed a finite unit-distance graph on $1581$ vertices that is not $4$-colorable. Marijn Heule independently verified the construction with a SAT proof. The Polymath16 project then iteratively shrank the graph: 553 (Heule, 2018), 529 (Heule, 2018), 525 (Parts, 2019), 517 (Heule, 2019, with $120^\circ$ rotational symmetry), 510 (Parts, 2019), to the current record of **509 vertices, 2442 edges** by Parts (2020, [arXiv:2010.12665](https://arxiv.org/abs/2010.12665)). Coordinates throughout this lineage live in $\mathbb{Q}(\sqrt{3}, \sqrt{11})$.
+
+Parts also published a **human-verifiable** proof of $\chi \geq 5$ ([arXiv:2010.12661](https://arxiv.org/abs/2010.12661)) showing that SAT was a convenience, not a logical necessity.
+
+Voronov, Neopryatnaya, and Dergachev (2021, [arXiv:2106.11824](https://arxiv.org/abs/2106.11824)) constructed the first $\chi \geq 5$ UDG with **no Moser spindle as a subgraph** (64513 vertices), and the first 5-chromatic UDGs on $S^2$ (372 and 972 vertices). These show the Moser spindle is structurally inessential to $\chi \geq 5$, even though it appears in every Polymath16 record.
 
 This replaced the long-standing $\chi \geq 4$ bound from the Moser spindle (1961).
+
+Deep dive: [`arch1_sat_lineage.md`](arch1_sat_lineage.md) (Architecture 1 SAT lineage, 2018-present).
 
 ### Upper bound: $\chi \leq 7$ (Isbell, ~1950)
 
@@ -46,13 +52,15 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 
 **Goal**: construct a finite UDG in $\mathbb{R}^2$ with chromatic number $\geq 6$ (or $\geq 7$).
 
-**Lineage**: Moser spindle ($\chi = 4$, 1961) $\to$ Golomb graphs $\to$ de Grey ($\chi \geq 5$, 2018) $\to$ Polymath16 (smaller) $\to$ ???.
+**Lineage**: Moser spindle ($\chi = 4$, 1961) $\to$ Golomb graphs $\to$ de Grey ($\chi \geq 5$, 2018, 1581 vertices) $\to$ Polymath16 (Heule 529, Parts 510, Parts 509 in 2020) $\to$ Voronov et al. (2021, Moser-spindle-free at 64513) $\to$ ???.
 
-**Tools**: SAT solvers (cadical, kissat); structured graph construction in number fields $\mathbb{Q}(\sqrt{3}, \sqrt{11})$ etc.; symmetric / group-theoretic constructions.
+**Tools**: SAT solvers (cadical, kissat, glucose); structured graph construction in number fields $\mathbb{Q}(\sqrt{3}, \sqrt{11})$ etc.; symmetric / group-theoretic constructions; Heule's clausal-proof-minimization (CPM) and Parts' preserve-a-property minimization.
 
-**Wrong-approach test**: must use the topology / density of $\mathbb{R}$, not just abstract UDG structure (since $\mathbb{Q}^2$ has $\chi = 2$). Constructions that live in a fixed number field $K$ must produce a graph that is *not* $4$-colorable but might be $4$-colorable in some sub-rational structure if extended back; the topology of $\mathbb{R}$ enters through the unbounded supply of algebraic distances.
+**Wrong-approach test**: must use the topology / density of $\mathbb{R}$, not just abstract UDG structure (since $\mathbb{Q}^2$ has $\chi = 2$). Every entry in the lineage above realizes essentially-irrational coordinates ($\sqrt{3}, \sqrt{11}$); the detector passes throughout. See [`arch1_sat_lineage.md`](arch1_sat_lineage.md) §5.
 
-**Status**: active worldwide. Smallest known $5$-chromatic UDG keeps shrinking. No known $6$-chromatic UDG.
+**Status**: active. Smallest 5-chromatic UDG record at 509 vertices since 2020 (no shrinking in 5 years). **No 6-chromatic UDG known.** Variant problems ($k$-distance, odd-distance, sphere) admit 6-chromatic constructions; the single-distance plane uniquely resists. See LEARNINGS L1.
+
+**Deep dive**: [`arch1_sat_lineage.md`](arch1_sat_lineage.md).
 
 ### Architecture 2: Measurable / spectral
 

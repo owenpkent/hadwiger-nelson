@@ -49,11 +49,13 @@ Stand up the repository: docs, four-architecture experiment scaffold, shared inf
 
 ## Pending
 
-- e1a Moser spindle SAT: verify χ(Moser) = 4 via multi-solver SAT, archive certificate. Sets the DIMACS encoding template for e1b/e1c.
-- e1b de Grey skeleton: import the 1581-vertex graph, SAT-verify χ ≥ 5.
+- ~~e1a Moser spindle SAT~~ **done** (commit ed28362). Two-solver agreement (cadical195 + glucose4); kissat404 dropped due to Windows segfault via bootstrap_with.
+- ~~Architecture surveys~~ **first dossier landed** for Architecture 1: [`docs/research_atlas/arch1_sat_lineage.md`](../../docs/research_atlas/arch1_sat_lineage.md). Triggered atlas README updates and LEARNINGS L1 + L2.
+- e1b de Grey skeleton: import the 1581-vertex graph, SAT-verify χ ≥ 5. The dossier confirms the 509-vertex Parts graph as a smaller alternative target.
 - HN-2 Lean: replace `moserSpindle = ⊥` with the explicit 11-edge graph; prove `chromaticNumber = 4` by `decide` after `Fintype` instances on `Fin 7 → Fin 4` colorings.
 - HN-5 Lean (Woodall): Q² parity argument is tractable since the predicate is decidable over ℚ.
-- Architecture surveys: nothing surveyed yet; the atlas is a sketch, not a deep dive.
+- Field-theoretic experiment (novel, surveyor-proposed): which closed-under-rotation rings $\mathbb{Z}[\zeta]$ refuse 5-colorings? See LEARNINGS L1.
+- Variants sub-dossier: odd-distance, two-distance, sphere problems collectively form a "Hadwiger-Nelson environment". Worth its own SURVEYOR session.
 
 ## Recommended next actions
 
