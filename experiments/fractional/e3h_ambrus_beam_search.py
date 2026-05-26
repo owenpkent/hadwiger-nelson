@@ -67,6 +67,8 @@ def beam_search_greedy(
     indep_max_size: int = 8,
     early_stop_eps: float = 1e-4,
     verbose: bool = True,
+    save_per_step_path: pathlib.Path | None = None,
+    resume_from_path: pathlib.Path | None = None,
 ) -> dict:
     """Greedy beam-search over candidate point pool.
 
@@ -78,6 +80,30 @@ def beam_search_greedy(
     config_indices = list(seed_indices)
     M = pool.shape[0]
     history = []
+
+    # Resume from saved state if available.
+    if resume_from_path is not None and resume_from_path.exists():
+        with resume_from_path.open() as f:
+            saved = json.load(f)
+        config_indices = list(saved["config_indices"])
+        history = list(saved["history"])
+        if verbose:
+            print(f"Resumed from {resume_from_path}: |X|={len(config_indices)}, "
+                  f"m_1={history[-1]['m1_bound']:.6f}", flush=True)
+
+    def save_state(prev_m1):
+        if save_per_step_path is None:
+            return
+        save_per_step_path.parent.mkdir(parents=True, exist_ok=True)
+        with save_per_step_path.open("w") as f:
+            json.dump({
+                "experiment": "e3h_ambrus_beam_search",
+                "pool": "polymath_510_vertices",
+                "seed_indices": list(seed_indices),
+                "config_indices": list(config_indices),
+                "history": history,
+                "current_m1": prev_m1,
+            }, f, indent=2)
 
     # Evaluate seed.
     X = pool[config_indices]
@@ -98,6 +124,7 @@ def beam_search_greedy(
               f"indep={r0['n_independent_sets']}, m_1 <= {r0['m1_bound']:.6f}", flush=True)
 
     prev_m1 = r0["m1_bound"]
+    save_state(prev_m1)
 
     while len(config_indices) < target_size:
         step = len(history)
@@ -137,9 +164,11 @@ def beam_search_greedy(
             "step_time_s": t_step,
         })
         if verbose:
-            print(f"Step {step}: |X|={len(config_indices)}, edges={best_r['n_edges']}, "
+            print(f"Step {step}: |X|={len(config_indices)}, added idx={best_idx}, "
+                  f"edges={best_r['n_edges']}, "
                   f"indep={best_r['n_independent_sets']}, m_1 <= {best_m1:.6f}  "
                   f"(eval {eval_count}/{len(candidate_indices)}, {t_step:.1f}s)", flush=True)
+        save_state(prev_m1)
 
     return {
         "history": history,
@@ -162,6 +191,7 @@ def main():
     print(f"Seed: hex lattice (indices {seed_indices})")
     print()
 
+    state_path = CACHE / "e3h_state.json"
     result = beam_search_greedy(
         pool=pool,
         seed_indices=seed_indices,
@@ -170,6 +200,8 @@ def main():
         indep_max_size=8,
         early_stop_eps=1e-5,
         verbose=True,
+        save_per_step_path=state_path,
+        resume_from_path=state_path,
     )
 
     print()

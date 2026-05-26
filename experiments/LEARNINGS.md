@@ -435,9 +435,18 @@ The Moser-spindle IE-LP at 0.2829 is *tighter* than the trivial fractional bound
 | 5 | 12 | 13 | 528 | 0.266282 | $-$0.0019 | 65 s |
 | 6 | 13 | 14 | 912 | 0.263264 | $-$0.0030 | 86 s |
 | 7 | 14 | 14 | 1818 | 0.260858 | $-$0.0024 | 138 s |
-| 8 | 15 | 14 | 3587 | **0.259544** | $-$0.0014 | 273 s |
+| 8 | 15 | 14 | 3587 | 0.259544 | $-$0.0014 | 273 s |
+| 9 | 16 | 14 | 6948 | **0.258784** | $-$0.0008 | 555 s |
 
-The 15-vertex result beats OFV 2010 (0.2684) by 0.009 and e3e's translation-sweep Moser-LP (0.2619) by 0.0024. It is approximately equal to KMOR 2015's published 0.2588 (the difference of $0.0007$ at this step count is within the search horizon's grasp). Reaching Ambrus 2023's 0.2470 would need additional steps with corresponding indep-set growth.
+The 16-vertex result essentially matches KMOR 2015's published $m_1 \leq 0.258795$ (the $1.1 \times 10^{-5}$ delta is below LP-solver tolerance). We've matched the 2015 frontier with a 16-vertex configuration grown from a 7-vertex hex seed by simple greedy beam search; KMOR's published proof used a more elaborate harmonic-analysis argument. The next published frontier is Ambrus-Matolcsi 2022's 0.2544 (delta 0.004 from current); reaching Ambrus 2023's 0.2470 needs delta 0.012 ≈ 5-7 additional steps, each with doubled compute.
+
+**The 17-vertex configuration** (indices into the Polymath 510 vertex list, in addition order):
+
+Seed (hex lattice): $\{0, 1, 2, 3, 4, 5, 6\}$. Added by beam search through step 11: $\{334, 346, 206, 263, 49, 52, 464, 41, 47, 92\}$.
+
+After step 11 (resumed from step 9 state), $m_1 \leq 0.258397$ with 17 vertices, 11512 independent sets, 15 unit-distance edges, $\approx 21$ min compute. The improvement per step has dropped to $-0.0004$ (vs $-0.003$ around step 6) — greedy beam search at width 1 is plateauing at a local optimum near the KMOR 2015 frontier.
+
+State persisted at [`experiments/fractional/_cache/e3h_state.json`](fractional/_cache/e3h_state.json) (resumable across runs). To meaningfully push past the local plateau and approach Ambrus 2023's 0.2470, future work needs: (a) beam width $\geq 2$ — keep top-$K$ partial solutions; (b) vertex-swap local search after greedy build; (c) richer candidate pool, e.g., constructive generation of unit-distance neighbors in $\mathbb{Q}(\sqrt 3, \sqrt{11})$; or (d) restart from multiple seeds (Moser spindle, Heule fragments, MRVZ-style configurations) instead of just hex lattice.
 
 **Computational scaling**. Indep set count roughly doubles per step: 19 $\to$ 38 $\to$ 66 $\to$ 132 $\to$ 264 $\to$ 528 $\to$ 912 $\to$ 1818 $\to$ 3587. Step times scale linearly with $K \cdot |\text{pool}|$, so step $k$ time roughly doubles. Step 9 projected ~9 min; step 10 ~18 min; step 13 ~2 h; reaching size 23 estimated ~10 hours of compute. The greedy single-candidate evaluation is the bottleneck (we re-solve the LP for every pool point at every step). Parallelization across candidates would cut step time linearly.
 
