@@ -24,7 +24,7 @@ Build result: `1859/1859` modules including all four `HadwigerNelson` modules.
 | HN-2a | `moserSpindle.Colorable 4` (upper bound) | explicit `Fin 7` graph + witness from e1a SAT + `decide` per-edge check | medium | **proved** (MoserSpindle.lean) |
 | HN-2b | `¬ moserSpindle.Colorable 3` (lower bound) | brute-force over $3^7 = 2187$ functions via `native_decide` | medium | **proved** (MoserSpindle.lean) |
 | HN-2c | `moserSpindle.chromaticNumber = 4` (combined) | glue HN-2a+b via `Nat.sInf_upward_closed_eq_succ_iff` + `Colorable.mono` | medium | **proved** (MoserSpindle.lean) |
-| HN-2d | Bridge `moserSpindle` to `planeUnitDistanceGraph` | inj graph hom using the 7 explicit plane coords + `Real.sqrt` distance lemmas | medium | open |
+| HN-2d | Bridge `moserSpindle` to `planeUnitDistanceGraph` and derive `4 ≤ chromaticNumberOfPlane` | 7 explicit plane coords with `Real.sqrt 3 / 11 / 33`, 11 unit-distance lemmas via `nlinarith`, graph hom, `chromaticNumber_le_of_forall_imp` | medium | **proved** (MoserBridge.lean) |
 | HN-3 | Hexagonal tiling gives $\chi(\mathbb{R}^2) \leq 7$ | measure-theoretic tiling + Eisenstein-lattice coloring | hard | not started |
 | HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | not started |
 | HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | parity argument on numerators after clearing denominators | medium | stub (Controls.lean) |

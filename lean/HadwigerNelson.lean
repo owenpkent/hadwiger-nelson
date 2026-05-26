@@ -3,4 +3,5 @@
 
 import HadwigerNelson.Basic
 import HadwigerNelson.MoserSpindle
+import HadwigerNelson.MoserBridge
 import HadwigerNelson.Controls

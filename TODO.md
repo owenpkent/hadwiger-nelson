@@ -46,7 +46,7 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Fill in HN-2a `moserSpindle.Colorable 4` (proved via e1a witness + per-edge decide)
 - [x] Fill in HN-2b `¬ moserSpindle.Colorable 3` (proved via native_decide over $3^7$ functions)
 - [x] Fill in HN-2c `moserSpindle.chromaticNumber = 4` (glued via `Nat.sInf_upward_closed_eq_succ_iff` and `Colorable.mono`)
-- [ ] Fill in HN-2d bridge `moserSpindle` to `planeUnitDistanceGraph` (inj graph hom via explicit coords)
+- [x] Fill in HN-2d bridge `moserSpindle` to `planeUnitDistanceGraph` — `four_le_chromaticNumberOfPlane` proved (commit pending)
 - [ ] Fill in HN-5 Q^2 chi = 2 (Woodall parity argument; predicate already over ℚ so should be tractable)
 - [ ] Fill in HN-6 L^infty chi = 4 (Chilakamarri construction)
 
