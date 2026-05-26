@@ -21,7 +21,10 @@ Build result: `1859/1859` modules including all four `HadwigerNelson` modules.
 | ID | Statement | Mathlib bridge | Difficulty | Status |
 |----|-----------|----------------|------------|--------|
 | HN-1 | Definition: `unitDistanceGraph` in a pseudo-metric space | `PseudoMetricSpace`, `SimpleGraph.fromRel` | easy | done (Basic.lean) |
-| HN-2 | Moser spindle is a UDG with $\chi = 4$ | explicit 7-vertex `Fin 7` graph, decide-based 4-coloring, decide-based non-3-colorability, homomorphism to `planeUnitDistanceGraph` | medium | stub (MoserSpindle.lean) |
+| HN-2a | `moserSpindle.Colorable 4` (upper bound) | explicit `Fin 7` graph + witness from e1a SAT + `decide` per-edge check | medium | **proved** (MoserSpindle.lean) |
+| HN-2b | `¬ moserSpindle.Colorable 3` (lower bound) | brute-force over $3^7 = 2187$ functions via `native_decide` | medium | **proved** (MoserSpindle.lean) |
+| HN-2c | `moserSpindle.chromaticNumber = 4` (combined) | `iInf` / `sInf` plumbing on `ℕ∞`, glue HN-2a+b | medium | open |
+| HN-2d | Bridge `moserSpindle` to `planeUnitDistanceGraph` | inj graph hom using the 7 explicit plane coords + `Real.sqrt` distance lemmas | medium | open |
 | HN-3 | Hexagonal tiling gives $\chi(\mathbb{R}^2) \leq 7$ | measure-theoretic tiling + Eisenstein-lattice coloring | hard | not started |
 | HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | not started |
 | HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | parity argument on numerators after clearing denominators | medium | stub (Controls.lean) |

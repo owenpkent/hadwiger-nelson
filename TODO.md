@@ -43,10 +43,12 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Skeleton modules: `HadwigerNelson.Basic` (UDG type, chromatic number), `HadwigerNelson.MoserSpindle`, `HadwigerNelson.Controls`
 - [x] `lake update` + `lake exe cache get` + `lake build` end-to-end (1859/1859 modules, commit 3b82e91)
 - [x] `unitDistanceGraph_adj` lemma proved (clean iff via `rw [SimpleGraph.fromRel_adj]` + dist_comm)
-- [ ] Fill in HN-2 Moser spindle chi = 4 (replace `(⊥ : SimpleGraph (Fin 7))` stub with explicit 11-edge graph and decide-based proof)
+- [x] Fill in HN-2a `moserSpindle.Colorable 4` (proved via e1a witness + per-edge decide)
+- [x] Fill in HN-2b `¬ moserSpindle.Colorable 3` (proved via native_decide over $3^7$ functions)
+- [ ] Fill in HN-2c `moserSpindle.chromaticNumber = 4` (glue HN-2a+b via Mathlib's sInf API)
+- [ ] Fill in HN-2d bridge `moserSpindle` to `planeUnitDistanceGraph` (inj graph hom via explicit coords)
 - [ ] Fill in HN-5 Q^2 chi = 2 (Woodall parity argument; predicate already over ℚ so should be tractable)
 - [ ] Fill in HN-6 L^infty chi = 4 (Chilakamarri construction)
-- [ ] Bridge `moserSpindle` to `planeUnitDistanceGraph` via an injective graph homomorphism (needed to transfer chi >= 4 from finite to the plane)
 
 ## Cross-cutting
 
