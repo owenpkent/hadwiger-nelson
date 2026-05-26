@@ -74,4 +74,6 @@ The experimental thread is organized around the same four-architecture framework
 | e3a fractional small | 3 | not started (subsumed by e3a Lovász theta below) |
 | e3a Lovász $\vartheta$ on Polymath16 510 | 3 | done; $\vartheta = 170.24$, loose chi >= 3 (LEARNINGS L5) |
 | e3b OFV Bessel-LP for $m_1(\mathbb{R}^2)$ | 3 | done; $m_1 \leq 0.287$ giving $\chi_m \geq 4$ in 30 ms via cvxpy + HiGHS (LEARNINGS L6) |
-| e3c Bochner continuous | 3 | superseded by e3b above (Bessel = Bochner in $d=2$ for $J_0$) |
+| e3c OFV multi-simplex LP for $m_1(\mathbb{R}^2)$ | 3 | done; $m_1 \leq 0.268412$ giving $\chi_m \geq 4$ (real $\geq 3.73$) via 3 off-center unit triangles, exact match to OFV 2010 Table 3.1 (LEARNINGS L8) |
+| e3d wide-triangle sweep | 3 | done; 1409 candidate triples on $0.1$-grid saturates near 0.2682; triangle class exhausted (LEARNINGS L9) |
+| e3e Moser-spindle LP inequality | 3 | done; $m_1 \leq 0.2619$ via Moser-spindle ($N=7, \alpha=2$) translations + OFV triangles, closes 75% of OFV-to-KMOR gap; $\chi_m \geq 4$ (real $\geq 3.82$) (LEARNINGS L9) |

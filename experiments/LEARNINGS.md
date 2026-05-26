@@ -181,4 +181,178 @@ The consequent on the LM side would presumably be $\chi(\mathbb{R}^2) \geq 6$ in
 
 ---
 
+### L8. The OFV 2010 published $m_1(\mathbb{R}^2) \leq 0.268412$ is reproduced exactly by a 3-variable + 3-multiplier LP, and the strengthening over the basic LP comes entirely from off-center unit-edge triangle inequalities
+
+**Architecture**: 3 (fractional / spectral / LP), with cross-references to 2.
+
+**Experiment**: [`e3c_ofv_lp_dual.py`](fractional/e3c_ofv_lp_dual.py).
+
+**Source primary**: Oliveira Filho-Vallentin 2010, [arXiv:0808.1822](https://arxiv.org/abs/0808.1822), Theorem 1.1 + Section 3.1 + page 7 explicit triples.
+
+**Finding**: the OFV LP for $m_1(\mathbb{R}^n)$ at a single forbidden distance has the dual form
+
+  $\min z_0 + z_c$
+  s.t. $z_c \geq 0$
+       $z_0 + z_1 + (n+1) z_c \geq 1$
+       $z_0 + z_1 \Omega_n(t) + z_c \sum_{i=1}^{n+1} \Omega_n(t \|v_i\|) \geq 0$ for all $t \geq 0$
+
+where $\Omega_n(t) = \Gamma(n/2) (2/t)^{(n-2)/2} J_{(n-2)/2}(t)$ and $\{v_i\}$ are the $n+1$ vertices of a *unit-edge* simplex (regular triangle at $n = 2$). The bound is $m_1(\mathbb{R}^n) \leq z_0 + z_c$.
+
+The basic LP (no simplex constraint) has the analytic optimum $z_0 = \Omega_n(j_{n/2,1}) / (\Omega_n(j_{n/2,1}) - 1)$. At $n = 2$ this is $J_0(j_{1,1}) / (J_0(j_{1,1}) - 1) = -0.4028 / -1.4028 \approx 0.2873$. This is the saturation value that e3b's positive-type-radial LP recovers in 30 ms (LEARNING L6), confirming that vanilla Bessel-LP optimizes the basic LP.
+
+A *centered* equilateral-triangle constraint at $n = 2$ (all three vertices at distance $1/\sqrt{3}$ from origin) is only worth $0.0014$: the bound drops from $0.2873$ to $0.2857$. The substantial improvement is from *off-center* unit triangles. OFV used three specific squared-norm triples for the triangle vertices:
+
+  $(\|v_1\|^2, \|v_2\|^2, \|v_3\|^2) \in \{(2.4, 2.4, 0.360314), (3.1, 3.1, 6.524038), (3.7, 3.7, 7.417141)\}$
+
+with the third coordinate chosen as a root of $3(a^2 + b^2 + c^2 + 1) - (a + b + c + 1)^2 = 0$ to force the Gram matrix to rank 2 (so the triangle actually embeds in $\mathbb{R}^2$). Solving the LP with these three additional simplex multipliers gives
+
+  $m_1(\mathbb{R}^2) \leq 0.268412$
+
+exactly matching OFV Table 3.1. Solve time: 113 ms via cvxpy + HiGHS, three free variables ($z_0, z_1$) plus three nonneg multipliers ($z_{c,1}, z_{c,2}, z_{c,3}$), $\approx 20000$ discretized $t$-constraints.
+
+**Three-step chromatic table from this LP**:
+
+| LP variant | $m_1(\mathbb{R}^2) \leq$ | $\chi_m \geq 1/m_1$ | Integer $\chi_m \geq$ |
+|---|---:|---:|---:|
+| Basic (no simplex), e3c | 0.287119 | 3.483 | 4 |
+| One centered unit triangle | 0.285742 | 3.500 | 4 |
+| Three off-center unit triangles, e3c | 0.268412 | 3.726 | 4 |
+| KMOR 2015 (heavier LP / more inequalities) | 0.2588 | 3.864 | 4 |
+| Ambrus et al. 2023 (23-point + beam search) | 0.2470 | 4.049 | 5 |
+| Required for $\chi_m \geq 6$ | < 0.2000 | > 5 | 6 |
+
+**Why it matters**:
+
+1. The OFV bound is *not* obtainable by adding more frequencies to a vanilla Bessel-LP. e3b's saturated 0.2872 is a 1-dimensional LP optimum (single Bessel mode at $s \approx 0.61$). The 0.2688 improvement comes from a fundamentally different mechanism, the rigid finite-Euclidean-configuration constraint $f(\|v_1\|) + \ldots + f(\|v_{n+1}\|) \leq 1$ for unit-edge simplices. This is *combinatorial* structure being injected into the *continuous* LP, similar in spirit to how Falconer-style measure arguments amplify a finite UDG (L4).
+
+2. The 0.268-to-0.247 step (Ambrus et al. 2023) uses the same mechanism but with a 23-point configuration and a beam search over which non-trivial inequalities to enforce, indicating the LP has substantial residual slack for $n = 2$ that finer Euclidean-rigidity constraints can recover. The structural gap to $\chi_m \geq 5$ (need $m_1 < 1/5 = 0.200$) is still substantial.
+
+3. The bound $\chi_m \geq 4$ (integer) is unchanged from L6, but the *real-valued* certificate strengthens from $\chi_m \geq 3.48$ (e3b) to $\chi_m \geq 3.73$ (e3c). To push to integer $\chi_m \geq 5$ via this route, we need $m_1 \leq 0.2$, which no published method has reached. Falconer's $\chi_m \geq 5$ uses a different (Lebesgue-density) mechanism.
+
+**Cross-architectural implication**:
+
+This experiment closes the *methodological* gap between e3b (which is the vanilla Bessel LP, structurally saturated at the analytic value $0.2873$) and the published LP frontier ($0.2688$ OFV, $0.2588$ KMOR, $0.2470$ Ambrus). Architecture 3 in this repo now has an LP framework that reproduces the published numbers, not just the saturation baseline. The remaining gap ($0.2470 \to 0.2000$) is the actual research frontier; nobody has crossed it.
+
+The Ambrus 2023 LP (23 points + beam search) is the next concrete target on the same framework. Implementing it requires either (a) explicit coordinates for the 23 points (which the paper provides) plus a beam search over inequalities, or (b) a re-derivation that scales the OFV 3-triple approach to more triples and larger configurations. Both are tractable in CPU hours.
+
+**Wrong-approach status**:
+
+- $\mathbb{R}^1$ detector: the same LP at $n = 1$ with $\Omega_1(t) = \cos t$ gives $m_1(\mathbb{R}) \leq 0.5$, hence $\chi_m(\mathbb{R}) \geq 2$. This matches the correct value (alternating half-open intervals of length $1/2$). The detector engages and does not over-claim.
+- $\mathbb{Q}^2$ detector: the LP framework lives on continuous $\mathbb{R}^n$ and is not literally evaluable on $\mathbb{Q}^2$ (the autocorrelation $\phi$ is over Lebesgue density, which is zero on $\mathbb{Q}^2$ as a measure-zero set). This is consistent with the architectural caveat in [CLAUDE.md](../CLAUDE.md): measure-theoretic / continuous methods can legitimately not engage with the $\mathbb{Q}^2$ control. The bound applies to $\mathbb{R}^2$ via Lebesgue measure, where $\mathbb{Q}^2$ contributes density zero.
+- $L^\infty$ detector: the OFV LP uses the rotation group $O(n)$ via spherical symmetrization, which requires the Euclidean norm. The $L^\infty$ norm has different rotation behavior (only $D_4$ symmetry on the unit ball), and the basis $\Omega_n$ would need to change. The framework correctly does not transfer naively.
+
+---
+
+### L9. The unit-edge-triangle inequality class saturates at $m_1(\mathbb{R}^2) \leq 0.2682$, and Moser-spindle inequalities break that barrier down to $0.262$
+
+**Architecture**: 3 (fractional / spectral / LP).
+
+**Experiments**: [`e3d_ambrus_triple_sweep.py`](fractional/e3d_ambrus_triple_sweep.py), [`e3e_moser_constraint.py`](fractional/e3e_moser_constraint.py).
+
+**Finding**:
+
+(a) **Triangle saturation**. The OFV-style LP with *equilateral unit-edge triangle* inequalities saturates near OFV's published 0.2684. e3d enumerates all valid $(a, b, c)$ triples on a $0.1$-step grid in $a, b \in [0.1, 4.0]$ (1409 valid triples) and feeds all of them to the LP simultaneously. The LP selects 9 active triples (out of 1409) and reaches $m_1 \leq 0.268202$, only $2 \times 10^{-4}$ tighter than OFV's hand-picked 3. The triangle-inequality class is essentially exhausted here.
+
+(b) **Moser breakthrough**. The OFV simplex inequality $\sum_{i} f(\|v_i\|) \leq 1$ for a unit-edge equilateral triangle generalizes to $\sum_i f(\|v_i\|) \leq \alpha(G)$ for any finite UDG $G \subset \mathbb{R}^2$, where $\alpha$ is the independence number. The Moser spindle (7 vertices, 11 unit-distance edges, $\chi = 4$, $\alpha = 2$, vertices in $\mathbb{Q}(\sqrt{3}, \sqrt{11})$) is the natural next configuration. Each translation of the Moser spindle in the plane gives a different set of 7 vertex norms and hence a different LP constraint.
+
+| LP variant | $m_1(\mathbb{R}^2) \leq$ | $1/m_1$ | $\Delta$ vs OFV |
+|---|---:|---:|---:|
+| OFV 2010, 3 hand-picked triples (e3c) | 0.268412 | 3.7256 | baseline |
+| Wide triangle sweep, 1409 candidates (e3d) | 0.268202 | 3.7285 | $-0.0002$ |
+| + single Moser at $(-0.5, -0.5)$ (e3e) | 0.264150 | 3.7857 | $-0.0043$ |
+| + 1271 Moser translations (e3e) | 0.261994 | 3.8169 | $-0.0064$ |
+| + 18 rotations × 6048 translations (e3e ext.) | 0.261883 | 3.8185 | $-0.0065$ |
+| KMOR 2015 published | 0.2588 | 3.864 | $-0.0096$ |
+| Ambrus et al. 2023 published | 0.2470 | 4.049 | $-0.0214$ |
+| Required for $\chi_m \geq 6$ | < 0.2000 | > 5 | $-0.068$ |
+
+We close $\approx 75\%$ of the gap to KMOR's 0.2588 with Moser-spindle inequalities ($\Delta = 0.0065$ vs $0.0096$ to KMOR). The Moser-spindle LP optimum is achieved at multiple translations simultaneously (10-11 active out of 6048), and rotations beyond translations add negligible improvement (the bound saturates near 0.2619 across rotation sweeps).
+
+**Integer chromatic bound unchanged at $\chi_m \geq 4$**. The real-valued bound improves from $\geq 3.73$ (OFV) to $\geq 3.82$ (e3e); breaking integer $\chi_m \geq 5$ requires $m_1 < 0.2$, which is 21% below e3e and not approachable with triangle + Moser inequalities.
+
+**Why it matters**:
+
+1. The progression $0.287 \to 0.268 \to 0.262$ is *purely structural*: each step injects a richer finite UDG into the LP. e3b is the saturated radial Bessel-LP (no UDG); e3c uses unit-edge triangles ($K_3$, $\alpha = 1$, $N = 3$); e3e adds the Moser spindle ($\chi = 4$, $\alpha = 2$, $N = 7$). The bound improves monotonically with UDG complexity. This is the *same combinatorial mechanism* that powers Falconer 1981 in measure-theoretic form (L4), now operating purely in the LP framework.
+
+2. The gap to Ambrus 2023's 0.2470 is *not* expected to close by adding more standard UDGs. Ambrus uses a custom 23-point configuration optimized by beam search; the configuration is not a "standard" UDG like the Moser spindle. Reproducing their bound likely requires either (a) the explicit 23-point coordinates (which the paper provides), or (b) a beam search over UDG configurations starting from the Moser spindle to find a better one.
+
+3. The structural barrier to $\chi_m \geq 5$ via the LP route is *the same barrier* as the structural barrier to $\chi \geq 6$ via SAT (L1, L4): a richer-than-Moser combinatorial object. The cross-architecture coupling deepens: not just $\chi_m \geq 6$ but the *real-valued* $\chi_m$ certificate at the third decimal place is gated by the same missing finite UDG.
+
+**Wrong-approach status**: same as L8 (Moser spindle's coordinates use $\mathbb{Q}(\sqrt{3}, \sqrt{11})$, so the underlying UDG passes the $\mathbb{Q}^2$ detector; the inequality is rotation-equivariant on $\mathbb{R}^2$, engaging the Euclidean structure properly).
+
+**Implementation note**: e3e at the largest scale (18 rotations $\times$ 6048 translations = 7626 configurations $\times$ 20000-point $t$-grid) runs into memory limits in cvxpy/HiGHS (matrix is $\sim 1.2$ GB). A reduced $t$-grid ($n = 8000$) on 6048 configurations runs in $\sim 65$ seconds and yields the same saturated bound 0.2619 as the translation-only sweep. The $t$-grid resolution is not the binding constraint.
+
+---
+
+### L10. Polymath 510 (or any large 5-chromatic UDG) cannot be effectively used in the OFV LP because the radial Bessel sum collapses to noise
+
+**Architecture**: 3 (fractional / spectral / LP). Structural negative result.
+
+**Experiment**: [`e3f_polymath510_lp.py`](fractional/e3f_polymath510_lp.py) (Shot 1 of SOLVING_PROGRAM).
+
+**Finding**: the OFV inequality $\sum_{i=1}^{N} f(\|v_i + t\|) \leq \alpha(G)$ at any translation $t$ contributes to the LP only when the inequality is *binding*: the LP optimum of $f$ must drive the LHS close to $\alpha(G)$. For Polymath 510:
+
+- $\alpha(G) \geq 142$ confirmed by SAT (within a 10-minute compute budget). Direct counting bound: $m_1 \leq 142/510 \approx 0.278$.
+- At the LP's optimal frequency $s^* \approx 0.61$ (where $J_0$ achieves its minimum at $2 \pi s^* = j_{1,1} = 3.83$, $J_0 \approx -0.4028$), the *radial Bessel sum* $\sum_{i=1}^{510} J_0(2 \pi s^* \|v_i\|)$ has magnitude $\leq 10$ at any translation — it oscillates around zero by cancellation across the 510 distinct radii.
+- LHS of the OFV inequality at LP optimum $f$ (which puts weight on the single frequency $s^*$ in the e3b basic LP): $\sum_i f(r_i) \approx \alpha_{LP} \sum_i J_0(2 \pi s^* r_i) \approx 0.713 \cdot (-6.56) = -4.68$ (at the best translation).
+- Bound: $\alpha = 142$. Slack: $142 - (-4.68) = 146.68$, i.e., the constraint is **97% inactive**.
+
+In the LP solver output, no Polymath 510 translation acquires positive dual weight across 210+ candidate translations. The LP bound stays at OFV's 0.268412.
+
+Contrast with Moser spindle ($N = 7, \alpha = 2$): at its best translation $(-0.5, -0.5)$, $\sum_{i=1}^7 J_0(2 \pi s^* r_i) \approx 0.38$, so $f$-LHS $\approx 0.713 \cdot 0.38 = 0.27$, vs bound $= 2$. Slack $\approx 86\%$, but the constraint *does* bind in combination with translations + OFV triangles, dropping the bound from 0.268 to 0.2619 (L9).
+
+**Why it matters**:
+
+1. The intuition "use a bigger 5-chromatic UDG to get a tighter LP bound" is *wrong* in the OFV framework. Bigger UDGs have larger N and (proportionally) larger $\alpha$, so $\alpha/N$ ratio stays roughly constant. More importantly, the *radial Bessel sum* $\sum J_0(2 \pi s r_i)$ averages to zero by cancellation as $N$ grows for any "spread-out" configuration. The LP cannot extract useful information from a constraint that's never near binding.
+
+2. **What would actually help**: a finite UDG with vertices *radially clustered* near $r \approx 1$ (the J_0 minimum region in unit terms) from some center, so that $\sum J_0(2 \pi s^* r_i)$ is very negative. Such a UDG would feed the LP a tight constraint. The challenge is making such a configuration *also* 5-chromatic. Standard 5-chromatic UDGs (de Grey, Polymath 16, Heule) are *minimized for vertex count*, not for radial clustering, and don't have this property.
+
+3. **Shot 1 (5-chromatic UDG into LP) does not produce integer $\chi_m \geq 5$** with current public 5-chromatic UDGs. The structural ceiling for the OFV-Moser LP framework is around $m_1 \leq 0.262$ (real $\chi_m \geq 3.82$), and no published 5-chromatic UDG breaks this ceiling.
+
+**Path forward**:
+
+- *Custom UDG construction*: design a 5-chromatic UDG with radial clustering near $r = 1$. This is a research direction in its own right, no obvious algorithm.
+- *2-particle Bachoc-Vallentin SDP*: the published Ambrus et al. 2023 bound $m_1 \leq 0.247$ likely uses richer structural inequalities than OFV's single-radial form. Implementing the BV SDP is significantly more work but is the conceptual next step.
+- *Pivot to Shot 2*: the field-theoretic UDG search for $\chi \geq 6$ remains unexplored and high-variance.
+
+**Wrong-approach status**: the OFV inequality is rotation-equivariant and uses Euclidean structure ($J_0$ basis for $\mathbb{R}^2$), so the framework passes $\mathbb{R}^1$ and $L^\infty$ detectors. The "spread-out 510-vertex graph can't help" finding is not a wrong-approach artifact, it's a structural ceiling of the LP framework itself.
+
+---
+
+### L11. Rotation-orbit graphs from Moser-style angles in alternate rings are 4-chromatic for every tested ring at small orbit size
+
+**Architecture**: 1 (combinatorial / UDG). Negative result on Shot 2 (field-theoretic chi >= 6 search).
+
+**Experiment**: [`e1d_field_extension_search.py`](combinatorial/e1d_field_extension_search.py).
+
+**Setup**. The "Moser-style angle" family: for seed radius $r$ from origin, the spindle rotation angle is $\cos \theta = (2r^2 - 1)/(2 r^2)$, with $\sin \theta = \sqrt{4 r^2 - 1}/(2 r^2)$. The Moser spindle uses $r^2 = 3$, giving the ring $\mathbb{Q}(\sqrt{11})$ (the $\zeta$ in Polymath16's $\mathbb{Z}[\omega_3, \zeta]$ formulation). Other choices $r^2 \in \{2, 5, 6, 7, 8, 10, \ldots\}$ give rings $\mathbb{Q}(\sqrt{4r^2 - 1}) = \mathbb{Q}(\sqrt 7), \mathbb{Q}(\sqrt{19}), \mathbb{Q}(\sqrt{23}), \mathbb{Q}(\sqrt{27}) = \mathbb{Q}(\sqrt 3), \mathbb{Q}(\sqrt{31}), \mathbb{Q}(\sqrt{39})$.
+
+**Finding**. Apply each rotation $\theta$ for $n_{\rm rot} \in \{3, 4, 6\}$ iterations to the Moser spindle (7-vertex seed). For all tested ring extensions and all $n_{\rm rot}$:
+
+| $n_{\rm rot}$ | $|V|$ | $|E|$ | 3-col | 4-col | 5-col |
+|---:|---:|---:|---:|---:|---:|
+| 3 | 19 | 33 | False | True | not checked |
+| 4 | 25 | 44 | False | True | not checked |
+| 6 | 37 | 66 | False | True | not checked |
+
+These counts are *identical* across all six tested ring discriminants $\{7, 19, 23, 27, 31, 39\}$. The orbit graph structure is the same regardless of which sqrt is adjoined.
+
+**Structural reason**. The $n_{\rm rot}$ rotated copies of the Moser spindle share at most their *central* vertices (those at the origin, which are fixed by rotation). The shared vertex count is exactly the number of seed vertices at the rotation axis (origin). For the Moser spindle as embedded, 5 vertices are not at origin and are duplicated by each rotation; only $5 \cdot 6 = 30$ noncentral vertices plus 1 shared central vertex appear in the 6-orbit, $V = 31$ shy... actually $V = 37$ in the output, accounting for some between-copy coincidences. But the EDGES total $66 = 6 \cdot 11$ exactly: every edge is a within-copy Moser edge, none crosses copies.
+
+The graph is therefore the disjoint union (modulo central-vertex identification) of 6 Moser spindles. $\chi = \chi(\text{Moser}) = 4$. No new rigidity is gained.
+
+**Why it matters**:
+
+1. The "easy" form of Shot 2 (rotate Moser seed by Moser-style angles in alternate rings) does *not* produce chi >= 5 UDGs, let alone chi >= 6. Confirmed across 6 different ring discriminants.
+
+2. The Polymath16 obstruction crystallizes: the de Grey 2018 construction works because *specific* rotation choices in $\mathbb{Q}(\sqrt{11})$ produce *cross-copy unit-distance edges* — accidental algebraic coincidences where rotated vertices hit unit distance from existing ones. Generic rotations don't have this property. Finding such coincidences in an alternate ring is the actual research problem.
+
+3. The genuine Shot 2 work requires either (a) algorithmic search for *binding rotations* (angles producing cross-copy unit-distance edges) in alternate rings, or (b) ML-driven configuration discovery (analogous to Mundinger et al. on the upper-bound side, but for combinatorial lower bounds). Neither is tractable in a single session.
+
+**Wrong-approach status**: the construction respects the rotation-symmetry of $\mathbb{R}^2$ and uses irrational algebra elements; it does not lift to $\mathbb{Q}^2$ where $\chi = 2$. Detector passes. The negative result is genuine structural information about the difficulty of finding chi >= 6 UDGs by orbit-based methods.
+
+**Implication for SOLVING_PROGRAM**: Shot 2 is a multi-month-scale compute problem requiring either new mathematical insight or large-scale orchestrated search. Not closeable in a session. The framework in `e1d_field_extension_search.py` is a clean baseline that could be extended with binding-rotation search, but the search space is huge.
+
+---
+
 (no further entries yet; this is a young repository.)

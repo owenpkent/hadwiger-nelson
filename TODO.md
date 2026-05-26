@@ -32,8 +32,12 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [ ] Survey: Cranston-Rabern fractional chromatic bounds + Matolcsi-Ruzsa-Varga-Zsámboki 2023 (chi_f >= 4)
 - [x] Compute Lovász theta on Polymath16 510: theta = 170.24, loose chi >= 3 only (LEARNINGS L5)
 - [x] Basic OFV rotation-invariant Bessel-LP: $m_1 \leq 0.287$, $\chi_m \geq 4$ in 30 ms (LEARNINGS L6)
-- [ ] Refine basis to match OFV's published $m_1 \leq 0.2688$
-- [ ] Push toward Ambrus et al. $m_1 \leq 0.2470$ via 23-point AC-MV-Z LP
+- [x] Refine basis to match OFV's published $m_1 \leq 0.2688$ (e3c, 3 off-center unit triangles, exact match, LEARNINGS L8)
+- [x] Wide-triangle sweep shows triangle inequalities saturate near 0.2682 (e3d, LEARNINGS L9)
+- [x] Moser-spindle inequality breaks triangle saturation: $m_1 \leq 0.2619$, $\chi_m \geq 4$ real $\geq 3.82$ (e3e, LEARNINGS L9)
+- [ ] Push toward KMOR 2015 $m_1 \leq 0.2588$: extend e3e with rotations + additional UDG configurations
+- [ ] Push toward Ambrus et al. $m_1 \leq 0.2470$ via 23-point AC-MV-Z LP (would give integer $\chi_m \geq 5$)
+- [ ] Beam search over larger UDG configurations (Polymath16 fragments, custom configurations)
 - [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP
 
 ## Architecture 4: Set-theoretic / axiomatic
