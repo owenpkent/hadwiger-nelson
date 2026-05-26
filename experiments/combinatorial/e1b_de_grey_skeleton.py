@@ -46,25 +46,54 @@ CACHE = pathlib.Path(__file__).parent / "_cache"
 SOLVERS = ["cadical195", "glucose4"]
 
 
+def load_dimacs_edges(path: pathlib.Path) -> list[tuple[int, int]]:
+    """Parse a DIMACS edge file (`p edge V E` header then `e u v` lines, 1-indexed)."""
+    edges: list[tuple[int, int]] = []
+    n_vertices = None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("c"):
+            continue
+        if line.startswith("p"):
+            # "p edge V E" or "p edges V E"
+            parts = line.split()
+            n_vertices = int(parts[2])
+            continue
+        if line.startswith("e"):
+            _, u, v = line.split()
+            edges.append((int(u) - 1, int(v) - 1))  # convert to 0-indexed
+    if n_vertices is None:
+        raise ValueError(f"no p-header in {path}")
+    return edges
+
+
 def load_graph_from_text(path: pathlib.Path) -> tuple[Optional[list], list[tuple[int, int]]]:
     """Parse a graph file.
 
     Supported formats (auto-detected by extension and content):
       - .json: {"vertices": [[x, y], ...], "edges": [[i, j], ...]}
-      - .txt: free-form. First line `V E` (counts), then V lines of `x y` coords,
-              then E lines of `i j` edge pairs.
-      - .csv: same as .txt but comma-separated.
+      - .edge / .dimacs: DIMACS edge format with `p edge V E` header.
+        Companion .vtx file is consulted for vertex coords when present.
+      - .txt / .csv: free-form. First line `V E` (counts), then V lines of
+        `x y` coords, then E lines of `i j` edge pairs.
     Returns (vertices_or_None, edges).
     """
-    text = path.read_text(encoding="utf-8")
-
     if path.suffix == ".json":
-        data = json.loads(text)
+        data = json.loads(path.read_text(encoding="utf-8"))
         vertices = data.get("vertices")
         edges = [tuple(e) for e in data["edges"]]
         return vertices, edges
 
+    if path.suffix in (".edge", ".dimacs"):
+        edges = load_dimacs_edges(path)
+        # Companion .vtx files use Mathematica syntax: `{x, y}` per line with
+        # `Sqrt[n]`. We do not parse them here; SAT verification is sound
+        # independent of coordinates. Exact-arithmetic distance verification
+        # against the .vtx file would be a separate follow-up experiment.
+        return None, edges
+
     sep = "," if path.suffix == ".csv" else None
+    text = path.read_text(encoding="utf-8")
     tokens = [line.split(sep) for line in text.splitlines() if line.strip() and not line.startswith("#")]
     if not tokens:
         raise ValueError(f"empty graph file: {path}")
