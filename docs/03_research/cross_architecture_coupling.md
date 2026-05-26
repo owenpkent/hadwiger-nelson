@@ -61,6 +61,8 @@ The six findings tell a single story.
 
 **For SYNTHESIZER**: this coupling story should be the headline of the project as it matures. The four-architecture map is a useful research tool, but the no-progress-since-2018 pattern across architectures is best understood as a single combinatorial barrier, not four independent ones.
 
+**Update (L7, Architecture 4)**: the coupling extends to Arch 4 as well, but inverted. Where L4 says Arch 2 *waits for* an Arch 1 breakthrough (a 6-chromatic UDG would unlock $\chi_m \geq 6$), L7 says Arch 4's main 2003 result *was already invalidated* by Arch 1's 2018 breakthrough. The Shelah-Soifer "$\chi(\mathbb{R}^2)$ depends on choice axioms" claim is *conditional* on all finite UDGs being 4-colorable; de Grey 2018 produced a 5-chromatic UDG and made the conditional vacuous. So three of the four architectures are now coupled to Arch 1 by the same combinatorial object: Arch 2 needs a $\chi \geq 6$ UDG to advance (L4), Arch 3 needs a $\chi_f \geq 6$ argument via $m_1 < 1/5$ density bounds (the same barrier in continuous form, L6), and Arch 4 lost its specific result to Arch 1 already (L7). Only Architecture 4's broader descriptive-set-theoretic / Borel-chromatic program is structurally independent of the missing UDG, and that program has not produced bounds on $\chi(\mathbb{R}^2)$ specifically.
+
 **For ORCHESTRATOR**: the architecture portfolio (40% Arch 1, 25% Arch 2, 15% Arch 3, 10% Arch 4, 10% cross-cutting) should be revisited in light of L4. If Arch 1 and Arch 2 share an obstruction, parallel investment in both gives diminishing returns. Concentrating on Arch 1 (the source of the missing object) or on Arch 3's symmetry-fixed LP (the only independent route) may be more efficient. Arch 4 remains valuable for the structural / axiomatic framing but is unlikely to close the bound gap directly.
 
 ## What this does *not* claim
@@ -87,5 +89,6 @@ The six findings tell a single story.
 - **LEARNINGS source**: [`experiments/LEARNINGS.md`](../../experiments/LEARNINGS.md) entries L1 through L6.
 - **Architecture 1 dossier**: [`docs/research_atlas/arch1_sat_lineage.md`](../research_atlas/arch1_sat_lineage.md).
 - **Architecture 2 dossier**: [`docs/research_atlas/arch2_measurable_lineage.md`](../research_atlas/arch2_measurable_lineage.md).
+- **Architecture 4 dossier**: [`docs/research_atlas/arch4_set_theoretic_lineage.md`](../research_atlas/arch4_set_theoretic_lineage.md).
 - **Session records**: [`experiments/orchestrator_sessions/`](../../experiments/orchestrator_sessions/).
 - **Verified Lean theorem**: `HadwigerNelson.four_le_chromaticNumberOfPlane` in [`lean/HadwigerNelson/MoserBridge.lean`](../../lean/HadwigerNelson/MoserBridge.lean).

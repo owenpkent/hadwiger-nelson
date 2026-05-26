@@ -44,8 +44,8 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 | $\chi_m(\mathbb{R}^2)$ | **measurable** chromatic number: color classes must be Lebesgue-measurable | $5 \leq \chi_m$ (Falconer 1981, **no improvement in 45 years**); see arch2 dossier |
 | $m_1(\mathbb{R}^2)$ | density of largest measurable unit-distance-avoiding set; $\chi_m \geq 1/m_1$ | $m_1 \leq 0.2470$ (Ambrus-Csiszárik-Matolcsi-Varga-Zsámboki 2023), settling Erdős's conjecture |
 | $\chi_f(\mathbb{R}^2)$ | **fractional** chromatic number | $\chi_f \geq 4$ (Matolcsi-Ruzsa-Varga-Zsámboki 2023, arXiv:2311.10069); previously $\geq 3.6$ (Cranston-Rabern) |
-| $\chi_B(\mathbb{R}^2)$ | **Borel** chromatic number: color classes Borel | open; sits between $\chi_m$ and $\chi$ |
-| $\chi(\mathbb{R}^2)$ in ZF + DC | without full Choice | **Shelah-Soifer**: can differ from ZFC value |
+| $\chi_B(\mathbb{R}^2)$ | **Borel** chromatic number: color classes Borel | open; sits between $\chi$ and $\chi_m$; no published bound stronger than $\chi_B \geq 5$ |
+| $\chi(\mathbb{R}^2)$ in ZF + DC + LM | without full Choice, with Lebesgue measurability | **open whether it differs from ZFC value**. Shelah-Soifer 2003 proved a *conditional* (if every finite UDG has $\chi \leq 4$ then values differ) which de Grey 2018 made vacuous by exhibiting a 5-chromatic UDG. The phenomenon survives for *artificial* distance graphs (Shelah-Soifer 2003b, Payne 2009) but not for $\chi(\mathbb{R}^2)$ itself. See LEARNINGS L7 |
 | $\chi_m(\mathbb{H}^2(d))$ | measurable, hyperbolic plane, edge distance $d$ | $\geq 6$ for $d \geq 12$ (DeCorte-Golubev 2018). *Does not transfer to $\mathbb{R}^2$* |
 | $\chi$ for convex-tile colorings | color classes are convex polygons of bounded area | $\geq 6$ (Coulson 2002, Townsend-Woodall). Strictly stronger restriction than Lebesgue-measurable |
 
@@ -99,11 +99,15 @@ The four architectures are not as independent as the framing suggests. Specifica
 
 **Goal**: clarify the dependence of $\chi(\mathbb{R}^2)$ on the axiom system; refine the Borel chromatic number.
 
-**Lineage**: Shelah-Soifer (the chromatic number depends on choice); descriptive set theory (Borel chromatic for graphs on Polish spaces).
+**Lineage**: de Bruijn-Erdős 1951 (compactness, weak AC) $\to$ Shelah-Soifer 2003 (axiom-dependence for distance graphs on $\mathbb{R}^1$ and $\mathbb{R}^2$; conditional theorem about $\chi(\mathbb{R}^2)$) $\to$ Shelah-Soifer 2005 ($\mathbb{R}^n$ extension) $\to$ Payne 2009 (first UDG-subgraphs with axiom-dependent $\chi$) $\to$ Kechris-Solecki-Todorcevic 1999 / Marks et al. (Borel chromatic framework on Polish spaces).
 
-**Tools**: forcing; descriptive set theory; effective measure theory.
+**Tools**: forcing; descriptive set theory; Hamel-basis constructions; Steinhaus theorem on difference sets; effective measure theory.
 
-**Status**: structural. Unlikely to close the gap directly but reframes what "the" chromatic number means.
+**Wrong-approach test**: partly orthogonal (axiom dependence is meta-mathematical). But arguments should still distinguish $\mathbb{R}$ from $\mathbb{Q}$ structurally.
+
+**Status**: conceptually rich but **does not close the $[5, 7]$ gap**. The 2003 Shelah-Soifer conditional theorem about $\chi(\mathbb{R}^2)$ was made vacuous by de Grey 2018: it required all finite UDGs to be 4-colorable, and de Grey produced a 5-chromatic finite UDG. Whether $\chi(G_{\mathbb{R}^2})$ specifically depends on AC remains **open**. See LEARNINGS L7 and the [arch4 dossier](arch4_set_theoretic_lineage.md).
+
+**Deep dive**: [`arch4_set_theoretic_lineage.md`](arch4_set_theoretic_lineage.md).
 
 ## Wrong-approach detectors
 
