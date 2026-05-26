@@ -73,5 +73,5 @@ The experimental thread is organized around the same four-architecture framework
 | e2c Fourier avoidance | 2 | not started |
 | e3a fractional small | 3 | not started (subsumed by e3a Lovász theta below) |
 | e3a Lovász $\vartheta$ on Polymath16 510 | 3 | done; $\vartheta = 170.24$, loose chi >= 3 (LEARNINGS L5) |
-| e3b Lovász $\vartheta$ | 3 | superseded by e3a above |
-| e3c Bochner continuous | 3 | not started |
+| e3b OFV Bessel-LP for $m_1(\mathbb{R}^2)$ | 3 | done; $m_1 \leq 0.287$ giving $\chi_m \geq 4$ in 30 ms via cvxpy + HiGHS (LEARNINGS L6) |
+| e3c Bochner continuous | 3 | superseded by e3b above (Bessel = Bochner in $d=2$ for $J_0$) |

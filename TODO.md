@@ -31,7 +31,9 @@ Task tracker for the Hadwiger-Nelson research repo.
 
 - [ ] Survey: Cranston-Rabern fractional chromatic bounds + Matolcsi-Ruzsa-Varga-Zsámboki 2023 (chi_f >= 4)
 - [x] Compute Lovász theta on Polymath16 510: theta = 170.24, loose chi >= 3 only (LEARNINGS L5)
-- [ ] Implement OFV / BNOFV rotation-invariant SDP framework (the right relaxation per L5)
+- [x] Basic OFV rotation-invariant Bessel-LP: $m_1 \leq 0.287$, $\chi_m \geq 4$ in 30 ms (LEARNINGS L6)
+- [ ] Refine basis to match OFV's published $m_1 \leq 0.2688$
+- [ ] Push toward Ambrus et al. $m_1 \leq 0.2470$ via 23-point AC-MV-Z LP
 - [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP
 
 ## Architecture 4: Set-theoretic / axiomatic
