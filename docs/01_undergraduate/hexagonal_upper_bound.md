@@ -10,7 +10,7 @@ A function $\varphi : \mathbb{R}^2 \to \{1, \dots, 7\}$ such that $\lVert x - y 
 
 ### Step 1: tile with regular hexagons
 
-A regular hexagon with **circumradius** $R$ (center to vertex) has **inradius** $r = R \tfrac{\sqrt{3}}{2}$ (center to edge midpoint) and **long diameter** $2R$ (vertex to opposite vertex).
+A regular hexagon with **circumradius** $R$ (center to vertex) has **inradius** $r = \tfrac{R\sqrt{3}}{2}$ (center to edge midpoint) and **long diameter** $2R$ (vertex to opposite vertex).
 
 Tile the plane with congruent regular hexagons of circumradius $R$ in the standard honeycomb pattern. Their centers form a triangular lattice with nearest-neighbor distance $2r = R \sqrt{3}$.
 
@@ -26,7 +26,11 @@ $$
 
 The quotient $\mathbb{Z}[\omega] / (\alpha)$ has exactly $7$ elements. Color each hexagon by its center's residue class modulo $\alpha$. This gives a periodic $7$-coloring of the lattice.
 
-Two centers of the same color differ by an element of the sub-lattice $\alpha \mathbb{Z}[\omega]$. The shortest nonzero element of this sub-lattice has norm $\sqrt{7}$ in $\mathbb{Z}[\omega]$ coordinates, which translates to distance $\sqrt{7} \cdot 2r = 2 R \sqrt{21} / \sqrt{3} = R \sqrt{21}$ in the plane.
+Two centers of the same color differ by an element of the sub-lattice $\alpha \mathbb{Z}[\omega]$. The shortest nonzero element of this sub-lattice has norm $\sqrt{7}$ in $\mathbb{Z}[\omega]$ coordinates. Each unit of $\mathbb{Z}[\omega]$-norm corresponds to a center spacing of $2r = R\sqrt{3}$, so the same-color centers are at physical distance
+
+$$
+\sqrt{7} \cdot 2r = \sqrt{7} \cdot R\sqrt{3} = R\sqrt{21}.
+$$
 
 So **same-colored centers are at distance $\geq R\sqrt{21}$**.
 
@@ -62,7 +66,7 @@ A $6$-color scheme using non-hexagonal tiles (squares, irregular polygons, fract
 
 ## Wrong-approach check
 
-The construction relies on Euclidean rotational and translational structure (regular hexagons exist; the Eisenstein lattice is Euclidean-isometric to a sub-lattice of $\mathbb{R}^2$). It does not work in $\mathbb{Q}^2$: there are no regular hexagons with rational vertices (the construction uses $\sqrt{3}$). In the $L^\infty$ metric, "hexagons" become "squares" and the analog gives only a $4$-color upper bound, matching $\chi(\text{L}^\infty\text{-UDG}) = 4$. So the approach is not L-function-blind in the HN sense: it correctly fails on the controls where $\chi$ is smaller.
+The construction relies on Euclidean rotational and translational structure (regular hexagons exist; the Eisenstein lattice is Euclidean-isometric to a sub-lattice of $\mathbb{R}^2$). It does not work in $\mathbb{Q}^2$: there are no regular hexagons with rational vertices (the construction uses $\sqrt{3}$). In the $L^\infty$ metric, hexagons become squares and the analog gives only a $4$-color upper bound, matching $\chi(L^\infty\text{-UDG}) = 4$ on $\mathbb{R}^2$. So the approach is not norm-blind: it correctly fails on the controls where $\chi$ is smaller.
 
 ## Open: can we do $6$?
 
