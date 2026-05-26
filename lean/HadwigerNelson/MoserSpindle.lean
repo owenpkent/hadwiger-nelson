@@ -76,11 +76,31 @@ theorem moserSpindle_not_colorable_three : ¬ moserSpindle.Colorable 3 := by
     native_decide
   exact h ⟨C, fun _ _ adj => C.valid adj⟩
 
-/-- HN-2 target: `chi(Moser spindle) = 4`. Combining the two halves into the
-    `chromaticNumber = 4` form involves Mathlib's `iInf` / `sInf` plumbing on
-    `ℕ∞`; tracked separately. The mathematical content lives in the two
-    theorems above. -/
+/-- HN-2c: the chromatic number of the Moser spindle equals 4.
+
+    Glues HN-2a (Colorable 4) and HN-2b (¬ Colorable 3) via
+    `Nat.sInf_upward_closed_eq_succ_iff`. The Colorable set is upward closed
+    by `Colorable.mono`, so `sInf {n | Colorable n} = k+1` iff
+    `Colorable (k+1) ∧ ¬ Colorable k`. Apply with `k = 3`. -/
+theorem moserSpindle_chromaticNumber : moserSpindle.chromaticNumber = 4 := by
+  rw [moserSpindle_colorable_four.chromaticNumber_eq_sInf]
+  have h_upward : ∀ k₁ k₂ : ℕ, k₁ ≤ k₂ →
+      k₁ ∈ {n' | moserSpindle.Colorable n'} →
+      k₂ ∈ {n' | moserSpindle.Colorable n'} :=
+    fun _ _ hk hc => hc.mono hk
+  have hinf : sInf {n' : ℕ | moserSpindle.Colorable n'} = 4 := by
+    rw [show (4 : ℕ) = 3 + 1 from rfl,
+        Nat.sInf_upward_closed_eq_succ_iff h_upward]
+    exact ⟨moserSpindle_colorable_four, moserSpindle_not_colorable_three⟩
+  rw [hinf]
+  rfl
+
+/-- Alias for the HN-2 target statement. -/
 def MoserSpindleIsFourChromatic : Prop :=
   moserSpindle.chromaticNumber = 4
+
+/-- HN-2 fully proved. -/
+theorem moserSpindleIsFourChromatic : MoserSpindleIsFourChromatic :=
+  moserSpindle_chromaticNumber
 
 end HadwigerNelson
