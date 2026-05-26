@@ -11,14 +11,15 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Implement `experiments/_shared/wrong_approach_detectors.py` Q^2 + L-infinity controls
 - [x] Implement `experiments/_shared/smoke_test.py` sanity check on Moser spindle and small UDGs
 - [x] Write `experiments/combinatorial/e1a_moser_spindle.py` verify chi(Moser) = 4 via SAT (cadical195 + glucose4 agree)
-- [ ] Write `experiments/combinatorial/e1b_de_grey_skeleton.py` load de Grey graph data, verify chi >= 5
+- [x] Write `experiments/combinatorial/e1b_de_grey_skeleton.py` cadical195 + glucose4 agree on UNSAT for 510 / 517 / 529 / 553 / 826; 1585 in progress
 
 ## Architecture 1: Combinatorial / UDG
 
-- [ ] Survey: Polymath16 chronology and current smallest 5-chromatic UDG
-- [ ] Reproduce: SAT-verify de Grey's 1581-vertex graph chi >= 5
+- [x] Survey: Polymath16 chronology and current smallest 5-chromatic UDG (dossier at `docs/research_atlas/arch1_sat_lineage.md`)
+- [x] Reproduce: SAT-verify de Grey's lineage at 510 / 517 / 529 / 553 / 826 vertices (de Grey 1585 in progress)
 - [ ] Explore: targeted constructions toward chi = 6 (Heule-style)
-- [ ] Document SAT encoding conventions and reproducibility
+- [ ] Field-theoretic search direction (LEARNINGS L1): which closed-under-rotation rings refuse 5-colorings
+- [x] Document SAT encoding conventions and reproducibility (e1a/e1b scripts + cache certificates)
 
 ## Architecture 2: Measurable / spectral
 
