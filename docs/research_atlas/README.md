@@ -49,6 +49,10 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 | $\chi_m(\mathbb{H}^2(d))$ | measurable, hyperbolic plane, edge distance $d$ | $\geq 6$ for $d \geq 12$ (DeCorte-Golubev 2018). *Does not transfer to $\mathbb{R}^2$* |
 | $\chi$ for convex-tile colorings | color classes are convex polygons of bounded area | $\geq 6$ (Coulson 2002, Townsend-Woodall). Strictly stronger restriction than Lebesgue-measurable |
 
+## Cross-architecture synthesis
+
+The four architectures are not as independent as the framing suggests. Specifically: Architectures 1 and 2 share a single missing object (a 6-chromatic finite UDG), and Architecture 3 evidence suggests the same structural barrier applies to $\chi_f$. See [`../03_research/cross_architecture_coupling.md`](../03_research/cross_architecture_coupling.md) for the full synthesis of LEARNINGS L1-L6 and what it implies for the research program.
+
 ## Four candidate proof architectures
 
 ### Architecture 1: Combinatorial / Unit-Distance Graphs
