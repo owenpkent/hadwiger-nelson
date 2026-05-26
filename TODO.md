@@ -16,9 +16,12 @@ Task tracker for the Hadwiger-Nelson research repo.
 ## Architecture 1: Combinatorial / UDG
 
 - [x] Survey: Polymath16 chronology and current smallest 5-chromatic UDG (dossier at `docs/research_atlas/arch1_sat_lineage.md`)
-- [x] Reproduce: SAT-verify de Grey's lineage at 510 / 517 / 529 / 553 / 826 vertices (de Grey 1585 in progress)
+- [x] Reproduce: SAT-verify de Grey's lineage at 510 / 517 / 529 / 553 / 826 / 1585 vertices (multi-solver agreement, LEARNINGS L3)
 - [ ] Explore: targeted constructions toward chi = 6 (Heule-style)
-- [ ] Field-theoretic search direction (LEARNINGS L1): which closed-under-rotation rings refuse 5-colorings
+- [x] Field-extension orbit-search framework (e1d) for chi >= 6 via alternate ring extensions
+  - [x] Tested 6 alternate rings {Q(sqrt p) : p = 7, 19, 23, 27, 31, 39} with Moser-spindle seed at orbit size 3-6
+  - [x] Naive orbit-only search NEGATIVE: rotations don't auto-bind copies (LEARNINGS L11)
+  - [ ] Algorithmic binding-rotation search (find rotations that produce cross-copy unit edges) — multi-month
 - [x] Document SAT encoding conventions and reproducibility (e1a/e1b scripts + cache certificates)
 
 ## Architecture 2: Measurable / spectral
@@ -35,10 +38,16 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Refine basis to match OFV's published $m_1 \leq 0.2688$ (e3c, 3 off-center unit triangles, exact match, LEARNINGS L8)
 - [x] Wide-triangle sweep shows triangle inequalities saturate near 0.2682 (e3d, LEARNINGS L9)
 - [x] Moser-spindle inequality breaks triangle saturation: $m_1 \leq 0.2619$, $\chi_m \geq 4$ real $\geq 3.82$ (e3e, LEARNINGS L9)
-- [ ] Push toward KMOR 2015 $m_1 \leq 0.2588$: extend e3e with rotations + additional UDG configurations
-- [ ] Push toward Ambrus et al. $m_1 \leq 0.2470$ via 23-point AC-MV-Z LP (would give integer $\chi_m \geq 5$)
-- [ ] Beam search over larger UDG configurations (Polymath16 fragments, custom configurations)
+- [x] Shot 1: 5-chromatic UDG (Polymath 510) in LP — NEGATIVE structural result; Bessel sums cancel across spread-out 510 vertices (e3f, LEARNINGS L10)
+- [x] Ambrus 2023 IE-LP framework: confirmed 1-particle LP with inclusion-exclusion atoms, NOT a 2-particle SDP (e3g, LEARNINGS L12)
+- [x] Beam search over IE-LP configurations: reached $m_1 \leq 0.2584$ at 17 vertices, matches KMOR 2015 (e3h, LEARNINGS L13)
+- [ ] Break the 0.258 greedy plateau toward Ambrus 2023 $m_1 \leq 0.2470$ (would give integer $\chi_m \geq 5$):
+  - [ ] Beam width >= 2 in e3h (keep top-K branches)
+  - [ ] Vertex-swap local search starting from the 17-pt configuration
+  - [ ] Restart from alternate seeds (Moser spindle, Heule fragments)
+  - [ ] Constructive candidate pool (generate unit-distance neighbors in Q(sqrt 3, sqrt 11) lattice instead of fixed Polymath 510)
 - [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP
+- [ ] Architecture 3 dossier: docs/research_atlas/arch3_fractional_lp_lineage.md (currently spread across LEARNINGS L5-L13)
 
 ## Architecture 4: Set-theoretic / axiomatic
 

@@ -51,7 +51,13 @@ Refinement: with diameter exactly $1$ and boundary handling, this gives $\chi \l
 
 ## Cross-architecture synthesis
 
-The four architectures are not as independent as the framing suggests. Specifically: Architectures 1 and 2 share a single missing object (a 6-chromatic finite UDG), and Architecture 3 evidence suggests the same structural barrier applies to $\chi_f$. See [`../03_research/cross_architecture_coupling.md`](../03_research/cross_architecture_coupling.md) for the full synthesis of LEARNINGS L1-L6 and what it implies for the research program.
+Three of the four architectures are gated by a single missing combinatorial object: **a finite unit-distance graph in $\mathbb{R}^2$ with chromatic number $\geq 6$**.
+
+- Architecture 1: such a graph directly gives $\chi(\mathbb{R}^2) \geq 6$.
+- Architecture 2: Falconer's 1981 four-step machine inputs a finite $k$-chromatic UDG and outputs $\chi_m \geq k$. A 6-chromatic UDG $\to$ $\chi_m \geq 6$.
+- Architecture 3: the OFV-style LP constraint $\sum f(\|v_i\|) \leq \alpha(G)$ drives $m_1 \to \alpha(G)/N(G) \leq 1/\chi_f(G)$. A graph with $\chi_f(G) \geq 6$ would give integer $\chi_m \geq 6$.
+
+See [`../03_research/cross_architecture_coupling.md`](../03_research/cross_architecture_coupling.md) for the synthesis of LEARNINGS L1-L13. Long-range research program in [`../../experiments/SOLVING_PROGRAM.md`](../../experiments/SOLVING_PROGRAM.md).
 
 ## Four candidate proof architectures
 
@@ -83,17 +89,26 @@ The four architectures are not as independent as the framing suggests. Specifica
 
 **Deep dive**: [`arch2_measurable_lineage.md`](arch2_measurable_lineage.md).
 
-### Architecture 3: Fractional / Lovász $\vartheta$ / spectral
+### Architecture 3: Fractional / Lovász $\vartheta$ / spectral / LP for $m_1(\mathbb{R}^2)$
 
-**Goal**: bound $\chi_f(\mathbb{R}^2)$ and the Lovász theta function on (graph powers of) the unit-distance graph, then transfer to $\chi$.
+**Goal**: bound $m_1(\mathbb{R}^2)$ via continuous LP / SDP, transfer to $\chi_m$ via $\chi_m \geq 1/m_1$; bound $\chi_f(\mathbb{R}^2)$ via finite UDG fractional chromatic.
 
-**Lineage**: Cranston-Rabern, Larman-Rogers, work on Cayley graphs of $\mathbb{R}^d$.
+**Lineage**: Cranston-Rabern $\chi_f \geq 76/21 \approx 3.62$ (arXiv:1501.01647) $\to$ Oliveira Filho-Vallentin 2010 LP $m_1 \leq 0.2688$ (arXiv:0808.1822) $\to$ Bachoc-Nebe-OFV 2009 2-particle SDP (arXiv:0801.1059, not helpful at $n=2$, LEARNINGS L12) $\to$ Keleti-Matolcsi-OFV-Ruzsa 2015 LP $m_1 \leq 0.2588$ (arXiv:1501.00168) $\to$ Bellitto-Pêcher-Sédillot 2018 $\chi_f \geq 3.8991$ on 607 vertices $\to$ Ambrus-Matolcsi 2022 LP $m_1 \leq 0.2544$ $\to$ Matolcsi-Ruzsa-Varga-Zsámboki 2023 $\chi_f \geq 4$ on 27 vertices (arXiv:2311.10069) $\to$ **Ambrus-Csiszárik-Matolcsi-Varga-Zsámboki 2023 $m_1 \leq 0.2470$** via 23-point IE-LP + beam search (arXiv:2207.14179). This last gives integer $\chi_m \geq 5$ via the bridge inequality $\chi_m \geq 1/m_1$.
 
-**Tools**: linear programming for fractional chromatic; semidefinite programming for Lovász $\vartheta$; spectral analysis of Cayley-graph-like operators on $\mathbb{R}^2$ (Bochner integrals over the rotation group).
+**Key insight (LEARNINGS L12)**: Ambrus 2023's path to 0.247 is a refined *1-particle* LP with inclusion-exclusion atom constraints from a finite point configuration. NOT a 2-particle SDP. The BV SDP at $n=2$ reduces to the basic Bessel LP.
 
-**Wrong-approach test**: must distinguish the Euclidean inner product from generic norms (otherwise applies to $L^\infty$ where $\chi = 4$).
+**Tools**: Bochner-Hankel decomposition of positive-type radial functions on $\mathbb{R}^2$ via Bessel $J_0$; rotation-invariant LP for $m_1(\mathbb{R}^n)$ via $\Omega_n$ functions; OFV-style simplex inequalities (unit-edge equilateral triangles $K_3$); Moser-spindle inequalities ($\alpha(G) = 2$); inclusion-exclusion atom LP from finite point configurations (Ambrus); beam search over configurations.
 
-**Status**: exploratory. $\chi_f < \chi$ in general, so this gives lower bounds but not equality.
+**Wrong-approach test**: must distinguish the Euclidean inner product from generic norms (otherwise applies to $L^\infty$ where $\chi = 4$); must engage the $O(2)$ rotation group via spherical symmetrization (otherwise reduces to $\mathbb{R}^1$ where the LP gives the correct $m_1 = 1/2$, $\chi_m \geq 2$ — detector check passes for OFV / IE-LP framework).
+
+**Status**: active. Project replication state:
+- e3b vanilla Bessel-LP: $m_1 \leq 0.2873$ analytic saturation (L6).
+- e3c OFV 2010 dual LP with 3 off-center triangles: $m_1 \leq 0.268412$ exact match (L8).
+- e3e Moser-spindle inequality at 6048 translations: $m_1 \leq 0.2619$ (L9).
+- e3h greedy beam search over IE-LP, 17-vertex configuration: $m_1 \leq 0.2584$ matching KMOR 2015 (L13).
+- Integer $\chi_m \geq 5$ via this route requires $m_1 < 0.2$, current open frontier. Greedy width-1 plateau near 0.258; beam width $\geq 2$, vertex-swap local search, or richer pool needed.
+
+**Cross-architecture coupling** (LEARNINGS L9, L10): the OFV LP constraint $\sum f(\|v_i\|) \leq \alpha(G)$ drives $m_1$ toward $\alpha(G)/N(G)$. For a 6-chromatic finite UDG with $\chi_f(G) = 6$, this gives $m_1 \leq 1/6$, hence integer $\chi_m \geq 6$. Same missing object as Architectures 1 and 2.
 
 ### Architecture 4: Set-theoretic / axiomatic
 

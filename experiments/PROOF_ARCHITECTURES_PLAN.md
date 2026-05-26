@@ -67,7 +67,7 @@ The experimental thread is organized around the same four-architecture framework
 | e1a Moser spindle | 1 | done (cadical195 + glucose4 agree on chi = 4) |
 | e1b de Grey skeleton | 1 | done for 510/517/529/553/826/1585 (cadical195 + glucose4 agree on UNSAT across all six, including the original de Grey 2018 graph) |
 | e1c Polymath16 smallest | 1 | not started |
-| e1d $\chi \geq 6$ search | 1 | not started |
+| e1d field-extension orbit search ($\chi \geq 6$) | 1 | framework built; orbit-only naive negative across 6 alternate rings (LEARNINGS L11) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |
@@ -77,3 +77,6 @@ The experimental thread is organized around the same four-architecture framework
 | e3c OFV multi-simplex LP for $m_1(\mathbb{R}^2)$ | 3 | done; $m_1 \leq 0.268412$ giving $\chi_m \geq 4$ (real $\geq 3.73$) via 3 off-center unit triangles, exact match to OFV 2010 Table 3.1 (LEARNINGS L8) |
 | e3d wide-triangle sweep | 3 | done; 1409 candidate triples on $0.1$-grid saturates near 0.2682; triangle class exhausted (LEARNINGS L9) |
 | e3e Moser-spindle LP inequality | 3 | done; $m_1 \leq 0.2619$ via Moser-spindle ($N=7, \alpha=2$) translations + OFV triangles, closes 75% of OFV-to-KMOR gap; $\chi_m \geq 4$ (real $\geq 3.82$) (LEARNINGS L9) |
+| e3f Polymath 510 in LP (Shot 1) | 3 | done; structural negative, LP ignores Polymath 510 constraint due to Bessel-sum cancellation across 510 vertices (LEARNINGS L10) |
+| e3g Ambrus inclusion-exclusion LP framework | 3 | done; implemented IE-LP. Moser 0.283, hex 2-layer 0.276, Moser+hex 0.272. Single-config bounds limited; LEARNINGS L12 |
+| e3h IE-LP beam search over Polymath 510 pool | 3 | done; m_1 $\leq$ 0.2584 at 17 vertices, matches KMOR 2015 (0.2588). Plateau at greedy width 1 (LEARNINGS L13) |
