@@ -6,6 +6,204 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L22. The L21 covering lemma has an EXACT list-coloring reformulation: chi(H_1 cup H_2 cup B) >= 5 iff H_2 is not list-colorable from lists L(v) = [4] \ F(v) where F(v) = {c_1(u) : (u,v) in B}. L21's C4 conjecture, read literally, is strictly stronger than necessary (C4 implies chi >= 5 but the converse fails); L22 supersedes it with the list-coloring theorem.
+
+**Architecture**: 1. VERIFIER pass on L21's open C4 conjecture.
+
+**Experiment**: [`e1w_lemma_c4.py`](combinatorial/e1w_lemma_c4.py).
+
+**Theorem (list-coloring reformulation of L21)**.
+
+Let $H_1, H_2$ be 4-chromatic graphs on disjoint vertex sets, $B \subseteq V(H_1) \times V(H_2)$ a bridge set, and fix any proper 4-coloring $c_1$ of $H_1$. For each $v \in V(H_2)$ define
+
+$$F(v) := \{c_1(u) : (u,v) \in B\} \subseteq [4], \qquad L(v) := [4] \setminus F(v).$$
+
+(So $F(v) = \emptyset$ and $L(v) = [4]$ for $v \notin \partial_B H_2$.) Then
+
+$$\chi(H_1 \cup H_2 \cup B) \geq 5 \iff H_2 \text{ has no proper coloring } c_2 \text{ with } c_2(v) \in L(v) \text{ for every } v.$$
+
+*Proof*.
+($\Rightarrow$) Contrapositive. If $c_2$ list-extends from $L$, the joint $c(u) := c_1(u)$ on $H_1$, $c(v) := c_2(v)$ on $H_2$ is proper: $H_1, H_2$ edges respected by $c_1, c_2$; for bridge $(u,v) \in B$ we have $c_1(u) \in F(v)$ while $c_2(v) \in L(v) = [4] \setminus F(v)$, so $c_1(u) \neq c_2(v)$. Hence the combined graph is 4-colorable.
+($\Leftarrow$) Contrapositive. Any proper 4-coloring $c$ of the combined graph yields $c_2 := c|_{V(H_2)}$ with $c_2(v) \neq c(u) = c_1(u)$ for every bridge $(u,v) \in B$. So $c_2(v) \notin F(v)$, i.e. $c_2(v) \in L(v)$. $\square$
+
+This is a *clean theorem*, not a conjecture, and is the right form of the covering lemma. Verified computationally on all six L21 small cases (see [`_cache/e1w_lemma_c4.json`](combinatorial/_cache/e1w_lemma_c4.json)).
+
+**F-profiles on the L21 small cases (sorted desc per case, $c_1$ = canonical first 4-coloring)**:
+
+| Case | $B$-kind | $\|B\|$ | $F$ profile | list-UNSAT? | C4 (L21) holds? | C4 violators / $\|\mathcal{C}_2\|$ |
+|---|---|---:|---|:---:|:---:|---:|
+| $K_4 \times K_4$ | unconstr. | 4 | [1,1,1,1] | Y | N | 24 / 24 |
+| $K_4 \times$ Moser | unconstr. | 4 | [4,0,0,0,0,0,0] | Y | Y | 0 / 384 |
+| Moser $\times$ Moser | no-$K_4$ | 14 | [4,3,2,2,1,1,0] | Y | N | 376 / 384 |
+| $K_4$-pendant$^{\times 2}$ | unconstr. | 4 | [1,1,1,1,0] | Y | N | 72 / 72 |
+| $W_5 \times W_5$ | no-$K_4$ | 11 | [3,3,2,1,1,1] | Y | N | 120 / 120 |
+| $K_4 \times$ Hajos | unconstr. | 4 | [1,1,1,1,0,0,0] | Y | N | 144 / 144 |
+
+**Verdict on C4 (as stated in L21)**.
+
+L21 stated C4 as: "for every 4-coloring $c_2$ of $H_2$, the bipartite subgraph $B[u : c_1(u) = c_2(v) \text{ for some } (u,v) \in B]$ must hit every color class of $c_2|_{\partial_B H_2}$." Translation into $F$: "for every $c_2$, for every $v \in \partial_B H_2$, $c_2(v) \in F(v)$." This is the universal "hits every boundary vertex" condition.
+
+The list-coloring form is: "for every $c_2$, **some** $v$ (anywhere in $V(H_2)$, including boundary) has $c_2(v) \in F(v)$." This is the existential "hits some vertex" condition.
+
+C4 is strictly stronger: 5 of 6 small cases have list-UNSAT (so $\chi \geq 5$) yet some $c_2$ has $c_2(v) \notin F(v)$ for some boundary $v$, so C4 fails. The C4 implication "$\chi \geq 5 \Rightarrow $ every $c_2$ is hit at every boundary $v$" is FALSE. The correct theorem is: "$\chi \geq 5 \iff $ every $c_2$ is hit at some vertex." **L22 supersedes C4.**
+
+**Explicit C4-vs-list witness (Moser $\times$ Moser, 14-bridge)**. With $c_1 = (0,1,2,0,1,2,3)$ and the L21 bridge set $B^*$, the 4-coloring $c_2 = (0,1,2,0,1,2,3)$ of $H_2$ violates C4 at $v \in \{1, 4, 5\}$ (where $c_2(v) \notin F(v)$), yet list-coloring is still UNSAT because $c_2$ is forbidden at $v=0$ (where $F(0) = \{0,1\}$ contains $c_2(0) = 0$). The covering succeeds *somewhere*, not *everywhere*.
+
+**Sharper structural facts in the no-$K_4$ / no-$K_5$ regime**.
+
+1. **$\|F(v)\| = 4$ at boundary $v$ does NOT force $K_5$ unless the four $H_1$-endpoints induce a $K_4$.** Verified on Moser $\times$ Moser 14-bridge: $v = 6$ has $F(v) = \{0,1,2,3\}$ but the bridges into $v = 6$ are $(0,6),(2,6),(3,6),(4,6),(6,6)$ with $c_1$-colors $\{0,2,0,1,3\}$; the $H_1$-endpoints partitioned by color are $\{0, 3\}$, $\{4\}$, $\{2\}$, $\{6\}$, and no 4-tuple one-per-color forms a $K_4$ in the Moser spindle. So the no-$K_4$ regime CAN tolerate $\|F(v)\| = 4$ without producing $K_5$. The $K_5$ collapse (L21's "trivial" cases) is the special situation where $H_1$ already contains a $K_4$ on the relevant endpoints.
+
+2. **$\|F(v)\| \leq 4$ trivially**; no obstruction here for the no-$K_5$ regime per se. The right structural invariant is the *full list profile* $(L(v))_{v \in V(H_2)}$ viewed as an instance of LIST-3-COLORING (or LIST-$k$-COLORING) of $H_2$.
+
+3. **Hall-type local obstructions for the 14-bridge case**: list size distribution $\{0: 1, 1: 1, 2: 2, 3: 2, 4: 1\}$. One vertex ($v = 6$) has $L = \emptyset$, so the list is locally infeasible at $v = 6$ alone, and the 14-bridge cover succeeds because some bridge from $H_1$ to $v = 6$ forces every color. *This is the "cone obstruction" interpretation*: a single boundary vertex with empty list is a 4-color cone-obstacle, and the bridges are exactly the cone structure that produces it.
+
+**Statement of the refined cone obstruction lemma C4' (replaces L21's C4)**.
+
+**C4' (list-coloring cone obstruction, proved as a theorem above)**. $\chi(H_1 \cup H_2 \cup B) \geq 5$ iff the list assignment $L : V(H_2) \to 2^{[4]}$ with $L(v) = [4] \setminus \{c_1(u) : (u,v) \in B\}$ admits no proper list-coloring of $H_2$. In particular, the strongest *local* obstruction is $L(v) = \emptyset$ at a single vertex (forced by 4 bridges with $H_1$-endpoints in all 4 color classes); the weakest is purely global, where every individual $L(v) \neq \emptyset$ but the global list-coloring is unsat by H_2's structure.
+
+**Corollary (lower bound from local obstruction)**. If $\chi(H_1 \cup H_2 \cup B) \geq 5$ via a local empty-list, then $\|B\| \geq 4$ (need 4 distinct colors at $v$). Verified by all L21 cases.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS: theorem assumes 4-chromatic halves, vacuous in $\mathbb{Q}^2$. |
+| $L^\infty$ on $\mathbb{R}^2$ ($\chi = 4$) | PASS: theorem is graph-theoretic, obstruction is realizability. |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS: no 4-chromatic UDG. Vacuous. |
+
+**Why this matters**.
+
+1. **List-coloring is the right primitive.** L21's covering-product formulation enumerates $\|\mathcal{C}_1\| \cdot \|\mathcal{C}_2\|$ pairs; L22's list-coloring formulation reduces this to a SINGLE list-coloring instance on $H_2$ (with $c_1$ fixed). This is an exponential speedup in formal reasoning: list-coloring of a 7-vertex Moser spindle with lists $L(v)$ is decidable in microseconds; enumerating $16 \times 384 = 6144$ coloring pairs is unnecessary.
+
+2. **The list-coloring view connects to known graph theory.** Choosability / list-chromatic number is a well-studied invariant. Moser spindle has list-chromatic number 4 (it's 4-list-colorable from any list assignment with $\|L(v)\| \geq 4$, but not always 3-list-colorable). Tighter local F-profiles (smaller lists) make list-coloring harder; the L21 14-bridge produces a profile that is "barely" infeasible.
+
+3. **The 14-bridge structure is sharp**: any 13-bridge subset of the L21 set $B^*$ either (a) leaves $L(6) \neq \emptyset$ (and the global list-coloring becomes feasible), or (b) keeps $L(6) = \emptyset$ but creates an empty-list elsewhere with smaller F-coverage. The minimum no-$K_4$ bridge count = 14 is exactly the local-empty-list threshold for Moser $\times$ Moser.
+
+4. **Lemma C4 was almost right.** L21's C4 was an intuition: "every $c_2$ must be obstructed somewhere by bridges." The correction is the quantifier ordering: "somewhere" not "everywhere on the boundary." With this fix, C4' = the list-coloring form, which is a theorem.
+
+**Future BUILDER directions (next session)**:
+
+1. **List-chromatic obstructions in UDG**: characterize which $H_2$ admit list-assignments $L$ with $\|L(v)\| \leq 3$ that are list-uncolorable. The Moser spindle with $L(6) = \emptyset$ and $\|L(v)\| \geq 1$ elsewhere is the smallest example seen here. The "no-empty-list" list-coloring obstruction is a richer combinatorial object.
+2. **Minimum bridge count in the no-empty-list regime**: in the L21 no-$K_4$ Moser $\times$ Moser, $\|B\| = 14$ uses the $L(v) = \emptyset$ local obstruction. What is the minimum no-$K_4$ AND no-empty-list bridge count? This is the "genuinely global" list-coloring obstruction, presumably much larger.
+3. **Apply the list-coloring form to the de Grey 1585 / Polymath 510 bridges**: compute $F(v)$ profiles for the 22 boundary vertices on the asymmetric side of de Grey 1585 (need to extract bridges from cache). Hypothesis: the F-profile is dominated by $\|F(v)\| \in \{3, 4\}$ for most v, with at least one $v$ having $L(v) = \emptyset$, reflecting the "core forces colors via the $C_6$ symmetry" intuition.
+
+---
+
+### L21. Bridge-set in "two 4-chromatic halves + bridges" is a set cover of the (c_1, c_2) compatibility product; every single bridge kills exactly 1/4 of pairs (provable); minimum |B| collapses to 4-6 via K_5 trick, but rises to 11-14 once K_4 is forbidden (the UDG-relevant regime)
+
+**Architecture**: 1. Resolves L20's open characterization question.
+
+**Experiment**: [`e1v_bridge_covering.py`](combinatorial/e1v_bridge_covering.py).
+
+**The covering lemma (now formally captured)**:
+
+For any 4-chromatic graphs $H_1, H_2$ on disjoint vertex sets and bridge set $B \subseteq V(H_1) \times V(H_2)$,
+
+$$\chi(H_1 \cup H_2 \cup B) \geq 5 \iff \bigcup_{(u,v) \in B} \{(c_1, c_2) \in \mathcal{C}_1 \times \mathcal{C}_2 : c_1(u) = c_2(v)\} = \mathcal{C}_1 \times \mathcal{C}_2,$$
+
+where $\mathcal{C}_1, \mathcal{C}_2$ are the sets of proper 4-colorings of $H_1, H_2$. Each bridge $(u,v)$ "kills" the subset of pairs assigning matching colors to its endpoints. $B$ forces $\chi \geq 5$ iff the kill sets cover $\mathcal{C}_1 \times \mathcal{C}_2$. Mod the diagonal $S_4$ action we may fix $c_1$ canonical and let $c_2$ range over the full $S_4$-orbit on $H_2$.
+
+**The kill-fraction theorem (proven, not just empirical)**: For any 4-chromatic graph $H_2$ and any vertex $v \in V(H_2)$ and any color $c \in \{0,1,2,3\}$, exactly $\|\mathcal{C}_2\| / 4$ of the proper 4-colorings $c_2$ satisfy $c_2(v) = c$.
+
+*Proof*: $S_4$ acts freely on $\mathcal{C}_2$ (4-chromatic means all 4 colors are used in every coloring, so the stabilizer is trivial; orbits have size $4! = 24$). The 4 colors are interchangeable under this action, so each color appears at $v$ in exactly $\|\mathcal{C}_2\|/4$ colorings.
+
+**Corollary (the trivial lower bound)**: For any single bridge $(u,v)$, the fraction of pairs killed is exactly $\rho_{u,v} = 1/4$. Hence $\|B\| \geq 4$ for any chi-$\geq$5-forcing bridge set.
+
+**Verified empirically**: across all tested graphs (K_4, Moser spindle, W_5, K_4 + pendant, Hajos join), every single (u,v) bridge kills exactly $\frac{1}{4}\|\mathcal{C}_1 \times \mathcal{C}_2\|$ pairs. Independent of graph structure.
+
+**Small-case minimum bridge sets (unconstrained SAT-min cover, with $\chi$ verified via Cadical)**:
+
+| $H_1 \times H_2$ | $\|\mathcal{C}_1\|$ | $\|\mathcal{C}_2\|$ | $\rho_{\text{mean}}$ | greedy $\|B\|$ | SAT-min $\|B\|$ | matching $\|B\|$ | no-$K_4$ $\|B\|$ |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| $K_4 \times K_4$ | 1 | 24 | 0.250 | 4 | **4** | infeasible | infeasible |
+| $K_4 \times$ Moser | 1 | 384 | 0.250 | 7 | **4** | infeasible | infeasible |
+| Moser $\times$ Moser | 16 | 384 | 0.250 | 7 | **6** | infeasible | **14** |
+| $K_4$-pendant $\times K_4$-pendant | 3 | 72 | 0.250 | 4 | **4** | infeasible | infeasible |
+| $W_5 \times W_5$ | 5 | 120 | 0.250 | 6 | **6** | infeasible | **11** |
+| $K_4 \times$ Hajos-join | 1 | 144 | 0.250 | 4 | **4** | infeasible | infeasible |
+
+**Key observation: all unconstrained minimum bridge sets force chi $\geq 5$ via embedded $K_5$**.
+
+Inspection of the chosen bridges:
+- $K_4 \times K_4$: bridges $\{(0,j) : j \in [4]\}$; vertex 0 of $H_1$ plus $H_2$'s $K_4$ forms $K_5$.
+- $K_4 \times$ Moser: bridges $\{(i,0) : i \in [4]\}$; vertex 0 of $H_2$ plus $H_1$'s $K_4$ forms $K_5$.
+- $W_5 \times W_5$: bridges from hub-0 of $H_1$ to all 6 of $H_2$; chi >= chi(W_5)+1 = 5 via $H_1.0$ cone.
+- Moser $\times$ Moser ($\|B\|=6$): bridges $\{(0,j),(1,j) : j \in \{0,1,2\}\}$; edge $(0,1) \in H_1$ + triangle $\{0,1,2\} \in H_2$ + 6 bridges = $K_5$ on $\{0,1,7,8,9\}$. Verified: combined graph has $K_5$.
+
+**Max-clique trick is forbidden by R^2-realizability**: a unit-distance graph in $\mathbb{R}^2$ has no $K_4$ (four points pairwise at unit distance would form a regular tetrahedron, impossible in 2D). Verified: de Grey 1585 has $\omega = 3$. So **no chi $\geq$ 5 UDG in $\mathbb{R}^2$ can use the $K_5$ trick**. The relevant minimum is the **no-$K_4$ constrained** minimum.
+
+**Smallest known abstract "delocalized chi = 5" with no $K_4$**: Moser $\times$ Moser with the 14-bridge no-$K_4$ cover yields a 14-vertex, 36-edge graph with $\omega = 3$ and $\chi = 5$, verified by SAT (Cadical, 4-coloring UNSAT and 5-coloring SAT). The 14 bridges are:
+
+$$B^{*}_{\text{Moser}^2} = \{(0,0),(0,1),(0,3),(0,4),(0,6),(1,0),(2,6),(3,6),(4,6),(5,1),(6,1),(6,3),(6,5),(6,6)\}.$$
+
+This uses all 7 $H_1$-vertices and 6 of 7 $H_2$-vertices (vertex 2 of $H_2$ omitted from the bridge boundary).
+
+**Conjectures from L20, tested**:
+
+**C1 (information-theoretic LB) is loose by a factor of 3-5x in small cases.** The bound $\|B\| \geq \log_{3/4}(1/\|P\|)$ predicts $\|B\| \geq 11$ for $K_4 \times K_4$ (true min 4), $\|B\| \geq 30$ for Moser $\times$ Moser (true min 6 unconstrained, 14 no-$K_4$). Kill sets are heavily correlated, not independent. C1 is correct as a bound but useless as a tightness predictor.
+
+**C2 (boundary color saturation) is REFUTED.** The minimum-side boundary often collapses to one color:
+
+| Case | bound-$H_1$ colors | bound-$H_2$ colors | both saturated? |
+|---|---|---|:---:|
+| $K_4 \times K_4$ | {0} | {0,1,2,3} | False |
+| $K_4 \times$ Moser | {0,1,2,3} | {0} | False (one-sided) |
+| Moser $\times$ Moser | {0,1} | {0,1,2,3} | False |
+| $W_5 \times W_5$ | {0} | {0,1,2,3} | False |
+
+The correct statement: **for the canonical fixed $c_1$, every color in $[4]$ must appear at $\partial_B H_2$ for the cover to be complete** (since $c_2(v)$ can match any of $c_1(u_1), c_1(u_2), \ldots$). When $\partial_B H_1$ has one vertex with fixed canonical color 0, the cover needs only color 0 to appear at $\partial_B H_2$ in all of $\{0,1,2,3\}$, but multiple bridges from that single $H_1$-vertex provide it. So one-sided saturation suffices in the $\|B\| = 4$ regime.
+
+**C3 (normalized bridge density)**: the small-case minima all hit density $\|B\| / (\|\partial_B H_1\| \cdot \|\partial_B H_2\| \cdot 4) = 0.25$. de Grey 1585 and Polymath 510 are an order of magnitude sparser:
+
+| Construction | $\|B\|$ | $\|\partial_B H_1\|$ | $\|\partial_B H_2\|$ | density |
+|---|---:|---:|---:|---:|
+| $K_4 \times K_4$ (trivial $K_5$) | 4 | 1 | 4 | 0.2500 |
+| Moser $\times$ Moser (trivial $K_5$) | 6 | 2 | 3 | 0.2500 |
+| Moser $\times$ Moser (no $K_4$) | 14 | 7 | 6 | 0.0833 |
+| de Grey 1585 (no $K_4$, UDG-realized) | 155 | 124 | 22 | 0.0142 |
+| Polymath 510 (no $K_4$, UDG-realized) | 833 | $\sim$315 | $\sim$195 | $\sim$0.0034 |
+
+**Interpretation**: as the no-$K_4$ constraint tightens (and toward UDG realizability), density drops by an order of magnitude per step. The minimum bridge-density seems to be a continuous function of the structural constraints, with de Grey / Polymath sitting near the UDG-realizable lower envelope.
+
+**Matching bridges (each vertex in $\leq 1$ bridge) are NEVER sufficient.** For all tested pairs, no matching of any size up to $\min(\|V_1\|, \|V_2\|)$ achieves chi $\geq 5$. This is because matching $\|B\|$ bridges contribute $\|B\| \cdot \|P\|/4$ kills with mostly disjoint $c_2$-fibers, but the kill sets for matching bridges leave a constant fraction of $\mathcal{C}_2$ uncovered (a single matching bridge $(u,v)$ kills only the c_2 with $c_2(v) = c_1(u)$; with each H_2 vertex used at most once, the surviving colorings are exactly those that avoid the matching constraint, which always exist in 4-chromatic graphs). **Bridge endpoints must be shared**: in de Grey 1585, the 22 boundary vertices in $H_2$ host 155 bridges, an average of 7 bridges per vertex.
+
+**Structural conjecture (new, from L21)**:
+
+**C4 (cone obstruction lemma, candidate)**: a minimum chi $\geq$ 5 forcing bridge set with no $K_4$ requires both bridge boundaries to have at least 4 distinct colors *taken together across the canonical coloring of $H_1$ and the varying coloring of $H_2$*. The right formal statement: for every 4-coloring $c_2$ of $H_2$, the bipartite induced subgraph $B[u : c_1(u) = c_2(v) \text{ for some } (u,v) \in B]$ must hit every color class of $c_2|_{\partial_B H_2}$.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS: lemma needs 4-chromatic halves, which don't exist as UDGs in $\mathbb{Q}^2$. |
+| $L^\infty$ on $\mathbb{R}^2$ ($\chi = 4$) | PASS: lemma is purely graph-theoretic; the obstruction to $\chi \geq 5$ in $L^\infty$ is in realizability (cannot put a Moser spindle in $L^\infty$ as UDG since the Moser spindle uses Euclidean equilateral triangles). |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS: $\mathbb{R}^1$ has no 4-chromatic UDG; lemma vacuous. |
+
+The lemma is structurally correct: it does NOT spuriously force chi $\geq 3$ on $\mathbb{Q}^2$ because the *hypothesis* (4-chromatic halves exist) fails there.
+
+**Why this matters**.
+
+1. **L21 gives the exact graph-theoretic characterization of chi $\geq$ 5 forcing**: bridge sets are precisely set covers of the 4-coloring product. Minimum bridges = minimum set cover (NP-hard in general, but tractable for small $H_i$).
+
+2. **The "trivial bound $\|B\| \geq 4$" is tight unconstrained, but the $K_5$ trick is illegal in UDGs**. In $\mathbb{R}^2$ unit-distance graphs, $\omega \leq 3$. So the effective minimum is the **no-$K_4$ minimum**. For Moser $\times$ Moser this is **14 bridges**.
+
+3. **The gap between small no-$K_4$ minima (14, 11) and de Grey's 155 is explained by realizability**: graph-theoretically 14 bridges suffice; realizing them as unit distances in $\mathbb{R}^2$ with both halves Moser spindles is presumably impossible (would require 14 simultaneous unit distances between two Moser spindles under some rigid motion, an overdetermined system in $\mathbb{Q}(\sqrt 3, \sqrt{11})$). de Grey 1585 uses 1585 vertices and 155 bridges precisely because each unit-distance edge is geometrically expensive; the construction trades vertex count for bridge cost.
+
+4. **The path to chi $\geq$ 6 must avoid the $K_6$ trick (correcting L20 implication 5)**. The parallel ADVERSARY pass (see [`orchestrator_sessions/2026-05-26-adversary-l21.md`](orchestrator_sessions/2026-05-26-adversary-l21.md), angle 6) refutes L20's claim that "the third color class can be reused" in its naive symmetric form. **Aligned $K_{2,2}$ bridges between three Moser spindles on the same vertex pair $\{0,1\}$ in each spindle create a literal $K_6$ on $\{0,1,7,8,14,15\}$, forcing $\chi = 6$** with only 4 bridges per pair (and pairwise $\chi = 4$, not even 5). Aligned $K_{2,3}$ bridges (BUILDER's $\|B\| = 6$ set, replicated on the same vertices in all three pairs) push to $\chi = 7$. The corrected statement: "third color class can be reused" holds precisely when bridge layouts are permuted / chain / asymmetric, and FAILS when bridges align $K_r$-substructures in $H_1, H_2, H_3$ to form a $K_{3r}$ cross-clique. **For UDG in $\mathbb{R}^2$ the $K_6$ trick is illegal** (max UDG clique is 3, just as $K_5$ is illegal for L21's chi-5 case). So the $\chi \geq 6$ UDG question requires non-$K_6$ obstructions, exactly mirroring how L21's no-$K_4$ regime restricts the chi-5 UDG question. The chi-6 cost is bounded below by the smallest no-$K_4$ three-way-coupled structure, which is open (the smallest abstract chi-6 three-way-coupled graph found by ADVERSARY has 9 vertices but uses $K_6$; the smallest no-$K_4$ chi-6 three-way graph is not known).
+
+5. **The Moser $\times$ Moser 14-vertex, $\omega = 3$, $\chi = 5$ abstract graph** is a clean small witness of the "two 4-chromatic halves + bridges" pattern. Whether this graph can be **realized as a UDG** in $\mathbb{R}^2$ (open question for BUILDER) is the natural follow-up: if yes, it would be the smallest known $\chi \geq 5$ UDG. If no, this gives a quantitative measure of how much realizability costs.
+
+**Cross-architectural implication**. L4/L17/L20 placed the missing chi $\geq$ 6 UDG in the shared "Architectures 1 & 2" space. L21 sharpens the path with the **$K_{n+1}$-trick ladder**: at each chromatic threshold $n$, the abstract graph-theoretic minimum forcing $\chi \geq n+1$ is achieved by creating a $K_{n+1}$ cross-clique (chi-5 needs $K_5$ from a star bridge into $K_4$; chi-6 needs $K_6$ from aligned $K_{2,2}$ bridges between three 4-chromatic halves; both verified). The UDG constraint $\omega \leq 3$ in $\mathbb{R}^2$ blocks every level of this ladder past $n = 3$. So the chi $\geq 6$ UDG must avoid $K_6$ cross-cliques exactly as the chi $\geq 5$ UDG must avoid $K_5$. The minimum no-$K_4$ three-way-coupled chi-6 graph is unknown; if it scales like the chi-5 case (14 vertices for Moser $\times$ Moser no-$K_4$), the chi-6 analog might be in the range of $\geq 14 \cdot 3 \approx 42$ vertices abstract, but realizability in $\mathbb{R}^2$ would presumably inflate this dramatically (consistent with no chi $\geq 6$ UDG found at vertex counts $\leq$ a few thousand).
+
+**Future BUILDER directions (next session)**:
+
+1. **UDG realizability check for the 14-vertex Moser $\times$ Moser no-$K_4$ graph**: enumerate rigid motions of the second Moser spindle relative to the first in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. Test whether any rigid motion realizes all 14 bridges as unit distances. If yes, this is a 14-vertex chi $\geq$ 5 UDG, smashing Parts 509. If no (likely), quantify the realizability gap.
+2. **Three-way coupling for chi $\geq$ 6, no-$K_4$ regime**: take three 4-chromatic graphs $H_1, H_2, H_3$ and a hypergraph of bridges. Characterize when $\chi(H_1 \cup H_2 \cup H_3 \cup B) \geq 6$ **subject to $\omega \leq 3$** (the UDG-relevant constraint). The abstract chi $\geq 6$ minimum via aligned $K_{2,2}$ bridges (4 bridges per pair, 9-21 vertices total) is now known (ADVERSARY angle 6) but uses $K_6$ which is illegal in UDG. The no-$K_4$ minimum, blocking $K_6$, is the right open question.
+3. **The cone obstruction lemma C4**: prove or refute the formal statement. If proven, it gives a structural witness for any chi $\geq$ 5 forcing bridge set.
+4. **The bridge-density continuum**: characterize the realizability-vs-density trade-off. Is there an algebraic lower bound on bridge density as a function of half-vertex count, under UDG realizability?
+
+---
+
 ### L20. The "two 4-chromatic halves + bridges" structure is universal in the chi >= 5 lineage: Polymath 510 has the same pattern as de Grey 1585, with different proportions
 
 **Architecture**: 1. Synthesizes L17 + L19.
