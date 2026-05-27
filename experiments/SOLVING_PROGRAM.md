@@ -59,7 +59,14 @@ Find this object once, three barriers collapse.
 
 **Novelty**: this is the actual bet on χ(R²) ≥ 6. High-variance, possibly the way through.
 
-**Status**: FRAMEWORK BUILT, INITIAL EXPERIMENTS NEGATIVE (LEARNING L11). The naive form — rotate Moser spindle by Moser-style angles in 6 alternate rings (Q(sqrt 7), Q(sqrt 19), Q(sqrt 23), Q(sqrt 27)=Q(sqrt 3), Q(sqrt 31), Q(sqrt 39)) at orbit sizes 3-6 — produces graphs of |V|=37, |E|=66 that are *all* 4-colorable. Structural reason: rotated copies share central vertices but have no cross-copy unit-distance edges, so the orbit graph is the disjoint union (modulo central identification) of Moser spindles, chi = 4. The de Grey 2018 construction works because *specific* rotation choices accidentally produce cross-copy unit edges; finding such coincidences in alternate rings is the actual research problem. Future work: algorithmic search for binding rotations + ML-driven configuration discovery. Multi-month-scale beyond a session.
+**Status**: BINDING-ROTATION FRAMEWORK BUILT AND ENUMERATED IN $\mathbb{Q}(\sqrt 3, \sqrt{11})$; NEGATIVE FOR chi >= 5 (LEARNINGS L11 + L14).
+
+L11 (initial): naive Moser-orbit graphs in 6 alternate rings give chi = 4.
+
+L14 (refined): The L11-identified "actual research problem" is now executed. The Moser spindle in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ admits exactly 16 single-binding rotations (about origin), 62 double-binding rotations (across all 7 pivots), and 4 triple-binding rotations. Stacking ALL 62 double-bindings yields a 211-vertex, 731-edge UDG with density 3.46 (within 30% of de Grey 1581's density 5.00), still chi = 4. Greedy iterative expansion (e1e Phase 4) plateaus at density 2.27 in a periodic attractor. The field-theoretic rigidity is sharply characterized: $\mathbb{Q}(\sqrt 3, \sqrt{11})$ over the Moser seed barely admits multi-cross-edge rotations. Routes forward:
+- Enlarge the field: $\mathbb{Q}(\sqrt 3, \sqrt{11}, \sqrt p)$ for small primes $p$, re-enumerate.
+- Larger seed: Heule G7 553 (a chi = 5 UDG) and search binding rotations for chi >= 6.
+- Reverse-engineer de Grey: characterize the specific $\{\theta_k\}$ his construction uses.
 
 ### Shot 3: Ambrus 23-point reproduction (LP bound m_1 ≤ 0.2470)
 
@@ -114,7 +121,7 @@ Find this object once, three barriers collapse.
 | Shot | Goal | Status | Lead time |
 |------|------|--------|----------:|
 | 1 | Integer χ_m ≥ 5 via LP-only (Arch 3) | completed; negative result (L10) | done |
-| 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | framework built; orbit-only negative (L11) | months |
+| 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | binding-rotation enumeration in Q(√3, √11) complete; 211-vertex chi=4 union, density 3.46; rigidity characterized (L11, L14) | months |
 | 3 | Ambrus 23-point reproduction | deferred | days |
 | 4 | Lean formalization of de Grey | not started | ~6 months |
 | 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | reframed: BV-SDP no help at n=2 (L12) | — |

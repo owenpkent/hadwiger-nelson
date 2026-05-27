@@ -463,4 +463,59 @@ State persisted at [`experiments/fractional/_cache/e3h_state.json`](fractional/_
 
 ---
 
+### L14. Binding-rotation search on the Moser spindle reveals the Q(sqrt 3, sqrt 11) rigidity: only 4 of 62 double-binding rotations admit cross-copy unit edges, and the full union has chi = 4
+
+**Architecture**: 1 (combinatorial / UDG). Structural sharpening of L11 on Shot 2 (field-theoretic chi >= 6 search).
+
+**Experiments**: [`e1e_binding_rotation_moser.py`](combinatorial/e1e_binding_rotation_moser.py), [`e1f_double_binding_search.py`](combinatorial/e1f_double_binding_search.py), [`e1g_pivot_double_binding.py`](combinatorial/e1g_pivot_double_binding.py).
+
+**Setup**. L11 left as the open problem: "find specific rotation choices in Q(sqrt 11) that produce cross-copy unit-distance edges, like de Grey 2018 did." This experiment runs that program directly. Given the Moser spindle $M$ (7 vertices, exact in $\mathbb{Q}(\sqrt 3, \sqrt{11})$), a *binding rotation* $\theta$ about some pivot $v_k$ is one where some seed pair $(p, q) \in M \times M$ satisfies $|R_{v_k, \theta}(p) - q| = 1$, i.e., the rotated copy $R_{v_k, \theta}(M)$ shares at least one unit-distance edge with $M$. The condition on $(\cos\theta, \sin\theta)$ is one linear equation
+$$\langle p - v_k,\, q - v_k\rangle \cos\theta + \det[(p-v_k) \mid (q-v_k)]\sin\theta = \tfrac{|p-v_k|^2 + |q-v_k|^2 - 1}{2}$$
+intersected with the unit circle $\cos^2\theta + \sin^2\theta = 1$. A *double-binding* satisfies two such constraints simultaneously: solve a $2 \times 2$ linear system in $(\cos\theta, \sin\theta)$ and check the unit-circle equation. The unit-circle equation is generically incompatible with the linear solution; double-bindings exist only when an algebraic identity in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ accidentally makes them compatible.
+
+**Findings**.
+
+(a) **Single bindings (about origin).** 16 unique $\theta$ values exist where $R_\theta(M)$ shares at least one unit edge with $M$. Each catches at most 2 cross-copy unit edges; the resulting $M \cup R_\theta(M)$ has $|V| \in [10, 13]$, $|E| \in [17, 24]$, all 4-colorable.
+
+(b) **Double bindings about origin (e1f).** Only **6** double-binding rotations exist for $M$ with rotation pivot at the origin in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. ALL SIX ARE DEGENERATE: the second binding constraint is satisfied by a *vertex coincidence* (a rotated $R_\theta(p)$ lands exactly on an existing $M$-vertex), so the apparent "cross edge" collapses into a within-copy edge after dedup. Net cross-copy edge count: $0$ for all 6. The full union $M \cup \bigcup_{k=1}^{6} R_{\theta_k}(M)$ has $|V| = 29$, $|E| = 61$, $\chi = 4$.
+
+(c) **Pivot-varied double bindings (e1g).** Varying the pivot across all 7 Moser vertices yields **62** distinct double-binding rotations. Of these, only **4** produce 3 cross-copy unit edges (triple-binding by algebraic coincidence). These 4 are paired: both occur at the outer-tip pivots $v_3$ and $v_6 = R_{\theta_{\text{Moser}}}(v_3)$, related by the Moser spindle's intrinsic symmetry. The other 58 have cross-edge count $\leq 2$. The full union with all 62 double-binding rotations stacked has $|V| = 211$, $|E| = 731$, density $E/V = 3.46$. Still **$\chi = 4$**.
+
+| Quantity | Origin-pivot | All 7 pivots |
+|---|---:|---:|
+| Single-binding rotations | 16 | (more, not enumerated) |
+| Double-binding rotations | 6 | 62 |
+| Triple-binding rotations (3+ cross edges) | 0 | 4 |
+| Union $|V|$ | 29 | 211 |
+| Union $|E|$ | 61 | 731 |
+| Union density $E/V$ | 2.10 | 3.46 |
+| $\chi$ of union | 4 | 4 |
+| 5-colorable? | yes | yes |
+
+(d) **Greedy iterative expansion (e1e Phase 4).** Greedy stacking of single-binding rotations from $M$, picking at each step the $\theta$ maximizing new-edge gain, settles into a *periodic attractor*: new-edge counts cycle through $(12, 14, 16, 12, 14, 16, \ldots)$ per added rotation. Density $E/V$ stays at $\approx 2.27$ for at least 19 iterations ($|V| = 121, |E| = 275$, all 4-colorable). The greedy never finds a rotation breaking the periodicity.
+
+**Why it matters**.
+
+1. **The de Grey "miracle" is much rarer than expected**. de Grey 2018's 1581-vertex graph uses dozens of carefully-chosen rotations in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ that produce many cross-copy unit edges per rotation. Our enumeration shows that in the *Moser spindle root*, this field admits zero double-binding rotations about origin, six total double-bindings about origin (all degenerate), and only four genuinely triple-binding rotations across all seven pivots. The field-theoretic rigidity is sharp: $\mathbb{Q}(\sqrt 3, \sqrt{11})$ over the Moser seed almost has *no* multi-cross-edge rotations. de Grey's success required composing many *single*-binding rotations into a 1581-vertex structure, not finding miraculous high-multiplicity rotations.
+
+2. **Density isn't enough**. The 211-vertex union has density $E/V = 3.46$, higher than e1d's orbit graphs ($1.78$) and within $30\%$ of de Grey 1581's density $5.00$ and Polymath 510's $4.91$. Yet still $\chi = 4$. The 5-chromaticity barrier is *structural*, not just density-driven: edges must form specific independent-set patterns to force a fifth color.
+
+3. **The structural obstruction is now precisely localized**. L11 said "the actual research problem" is finding binding rotations in alternate rings. e1f, e1g now establish the *combinatorial size of the binding-rotation search space* for the Moser spindle in $\mathbb{Q}(\sqrt 3, \sqrt{11})$: there are exactly 16 single-binding angles about origin, 62 double-binding angles across all pivots, 4 triple-binding angles. To find a chi >= 6 UDG via binding rotations starting from $M$ in this field would require composing single-binding rotations into a structure of size $\gg 1581$ vertices, which is well beyond the de Grey lineage's current scale. **The most plausible route to chi >= 6 is to leave $\mathbb{Q}(\sqrt 3, \sqrt{11})$ entirely** for a richer algebraic field, or to start from a 5-chromatic UDG seed (Heule 553) rather than $M$ and search for binding rotations *of that* into a chi >= 6 graph.
+
+4. **Reverse engineering de Grey**. The de Grey 1581-vertex graph can be re-described as: a specific multi-rotation $H = \bigcup_k R_{\theta_k}(W)$ where $W$ is a smaller "wheel" structure and the $\theta_k$ are chosen via the rotation lattice of $\mathbb{Q}(\sqrt 3, \sqrt{11})$. Our binding-rotation framework is the right shape to *re-derive* de Grey systematically by searching over $W$ candidates and $\{\theta_k\}$ subsets. Doing so would give the smallest known 5-chromatic UDG that can be constructed *purely from binding rotations* (rather than the SAT-minimized 509 of Parts 2020). This is a concrete future BUILDER target.
+
+**Cross-architectural implication**. L4 noted that Architectures 1 and 2 share the missing 6-chromatic UDG. L14 sharpens the obstacle: not just "find a $6$-chromatic UDG", but "find one in any algebraic extension of $\mathbb{Q}$ at all", because the search in the canonical $\mathbb{Q}(\sqrt 3, \sqrt{11})$ has the structural rigidity above. Until a richer field admits the binding miracles needed, both Architectures 1 and 2 are stuck at the chi/chi_m = 5 level.
+
+**Wrong-approach status**. Passes the $\mathbb{Q}^2$ detector: the binding-rotation construction uses irrational $\cos\theta, \sin\theta$ throughout (never lifts to $\mathbb{Q}^2$). Passes the $\mathbb{R}^1$ detector (one-dimensional analog has no rotations). Engages with the $O(2)$ rotation structure properly.
+
+**Implementation notes**. Numerical computation at 80-digit mpmath precision throughout, with sympy-exact verification of seed edges. The double-binding solver is a $2 \times 2$ linear system; the unit-circle check uses tolerance $10^{-30}$, which excludes accidental near-misses in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ given the field's bounded denominators. Each experiment runs in seconds-to-minutes on a single core. e1f cache: 6 double bindings about origin; e1g cache: 62 double bindings across pivots, 4 with cross >= 3; e1e cache: 16 single-binding angles, greedy expansion to $|V| = 121$ at 19 iterations.
+
+**Future BUILDER directions (next session)**:
+
+1. **Repeat the binding-rotation enumeration in $\mathbb{Q}(\sqrt 3, \sqrt{11}, \sqrt p)$** for small primes $p \in \{2, 5, 7, 13, 17, 19, \ldots\}$. Each enlargement may admit *new* double or triple bindings beyond the 62 / 4 from $\mathbb{Q}(\sqrt 3, \sqrt{11})$ alone. Find the smallest extension where the binding count substantially increases.
+2. **Seed from a 5-chromatic UDG** (Heule G7 553, or Parts 509 reconstructed): enumerate binding rotations of *that*, looking for chi >= 6. The richer seed has many more (p, q) pairs and may admit more (and higher-multiplicity) bindings.
+3. **Reverse-engineer de Grey**. Identify the specific set $\{\theta_k\}$ of rotation angles in de Grey's 1581-vertex graph, characterize them as binding rotations, and search for a smaller subset producing the same chi >= 5. This would give a constructive upper bound on the "rotation complexity" of $\chi \geq 5$.
+
+---
+
 (no further entries yet; this is a young repository.)

@@ -68,6 +68,9 @@ The experimental thread is organized around the same four-architecture framework
 | e1b de Grey skeleton | 1 | done for 510/517/529/553/826/1585 (cadical195 + glucose4 agree on UNSAT across all six, including the original de Grey 2018 graph) |
 | e1c Polymath16 smallest | 1 | not started |
 | e1d field-extension orbit search ($\chi \geq 6$) | 1 | framework built; orbit-only naive negative across 6 alternate rings (LEARNINGS L11) |
+| e1e Moser binding-rotation search ($\chi \geq 6$) | 1 | done; 16 single bindings in $\mathbb{Q}(\sqrt 3, \sqrt{11})$; greedy stacking plateaus at $E/V = 2.27$, chi = 4 (LEARNINGS L14) |
+| e1f Moser double-binding (origin pivot) | 1 | done; only 6 double-bindings, ALL degenerate (cross = 0); union $V=29, E=61$, chi = 4 (LEARNINGS L14) |
+| e1g Moser double-binding (all 7 pivots) | 1 | done; 62 double-bindings, 4 with triple cross edges; union $V=211, E=731$, density 3.46, chi = 4 (LEARNINGS L14) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |
