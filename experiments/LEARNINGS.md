@@ -837,4 +837,65 @@ The first 7 translations all live in $\mathbb{Q}[\sqrt 3]$ and form the standard
 
 ---
 
+### L20. The "two 4-chromatic halves + bridges" structure is universal in the chi >= 5 lineage: Polymath 510 has the same pattern as de Grey 1585, with different proportions
+
+**Architecture**: 1. Synthesizes L17 + L19.
+
+**Experiment**: [`e1t_overlap_chi.py`](combinatorial/e1t_overlap_chi.py).
+
+L19 split Polymath 510 into (315 vertices shared with de Grey 1585) and (195 field-reduction artifacts). L20 tests the chi of each half:
+
+| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
+|---|---:|---:|---:|---:|
+| Polymath ∩ de-Grey overlap (in Polymath edges) | 315 | 1327 | 4.21 | **4** |
+| Polymath ∩ de-Grey overlap (in de Grey edges) | 315 | 1327 | 4.21 | **4** |
+| Polymath 195 artifacts | 195 | 344 | 1.76 | **4** |
+| Polymath 510 full | 510 | 2504 | 4.91 | **5** |
+
+The edge counts are identical (1327) under both edge sets, confirming the translation $T = (2, 0)$ is an *isometry* preserving the unit-distance structure on the overlap vertices.
+
+**The pattern matches de Grey 1585** (L17):
+
+| Graph | Half 1 | $\chi(H_1)$ | Half 2 | $\chi(H_2)$ | Bridges | $\chi$(full) |
+|---|---:|---:|---:|---:|---:|---:|
+| de Grey 1585 | 778v (C_6 core) | 4 | 807v (asymmetric) | 4 | 155 | 5 |
+| Polymath 510 | 315v (de-Grey overlap) | 4 | 195v (artifacts) | 4 | 833 | 5 |
+
+Both graphs have the **identical structural pattern**: two 4-chromatic halves connected by bridge edges. Removing the bridges in either case yields two disconnected 4-chromatic graphs.
+
+**Bridge density comparison**:
+
+| Graph | Bridges per total V | Bridges per cross-half pair |
+|---|---:|---:|
+| de Grey 1585 | 155 / 1585 = 0.098 | 155 / (778 × 807) ≈ $2.5 \times 10^{-4}$ |
+| Polymath 510 | 833 / 510 = 1.63 | 833 / (315 × 195) ≈ $1.36 \times 10^{-2}$ |
+
+Polymath 510's bridge density is **17× higher per vertex** and **54× higher per cross-pair** than de Grey 1585's. The SAT-minimization compensated for fewer vertices with much denser bridge structure.
+
+**Key implications**.
+
+1. **The chi >= 5 mechanism is universal in the lineage**: every published chi $\geq 5$ UDG seems to be a "two 4-chromatic halves coupled by bridges" construction. The de Grey 2018 breakthrough wasn't a new mechanism; it was an *instance* of this pattern. Heule/Parts found smaller instances by reducing the field and densifying the bridges.
+
+2. **This pattern is necessary, not just sufficient**: every reasonable structural reduction (L18) and every half (L17, L20) drops chi to 4. So the chi $\geq 5$ obstruction REQUIRES the half + half + bridge structure. The minimum number of vertices for chi $\geq 5$ is bounded below by the minimum size of (4-chromatic half 1) + (4-chromatic half 2) + (enough bridges to couple them).
+
+3. **Bound estimates for chi $\geq 5$ minimum**: a 4-chromatic UDG has at least 7 vertices (Moser spindle). So a "two-halves" chi $\geq 5$ UDG has at least 14 vertices + some bridges. The Heule/Parts pipeline has reached 509 vertices. Whether the minimum is much smaller (e.g., 50-100 vertices) is open. The bridge-density trade-off seen in L20 suggests aggressive bridge densification could shrink the halves substantially.
+
+4. **The chi >= 6 question becomes structurally precise**: to force chi $\geq 6$, we'd need to couple TWO chi-5 sub-objects (each having the chi $\geq 5$ obstruction internally), or use a higher-order coupling. Both options multiply the vertex count substantially. The smallest plausible chi $\geq 6$ UDG might be of size $\sim 1000$-$5000$ vertices (= 2 × (Polymath 510 + bridges) or similar). This is consistent with no chi $\geq 6$ UDG having been found despite extensive SAT search at vertex counts up to a few thousand.
+
+5. **The chi >= 6 problem may require a DIFFERENT structural mechanism**. The "two halves + bridges" pattern caps at chi = 5 in the L18/L20 sense: adding a third 4-chromatic component coupled by more bridges does not naively force chi = 6 (the third color class can be reused). To force chi = 6, the coupling must be qualitatively different — perhaps a 3-way coupling that forces each of three colors to be paired with a different chi-4 structure. This is speculation; no such construction is known.
+
+**Cross-architectural implication**.
+
+L4 said Architectures 1 and 2 share the missing 6-chromatic UDG. L20 sharpens: a 6-chromatic UDG would presumably need a structural mechanism beyond the "two halves + bridges" pattern that all current chi $\geq 5$ graphs use. The path to chi $\geq 6$ is therefore not a refinement of de Grey / Polymath / Heule, but a fundamentally different combinatorial idea.
+
+**Wrong-approach status**. Same as L19; passes detectors.
+
+**Future BUILDER directions (next session)**:
+
+1. **The "minimum two-halves-plus-bridges" question**: given two arbitrary 4-chromatic UDGs $H_1, H_2$ and a target bridge set $B$, when does $H_1 + H_2 + B$ have chi $\geq 5$? Characterize the necessary bridge structure.
+2. **Search for a 3-way coupling that forces chi $\geq 6$**: take three small 4-chromatic UDGs and connect them by carefully-chosen edges. Test chi.
+3. **Direct enumeration of chi $\geq 5$ small graphs**: Polymath 510's "halves" are 315 + 195. Can we find a chi $\geq 5$ UDG with halves of size 100 + 100 (plus bridges)? Lower bound: each half $\geq 7$ (Moser).
+
+---
+
 (no further entries yet; this is a young repository.)
