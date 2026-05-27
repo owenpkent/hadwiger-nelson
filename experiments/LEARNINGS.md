@@ -59,13 +59,19 @@ The 700 dropped bridges came from 28 $H_1$-vertices that L27's greedy added with
 
 L27 attributed the chi-6 forcing primarily to the 97 always-saturating vertices (L22 "empty-list class at scale"). L28 corrects this: the 43 always-saturating remain at $K = 2000$, but the chi-6 forcing now critically depends on the joint distribution of the 54 graded vertices' $\|F\|$ patterns. The forcing is no longer "universal empty-list at 97 vertices" but **"empty-list at 43 vertices AND restricted-list (size $\leq 4$) at 54 vertices with c_1-dependent patterns"**. This is a structurally distinct obstruction: removing any single restricted vertex's constraint can still leave the forcing intact because other variably-saturated vertices step in.
 
-**Refinement of L27's Conjecture R5**.
+**Status of L27's Conjecture R5 (now: REFUTED, see correction in L27)**.
 
-The rainbow forcing claim (every $c_1$ uses all 5 colors on $U_v$) holds at 43 vertices at $K = 2000$ (down from 97). At the 54 graded vertices, the relevant condition is a **list-restriction conjunction**: the joint set of $\|F\|$-patterns across all 54 vertices satisfies a Hall-type matching obstruction. Conjecture R5 should be refined to:
+L27 conjectured R5: vertex-criticality + $\chi(H[V \setminus U]) \leq k-1$ implies every proper $k$-coloring of $H$ uses all $k$ colors on $U$. This is false; a $C_5$ counterexample with $k = 3$ and $U = \{v_0, v_2, v_4\}$ exhibits a proper 3-coloring $(1, 2, 1, 2, 3)$ with $c(U) = \{1, 3\}$ missing color 2 (see L27's R5 section for full counterexample). The Polymath 510 empirical rainbow observation is not derivable from vertex-criticality alone.
 
-> **R5' (refined)**. If $H$ is chi-$k$ vertex-critical and $\{U_1, \ldots, U_m\} \subseteq 2^{V(H)}$ are vertex subsets with $\chi(H[V \setminus U_i]) \leq k-1$ for each $i$, then every proper $k$-coloring of $H$ admits a Hall-type matching across the $U_i$'s using restricted color subsets.
+A natural patch would generalize to many subsets via Hall's marriage condition:
 
-The pure rainbow-forcing-on-a-single-$U$ version is a special case ($m = 1$, all 5 colors on $U_1$).
+> **R5' (attempted refinement, open and PROBABLY FALSE in this form)**. If $H$ is chi-$k$ vertex-critical and $\{U_1, \ldots, U_m\} \subseteq 2^{V(H)}$ have $\chi(H[V \setminus U_i]) \leq k - 1$ for each $i$, then every proper $k$-coloring of $H$ admits a Hall-type matching across the $U_i$'s using restricted color subsets.
+
+R5' is suspect for the same reason as R5: vertex-criticality + complement-chromatic conditions are insufficient to force color-class structure on the $U_i$'s; the $C_5$ counterexample lifts straightforwardly to multi-subset versions by taking $m = 1$ or replicating the bad coloring on multiple shifted $U_i$'s. The probable correct framing is **NOT** a clean rainbow / Hall lemma but rather a graded list-coloring infeasibility theorem: the L24 list-coloring obstruction itself, applied at the structure of $P_{510}$ specifically, is what forces the observed F-profile. The L28 "graded rainbow forcing" picture is a description of the empirical F-profile shift, not a derivable structural theorem.
+
+What can be salvaged: the L24 triple-lift theorem (proved) does imply that chi $\geq 6$ at $P_{510}^2 + B$ corresponds to UNIVERSAL list-coloring infeasibility on every $c_1$. The 88-sample empirical confirmation of this universality at $K = 2000$ is exactly what cadical's UNSAT certifies. No separate "R5'" theorem is needed; the SAT certificate IS the proof.
+
+**Open structural question (the right framing)**. Replace R5' with: "characterize the bridge structures $B$ between two chi-5 vertex-critical UDG halves under which the L24 list-coloring obstruction is realized." This is an explicit problem about $B$, not a generic combinatorial lemma. Likely requires the specific algebraic structure of the halves (Polymath 510's $\mathbb{Q}(\sqrt 3, \sqrt{11})$ field) plus the bridge layout, not vertex-criticality alone.
 
 **UDG realizability**: still NO. The 43 always-saturating $H_2$-vertices at $K = 2000$ inherit L27's cocircularity obstruction (each requires 22-27 cocircular bridge-endpoints at radius 1; none achieve it). The 54 graded vertices add softer constraints (subsets of $U_v$ that must be cocircular under SOME $c_1$ assignment), but the 43-vertex obstruction alone suffices.
 
@@ -77,7 +83,7 @@ The pure rainbow-forcing-on-a-single-$U$ version is a special case ($m = 1$, all
 
 2. **The structural obstruction is richer than L27 reported**. L27 oversimplified the F-profile as bimodal $\{0, 5\}$; the actual distribution at $K = 2700$ is $\{0: 114, 1: 113, 2: 175, 5: 97, \text{variable}: 11\}$. At $K = 2000$, the saturated-F=5 level drops by 54 to variable-F, exposing a graded rainbow forcing that was hidden by the over-engineered bridge count at L27.
 
-3. **The R5 conjecture generalizes naturally**. R5' (Hall-matching over multiple subsets with restricted color lists) is the correct structural primitive. Pure rainbow forcing on a single $U$ is too restrictive; the chi-6 obstruction in $P_{510}^2$ is genuinely about a JOINT distribution of color-restriction patterns across many subsets.
+3. **R5 / R5' are not clean theorems and should not be cited as such**. R5 (single-subset rainbow) is refuted by $C_5$. R5' (multi-subset Hall) inherits the same counterexample. The L24 list-coloring theorem already captures everything that's provable from vertex-criticality + bridge structure; what remains specific to $P_{510}^2$ (and what would explain the observed F-profile shift at $K = 2000$) is the algebraic embedding of Polymath 510 in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, not a generic graph-theoretic lemma.
 
 4. **The chi-6 abstract minimum vertex count is likely well below 1020**. The 700-bridge reduction at fixed $\|V\| = 1020$ suggests the dual question (fix $\|B\|$, minimize $\|V\|$) has substantial slack. A direction-3-style mixed-half construction ($P_{510} \cup P_{517} + B$, or $P_{510} \cup$ Moser $+ B$) might yield chi-6 at $\|V\| < 1020$.
 
@@ -85,7 +91,7 @@ The pure rainbow-forcing-on-a-single-$U$ version is a special case ($m = 1$, all
 
 1. **Tighten the binary search to $(1500, 2000]$**: probe $K = 1750, 1850, 1900$ with Cadical 60-min budget and Glucose fallback. Time budget per probe: 1-2 hours each.
 2. **Exhaustive Stage 2 local search at $K = 2000$**: full one-bridge sweep (up to 2000 trials, 5-min Cadical budget each) to find the true greedy-suffix-local minimum. Likely 1-2 days of compute.
-3. **Prove or refute the refined Conjecture R5'**. The Hall-matching obstruction over restricted color lists is the correct structural primitive; formal proof via vertex-criticality + Hall's marriage theorem on color-class partitions is the natural attack.
+3. **Identify the correct structural primitive replacing R5 / R5'**. Both are refuted by the $C_5$ counterexample (see L27 R5 section). The right question is graph-specific: characterize bridge structures $B$ between two chi-5 vertex-critical UDG halves under which the L24 list-coloring obstruction is realized in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. This is about $B$ and the halves' algebraic embeddings, not a clean combinatorial lemma.
 4. **Mixed-half chi-6 search**: $P_{510} \cup P_{517} \cup B$ ($\|V\| = 1027$, marginally larger but different field structure), $P_{510} \cup$ Heule-553 $\cup B$ ($\|V\| = 1063$), and triple-coupling via L24 form with $P_{510}$ + 2 Moser halves.
 5. **Glucose / Minisat verification at $\|B\| = 2000$**: the L27 standard required triple-solver agreement; L28 has only Cadical UNSAT confirmed at $K = 2000$. Glucose was running at agent termination.
 
@@ -166,11 +172,15 @@ For 5 saturating $v$'s tested:
 
 Each $U_v$ is 4-colorable in isolation, yet EVERY proper 5-coloring of the full $P_{510}$ uses all 5 colors on $U_v$. This is **non-local rainbow forcing**: the 5-coloring constraint propagates from $P_{510}$'s chi-5 obstruction through $V(P_{510}) \setminus U_v$ to force a rainbow on $U_v$.
 
-**Conjecture R5 (Rainbow Forcing Lemma, NEW)**.
+**Conjecture R5 (Rainbow Forcing Lemma, NEW) — REFUTED as stated, see below**.
 
-If $H$ is a chi-5 vertex-critical graph and $U \subseteq V(H)$ with $\chi(H[V \setminus U]) \leq 4$, then every proper 5-coloring of $H$ uses all 5 colors on $U$.
+The natural first guess: if $H$ is a chi-$k$ vertex-critical graph and $U \subseteq V(H)$ with $\chi(H[V \setminus U]) \leq k - 1$, then every proper $k$-coloring of $H$ uses all $k$ colors on $U$.
 
-For $P_{510}$ with $\|V \setminus U_v\| \approx 488$ and $\chi(P_{510}[V \setminus U_v]) \leq 4$ (consistent with L26 criticality), R5 predicts the observed rainbow forcing. Provable via vertex-criticality + pigeonhole on color classes.
+**This is false in general.** Counterexample at $k = 3$: $H = C_5$ (the 5-cycle, chi = 3, vertex-critical), $U = \{v_0, v_2, v_4\}$. Then $H[V \setminus U] = H[\{v_1, v_3\}]$ is empty (two isolated vertices), $\chi = 1 \leq 2$. Hypothesis satisfied. But the proper 3-coloring $c = (1, 2, 1, 2, 3)$ on $(v_0, \ldots, v_4)$ gives $c(U) = \{1, 1, 3\} = \{1, 3\}$, missing color 2. R5 violated.
+
+So the observed Polymath 510 rainbow forcing on $U_v$ is NOT a consequence of vertex-criticality alone. The correct underlying condition is the L22 list-coloring infeasibility itself: for each saturating $v$, the lists $L(w) = [5] \setminus F(w)$ on $V(H_2) \setminus \{v\}$ are jointly infeasible because $L(v) = \emptyset$. This is a property of the specific bridge structure on Polymath 510, NOT a derivable rainbow forcing lemma. The 88-sample empirical observation that every $c_1$ saturates $F(v)$ at the 97 vertices is exactly the L24 list-coloring obstruction; it has no separate proof.
+
+The "rainbow forcing" language in this section should be read as a DESCRIPTION of the empirical F-profile, not as an independent structural theorem. L28 supersedes this conjecture with the correct framing (Hall-type matching across many subsets, still open, see below).
 
 **UDG-realizability: NO** (cocircularity sieve at scale, all 97/97 saturating $v$).
 
@@ -227,7 +237,7 @@ L27 is the FIRST entry in the "$\chi \geq 6$, $\omega = 3$" row of the de Grey /
 
 3. **UDG-realizability remains the bottleneck**. L23 showed the L21 abstract chi-5 graph is not UDG-realizable due to cocircularity at small scale; L27 shows the same obstruction at scale (97 simultaneous failures) for chi-6. The realizability cost factor of $\sim 113$ from chi-5 abstract to UDG (14 $\to$ 1585) extrapolated to chi-6 places the UDG chi-6 vertex count at $\sim 10^5$, well outside current SAT reach.
 
-4. **Conjecture R5 generalizes the L21-L24-L27 covering ladder structurally**. If proven, every chi-$k$ vertex-critical graph forces rainbow on any large enough subset, enabling abstract chi-$(k+1)$ constructions for arbitrary $k$. The path to chi-7 abstract becomes: L27 chi-6 graph + a new vertex-critical chi-5 half + bridges. Recursive.
+4. **The L21-L24-L27 covering ladder lacks a clean structural theorem beyond L24's list-coloring infeasibility**. The original R5 conjecture (rainbow forcing from vertex-criticality alone) is refuted by the $C_5$ counterexample above. What's actually happening at $P_{510}^2$ is the L24 list-coloring infeasibility manifesting through the specific algebraic structure of Polymath 510; the "rainbow on $U_v$" observation is a CONSEQUENCE of L24 at this graph, not a generalizable rainbow lemma. A correct structural primitive (replacing R5) would have to incorporate the joint algebraic structure of the halves and the bridge layout, not just vertex-criticality. Finding such a primitive is an open problem.
 
 5. **The realizability gap remains structural**. The chi-6 UDG is not on the immediate horizon. The path forward is either (a) softening the L27 cocircularity-obstructed bridges into multi-vertex UDG paths (factor $\sim 100$ blow-up), or (b) finding a completely different chi-6 construction (Haugstrup-style higher-dimensional reductions, MRVZ-style fractional advances).
 
@@ -236,7 +246,7 @@ L27 is the FIRST entry in the "$\chi \geq 6$, $\omega = 3$" row of the de Grey /
 1. **Binary-search bridge minimum** in $(1200, 2200]$ for $P_{510}^2$ chi-6.
 2. **Smaller chi-6 abstract via mixed halves**: $P_{510} \cup P_{517} \cup B$, or $P_{510} \cup$ Moser $\cup B$ via L24 triple form; might yield $\|V\| < 1020$.
 3. **Lean 4 formalization of L24 + L27**: the triple lift at chi-5 level fits the same `bridgeGraph` infrastructure from H4.
-4. **Prove or refute Conjecture R5** (rainbow forcing). Vertex-criticality + pigeonhole is the natural attack.
+4. **Replace the refuted R5 with a correct structural primitive**. R5 as stated is false ($C_5$ counterexample above); find a sharper hypothesis under which rainbow forcing on $U$ does follow from $H$'s structure plus $U$'s embedding. Candidates: requiring $H[U]$ to be itself $k$-critical, or requiring the bridge structure to enforce a specific Hall condition on color classes.
 5. **Apply L23's same-$j$ linear-difference trick to L27's 97 saturating-$v$ obstructions**: yields 97 independent algebraic certificates of UDG-non-realizability. Likely too large for sympy Groebner but the rank-deficiency check is fast.
 6. **Cocircularity-softened UDG construction**: estimate the actual minimum UDG chi-6 vertex count by softening each of L27's 97 obstructions with auxiliary $\mathbb{R}^2$ vertices.
 

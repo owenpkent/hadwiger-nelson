@@ -42,10 +42,11 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [x] Binary-search bridge minimum for L27: tightened to |B| <= 2000 (700-bridge reduction, 26%); bracket now (1500, 2000]; obstruction class shifts from "97 always-saturating" to "43 always-saturating + 54 graded rainbow" (h6, LEARNINGS L28); F-profile correction to L27 (multi-modal, not bimodal)
   - [ ] Tighten bracket to (1500, 2000]: probe K=1750, 1850, 1900 with Cadical 60min + Glucose fallback; expected 1-2h per probe
   - [ ] Exhaustive Stage 2 local one-bridge search at K=2000 (~2000 trials, 5-min Cadical each, ~1-2 days)
-  - [ ] Prove or refute refined Conjecture R5' (Hall-matching obstruction over restricted color lists across multiple subsets)
+  - [x] Refute R5 / R5' as stated (C_5 counterexample at k=3, U={v0,v2,v4}); both are false. The chi-6 forcing at P_510² is L24 applied to Polymath 510's specific algebraic embedding, not a clean rainbow-forcing or Hall-matching lemma
+  - [ ] Find the correct structural primitive replacing R5 / R5': characterize bridge structures B between two chi-5 vertex-critical UDG halves under which L24 list-coloring infeasibility is realized in Q(sqrt 3, sqrt 11)
   - [ ] Glucose / Minisat verification at K=2000 to match L27 triple-solver standard
   - [ ] Smaller chi-6 abstract via mixed halves: try P_510 × P_517 + bridges (V=1027 marginally smaller), or P_510 + Moser + B via L24 triple form
-  - [ ] Prove or refute Conjecture R5 (rainbow forcing): every chi-k vertex-critical graph forces rainbow on subsets U with V \ U inducing chi-(k-1)
+  - [x] R5 rainbow-forcing conjecture (every chi-k vertex-critical graph forces rainbow on U with V\U inducing chi-(k-1)) REFUTED by C_5 counterexample at k=3, U={v_0, v_2, v_4}; proper 3-coloring (1,2,1,2,3) has c(U)={1,3} missing color 2. The Polymath 510 empirical rainbow is a consequence of L24 list-coloring infeasibility plus Polymath 510's specific algebraic structure, not a vertex-criticality + pigeonhole theorem.
   - [ ] Cocircularity-softened UDG construction for L27: replace each obstructed bridge with 2-hop softening to estimate actual minimum chi-6 UDG vertex count
   - [ ] Search for 7-vertex 4-chromatic UDG distinct from Moser spindle (would re-open the 14v UDG chi-5 route; L25 future direction 1)
   - [ ] Pair Moser with 8-9-vertex UDGs from e1l (chain/pivot constructions); test no-K_4 chi-5 minima
