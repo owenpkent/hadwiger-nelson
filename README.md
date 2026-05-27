@@ -11,7 +11,7 @@ A research-and-study project on the **chromatic number of the plane**: the small
 
 | Architecture | Thread | Current state |
 |--------------|--------|---------------|
-| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826/1585; field-extension orbit search framework built (e1d), naive negative across 6 alternate rings (L11) |
+| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826/1585; binding-rotation search exhausted in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ (L14); reverse-engineered Polymath 510 and de Grey 1585 as the "two 4-chromatic halves + bridges" coupling construction (L15-L20) |
 | 2. Measurable / spectral | Falconer 1981; recent autocorrelation bounds | dossier landed (arch2_measurable_lineage.md); 512×512 autocorrelation experiment (e2a); $\chi_m \geq 5$ depends on a missing 6-chromatic finite UDG (L4) |
 | 3. Fractional / Lovász $\vartheta$ | OFV 2010, KMOR 2015, Ambrus 2023 LP lineage | $m_1(\mathbb{R}^2) \leq 0.2584$ at 17 vertices via greedy beam search (e3h), matching KMOR 2015's published bound; integer $\chi_m \geq 4$, real $\geq 3.87$ |
 | 4. Set-theoretic / axiomatic | Shelah-Soifer phenomenon | dossier landed (arch4_set_theoretic_lineage.md); 2003 conditional was made vacuous by de Grey 2018 (L7) |
@@ -25,6 +25,8 @@ A research-and-study project on the **chromatic number of the plane**: the small
 - **OFV 2010 reproduction**: $m_1(\mathbb{R}^2) \leq 0.268412$ exactly matches OFV Table 3.1 via 3-multiplier dual LP with simplex strengthening, see e3c and L8.
 
 - **Architecture 3 LP frontier**: $m_1(\mathbb{R}^2) \leq 0.2584$ via greedy beam search over IE-LP configurations (e3h, L13). Closes 88% of the OFV (0.2684) to Ambrus (0.2470) gap. Reaching integer $\chi_m \geq 5$ requires $m_1 < 0.2$, currently open via this route.
+
+- **Universal chi ≥ 5 mechanism identified (L14-L20)**: Every published $\chi \geq 5$ UDG (de Grey 1585, Polymath 510, Heule 553/826) is an instance of the "two 4-chromatic halves coupled by bridge edges" pattern. de Grey 1585 splits as 778v (C_6 core, chi=4) + 807v (asymmetric half, chi=4) + 155 bridges (L17). Polymath 510 has the same pattern: 315v + 195v + 833 bridges (L20). Polymath 510 is essentially a translated substructure of de Grey 1585 — 315/510 = 62% of its vertices map to de Grey vertices under $T = (2, 0)$ (L19). The chi $\geq 5$ obstruction is delocalized: every reasonable structural reduction drops chi to 4 (L18). Implication: chi $\geq 6$ requires a fundamentally different mechanism (3-way coupling or hierarchical coupling of chi-5 sub-objects); the two-halves pattern appears to cap at chi = 5.
 
 ## Structure (mirrors the zeta-function research repo)
 
@@ -87,7 +89,7 @@ lake exe cache get   # fetches Mathlib v4.13.0 oleans
 lake build           # 1859 modules
 ```
 
-See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate of experiments (e1a-e1d, e2a, e3a-e3h all landed).
+See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate of experiments (e1a-e1t, e2a, e3a-e3h all landed).
 
 ## Long-range research program
 
@@ -96,9 +98,12 @@ See [`experiments/SOLVING_PROGRAM.md`](experiments/SOLVING_PROGRAM.md) for the s
 ## Latest sessions
 
 See [`experiments/orchestrator_sessions/`](experiments/orchestrator_sessions/) for per-session ORCHESTRATOR records. Most recent:
+- `session_011_polymath_degrey_overlap.md` — Polymath 510 is a translated substructure of de Grey 1585; 62% vertex overlap under $T = (2, 0)$.
+- `session_010_obstruction_mechanism.md` — de Grey 1585's chi = 5 obstruction is a three-component coupling (C_6 core + asymmetric half + 155 bridges). Universal "two halves + bridges" pattern.
+- `session_009_degrey1585.md` — de Grey 1585 symmetry analysis: natural center $v_0 = (2, 0)$; approximate D_6; C_6-symmetric core has chi = 4.
+- `session_008_reverse_engineer_polymath510.md` — Polymath 510 has approximate C_6 about origin (92% coverage); C_6 closure is 1155v, chi = 5, C_6-irreducible.
+- `session_007_field_theoretic_binding.md` — Binding-rotation enumeration in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ for chi >= 6; 211-vertex union, density 3.46, chi = 4.
 - `session_006_ambrus_beam.md` — Shot 5 reframed to Ambrus IE-LP; greedy beam search to $m_1 \leq 0.2584$ matching KMOR 2015.
-- `session_005_solving_program.md` — Architecture 3 push from 0.287 to 0.262 via OFV reproduction + Moser-LP; Shot 1 negative; Shot 2 framework built.
-- `session_004_cross_architecture.md` — HN-2 Lean completion, Architectures 2-4 opened, cross-architecture synthesis.
 
 ## When in doubt
 

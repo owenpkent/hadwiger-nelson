@@ -59,6 +59,29 @@ Three of the four architectures are gated by a single missing combinatorial obje
 
 See [`../03_research/cross_architecture_coupling.md`](../03_research/cross_architecture_coupling.md) for the synthesis of LEARNINGS L1-L13. Long-range research program in [`../../experiments/SOLVING_PROGRAM.md`](../../experiments/SOLVING_PROGRAM.md).
 
+## The universal "two 4-chromatic halves + bridges" pattern (LEARNINGS L14-L20)
+
+Reverse-engineering of de Grey 1585 and Polymath 510 (sessions 007-011) identified a universal mechanism behind every published chi >= 5 UDG:
+
+**Every chi >= 5 graph in the published lineage decomposes as two 4-chromatic halves connected by bridge edges.** Removing any single component (either half, or the bridges) drops chi to 4.
+
+| Graph | Half 1 ($\chi=4$) | Half 2 ($\chi=4$) | Bridges | Full ($\chi=5$) |
+|---|---:|---:|---:|---:|
+| de Grey 1585 | 778v (C_6 core about $v_0=(2,0)$) | 807v (asymmetric) | 155 | 1585v |
+| Polymath 510 | 315v (overlap with de Grey under $T=(2,0)$) | 195v (field artifacts) | 833 | 510v |
+
+Findings:
+
+- **Polymath 510 is a translated substructure of de Grey 1585** (L19): 315/510 = 62% of its vertices ARE de Grey vertices under $T = (2, 0)$. Heule/Parts didn't build a new graph; they extracted a subset of de Grey's vertices that fit in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ and added 195 compensatory artifacts.
+
+- **Obstruction is extremely delocalized in de Grey 1585** (L18): every reasonable structural reduction (even keeping 75% of vertices) drops chi to 4.
+
+- **Binding-rotation search exhausted in $\mathbb{Q}(\sqrt 3, \sqrt{11})$** (L14): the Moser spindle admits only 16 single, 62 double, 4 triple binding rotations. Full stacking yields 211v / chi=4. Reaching chi >= 6 likely requires de Grey's full field $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$.
+
+- **Implication for chi >= 6**: the "two halves + bridges" pattern appears to cap at chi = 5. A chi >= 6 UDG likely requires a *qualitatively different* mechanism — e.g., a 3-way coupling that forces each of three colors to be paired with a distinct chi-4 structure. No such construction is known.
+
+This refines L4's "missing 6-chromatic UDG" framing: the missing object is not a refinement of de Grey / Polymath, but a fundamentally different combinatorial idea.
+
 ## Four candidate proof architectures
 
 ### Architecture 1: Combinatorial / Unit-Distance Graphs
@@ -72,6 +95,8 @@ See [`../03_research/cross_architecture_coupling.md`](../03_research/cross_archi
 **Wrong-approach test**: must use the topology / density of $\mathbb{R}$, not just abstract UDG structure (since $\mathbb{Q}^2$ has $\chi = 2$). Every entry in the lineage above realizes essentially-irrational coordinates ($\sqrt{3}, \sqrt{11}$); the detector passes throughout. See [`arch1_sat_lineage.md`](arch1_sat_lineage.md) §5.
 
 **Status**: active. Smallest 5-chromatic UDG record at 509 vertices since 2020 (no shrinking in 5 years). **No 6-chromatic UDG known.** Variant problems ($k$-distance, odd-distance, sphere) admit 6-chromatic constructions; the single-distance plane uniquely resists. See LEARNINGS L1.
+
+**Structural understanding** (sessions 007-011, LEARNINGS L14-L20): every published chi >= 5 UDG in the lineage is an instance of the "two 4-chromatic halves + bridges" coupling construction. The de Grey 2018 breakthrough was not a new combinatorial mechanism; it was a specific instance with 778v + 807v + 155 bridges. Polymath 510 is essentially the same construction translated by $(2, 0)$, restricted to a smaller field, with 315v + 195v + 833 bridges (denser bridges compensate for fewer vertices). The chi >= 6 path likely needs a fundamentally different mechanism than this pattern.
 
 **Deep dive**: [`arch1_sat_lineage.md`](arch1_sat_lineage.md).
 

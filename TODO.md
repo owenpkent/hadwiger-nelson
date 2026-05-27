@@ -21,8 +21,18 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Field-extension orbit-search framework (e1d) for chi >= 6 via alternate ring extensions
   - [x] Tested 6 alternate rings {Q(sqrt p) : p = 7, 19, 23, 27, 31, 39} with Moser-spindle seed at orbit size 3-6
   - [x] Naive orbit-only search NEGATIVE: rotations don't auto-bind copies (LEARNINGS L11)
-  - [ ] Algorithmic binding-rotation search (find rotations that produce cross-copy unit edges) — multi-month
+  - [x] Binding-rotation enumeration for Moser in Q(sqrt 3, sqrt 11): 16 single, 62 double, 4 triple bindings; full 62-stack is 211-vertex, density 3.46, chi = 4 (e1e/e1f/e1g, LEARNINGS L14)
+  - [ ] Repeat binding-rotation enumeration in enriched fields Q(sqrt 3, sqrt 11, sqrt p) for small primes p
 - [x] Document SAT encoding conventions and reproducibility (e1a/e1b scripts + cache certificates)
+- [x] Reverse-engineer Polymath 510 and de Grey 1585 (e1i-e1t)
+  - [x] Polymath 510 has approximate C_6 about origin (92% coverage); C_6 closure is C_6-irreducible at 1155v / chi=5 (e1i/e1j/e1k, LEARNINGS L15)
+  - [x] de Grey 1585's natural center is v_0 = (2, 0), approximate D_6 symmetry (~50% coverage per element) (e1l/e1m, LEARNINGS L16)
+  - [x] de Grey 1585's chi = 5 obstruction is a three-component coupling: 778v core (chi 4) + 807v asymmetric (chi 4) + 155 bridges (e1n/e1o/e1p/e1q, LEARNINGS L17)
+  - [x] de Grey 1585 obstruction is extremely delocalized: every reasonable structural reduction drops chi to 4 (e1r, LEARNINGS L18)
+  - [x] Polymath 510 is essentially a translated substructure of de Grey 1585 (62% vertex overlap under T = (2, 0)) (e1s, LEARNINGS L19)
+  - [x] Universal "two 4-chromatic halves + bridges" pattern: same mechanism in de Grey 1585 (778+807+155) and Polymath 510 (315+195+833) (e1t, LEARNINGS L20)
+  - [ ] Search for 3-way coupling or hierarchical coupling that could force chi >= 6 (the universal pattern caps at chi = 5)
+  - [ ] Try replicating the universal pattern in a yet-smaller form: two 4-chromatic halves of size ~50 each + bridges; SAT-check chi
 
 ## Architecture 2: Measurable / spectral
 

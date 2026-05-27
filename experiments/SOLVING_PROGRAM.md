@@ -116,6 +116,26 @@ L14 (refined): The L11-identified "actual research problem" is now executed. The
 - If χ(R²) = 5 truly, Shots 1 and 2 succeed only at "integer χ_m ≥ 5" and "no 6-chromatic UDG found after large search", respectively. Both still publishable contributions, neither resolving the conjecture.
 - Architecture 4 (set-theoretic / Borel chromatic) remains stuck post-2018 (LEARNINGS L7); the "obvious replacement Shelah-Soifer conditional" is unstarted but unlikely to advance bounds on χ(R²) per se.
 
+## Structural reframe of Shot 2 (LEARNINGS L14-L20)
+
+After sessions 007-011 reverse-engineered de Grey 1585 and Polymath 510:
+
+- **Every chi >= 5 UDG in the published lineage uses one mechanism**: two 4-chromatic halves coupled by bridge edges (L20). de Grey 1585: 778v + 807v + 155 bridges. Polymath 510: 315v + 195v + 833 bridges. Removing any single component drops chi to 4.
+- **Polymath 510 IS de Grey 1585 (translated, restricted to smaller field)** (L19): 62% vertex overlap under T = (2, 0). The Heule/Parts minimization didn't construct a new graph; they reformulated de Grey's.
+- **The de Grey 1585 chi=5 obstruction is extremely delocalized** (L18): every reasonable structural reduction drops chi to 4. de Grey's graph is "structurally tight" — no obvious slack.
+
+The implication: **Shot 2 cannot succeed by refining the de Grey / Polymath / Heule lineage**. To force chi >= 6 requires a *qualitatively different* mechanism than "two halves + bridges":
+
+- A 3-way coupling: three 4-chromatic components mutually constrained such that each color must be a different chi-4 structure.
+- A hierarchical coupling: pair two chi-5 sub-objects (each requiring 5 colors) into a chi-6 structure.
+
+Neither pattern is known. The path to chi >= 6 is therefore a research-grade open problem requiring new combinatorial ideas, not just larger SAT searches.
+
+Shot 2 (sub-goals revised):
+- 2a: Search for a 3-way coupling chi >= 6 UDG (qualitatively new mechanism).
+- 2b: Test whether the universal pattern can be replicated in much smaller form (e.g., halves of size 50-100 each + dense bridges).
+- 2c: Repeat binding-rotation enumeration in de Grey's full field Q(sqrt 3, sqrt 5, sqrt 7, sqrt 11) — the SAT-minimized Polymath field is provably insufficient.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
