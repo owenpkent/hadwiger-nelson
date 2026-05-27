@@ -14,7 +14,7 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 L19 split Polymath 510 into (315 vertices shared with de Grey 1585) and (195 field-reduction artifacts). L20 tests the chi of each half:
 
-| Subgraph | $\|V\|$ | $\|E\|$ | Density | $\chi$ |
+| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
 |---|---:|---:|---:|---:|
 | Polymath ∩ de-Grey overlap (in Polymath edges) | 315 | 1327 | 4.21 | **4** |
 | Polymath ∩ de-Grey overlap (in de Grey edges) | 315 | 1327 | 4.21 | **4** |
@@ -25,7 +25,7 @@ The edge counts are identical (1327) under both edge sets, confirming the transl
 
 **The pattern matches de Grey 1585** (L17):
 
-| Graph | Half 1 | $\chi(H_1)$ \| Half 2 \| $\chi(H_2)$ \| Bridges \| $\chi$(full) |
+| Graph | Half 1 | $\chi(H_1)$ | Half 2 | $\chi(H_2)$ | Bridges | $\chi$(full) |
 |---|---:|---:|---:|---:|---:|---:|
 | de Grey 1585 | 778v (C_6 core) | 4 | 807v (asymmetric) | 4 | 155 | 5 |
 | Polymath 510 | 315v (de-Grey overlap) | 4 | 195v (artifacts) | 4 | 833 | 5 |
@@ -79,14 +79,14 @@ L18 hinted that Polymath 510 and de Grey 1585 might be "two distinct chi >= 5 ge
 
 | Rank | Translation $T$ | Vertex overlap | Note |
 |---:|:---|---:|:---|
-| 1 | $(2,\, 0)$ \| **315 / 510 = 61.8%** \| The canonical alignment (origin of Polymath -> $v_0$ of de Grey) |
+| 1 | $(2,\, 0)$ | **315 / 510 = 61.8%** | The canonical alignment (origin of Polymath -> $v_0$ of de Grey) |
 | 2 | $(2.5,\, -\sqrt 3/6 \approx -0.289)$ | 203 | Hex-lattice translate |
 | 3 | $(2.0,\, \sqrt 3 / 3 \approx 0.577)$ | 203 | Hex-lattice translate |
 | 4 | $(1.5,\, -\sqrt 3/6)$ | 200 | Hex-lattice translate |
 | 5 | $(2.5,\, \sqrt 3/6)$ | 197 | Hex-lattice translate |
 | 6 | $(2.0,\, -\sqrt 3/3)$ | 196 | Hex-lattice translate |
 | 7 | $(1.5,\, \sqrt 3/6)$ | 196 | Hex-lattice translate |
-| 8 | $(2.562, -0.132)$ \| 146 \| Algebraic translate (not in $\sqrt 3$-only basis) |
+| 8 | $(2.562, -0.132)$ | 146 | Algebraic translate (not in $\sqrt 3$-only basis) |
 | 9 | $(2.167, 0.553)$ | 146 | Algebraic translate |
 | 10 | $(1.833, 0.553)$ | 145 | Algebraic translate |
 
@@ -134,7 +134,7 @@ L17 split de Grey 1585 into three components (C_6 core, asymmetric half, 155 bri
 
 **Reductions tested**:
 
-| Reduction | $\|V\|$ | $\|E\|$ | Removed | $\chi \leq 4?$ |
+| Reduction | $|V|$ | $|E|$ | Removed | $\chi \leq 4?$ |
 |---|---:|---:|---|---:|
 | R1: bridge_core + V_asym | 931 | 4273 | All 654 non-bridge-touched core vertices | True |
 | R3: V_sym + bridge_asym | 800 | 3963 | All 785 non-bridge-touched asym vertices | True |
@@ -180,7 +180,7 @@ L18 deepens the L4 / L17 picture. Architectures 1 and 2 share the missing 6-chro
 
 **The full structural picture of de Grey 1585**:
 
-| Subgraph | $\|V\|$ | $\|E\|$ | Density | $\chi$ |
+| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
 |---|---:|---:|---:|---:|
 | $C_6$-symmetric core $V_{\text{sym}}$ (about $v_0$) | 778 | 3806 | 4.89 | **4** |
 | Asymmetric half $V \setminus V_{\text{sym}}$ | 807 | 3948 | 4.89 | **4** |
@@ -232,7 +232,7 @@ L17 sharpens what such a 6-chromatic UDG would look like: it would presumably al
 
 **Future BUILDER directions (next session)**:
 
-1. **SAT-MUS for the full graph**: find a minimum vertex subset $V_{\min} \subseteq V$ such that the induced subgraph has chi $\geq 5$. Compare $\|V_{\min}\|$ to Polymath 510's 510 and Parts' 509.
+1. **SAT-MUS for the full graph**: find a minimum vertex subset $V_{\min} \subseteq V$ such that the induced subgraph has chi $\geq 5$. Compare $|V_{\min}|$ to Polymath 510's 510 and Parts' 509.
 2. **Iso-classify the bridges**: are the 155 bridge edges algebraically related? What's the field-theoretic pattern relating them?
 3. **The "minimal coupling" hypothesis**: is there a chi $\geq 5$ UDG whose components are (a) a small 4-chromatic core, (b) a small 4-chromatic asymmetric piece, (c) a small number of bridges? If so, this could be a smaller chi $\geq 5$ UDG than Parts 509.
 
@@ -301,9 +301,9 @@ This is a sharp structural fact about the geometry of chi $\geq 5$ unit-distance
 
 | Graph | Source | Symmetry structure | Symmetric core chi |
 |---|---|---|---:|
-| Polymath 510 | $\mathbb{Q}(\sqrt 3, \sqrt{11})$ \| Approximate $C_6$ about origin (92% coverage) | (full closure is chi 5, but C_6-irreducible: every rotation copy essential, L15) |
+| Polymath 510 | $\mathbb{Q}(\sqrt 3, \sqrt{11})$ | Approximate $C_6$ about origin (92% coverage) | (full closure is chi 5, but C_6-irreducible: every rotation copy essential, L15) |
 | Heule 826 | $\mathbb{Q}(\sqrt 3, \sqrt{11})$ | NO non-identity exact symmetries | n/a |
-| **de Grey 1585** | $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ \| Approximate $D_6$ about $v_0 = (2, 0)$ (~50% coverage per element) | **778-vertex core, chi = 4** |
+| **de Grey 1585** | $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ | Approximate $D_6$ about $v_0 = (2, 0)$ (~50% coverage per element) | **778-vertex core, chi = 4** |
 
 **Future BUILDER directions (next session)**:
 
@@ -325,14 +325,14 @@ This is a sharp structural fact about the geometry of chi $\geq 5$ unit-distance
 
 **Approximate symmetry finding (e1j)**. Polymath 510 has approximate $C_6$ symmetry about origin:
 
-| Rotation about origin | Maps $v_1$ to \| Coverage (vertices mapping back into $V$) |
+| Rotation about origin | Maps $v_1$ to | Coverage (vertices mapping back into $V$) |
 |---|---|---:|
-| $0$ (identity) \| $v_1$ \| $510/510 = 100\%$ |
-| $60°$ ($2\pi/6$) \| $v_6$ \| $471/510 = 92.35\%$ |
-| $120°$ ($4\pi/6$) \| $v_2$ \| $470/510 = 92.16\%$ |
-| $180°$ ($\pi$) \| $v_4$ \| $343/510 = 67.25\%$ |
-| $240°$ ($5\pi/3$) \| $v_3$ \| $337/510 = 66.08\%$ |
-| $300°$ ($\pi/3$) \| $v_5$ \| $337/510 = 66.08\%$ |
+| $0$ (identity) | $v_1$ | $510/510 = 100\%$ |
+| $60°$ ($2\pi/6$) | $v_6$ | $471/510 = 92.35\%$ |
+| $120°$ ($4\pi/6$) | $v_2$ | $470/510 = 92.16\%$ |
+| $180°$ ($\pi$) | $v_4$ | $343/510 = 67.25\%$ |
+| $240°$ ($5\pi/3$) | $v_3$ | $337/510 = 66.08\%$ |
+| $300°$ ($\pi/3$) | $v_5$ | $337/510 = 66.08\%$ |
 
 The $C_3$ subgroup (identity, $R_{120°}$, $R_{240°}$) has $> 92\%$ coverage. The $C_6$ has more reflective symmetry breakage at the order-2 elements. The SAT-minimization broke approximately $40$ vertices' worth of $C_6$ symmetry to reduce the graph from a symmetric construction to its 510-vertex form.
 
@@ -340,9 +340,9 @@ The $C_3$ subgroup (identity, $R_{120°}$, $R_{240°}$) has $> 92\%$ coverage. T
 
 | Quantity | Value |
 |---|---:|
-| Original $\|V\|$ | 510 |
-| Closure $\|V_+\|$ | 1155 (added 645 vertices) |
-| Closure $\|E_+\|$ | 10397 (density 9.0) |
+| Original $|V|$ | 510 |
+| Closure $|V_+|$ | 1155 (added 645 vertices) |
+| Closure $|E_+|$ | 10397 (density 9.0) |
 | $\chi(V_+)$ | **5** (4-colorable: False, 5-colorable: True; SAT-confirmed) |
 | Number of $C_6$ orbits | 535 (mostly size 1 or 6) |
 
@@ -350,7 +350,7 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 
 **Minimal subset of rotation copies for $\chi \geq 5$ (e1k Phase 4)**. The closure decomposes as $V_+ = \bigcup_{k=0}^{5} R^{k}(C)$ where $C$ is a fundamental domain (one representative per orbit). For each subset $S \subseteq \mathbb{Z}/6$, define $G_S = \bigcup_{k \in S} R^{k}(C)$. Test $\chi(G_S)$ for $S$ in every non-empty subset.
 
-| $\|S\|$ | Example $S$ \| $\|V(G_S)\|$ \| $\|E(G_S)\|$ \| $\chi \leq 4?$ \| $\chi \leq 5?$ |
+| $|S|$ | Example $S$ | $\|V(G_S)\|$ | $\|E(G_S)\|$ | $\chi \leq 4?$ | $\chi \leq 5?$ |
 |---:|:---|---:|---:|---:|---:|
 | 1 | $\{0\}$ | 535 | 2565 | T | — |
 | 2 | $\{0,1\}$ | 663 | 3940 | T | — |
@@ -359,13 +359,13 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 | 5 | $\{0,1,2,3,4\}$ | 1032 | 8260 | T | — |
 | **6** | $\{0,1,2,3,4,5\}$ | **1155** | **10397** | **F** | T |
 
-**ALL 63 proper subsets** ($1 \leq \|S\| \leq 5$) give $\chi(G_S) \leq 4$. Only the full union $\|S\| = 6$ achieves $\chi \geq 5$. The C_6 closure is **C_6-irreducible**: every single rotation copy is essential.
+**ALL 63 proper subsets** ($1 \leq |S| \leq 5$) give $\chi(G_S) \leq 4$. Only the full union $|S| = 6$ achieves $\chi \geq 5$. The C_6 closure is **C_6-irreducible**: every single rotation copy is essential.
 
 **Why it matters**.
 
 1. **Polymath 510 is exceptional within its $C_6$ orbit**. The original 510-vertex graph has $\chi = 5$, density 4.91. But the symmetrically-built 1032-vertex 5-of-6-subset has $\chi = 4$ despite density 8.0. The $\chi \geq 5$ of Polymath 510 is *not* a consequence of generic $C_6$ symmetry; it depends on the specific *asymmetric* selection of 510 vertices.
 
-2. **The de Grey "rotation set characterization" question is sharpened**. For the Polymath/Heule/Parts lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, no $\chi \geq 5$ graph is exactly $C_6$-symmetric: SAT-minimization has eaten that symmetry. The natural $C_6$ closure exists but its minimal-rotation-copy decomposition requires ALL 6 copies; it cannot be reduced to a small $\|S\|$.
+2. **The de Grey "rotation set characterization" question is sharpened**. For the Polymath/Heule/Parts lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, no $\chi \geq 5$ graph is exactly $C_6$-symmetric: SAT-minimization has eaten that symmetry. The natural $C_6$ closure exists but its minimal-rotation-copy decomposition requires ALL 6 copies; it cannot be reduced to a small $|S|$.
 
 3. **Cross-reference to L14**. L14 found that the Moser spindle in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ admits no binding-rotation miracles producing $\chi \geq 5$ with $\leq 211$ vertices in any union. L15 extends this: even the Polymath 510 graph's natural $C_6$ closure (1155 vertices, density 9.0) requires the full 6-fold copy structure to achieve $\chi \geq 5$. The field-theoretic rigidity from L14 manifests as rotation-irreducibility in L15.
 
@@ -374,7 +374,7 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 **Implementation notes**.
 
 - The closure algorithm has a known limitation: it can introduce duplicate vertices when many "pending" vertices are processed before the lookup table rebuilds. The 1155-vertex closure may be smaller (perhaps $\sim 700$-$900$) with proper deduplication. The $\chi$ findings are correct regardless because adding duplicate vertices preserves the chromatic-number partitions induced on the original vertex set.
-- The subset-decomposition fundamental domain $C$ has $\|C\| = 535$ orbits, of which $407$ are size-1 (likely artifacts of the duplicate-vertex bug; with proper dedup we expect $\sim 1$ size-1 orbit and the rest size-6).
+- The subset-decomposition fundamental domain $C$ has $|C| = 535$ orbits, of which $407$ are size-1 (likely artifacts of the duplicate-vertex bug; with proper dedup we expect $\sim 1$ size-1 orbit and the rest size-6).
 
 **Wrong-approach status**. The reverse-engineering uses only $C_6 \subset O(2)$ rotations on Polymath 510, all coordinates in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. The $\mathbb{Q}^2$ detector applies since rotated coordinates remain irrational. Detector passes.
 
@@ -392,30 +392,30 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 
 **Experiments**: [`e1e_binding_rotation_moser.py`](combinatorial/e1e_binding_rotation_moser.py), [`e1f_double_binding_search.py`](combinatorial/e1f_double_binding_search.py), [`e1g_pivot_double_binding.py`](combinatorial/e1g_pivot_double_binding.py).
 
-**Setup**. L11 left as the open problem: "find specific rotation choices in Q(sqrt 11) that produce cross-copy unit-distance edges, like de Grey 2018 did." This experiment runs that program directly. Given the Moser spindle $M$ (7 vertices, exact in $\mathbb{Q}(\sqrt 3, \sqrt{11})$), a *binding rotation* $\theta$ about some pivot $v_k$ is one where some seed pair $(p, q) \in M \times M$ satisfies $\|R_{v_k, \theta}(p) - q\| = 1$, i.e., the rotated copy $R_{v_k, \theta}(M)$ shares at least one unit-distance edge with $M$. The condition on $(\cos\theta, \sin\theta)$ is one linear equation
-$$\langle p - v_k,\, q - v_k\rangle \cos\theta + \det[(p-v_k) \mid (q-v_k)]\sin\theta = \tfrac{\|p-v_k\|^2 + \|q-v_k\|^2 - 1}{2}$$
+**Setup**. L11 left as the open problem: "find specific rotation choices in Q(sqrt 11) that produce cross-copy unit-distance edges, like de Grey 2018 did." This experiment runs that program directly. Given the Moser spindle $M$ (7 vertices, exact in $\mathbb{Q}(\sqrt 3, \sqrt{11})$), a *binding rotation* $\theta$ about some pivot $v_k$ is one where some seed pair $(p, q) \in M \times M$ satisfies $|R_{v_k, \theta}(p) - q| = 1$, i.e., the rotated copy $R_{v_k, \theta}(M)$ shares at least one unit-distance edge with $M$. The condition on $(\cos\theta, \sin\theta)$ is one linear equation
+$$\langle p - v_k,\, q - v_k\rangle \cos\theta + \det[(p-v_k) \mid (q-v_k)]\sin\theta = \tfrac{|p-v_k|^2 + |q-v_k|^2 - 1}{2}$$
 intersected with the unit circle $\cos^2\theta + \sin^2\theta = 1$. A *double-binding* satisfies two such constraints simultaneously: solve a $2 \times 2$ linear system in $(\cos\theta, \sin\theta)$ and check the unit-circle equation. The unit-circle equation is generically incompatible with the linear solution; double-bindings exist only when an algebraic identity in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ accidentally makes them compatible.
 
 **Findings**.
 
-(a) **Single bindings (about origin).** 16 unique $\theta$ values exist where $R_\theta(M)$ shares at least one unit edge with $M$. Each catches at most 2 cross-copy unit edges; the resulting $M \cup R_\theta(M)$ has $\|V\| \in [10, 13]$, $\|E\| \in [17, 24]$, all 4-colorable.
+(a) **Single bindings (about origin).** 16 unique $\theta$ values exist where $R_\theta(M)$ shares at least one unit edge with $M$. Each catches at most 2 cross-copy unit edges; the resulting $M \cup R_\theta(M)$ has $|V| \in [10, 13]$, $|E| \in [17, 24]$, all 4-colorable.
 
-(b) **Double bindings about origin (e1f).** Only **6** double-binding rotations exist for $M$ with rotation pivot at the origin in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. ALL SIX ARE DEGENERATE: the second binding constraint is satisfied by a *vertex coincidence* (a rotated $R_\theta(p)$ lands exactly on an existing $M$-vertex), so the apparent "cross edge" collapses into a within-copy edge after dedup. Net cross-copy edge count: $0$ for all 6. The full union $M \cup \bigcup_{k=1}^{6} R_{\theta_k}(M)$ has $\|V\| = 29$, $\|E\| = 61$, $\chi = 4$.
+(b) **Double bindings about origin (e1f).** Only **6** double-binding rotations exist for $M$ with rotation pivot at the origin in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. ALL SIX ARE DEGENERATE: the second binding constraint is satisfied by a *vertex coincidence* (a rotated $R_\theta(p)$ lands exactly on an existing $M$-vertex), so the apparent "cross edge" collapses into a within-copy edge after dedup. Net cross-copy edge count: $0$ for all 6. The full union $M \cup \bigcup_{k=1}^{6} R_{\theta_k}(M)$ has $|V| = 29$, $|E| = 61$, $\chi = 4$.
 
-(c) **Pivot-varied double bindings (e1g).** Varying the pivot across all 7 Moser vertices yields **62** distinct double-binding rotations. Of these, only **4** produce 3 cross-copy unit edges (triple-binding by algebraic coincidence). These 4 are paired: both occur at the outer-tip pivots $v_3$ and $v_6 = R_{\theta_{\text{Moser}}}(v_3)$, related by the Moser spindle's intrinsic symmetry. The other 58 have cross-edge count $\leq 2$. The full union with all 62 double-binding rotations stacked has $\|V\| = 211$, $\|E\| = 731$, density $E/V = 3.46$. Still **$\chi = 4$**.
+(c) **Pivot-varied double bindings (e1g).** Varying the pivot across all 7 Moser vertices yields **62** distinct double-binding rotations. Of these, only **4** produce 3 cross-copy unit edges (triple-binding by algebraic coincidence). These 4 are paired: both occur at the outer-tip pivots $v_3$ and $v_6 = R_{\theta_{\text{Moser}}}(v_3)$, related by the Moser spindle's intrinsic symmetry. The other 58 have cross-edge count $\leq 2$. The full union with all 62 double-binding rotations stacked has $|V| = 211$, $|E| = 731$, density $E/V = 3.46$. Still **$\chi = 4$**.
 
 | Quantity | Origin-pivot | All 7 pivots |
 |---|---:|---:|
 | Single-binding rotations | 16 | (more, not enumerated) |
 | Double-binding rotations | 6 | 62 |
 | Triple-binding rotations (3+ cross edges) | 0 | 4 |
-| Union $\|V\|$ | 29 | 211 |
-| Union $\|E\|$ | 61 | 731 |
+| Union $|V|$ | 29 | 211 |
+| Union $|E|$ | 61 | 731 |
 | Union density $E/V$ | 2.10 | 3.46 |
 | $\chi$ of union | 4 | 4 |
 | 5-colorable? | yes | yes |
 
-(d) **Greedy iterative expansion (e1e Phase 4).** Greedy stacking of single-binding rotations from $M$, picking at each step the $\theta$ maximizing new-edge gain, settles into a *periodic attractor*: new-edge counts cycle through $(12, 14, 16, 12, 14, 16, \ldots)$ per added rotation. Density $E/V$ stays at $\approx 2.27$ for at least 19 iterations ($\|V\| = 121, \|E\| = 275$, all 4-colorable). The greedy never finds a rotation breaking the periodicity.
+(d) **Greedy iterative expansion (e1e Phase 4).** Greedy stacking of single-binding rotations from $M$, picking at each step the $\theta$ maximizing new-edge gain, settles into a *periodic attractor*: new-edge counts cycle through $(12, 14, 16, 12, 14, 16, \ldots)$ per added rotation. Density $E/V$ stays at $\approx 2.27$ for at least 19 iterations ($|V| = 121, |E| = 275$, all 4-colorable). The greedy never finds a rotation breaking the periodicity.
 
 **Why it matters**.
 
@@ -431,7 +431,7 @@ intersected with the unit circle $\cos^2\theta + \sin^2\theta = 1$. A *double-bi
 
 **Wrong-approach status**. Passes the $\mathbb{Q}^2$ detector: the binding-rotation construction uses irrational $\cos\theta, \sin\theta$ throughout (never lifts to $\mathbb{Q}^2$). Passes the $\mathbb{R}^1$ detector (one-dimensional analog has no rotations). Engages with the $O(2)$ rotation structure properly.
 
-**Implementation notes**. Numerical computation at 80-digit mpmath precision throughout, with sympy-exact verification of seed edges. The double-binding solver is a $2 \times 2$ linear system; the unit-circle check uses tolerance $10^{-30}$, which excludes accidental near-misses in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ given the field's bounded denominators. Each experiment runs in seconds-to-minutes on a single core. e1f cache: 6 double bindings about origin; e1g cache: 62 double bindings across pivots, 4 with cross >= 3; e1e cache: 16 single-binding angles, greedy expansion to $\|V\| = 121$ at 19 iterations.
+**Implementation notes**. Numerical computation at 80-digit mpmath precision throughout, with sympy-exact verification of seed edges. The double-binding solver is a $2 \times 2$ linear system; the unit-circle check uses tolerance $10^{-30}$, which excludes accidental near-misses in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ given the field's bounded denominators. Each experiment runs in seconds-to-minutes on a single core. e1f cache: 6 double bindings about origin; e1g cache: 62 double bindings across pivots, 4 with cross >= 3; e1e cache: 16 single-binding angles, greedy expansion to $|V| = 121$ at 19 iterations.
 
 **Future BUILDER directions (next session)**:
 
@@ -474,7 +474,7 @@ After step 11 (resumed from step 9 state), $m_1 \leq 0.258397$ with 17 vertices,
 
 State persisted at [`experiments/fractional/_cache/e3h_state.json`](fractional/_cache/e3h_state.json) (resumable across runs). To meaningfully push past the local plateau and approach Ambrus 2023's 0.2470, future work needs: (a) beam width $\geq 2$ — keep top-$K$ partial solutions; (b) vertex-swap local search after greedy build; (c) richer candidate pool, e.g., constructive generation of unit-distance neighbors in $\mathbb{Q}(\sqrt 3, \sqrt{11})$; or (d) restart from multiple seeds (Moser spindle, Heule fragments, MRVZ-style configurations) instead of just hex lattice.
 
-**Computational scaling**. Indep set count roughly doubles per step: 19 $\to$ 38 $\to$ 66 $\to$ 132 $\to$ 264 $\to$ 528 $\to$ 912 $\to$ 1818 $\to$ 3587. Step times scale linearly with $K \cdot \|\text{pool}\|$, so step $k$ time roughly doubles. Step 9 projected ~9 min; step 10 ~18 min; step 13 ~2 h; reaching size 23 estimated ~10 hours of compute. The greedy single-candidate evaluation is the bottleneck (we re-solve the LP for every pool point at every step). Parallelization across candidates would cut step time linearly.
+**Computational scaling**. Indep set count roughly doubles per step: 19 $\to$ 38 $\to$ 66 $\to$ 132 $\to$ 264 $\to$ 528 $\to$ 912 $\to$ 1818 $\to$ 3587. Step times scale linearly with $K \cdot |\text{pool}|$, so step $k$ time roughly doubles. Step 9 projected ~9 min; step 10 ~18 min; step 13 ~2 h; reaching size 23 estimated ~10 hours of compute. The greedy single-candidate evaluation is the bottleneck (we re-solve the LP for every pool point at every step). Parallelization across candidates would cut step time linearly.
 
 **Why this works at all**. The IE-LP has more degrees of freedom than the OFV simplex LP: each independent set contributes one atom variable, and each pair of vertices contributes one (ie2) constraint linking that pair's atom sum to the autocorrelation $f$ at the pair's distance. As the configuration grows, the LP's effective coverage of distinct distances and independence structures increases. The hexagonal lattice seed provides a high-symmetry base; adding Polymath 510 vertices introduces new distances and new constraint patterns. Greedy selection picks the addition that most tightens the LP at each step.
 
@@ -523,7 +523,7 @@ The improvement comes entirely from *richer point configurations* in the inclusi
 
 **Implementation**. e3g implements the IE-LP framework with CVXPY + HiGHS. Tested on three configurations:
 
-| Configuration | $n$ \| edges \| indep sets \| $m_1 \leq$ \| $\chi_m \geq$ (real) |
+| Configuration | $n$ | edges | indep sets | $m_1 \leq$ | $\chi_m \geq$ (real) |
 |---|---:|---:|---:|---:|---:|
 | Moser spindle | 7 | 11 | 18 | 0.2829 | 3.535 |
 | Hex lattice 1 layer | 7 | 12 | 19 | 0.2799 | 3.573 |
@@ -559,7 +559,7 @@ The Moser-spindle IE-LP at 0.2829 is *tighter* than the trivial fractional bound
 
 **Finding**. Apply each rotation $\theta$ for $n_{\rm rot} \in \{3, 4, 6\}$ iterations to the Moser spindle (7-vertex seed). For all tested ring extensions and all $n_{\rm rot}$:
 
-| $n_{\rm rot}$ \| $|V|$ \| $|E|$ | 3-col | 4-col | 5-col |
+| $n_{\rm rot}$ | $|V|$ | $|E|$ | 3-col | 4-col | 5-col |
 |---:|---:|---:|---:|---:|---:|
 | 3 | 19 | 33 | False | True | not checked |
 | 4 | 25 | 44 | False | True | not checked |
@@ -591,10 +591,10 @@ The graph is therefore the disjoint union (modulo central-vertex identification)
 
 **Experiment**: [`e3f_polymath510_lp.py`](fractional/e3f_polymath510_lp.py) (Shot 1 of SOLVING_PROGRAM).
 
-**Finding**: the OFV inequality $\sum_{i=1}^{N} f(\\|v_i + t\\|) \leq \alpha(G)$ at any translation $t$ contributes to the LP only when the inequality is *binding*: the LP optimum of $f$ must drive the LHS close to $\alpha(G)$. For Polymath 510:
+**Finding**: the OFV inequality $\sum_{i=1}^{N} f(\|v_i + t\|) \leq \alpha(G)$ at any translation $t$ contributes to the LP only when the inequality is *binding*: the LP optimum of $f$ must drive the LHS close to $\alpha(G)$. For Polymath 510:
 
 - $\alpha(G) \geq 142$ confirmed by SAT (within a 10-minute compute budget). Direct counting bound: $m_1 \leq 142/510 \approx 0.278$.
-- At the LP's optimal frequency $s^* \approx 0.61$ (where $J_0$ achieves its minimum at $2 \pi s^* = j_{1,1} = 3.83$, $J_0 \approx -0.4028$), the *radial Bessel sum* $\sum_{i=1}^{510} J_0(2 \pi s^* \\|v_i\\|)$ has magnitude $\leq 10$ at any translation — it oscillates around zero by cancellation across the 510 distinct radii.
+- At the LP's optimal frequency $s^* \approx 0.61$ (where $J_0$ achieves its minimum at $2 \pi s^* = j_{1,1} = 3.83$, $J_0 \approx -0.4028$), the *radial Bessel sum* $\sum_{i=1}^{510} J_0(2 \pi s^* \|v_i\|)$ has magnitude $\leq 10$ at any translation — it oscillates around zero by cancellation across the 510 distinct radii.
 - LHS of the OFV inequality at LP optimum $f$ (which puts weight on the single frequency $s^*$ in the e3b basic LP): $\sum_i f(r_i) \approx \alpha_{LP} \sum_i J_0(2 \pi s^* r_i) \approx 0.713 \cdot (-6.56) = -4.68$ (at the best translation).
 - Bound: $\alpha = 142$. Slack: $142 - (-4.68) = 146.68$, i.e., the constraint is **97% inactive**.
 
@@ -630,18 +630,18 @@ Contrast with Moser spindle ($N = 7, \alpha = 2$): at its best translation $(-0.
 
 (a) **Triangle saturation**. The OFV-style LP with *equilateral unit-edge triangle* inequalities saturates near OFV's published 0.2684. e3d enumerates all valid $(a, b, c)$ triples on a $0.1$-step grid in $a, b \in [0.1, 4.0]$ (1409 valid triples) and feeds all of them to the LP simultaneously. The LP selects 9 active triples (out of 1409) and reaches $m_1 \leq 0.268202$, only $2 \times 10^{-4}$ tighter than OFV's hand-picked 3. The triangle-inequality class is essentially exhausted here.
 
-(b) **Moser breakthrough**. The OFV simplex inequality $\sum_{i} f(\\|v_i\\|) \leq 1$ for a unit-edge equilateral triangle generalizes to $\sum_i f(\\|v_i\\|) \leq \alpha(G)$ for any finite UDG $G \subset \mathbb{R}^2$, where $\alpha$ is the independence number. The Moser spindle (7 vertices, 11 unit-distance edges, $\chi = 4$, $\alpha = 2$, vertices in $\mathbb{Q}(\sqrt{3}, \sqrt{11})$) is the natural next configuration. Each translation of the Moser spindle in the plane gives a different set of 7 vertex norms and hence a different LP constraint.
+(b) **Moser breakthrough**. The OFV simplex inequality $\sum_{i} f(\|v_i\|) \leq 1$ for a unit-edge equilateral triangle generalizes to $\sum_i f(\|v_i\|) \leq \alpha(G)$ for any finite UDG $G \subset \mathbb{R}^2$, where $\alpha$ is the independence number. The Moser spindle (7 vertices, 11 unit-distance edges, $\chi = 4$, $\alpha = 2$, vertices in $\mathbb{Q}(\sqrt{3}, \sqrt{11})$) is the natural next configuration. Each translation of the Moser spindle in the plane gives a different set of 7 vertex norms and hence a different LP constraint.
 
-| LP variant | $m_1(\mathbb{R}^2) \leq$ \| $1/m_1$ \| $\Delta$ vs OFV |
+| LP variant | $m_1(\mathbb{R}^2) \leq$ | $1/m_1$ | $\Delta$ vs OFV |
 |---|---:|---:|---:|
 | OFV 2010, 3 hand-picked triples (e3c) | 0.268412 | 3.7256 | baseline |
 | Wide triangle sweep, 1409 candidates (e3d) | 0.268202 | 3.7285 | $-0.0002$ |
-| + single Moser at $(-0.5, -0.5)$ (e3e) \| 0.264150 \| 3.7857 \| $-0.0043$ |
+| + single Moser at $(-0.5, -0.5)$ (e3e) | 0.264150 | 3.7857 | $-0.0043$ |
 | + 1271 Moser translations (e3e) | 0.261994 | 3.8169 | $-0.0064$ |
 | + 18 rotations × 6048 translations (e3e ext.) | 0.261883 | 3.8185 | $-0.0065$ |
 | KMOR 2015 published | 0.2588 | 3.864 | $-0.0096$ |
 | Ambrus et al. 2023 published | 0.2470 | 4.049 | $-0.0214$ |
-| Required for $\chi_m \geq 6$ \| < 0.2000 \| > 5 \| $-0.068$ |
+| Required for $\chi_m \geq 6$ | < 0.2000 | > 5 | $-0.068$ |
 
 We close $\approx 75\%$ of the gap to KMOR's 0.2588 with Moser-spindle inequalities ($\Delta = 0.0065$ vs $0.0096$ to KMOR). The Moser-spindle LP optimum is achieved at multiple translations simultaneously (10-11 active out of 6048), and rotations beyond translations add negligible improvement (the bound saturates near 0.2619 across rotation sweeps).
 
@@ -674,7 +674,7 @@ We close $\approx 75\%$ of the gap to KMOR's 0.2588 with Moser-spindle inequalit
   $\min z_0 + z_c$
   s.t. $z_c \geq 0$
        $z_0 + z_1 + (n+1) z_c \geq 1$
-       $z_0 + z_1 \Omega_n(t) + z_c \sum_{i=1}^{n+1} \Omega_n(t \\|v_i\\|) \geq 0$ for all $t \geq 0$
+       $z_0 + z_1 \Omega_n(t) + z_c \sum_{i=1}^{n+1} \Omega_n(t \|v_i\|) \geq 0$ for all $t \geq 0$
 
 where $\Omega_n(t) = \Gamma(n/2) (2/t)^{(n-2)/2} J_{(n-2)/2}(t)$ and $\{v_i\}$ are the $n+1$ vertices of a *unit-edge* simplex (regular triangle at $n = 2$). The bound is $m_1(\mathbb{R}^n) \leq z_0 + z_c$.
 
@@ -682,7 +682,7 @@ The basic LP (no simplex constraint) has the analytic optimum $z_0 = \Omega_n(j_
 
 A *centered* equilateral-triangle constraint at $n = 2$ (all three vertices at distance $1/\sqrt{3}$ from origin) is only worth $0.0014$: the bound drops from $0.2873$ to $0.2857$. The substantial improvement is from *off-center* unit triangles. OFV used three specific squared-norm triples for the triangle vertices:
 
-  $(\\|v_1\\|^2, \\|v_2\\|^2, \\|v_3\\|^2) \in \{(2.4, 2.4, 0.360314), (3.1, 3.1, 6.524038), (3.7, 3.7, 7.417141)\}$
+  $(\|v_1\|^2, \|v_2\|^2, \|v_3\|^2) \in \{(2.4, 2.4, 0.360314), (3.1, 3.1, 6.524038), (3.7, 3.7, 7.417141)\}$
 
 with the third coordinate chosen as a root of $3(a^2 + b^2 + c^2 + 1) - (a + b + c + 1)^2 = 0$ to force the Gram matrix to rank 2 (so the triangle actually embeds in $\mathbb{R}^2$). Solving the LP with these three additional simplex multipliers gives
 
@@ -692,7 +692,7 @@ exactly matching OFV Table 3.1. Solve time: 113 ms via cvxpy + HiGHS, three free
 
 **Three-step chromatic table from this LP**:
 
-| LP variant | $m_1(\mathbb{R}^2) \leq$ \| $\chi_m \geq 1/m_1$ \| Integer $\chi_m \geq$ |
+| LP variant | $m_1(\mathbb{R}^2) \leq$ | $\chi_m \geq 1/m_1$ | Integer $\chi_m \geq$ |
 |---|---:|---:|---:|
 | Basic (no simplex), e3c | 0.287119 | 3.483 | 4 |
 | One centered unit triangle | 0.285742 | 3.500 | 4 |
@@ -703,7 +703,7 @@ exactly matching OFV Table 3.1. Solve time: 113 ms via cvxpy + HiGHS, three free
 
 **Why it matters**:
 
-1. The OFV bound is *not* obtainable by adding more frequencies to a vanilla Bessel-LP. e3b's saturated 0.2872 is a 1-dimensional LP optimum (single Bessel mode at $s \approx 0.61$). The 0.2688 improvement comes from a fundamentally different mechanism, the rigid finite-Euclidean-configuration constraint $f(\\|v_1\\|) + \ldots + f(\\|v_{n+1}\\|) \leq 1$ for unit-edge simplices. This is *combinatorial* structure being injected into the *continuous* LP, similar in spirit to how Falconer-style measure arguments amplify a finite UDG (L4).
+1. The OFV bound is *not* obtainable by adding more frequencies to a vanilla Bessel-LP. e3b's saturated 0.2872 is a 1-dimensional LP optimum (single Bessel mode at $s \approx 0.61$). The 0.2688 improvement comes from a fundamentally different mechanism, the rigid finite-Euclidean-configuration constraint $f(\|v_1\|) + \ldots + f(\|v_{n+1}\|) \leq 1$ for unit-edge simplices. This is *combinatorial* structure being injected into the *continuous* LP, similar in spirit to how Falconer-style measure arguments amplify a finite UDG (L4).
 
 2. The 0.268-to-0.247 step (Ambrus et al. 2023) uses the same mechanism but with a 23-point configuration and a beam search over which non-trivial inequalities to enforce, indicating the LP has substantial residual slack for $n = 2$ that finer Euclidean-rigidity constraints can recover. The structural gap to $\chi_m \geq 5$ (need $m_1 < 1/5 = 0.200$) is still substantial.
 
@@ -772,8 +772,8 @@ The LP places all weight at the single frequency $s \approx 0.6087$, which corre
 
 | Method | Wall clock | Result | Integer bound |
 |--------|-----------:|--------|--------------:|
-| Vanilla $\vartheta$ via SDP on 510-vertex UDG \| 644 s \| $\vartheta = 170.24$, $n/\vartheta = 2.996$ \| $\chi \geq 3$ |
-| Rotation-invariant Bessel-LP on $\mathbb{R}^2$ \| 0.03 s \| $m_1 \leq 0.287$, $1/m_1 = 3.48$ \| $\chi_m \geq 4$ |
+| Vanilla $\vartheta$ via SDP on 510-vertex UDG | 644 s | $\vartheta = 170.24$, $n/\vartheta = 2.996$ | $\chi \geq 3$ |
+| Rotation-invariant Bessel-LP on $\mathbb{R}^2$ | 0.03 s | $m_1 \leq 0.287$, $1/m_1 = 3.48$ | $\chi_m \geq 4$ |
 
 The continuous rotation-invariant LP is $\approx 2 \times 10^4 \times$ faster *and* gives a strictly tighter integer bound on a stronger object ($\chi_m \geq \chi$). This is the empirical realization of L5's prediction: encoding rotation symmetry in the optimization is structurally the right move for HN.
 
