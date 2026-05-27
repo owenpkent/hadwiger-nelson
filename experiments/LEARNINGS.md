@@ -147,7 +147,7 @@ Each obstruction class has a distinctive F-profile shape: max value (4 for empty
 
 **Empirical no-$K_4$ scan** (uniform + L21-anchored sampling):
 
-| Phase | sample method | $|B_{ij}|$ range | total | no-$K_4$ | $\chi = 4$ | $\chi = 5$ | $\chi \geq 6$ |
+| Phase | sample method | $\|B_{ij}\|$ range | total | no-$K_4$ | $\chi = 4$ | $\chi = 5$ | $\chi \geq 6$ |
 |---|---|---|---:|---:|---:|---:|---:|
 | D | uniform | [6, 14] | 297 | 103 | 103 | 0 | **0** |
 | E | uniform | [8, 12] | 400 | 80 | 80 | 0 | **0** |
