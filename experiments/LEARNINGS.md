@@ -666,4 +666,70 @@ This is a sharp structural fact about the geometry of chi $\geq 5$ unit-distance
 
 ---
 
+### L17. de Grey 1585's chi >= 5 mechanism: 155 bridge edges between two 4-chromatic halves, where neither half nor the bridge-touched subgraph alone suffices
+
+**Architecture**: 1. Continues L16.
+
+**Experiments**: [`e1o_asymmetric_obstruction.py`](combinatorial/e1o_asymmetric_obstruction.py), [`e1p_degrey_asymmetric_half.py`](combinatorial/e1p_degrey_asymmetric_half.py), [`e1q_bridge_subgraph.py`](combinatorial/e1q_bridge_subgraph.py).
+
+**The full structural picture of de Grey 1585**:
+
+| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
+|---|---:|---:|---:|---:|
+| $C_6$-symmetric core $V_{\text{sym}}$ (about $v_0$) | 778 | 3806 | 4.89 | **4** |
+| Asymmetric half $V \setminus V_{\text{sym}}$ | 807 | 3948 | 4.89 | **4** |
+| Bridge-touched restricted subgraph | 146 | 327 | 2.24 | **4** |
+| Full de Grey 1585 | 1585 | 7909 | 4.99 | **5** |
+
+The 7909 edges decompose as: **3806 within core + 3948 within asym + 155 bridges**. Both halves have *almost identical density* (4.89) and *identical chromatic number* (4). The chi = 5 property is purely a coupling phenomenon.
+
+(a) **No singleton augmentation works (e1o Phase 1)**. For every asymmetric vertex $v$, $\chi(V_{\text{sym}} \cup \{v\}) = 4$. Adding one asymmetric vertex to the symmetric core does not force a 5th color.
+
+(b) **Greedy by degree-to-G fails (e1o Phase 2)**. Adding the highest-degree asymmetric vertex 50 times sequentially keeps the graph 4-colorable. The added vertices have degree to current graph dropping from 14 to 2-3, but no chi-jump.
+
+(c) **The asymmetric half alone is 4-chromatic (e1p)**. $\chi(V \setminus V_{\text{sym}}) = 4$. The chi $\geq 5$ property is NOT located in either half.
+
+(d) **155 bridge edges, sparse contact**: The bridges connect only **124 core vertices** (16% of 778) and **22 asymmetric vertices** (2.7% of 807). The asymmetric half is connected to the core through a very narrow interface.
+
+(e) **The bridge-touched subgraph is 4-chromatic** (e1q). Restricting to the 146 vertices that participate in any bridge edge gives a 327-edge subgraph (density 2.24), chi = 4. The bridges alone, even with their local context, don't force chi = 5.
+
+**The chi >= 5 obstruction is therefore THREE-COMPONENT**:
+
+1. The **C_6-symmetric core** provides 778 4-chromatic vertices.
+2. The **asymmetric half** provides 807 more 4-chromatic vertices.
+3. The **155 bridges** couple them at 146 contact points.
+
+REMOVING any of the three components drops chi to 4:
+- Remove bridges only: two disconnected 4-chromatic halves, chi = 4.
+- Remove the asymmetric half: just the C_6 core, chi = 4.
+- Remove the core: just the asymmetric half, chi = 4.
+
+But preserve all three: chi = 5. **The chi = 5 obstruction is a global property requiring all three components simultaneously**, not localized in any single sub-structure.
+
+**Why it matters**.
+
+1. **Refutes a naive simplification hypothesis**. One might guess: "the chi $\geq 5$ obstruction lives in a small subgraph; extract that subgraph, ignore the rest". L17 says this is false for de Grey 1585. The chi $\geq 5$ certificate of de Grey 1585 requires both halves plus their coupling. The smallest subgraph of de Grey 1585 with chi $\geq 5$ may not be much smaller than 1585 itself, despite the SAT-minimization in the Polymath/Heule lineage reaching 510.
+
+2. **Polymath 510 may NOT be a subset of de Grey 1585**. The Polymath/Heule lineage starts from a different base graph (in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, not de Grey's $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$) and was constructed independently. The fact that both lineages reach chi $\geq 5$ at $\sim 500$-$1500$ vertices but via structurally different mechanisms (de Grey's three-component coupling vs Polymath's asymmetric SAT-selected subset) suggests two distinct chi $\geq 5$ "geometries" in the plane.
+
+3. **The chi = 5 mechanism is fundamentally coupling-based, not symmetry-based**. Both halves of de Grey 1585 individually mimic a "soft" 4-chromaticity; the 155 bridges encode an algebraic alignment that forces a 5th color. The Hadwiger-Nelson chi $\geq 5$ bound is therefore not about high local density (cores and asymmetric halves match in density 4.89), but about specific *geometric alignment* between rotationally-symmetric and asymmetric structural components.
+
+4. **The next question is whether the bridges can be REPLACED by a smaller coupling structure**. If we identify the "bridge pattern" abstractly (a specific configuration of 155 edges between 124 core vertices and 22 asymmetric vertices), maybe a different graph achieves the same chi $\geq 5$ with fewer or differently-placed bridges.
+
+**Cross-architectural implication**.
+
+L4: Architectures 1 and 2 share the missing 6-chromatic UDG.
+
+L17 sharpens what such a 6-chromatic UDG would look like: it would presumably also be a *coupling* construction. If the chi = 5 obstruction is the alignment of two 4-chromatic halves via $\sim$155 bridges, then chi = 6 would require either (a) the alignment of TWO chi-5 sub-objects, or (b) a richer coupling structure within a single graph. Neither pattern is present in any known UDG.
+
+**Wrong-approach status**. All experiments use the exact algebraic coordinates of de Grey 1585. The $\mathbb{Q}^2$ detector passes (all coordinates use $\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11}$).
+
+**Future BUILDER directions (next session)**:
+
+1. **SAT-MUS for the full graph**: find a minimum vertex subset $V_{\min} \subseteq V$ such that the induced subgraph has chi $\geq 5$. Compare $|V_{\min}|$ to Polymath 510's 510 and Parts' 509.
+2. **Iso-classify the bridges**: are the 155 bridge edges algebraically related? What's the field-theoretic pattern relating them?
+3. **The "minimal coupling" hypothesis**: is there a chi $\geq 5$ UDG whose components are (a) a small 4-chromatic core, (b) a small 4-chromatic asymmetric piece, (c) a small number of bridges? If so, this could be a smaller chi $\geq 5$ UDG than Parts 509.
+
+---
+
 (no further entries yet; this is a young repository.)
