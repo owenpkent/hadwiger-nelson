@@ -95,6 +95,13 @@ hadwiger-nelson/
 - In chat output, use Unicode and plain text for math (no KaTeX surface).
 - Code: explanatory module-level docstrings, minimal inline comments. Comments explain WHY, not WHAT.
 
+## LEARNINGS.md conventions
+
+- **Newest entries at the top.** When adding L_N, insert it directly below the format note in the header, not at the bottom. The file documents this in its own header.
+- **Numbering is monotonic.** L1, L2, ..., L_N never re-numbered. New entries get the next N regardless of position in the file (so the top of the file currently shows L20, then L19, ..., down to L1 at the bottom).
+- **Escape pipes inside math in table cells**: write `$\|V\|$`, not `$|V|$`. Markdown renderers treat unescaped `|` as a column separator and break the alignment row, sometimes rendering it as emoji. The backslash escape is invisible to LaTeX but tells Markdown the pipe is literal.
+- **Don't put two `$...$` math blocks on the same table row without thinking** about whether some pipe regex might confuse them. `$\chi(H_1)$ | Half 2 | $\chi(H_2)$` is fine — the pipes between math blocks are real column separators. But a fix-up script that greedy-matches `$...|...$` will corrupt this; use the targeted `\$\|...\|\$` pattern instead. See [`experiments/_shared/fix_table_pipes.py`](experiments/_shared/fix_table_pipes.py).
+
 ## Git commits
 
 ```powershell
