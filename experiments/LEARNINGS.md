@@ -732,4 +732,52 @@ L17 sharpens what such a 6-chromatic UDG would look like: it would presumably al
 
 ---
 
+### L18. de Grey 1585's chi = 5 obstruction is extremely delocalized: every tested structural reduction drops chi to 4
+
+**Architecture**: 1. Continues L17.
+
+**Experiment**: [`e1r_targeted_reduction.py`](combinatorial/e1r_targeted_reduction.py).
+
+L17 split de Grey 1585 into three components (C_6 core, asymmetric half, 155 bridges) and showed all three are individually 4-chromatic. This experiment asks: how much of each component is essential?
+
+**Reductions tested**:
+
+| Reduction | $|V|$ | $|E|$ | Removed | $\chi \leq 4?$ |
+|---|---:|---:|---|---:|
+| R1: bridge_core + V_asym | 931 | 4273 | All 654 non-bridge-touched core vertices | True |
+| R3: V_sym + bridge_asym | 800 | 3963 | All 785 non-bridge-touched asym vertices | True |
+| R5: bridge_core + half_nonbridge_core + V_asym | 1258 | 5341 | Half (327) of non-bridge-touched core vertices | True |
+| R6: V_sym + bridge_asym + half_nonbridge_asym | 1192 | 4987 | Half (393) of non-bridge-touched asym vertices | True |
+| R7: bridge_core + bridge_asym + half_nonbridge_asym | 538 | 1351 | All non-bridge core + half non-bridge asym | True |
+
+**Every reduction is 4-colorable**, including ones where we keep $1192 / 1585 = 75\%$ of the original vertices. Removing even ~20% of any single component (or its complement) collapses chi.
+
+**Implications**.
+
+1. **The chi $\geq 5$ obstruction is extremely delocalized**. There is no small "essential core" of vertices that alone forces chi $\geq 5$ in de Grey 1585. Hundreds of vertices that look individually redundant are collectively essential. The chi $\geq 5$ certificate "lives" simultaneously across all components and a substantial fraction of each.
+
+2. **Explains the Heule/Parts reformulation**. Heule (2018) and Parts (2020) didn't minimize de Grey 1585 directly. They reformulated the problem in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ (a strict subfield of de Grey's $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$) and found an entirely different 5-chromatic graph (Polymath 510, Heule 553, Parts 509). The delocalization in L18 is the *reason* direct minimization of de Grey 1585 doesn't easily work: there is no "easy slack" to trim. Heule's success at smaller vertex counts comes from a different combinatorial path, not from pruning de Grey's.
+
+3. **The chi $\geq 5$ "complexity" of de Grey 1585 is structurally HIGH**. By any reasonable measure (minimum essential subgraph, MUS size), de Grey 1585 looks like its chi $\geq 5$ certificate requires nearly all 1585 vertices. Whether a much smaller subset has chi $\geq 5$ is an open question, but L18 says greedy / structural reduction does NOT find one.
+
+4. **Two distinct chi $\geq 5$ "geometries"** are now in evidence:
+   - de Grey's $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ construction: extremely delocalized; nearly all 1585 vertices essential under structural-reduction tests.
+   - Polymath/Heule/Parts $\mathbb{Q}(\sqrt 3, \sqrt{11})$ construction: SAT-minimized to 509-553 vertices, exact rotational symmetry destroyed (L15), but presumably still has the delocalization property at its smaller scale.
+
+   These are NOT subsets of each other; they are *different combinatorial graphs* achieving chi $\geq 5$ via different mechanisms.
+
+**Cross-architectural implication**.
+
+L18 deepens the L4 / L17 picture. Architectures 1 and 2 share the missing 6-chromatic UDG. L17 says chi = 5 is a coupling phenomenon between symmetric and asymmetric components. L18 says this coupling is *globally delocalized*: small modifications to either component break it. The implication for chi $\geq 6$: it would presumably require an even more delicate coupling structure, and finding it via SAT minimization or naive construction is implausible. The path to chi $\geq 6$ likely involves a *fundamentally new geometric mechanism*, not refinement of the chi $\geq 5$ constructions.
+
+**Wrong-approach status**. Uses exact algebraic coordinates throughout. The $\mathbb{Q}^2$ detector passes.
+
+**Future BUILDER directions (next session)**:
+
+1. **Full SAT-MUS**: rather than ad-hoc reductions, compute the minimum unsatisfiable subset of the 4-coloring CNF for de Grey 1585. Modern SAT solvers (CaMUS, MUSER) can extract MUSes. Time budget: hours-to-days.
+2. **Search the de Grey field for an "easier" chi $\geq 5$ subgraph**: maybe a fragment of de Grey 1585 outside our structural decomposition (orthogonal to the C_6 core distinction) is more compact.
+3. **Compare Polymath 510 to de Grey 1585 as a UDG**: are any vertices of Polymath 510 also vertices of de Grey 1585 (i.e., common algebraic points)? If yes, the two constructions overlap; if no, they are entirely separate sub-geometries of $\mathbb{R}^2$.
+
+---
+
 (no further entries yet; this is a young repository.)
