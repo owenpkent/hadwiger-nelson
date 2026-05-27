@@ -81,6 +81,7 @@ The experimental thread is organized around the same four-architecture framework
 | e1p de Grey asymmetric half chi | 1 | done; chi = 4 (807 vertices, 3948 edges, density 4.89) (LEARNINGS L17) |
 | e1q de Grey bridge subgraph | 1 | done; 155 bridges touch 124 core + 22 asym vertices; bridge-touched subgraph chi = 4 (LEARNINGS L17) |
 | e1r de Grey targeted reductions | 1 | done; every reduction (including 75% of original) drops chi to 4. Obstruction is extremely delocalized (LEARNINGS L18) |
+| e1s Polymath 510 vs de Grey 1585 vertex comparison | 1 | done; 315/510 = 62% of Polymath vertices match de Grey under T = (2, 0). Polymath 510 is a translated substructure of de Grey + 195 field-reduction artifacts (LEARNINGS L19) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |

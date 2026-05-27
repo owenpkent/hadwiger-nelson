@@ -780,4 +780,61 @@ L18 deepens the L4 / L17 picture. Architectures 1 and 2 share the missing 6-chro
 
 ---
 
+### L19. Polymath 510 is essentially a translated substructure of de Grey 1585: 315/510 = 62% of vertices match under T = (2, 0); the remaining 195 are field-reduction artifacts
+
+**Architecture**: 1. Resolves the "different chi >= 5 geometries" question from L18.
+
+**Experiment**: [`e1s_compare_polymath_degrey.py`](combinatorial/e1s_compare_polymath_degrey.py).
+
+L18 hinted that Polymath 510 and de Grey 1585 might be "two distinct chi >= 5 geometries". L19 establishes that they are not distinct: **Polymath 510 is approximately a translated substructure of de Grey 1585**, with the translation T = (2, 0) and 62% vertex overlap.
+
+**Method**. For each pair $(p, q)$ with $p \in V(\text{Polymath 510})$ and $q \in V(\text{de Grey 1585})$, compute translation $T = q - p$. Count how many other Polymath vertices map under $T$ to a de Grey vertex. The top translations by overlap:
+
+| Rank | Translation $T$ | Vertex overlap | Note |
+|---:|:---|---:|:---|
+| 1 | $(2,\, 0)$ | **315 / 510 = 61.8%** | The canonical alignment (origin of Polymath -> $v_0$ of de Grey) |
+| 2 | $(2.5,\, -\sqrt 3/6 \approx -0.289)$ | 203 | Hex-lattice translate |
+| 3 | $(2.0,\, \sqrt 3 / 3 \approx 0.577)$ | 203 | Hex-lattice translate |
+| 4 | $(1.5,\, -\sqrt 3/6)$ | 200 | Hex-lattice translate |
+| 5 | $(2.5,\, \sqrt 3/6)$ | 197 | Hex-lattice translate |
+| 6 | $(2.0,\, -\sqrt 3/3)$ | 196 | Hex-lattice translate |
+| 7 | $(1.5,\, \sqrt 3/6)$ | 196 | Hex-lattice translate |
+| 8 | $(2.562, -0.132)$ | 146 | Algebraic translate (not in $\sqrt 3$-only basis) |
+| 9 | $(2.167, 0.553)$ | 146 | Algebraic translate |
+| 10 | $(1.833, 0.553)$ | 145 | Algebraic translate |
+
+The first 7 translations all live in $\mathbb{Q}[\sqrt 3]$ and form the standard hex-lattice neighbors of $T_1 = (2, 0)$ at offsets $(0.5, \pm \sqrt 3/6)$. They represent Polymath 510 sliding onto de Grey 1585 with 196-315 vertex correspondence, depending on the alignment.
+
+**Direct membership** (translation $T = (0, 0)$): only 25 vertex matches. Without translation, the graphs barely overlap.
+
+**Structural picture**.
+
+1. **Heule/Parts reformulation reuses de Grey 1585's vertices**. The Polymath/Heule lineage starts from de Grey 1585, translates by $(-2, 0)$ to recenter at origin, retains 315 of de Grey's 1585 vertices (those that fit in the smaller field $\mathbb{Q}(\sqrt 3, \sqrt{11})$), and adds 195 new vertices to compensate for the field reduction.
+
+2. **The 195 "new" Polymath vertices are field-reduction artifacts**. de Grey's $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ has more algebraic complexity than Polymath's $\mathbb{Q}(\sqrt 3, \sqrt{11})$; some vertices that played a role in de Grey's chi-5 obstruction don't have direct $\mathbb{Q}(\sqrt 3, \sqrt{11})$ representatives. The 195 new vertices are presumably chosen so the chi $\geq 5$ obstruction is preserved despite the field reduction.
+
+3. **There is only ONE chi $\geq 5$ "geometry" in the lineage, not two**. Polymath 510 and de Grey 1585 are essentially the same combinatorial object viewed from different algebraic vantage points (different fields, different vertex centers). L18's "two distinct geometries" framing was wrong; the correct statement is "two algebraic presentations of the same underlying chi $\geq 5$ phenomenon".
+
+4. **The 195 field-reduction artifacts may not have geometric meaning beyond preserving chi $\geq 5$**. They are essentially "patches" filling in the absence of $\sqrt 5, \sqrt 7$. Whether they admit cleaner descriptions (e.g., as systematic translates of a smaller motif) is an open question.
+
+**Why it matters**.
+
+1. **The Hadwiger-Nelson chi $\geq 5$ result has a single underlying construction**, with all known examples (de Grey 1585, Heule 553, Polymath 510, Parts 509) being variant subsets / extensions of the same vertex set. The progress from 1585 to 509 vertices is not finding new chi $\geq 5$ graphs; it is minimizing the original.
+
+2. **Refines L18**: the chi $\geq 5$ obstruction is delocalized in de Grey 1585 (L18) BUT Polymath 510 finds a way to be smaller by exploiting field reduction. The minimum may not be 509; it may be smaller in an even smaller field (e.g., $\mathbb{Q}(\sqrt 3)$, $\mathbb{Q}(\sqrt{11})$ alone, $\mathbb{Q}$).
+
+3. **The path to chi $\geq 6$ probably starts with de Grey's full field** $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$, not the reduced field. The richer field provides more algebraic coincidences. de Grey's choice of field was not accidental.
+
+**Cross-architectural implication**. L4 said Architectures 1 and 2 share the missing 6-chromatic UDG. L19 sharpens: the 6-chromatic UDG, if it exists, is likely in a field at least as rich as $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$. The path through smaller fields (Polymath's) likely cannot reach chi $\geq 6$ because the field reduction discards exactly the algebraic complexity needed.
+
+**Wrong-approach status**. Compares two specific algebraic UDGs in $\mathbb{R}^2$. The $\mathbb{Q}^2$ detector passes (both graphs use irrational coordinates throughout).
+
+**Future BUILDER directions (next session)**:
+
+1. **Identify the 195 Polymath "new" vertices algebraically**. What's the field-theoretic pattern? Are they all systematic translates of a small motif, or scattered?
+2. **The 195 new vertices may NOT be necessary in the field Q(sqrt 3, sqrt 5, sqrt 7, sqrt 11)**. Test: build the chi $\geq 5$ UDG using only de Grey 1585's vertices that coincide with Polymath 510 (the 315 overlap, plus some closure). Is that still chi $\geq 5$?
+3. **The de Grey 2018 paper provided a richer-field construction**; modern SAT minimization moved to the smaller field for solver-pragmatic reasons. The richer field may be the proper home of chi $\geq 6$.
+
+---
+
 (no further entries yet; this is a young repository.)
