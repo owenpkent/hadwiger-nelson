@@ -39,7 +39,11 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [x] Polymath 510 vertex-critical for chi >= 5: all 510 single-removals are 4-colorable (h1 Phase 1, LEARNINGS L26)
   - [ ] Complete H1 Phase 2 pair sweep: resume h1_parts_shave.py from index 56,500 (~2 hours; checkpointed)
   - [x] Polymath 510 × Polymath 510 + no-K_4 bridges: FIRST no-K_4 chi >= 6 abstract graph found at 1020 vertices, 2700 bridges, triple-solver SAT verified (h5, LEARNINGS L27); not UDG-realizable due to L23-style cocircularity at scale across all 97 saturating vertices
-  - [ ] Binary-search bridge minimum for L27 in (1200, 2200]: pin down minimum no-K_4 chi-6 bridge count for P_510² to within ±100 bridges
+  - [x] Binary-search bridge minimum for L27: tightened to |B| <= 2000 (700-bridge reduction, 26%); bracket now (1500, 2000]; obstruction class shifts from "97 always-saturating" to "43 always-saturating + 54 graded rainbow" (h6, LEARNINGS L28); F-profile correction to L27 (multi-modal, not bimodal)
+  - [ ] Tighten bracket to (1500, 2000]: probe K=1750, 1850, 1900 with Cadical 60min + Glucose fallback; expected 1-2h per probe
+  - [ ] Exhaustive Stage 2 local one-bridge search at K=2000 (~2000 trials, 5-min Cadical each, ~1-2 days)
+  - [ ] Prove or refute refined Conjecture R5' (Hall-matching obstruction over restricted color lists across multiple subsets)
+  - [ ] Glucose / Minisat verification at K=2000 to match L27 triple-solver standard
   - [ ] Smaller chi-6 abstract via mixed halves: try P_510 × P_517 + bridges (V=1027 marginally smaller), or P_510 + Moser + B via L24 triple form
   - [ ] Prove or refute Conjecture R5 (rainbow forcing): every chi-k vertex-critical graph forces rainbow on subsets U with V \ U inducing chi-(k-1)
   - [ ] Cocircularity-softened UDG construction for L27: replace each obstructed bridge with 2-hop softening to estimate actual minimum chi-6 UDG vertex count

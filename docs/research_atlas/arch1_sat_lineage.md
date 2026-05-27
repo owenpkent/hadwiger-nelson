@@ -89,6 +89,8 @@ Documented attempts and obstructions:
 
 **Rumor / unverified flag**: discussion threads (Mixon's blog, dustingmixon comments) periodically mention private experiments with $> 100{,}000$-vertex candidate graphs. None has resulted in a published $\chi \geq 6$ result. I have no evidence of an unpublished construction; treat any rumor as unverified.
 
+**[2026-05-27 update, this project, LEARNINGS L27 / L28]**. The first concrete no-$K_4$ $\chi \geq 6$ ABSTRACT graph in the de Grey / Polymath lineage was constructed by the h5 BUILDER: $P_{510} \cup P_{510} \cup B$ with $\|B\| = 2700$ bridges (later tightened to $\|B\| \leq 2000$ by h6), 1020 vertices, $\omega = 3$, $\chi \geq 6$ triple-solver SAT verified (Cadical 87s, Glucose 353s, Minisat 735s). This is the first chi-6 construction in the lineage that does NOT use a $K_n$ cross-clique trick (the ADVERSARY angle-6 prior chi-6 abstract graphs all relied on aligned $K_{2,2}$ bridges creating $K_6$, illegal in UDG). However, the L27/L28 graph is NOT UDG-realizable in $\mathbb{R}^2$: cocircularity sieve confirms zero of 97 saturating $H_2$-vertices have cocircular bridge-source sets at unit radius (L23-style obstruction applied 97 times). The chi-6 UDG question is now sharpened: the abstract construction exists, the Euclidean realization fails by 1.25 to 2.2 coordinate units per obstructed bridge. Lower bound for chi-6 UDG vertex count via cocircularity softening: roughly $5{,}000$ minimum, plausibly $\sim 10^5$. Consistent with no chi-6 UDG observed at thousands-of-vertices SAT search scale.
+
 ---
 
 ## 4. Open computational questions (concrete, tractable-looking SAT instances)
