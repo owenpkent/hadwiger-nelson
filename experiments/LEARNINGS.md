@@ -14,7 +14,7 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 L19 split Polymath 510 into (315 vertices shared with de Grey 1585) and (195 field-reduction artifacts). L20 tests the chi of each half:
 
-| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
+| Subgraph | $\|V\|$ | $\|E\|$ | Density | $\chi$ |
 |---|---:|---:|---:|---:|
 | Polymath ∩ de-Grey overlap (in Polymath edges) | 315 | 1327 | 4.21 | **4** |
 | Polymath ∩ de-Grey overlap (in de Grey edges) | 315 | 1327 | 4.21 | **4** |
@@ -134,7 +134,7 @@ L17 split de Grey 1585 into three components (C_6 core, asymmetric half, 155 bri
 
 **Reductions tested**:
 
-| Reduction | $|V|$ | $|E|$ | Removed | $\chi \leq 4?$ |
+| Reduction | $\|V\|$ | $\|E\|$ | Removed | $\chi \leq 4?$ |
 |---|---:|---:|---|---:|
 | R1: bridge_core + V_asym | 931 | 4273 | All 654 non-bridge-touched core vertices | True |
 | R3: V_sym + bridge_asym | 800 | 3963 | All 785 non-bridge-touched asym vertices | True |
@@ -180,7 +180,7 @@ L18 deepens the L4 / L17 picture. Architectures 1 and 2 share the missing 6-chro
 
 **The full structural picture of de Grey 1585**:
 
-| Subgraph | $|V|$ | $|E|$ | Density | $\chi$ |
+| Subgraph | $\|V\|$ | $\|E\|$ | Density | $\chi$ |
 |---|---:|---:|---:|---:|
 | $C_6$-symmetric core $V_{\text{sym}}$ (about $v_0$) | 778 | 3806 | 4.89 | **4** |
 | Asymmetric half $V \setminus V_{\text{sym}}$ | 807 | 3948 | 4.89 | **4** |
@@ -232,7 +232,7 @@ L17 sharpens what such a 6-chromatic UDG would look like: it would presumably al
 
 **Future BUILDER directions (next session)**:
 
-1. **SAT-MUS for the full graph**: find a minimum vertex subset $V_{\min} \subseteq V$ such that the induced subgraph has chi $\geq 5$. Compare $|V_{\min}|$ to Polymath 510's 510 and Parts' 509.
+1. **SAT-MUS for the full graph**: find a minimum vertex subset $V_{\min} \subseteq V$ such that the induced subgraph has chi $\geq 5$. Compare $\|V_{\min}\|$ to Polymath 510's 510 and Parts' 509.
 2. **Iso-classify the bridges**: are the 155 bridge edges algebraically related? What's the field-theoretic pattern relating them?
 3. **The "minimal coupling" hypothesis**: is there a chi $\geq 5$ UDG whose components are (a) a small 4-chromatic core, (b) a small 4-chromatic asymmetric piece, (c) a small number of bridges? If so, this could be a smaller chi $\geq 5$ UDG than Parts 509.
 
@@ -340,9 +340,9 @@ The $C_3$ subgroup (identity, $R_{120°}$, $R_{240°}$) has $> 92\%$ coverage. T
 
 | Quantity | Value |
 |---|---:|
-| Original $|V|$ | 510 |
-| Closure $|V_+|$ | 1155 (added 645 vertices) |
-| Closure $|E_+|$ | 10397 (density 9.0) |
+| Original $\|V\|$ | 510 |
+| Closure $\|V_+\|$ | 1155 (added 645 vertices) |
+| Closure $\|E_+\|$ | 10397 (density 9.0) |
 | $\chi(V_+)$ | **5** (4-colorable: False, 5-colorable: True; SAT-confirmed) |
 | Number of $C_6$ orbits | 535 (mostly size 1 or 6) |
 
@@ -350,7 +350,7 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 
 **Minimal subset of rotation copies for $\chi \geq 5$ (e1k Phase 4)**. The closure decomposes as $V_+ = \bigcup_{k=0}^{5} R^{k}(C)$ where $C$ is a fundamental domain (one representative per orbit). For each subset $S \subseteq \mathbb{Z}/6$, define $G_S = \bigcup_{k \in S} R^{k}(C)$. Test $\chi(G_S)$ for $S$ in every non-empty subset.
 
-| $|S|$ | Example $S$ | $\|V(G_S)\|$ | $\|E(G_S)\|$ | $\chi \leq 4?$ | $\chi \leq 5?$ |
+| $\|S\|$ | Example $S$ | $\|V(G_S)\|$ | $\|E(G_S)\|$ | $\chi \leq 4?$ | $\chi \leq 5?$ |
 |---:|:---|---:|---:|---:|---:|
 | 1 | $\{0\}$ | 535 | 2565 | T | — |
 | 2 | $\{0,1\}$ | 663 | 3940 | T | — |
@@ -365,7 +365,7 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 
 1. **Polymath 510 is exceptional within its $C_6$ orbit**. The original 510-vertex graph has $\chi = 5$, density 4.91. But the symmetrically-built 1032-vertex 5-of-6-subset has $\chi = 4$ despite density 8.0. The $\chi \geq 5$ of Polymath 510 is *not* a consequence of generic $C_6$ symmetry; it depends on the specific *asymmetric* selection of 510 vertices.
 
-2. **The de Grey "rotation set characterization" question is sharpened**. For the Polymath/Heule/Parts lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, no $\chi \geq 5$ graph is exactly $C_6$-symmetric: SAT-minimization has eaten that symmetry. The natural $C_6$ closure exists but its minimal-rotation-copy decomposition requires ALL 6 copies; it cannot be reduced to a small $|S|$.
+2. **The de Grey "rotation set characterization" question is sharpened**. For the Polymath/Heule/Parts lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, no $\chi \geq 5$ graph is exactly $C_6$-symmetric: SAT-minimization has eaten that symmetry. The natural $C_6$ closure exists but its minimal-rotation-copy decomposition requires ALL 6 copies; it cannot be reduced to a small $\|S\|$.
 
 3. **Cross-reference to L14**. L14 found that the Moser spindle in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ admits no binding-rotation miracles producing $\chi \geq 5$ with $\leq 211$ vertices in any union. L15 extends this: even the Polymath 510 graph's natural $C_6$ closure (1155 vertices, density 9.0) requires the full 6-fold copy structure to achieve $\chi \geq 5$. The field-theoretic rigidity from L14 manifests as rotation-irreducibility in L15.
 
@@ -409,8 +409,8 @@ intersected with the unit circle $\cos^2\theta + \sin^2\theta = 1$. A *double-bi
 | Single-binding rotations | 16 | (more, not enumerated) |
 | Double-binding rotations | 6 | 62 |
 | Triple-binding rotations (3+ cross edges) | 0 | 4 |
-| Union $|V|$ | 29 | 211 |
-| Union $|E|$ | 61 | 731 |
+| Union $\|V\|$ | 29 | 211 |
+| Union $\|E\|$ | 61 | 731 |
 | Union density $E/V$ | 2.10 | 3.46 |
 | $\chi$ of union | 4 | 4 |
 | 5-colorable? | yes | yes |
@@ -559,7 +559,7 @@ The Moser-spindle IE-LP at 0.2829 is *tighter* than the trivial fractional bound
 
 **Finding**. Apply each rotation $\theta$ for $n_{\rm rot} \in \{3, 4, 6\}$ iterations to the Moser spindle (7-vertex seed). For all tested ring extensions and all $n_{\rm rot}$:
 
-| $n_{\rm rot}$ | $|V|$ | $|E|$ | 3-col | 4-col | 5-col |
+| $n_{\rm rot}$ | $\|V\|$ | $\|E\|$ | 3-col | 4-col | 5-col |
 |---:|---:|---:|---:|---:|---:|
 | 3 | 19 | 33 | False | True | not checked |
 | 4 | 25 | 44 | False | True | not checked |
