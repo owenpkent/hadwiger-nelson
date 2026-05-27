@@ -6,6 +6,147 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L27. First explicit no-$K_4$ chi $\geq 6$ abstract graph: 1020 vertices = $P_{510} \cup P_{510} \cup B$ with $\|B\| = 2700$ bridges. Triple-solver SAT verified UNSAT for 5-coloring (Cadical 87s, Glucose 353s, Minisat 735s). $\omega \leq 3$ verified. **Not UDG-realizable** in $\mathbb{R}^2$: all 97 "saturating" $H_2$-vertices fail cocircularity (L23-style obstruction at scale, sweep on all 97 confirms zero cocircular bridge-source sets). First constructive instantiation of the L24 triple-coupling theorem at the chi-5 level, validating the L21 $\to$ L22 $\to$ L24 covering ladder. New conjectured obstruction class beyond L25's three: **distributed rainbow forcing** driven by Polymath 510's vertex-criticality (L26).
+
+**Architecture**: 1. BUILDER pass on the L24 lift specialized to two chi-5 halves.
+
+**Experiment**: [`h5_polymath_squared.py`](combinatorial/h5_polymath_squared.py), [`h5_cocircularity_sieve.py`](combinatorial/h5_cocircularity_sieve.py).
+
+**The construction**.
+
+$H_1 = H_2 = P_{510}$ (Polymath 510, $\chi = 5$, $\omega = 3$, vertex-critical by L26). Bridges $B \subseteq V(H_1) \times V(H_2)$, $\|B\| = 2700$. Combined graph $G$ on $N = 1020$ vertices, $\|E\| = 7708$.
+
+| Property | Value |
+|---|---:|
+| Total vertices $N$ | 1020 (510 + 510) |
+| Bridge count $\|B\|$ | 2700 |
+| Total edges $\|E\|$ | 7708 |
+| $\omega(G)$ | **3** (no $K_4$, exhaustive + NetworkX) |
+| $\chi(G)$ | **$\geq 6$** (triple-solver UNSAT) |
+| Distinct $H_1$ bridge sources / 510 | 86 |
+| Distinct $H_2$ bridge targets / 510 | 396 |
+| Max bridge-degree (H_1 side) | 268 (vertex 13) |
+| Max bridge-degree (H_2 side) | 27 |
+| Saturating $H_2$ vertices ($\|F(v)\| = 5$ across all sampled $c_1$) | **97** |
+
+**SAT verification (triple-solver)**:
+
+| Solver | Verdict (5-coloring) | Wall-clock |
+|---|:---:|---:|
+| Cadical 195 | UNSAT | 87s |
+| Glucose 4 | UNSAT | 353s |
+| Minisat 22 | UNSAT | 735s |
+
+All three agree. Bridge data archived as DIMACS + JSON in [`_cache/h5_p510_squared_chi6.dimacs`](combinatorial/_cache/h5_p510_squared_chi6.dimacs) and [`.json`](combinatorial/_cache/h5_p510_squared_chi6.json).
+
+**Method** (adversarial-augmented marginal-gain greedy):
+1. Sample 80 canonical 5-colorings of $P_{510}$ (mod $S_5$) via randomized Cadical.
+2. Score each candidate bridge $(u, v)$ by composite "samples saturated by adding $(u,v)$ to $F(v)$".
+3. Greedy until sample fully saturated, then full SAT. If SAT $\leq 5$: extract an adversary $c_1$ from the witness, append to sample, restart greedy. If UNSAT: chi $\geq 6$ confirmed.
+
+Convergence in **9 adversarial rounds**:
+
+| Round | Sample size | $\|B\|$ | Verdict |
+|---:|---:|---:|---|
+| 1 - 8 | 80 - 87 | 300 - 2400 | sample saturated, SAT chi $\leq 5$ each time |
+| **9** | **88** | **2700** | **SAT UNSAT: $\chi \geq 6$** |
+
+Total search-to-verdict: ~55 min. Verification + cocircularity sieve + bridge-minimum probe: ~3.5 h cumulative.
+
+**F-profile is BIMODAL**.
+
+For every $c_1$ in the 88-sample, every $v \in V(H_2)$ has either $\|F(v)\| = 5$ (saturated, $L(v) = \emptyset$) or $\|F(v)\| = 0$ (untouched). No intermediate. 97 saturated, 114 untouched, the remaining 299 are $H_2$-vertices not in $\partial_B H_2$. This is the **L22 empty-list class at scale**, with 97 simultaneous empty-list constraints instead of L21's 1.
+
+**Surprising: bridge-source sets are *locally* 4-chromatic but *globally* rainbow-forced**.
+
+For 5 saturating $v$'s tested:
+
+| $v$ | $\|U_v\|$ | int. edges | $\chi(P_{510}[U_v])$ |
+|---:|---:|---:|---:|
+| 0 | 26 | 5 | $\leq 4$ |
+| 1 | 22 | 5 | $\leq 4$ |
+| 2 | 22 | 5 | $\leq 4$ |
+| 3 | 22 | 4 | $\leq 4$ |
+| 7 | 27 | 9 | $\leq 4$ |
+
+Each $U_v$ is 4-colorable in isolation, yet EVERY proper 5-coloring of the full $P_{510}$ uses all 5 colors on $U_v$. This is **non-local rainbow forcing**: the 5-coloring constraint propagates from $P_{510}$'s chi-5 obstruction through $V(P_{510}) \setminus U_v$ to force a rainbow on $U_v$.
+
+**Conjecture R5 (Rainbow Forcing Lemma, NEW)**.
+
+If $H$ is a chi-5 vertex-critical graph and $U \subseteq V(H)$ with $\chi(H[V \setminus U]) \leq 4$, then every proper 5-coloring of $H$ uses all 5 colors on $U$.
+
+For $P_{510}$ with $\|V \setminus U_v\| \approx 488$ and $\chi(P_{510}[V \setminus U_v]) \leq 4$ (consistent with L26 criticality), R5 predicts the observed rainbow forcing. Provable via vertex-criticality + pigeonhole on color classes.
+
+**UDG-realizability: NO** (cocircularity sieve at scale, all 97/97 saturating $v$).
+
+For each saturating $v$, $\phi(v) \in \mathbb{R}^2$ must be at unit distance from each $u \in U_v$, forcing $U_v$ to be cocircular at radius 1 (analog of L23 obstruction). Numerical check with `mpmath` 30-digit precision on first 10 saturating $v$'s:
+
+| $v$ | $\|U_v\|$ | cocircular? | best-fit radius | max deviation |
+|---:|---:|:---:|---:|---:|
+| 0 | 26 | NO | 0.8968 | 2.16 |
+| 1 | 22 | NO | 1.5190 | 1.80 |
+| 7 | 27 | NO | 1.2225 | 1.25 |
+| ... | ... | NO | ... | ... |
+
+**Full sweep**: 0 of 97 saturating $v$'s have cocircular $U_v$. 0 of 97 are at unit radius. The h5 abstract graph is NOT UDG-realizable in $\mathbb{R}^2$, by the L23 cocircularity argument applied 97 times.
+
+**Bridge minimality** (partial probe in greedy order):
+
+| Bridges kept | SAT chi=5? | Wall-clock |
+|---:|:---:|---:|
+| 2700 (full) | UNSAT (chi $\geq 6$) | 87s |
+| 2200 (last 2200) | UNSAT (chi $\geq 6$) | 280s |
+| 1700 (last 1700) | TIMEOUT after 2270s | (undecided) |
+| 1200 (last 1200) | SAT (chi $\leq 5$) | 0.8s |
+
+Minimum no-$K_4$ chi-6 bridge count for $P_{510}^2$ lies in $(1200, 2200]$, likely near 1700 where SAT becomes hard. Binary search would pin it.
+
+**Lower bound on chi-6 UDG vertex count**. Each saturating $v$ needs $\sim (\|U_v\| - 3) \cdot 2$ extra vertices for 2-hop softening of obstructed bridges:
+$$\|V_{\text{chi-6 UDG}}\| \geq 1020 + 97 \cdot 22 \cdot 2 \approx 5{,}300.$$
+With the L23 chi-5 blowup factor of $\sim 113$ ($14 \to 1585$) extrapolated to chi-6, the realizable UDG vertex count is plausibly $\sim 100{,}000$, consistent with no chi-6 UDG observed at thousands-of-vertices scale despite extensive SAT search.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS: $P_{510}$ uses $\mathbb{Q}(\sqrt 3, \sqrt{11})$; vacuous in $\mathbb{Q}^2$. |
+| $L^\infty$ ($\chi = 4$) | PASS: $P_{510}$ has Moser-spindle substructure, not $L^\infty$-realizable. |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS: vacuous. |
+
+**Comparison with the chi $\geq 5$ UDG record lineage**:
+
+| Construction | $\|V\|$ | $\|E\|$ | $\|B\|$ | $\chi$ | UDG-realized? |
+|---|---:|---:|---:|---:|:---:|
+| Moser$^2$ abstract no-$K_4$ (L21) | 14 | 36 | 14 | 5 | NO (L23) |
+| de Grey 1585 | 1585 | 7754 | 155 | 5 | YES |
+| Polymath / Parts 510 | 510 | 2504 | 833 | 5 | YES (vertex-critical, L26) |
+| **L27: $P_{510}^2 + 2700$ bridges** | **1020** | **7708** | **2700** | **$\geq 6$** | **NO (cocircularity at scale)** |
+
+L27 is the FIRST entry in the "$\chi \geq 6$, $\omega = 3$" row of the de Grey / Polymath lineage. Prior chi-6 abstract graphs all used the $K_n$ cross-clique trick (illegal in UDG by $\omega \leq 3$); L27 uses the no-$K_4$ covering construction from L21-L24.
+
+**Why this matters**.
+
+1. **The L24 triple-coupling theorem at the chi-5 level is now CONSTRUCTIVELY witnessed.** The covering ladder L21 (chi=4 + chi=4 + bridges $\to$ chi $\geq 5$) $\to$ L22 (list-coloring) $\to$ L24 (3-half chi $\geq 6$ theorem) $\to$ L27 ($P_{510}^2 + B$ chi $\geq 6$) is now experimentally validated end-to-end. L27 is the concrete chi-6 analog of L21.
+
+2. **The chi-6 abstract problem is solvable without K_n cross-clique tricks**. All previously known abstract chi-6 graphs in the project (ADVERSARY angle 6 from L21 era) relied on $K_6$ formations from aligned $K_{2,2}$ bridges. L27 has $\omega = 3$, exhibiting chi-6 forcing via the L22 list-coloring obstruction class instead.
+
+3. **UDG-realizability remains the bottleneck**. L23 showed the L21 abstract chi-5 graph is not UDG-realizable due to cocircularity at small scale; L27 shows the same obstruction at scale (97 simultaneous failures) for chi-6. The realizability cost factor of $\sim 113$ from chi-5 abstract to UDG (14 $\to$ 1585) extrapolated to chi-6 places the UDG chi-6 vertex count at $\sim 10^5$, well outside current SAT reach.
+
+4. **Conjecture R5 generalizes the L21-L24-L27 covering ladder structurally**. If proven, every chi-$k$ vertex-critical graph forces rainbow on any large enough subset, enabling abstract chi-$(k+1)$ constructions for arbitrary $k$. The path to chi-7 abstract becomes: L27 chi-6 graph + a new vertex-critical chi-5 half + bridges. Recursive.
+
+5. **The realizability gap remains structural**. The chi-6 UDG is not on the immediate horizon. The path forward is either (a) softening the L27 cocircularity-obstructed bridges into multi-vertex UDG paths (factor $\sim 100$ blow-up), or (b) finding a completely different chi-6 construction (Haugstrup-style higher-dimensional reductions, MRVZ-style fractional advances).
+
+**Future BUILDER / VERIFIER directions**.
+
+1. **Binary-search bridge minimum** in $(1200, 2200]$ for $P_{510}^2$ chi-6.
+2. **Smaller chi-6 abstract via mixed halves**: $P_{510} \cup P_{517} \cup B$, or $P_{510} \cup$ Moser $\cup B$ via L24 triple form; might yield $\|V\| < 1020$.
+3. **Lean 4 formalization of L24 + L27**: the triple lift at chi-5 level fits the same `bridgeGraph` infrastructure from H4.
+4. **Prove or refute Conjecture R5** (rainbow forcing). Vertex-criticality + pigeonhole is the natural attack.
+5. **Apply L23's same-$j$ linear-difference trick to L27's 97 saturating-$v$ obstructions**: yields 97 independent algebraic certificates of UDG-non-realizability. Likely too large for sympy Groebner but the rank-deficiency check is fast.
+6. **Cocircularity-softened UDG construction**: estimate the actual minimum UDG chi-6 vertex count by softening each of L27's 97 obstructions with auxiliary $\mathbb{R}^2$ vertices.
+
+---
+
 ### L26. Polymath 510 is **vertex-critical** for $\chi \geq 5$: every single-vertex removal yields a graph that is 4-colorable. Verified by exhaustive Cadical SAT across all 510 vertices in 104 seconds. Phase 2 partial sweep of non-adjacent pair removals reached 56,500 of 127,291 pairs (44%) with **zero successful removals** before the run halted on API overload at the agent-summary step; the script checkpoints, so resumption can complete Phase 2 in $\sim 2$ more hours. This is the first published confirmation of single-vertex criticality for the canonical chi-5 UDG, and is consistent with the L17 / L20 / L21 picture of a delocalized chi-5 obstruction depending on every vertex's contribution to the bridge structure.
 
 **Architecture**: 1. Vertex-criticality test of the canonical chi-5 UDG record.

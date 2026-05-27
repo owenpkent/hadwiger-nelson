@@ -38,7 +38,11 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [x] Four obstruction classes catalogued: W5² 12v adjacent-singleton, W5×Moser global, Moser² empty-list, W5×Golomb sparse-singleton (h3, LEARNINGS L25)
   - [x] Polymath 510 vertex-critical for chi >= 5: all 510 single-removals are 4-colorable (h1 Phase 1, LEARNINGS L26)
   - [ ] Complete H1 Phase 2 pair sweep: resume h1_parts_shave.py from index 56,500 (~2 hours; checkpointed)
-  - [ ] Polymath 510 × Polymath 510 + no-K_4 bridges: chi >= 6 search via L24 triple-lift at the 5-color level (next chi-6 UDG target)
+  - [x] Polymath 510 × Polymath 510 + no-K_4 bridges: FIRST no-K_4 chi >= 6 abstract graph found at 1020 vertices, 2700 bridges, triple-solver SAT verified (h5, LEARNINGS L27); not UDG-realizable due to L23-style cocircularity at scale across all 97 saturating vertices
+  - [ ] Binary-search bridge minimum for L27 in (1200, 2200]: pin down minimum no-K_4 chi-6 bridge count for P_510² to within ±100 bridges
+  - [ ] Smaller chi-6 abstract via mixed halves: try P_510 × P_517 + bridges (V=1027 marginally smaller), or P_510 + Moser + B via L24 triple form
+  - [ ] Prove or refute Conjecture R5 (rainbow forcing): every chi-k vertex-critical graph forces rainbow on subsets U with V \ U inducing chi-(k-1)
+  - [ ] Cocircularity-softened UDG construction for L27: replace each obstructed bridge with 2-hop softening to estimate actual minimum chi-6 UDG vertex count
   - [ ] Search for 7-vertex 4-chromatic UDG distinct from Moser spindle (would re-open the 14v UDG chi-5 route; L25 future direction 1)
   - [ ] Pair Moser with 8-9-vertex UDGs from e1l (chain/pivot constructions); test no-K_4 chi-5 minima
   - [ ] Apply same-j linear-difference trick (h2) to de Grey 1585 and Polymath 510 bridges as a structural rank check
