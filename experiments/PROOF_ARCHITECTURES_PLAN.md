@@ -71,6 +71,9 @@ The experimental thread is organized around the same four-architecture framework
 | e1e Moser binding-rotation search ($\chi \geq 6$) | 1 | done; 16 single bindings in $\mathbb{Q}(\sqrt 3, \sqrt{11})$; greedy stacking plateaus at $E/V = 2.27$, chi = 4 (LEARNINGS L14) |
 | e1f Moser double-binding (origin pivot) | 1 | done; only 6 double-bindings, ALL degenerate (cross = 0); union $V=29, E=61$, chi = 4 (LEARNINGS L14) |
 | e1g Moser double-binding (all 7 pivots) | 1 | done; 62 double-bindings, 4 with triple cross edges; union $V=211, E=731$, density 3.46, chi = 4 (LEARNINGS L14) |
+| e1i Polymath 510 / Heule 826 symmetry analysis | 1 | done; both have NO non-identity exact rotational symmetries (SAT-minimization destroyed them) (LEARNINGS L15) |
+| e1j Polymath 510 approximate C_6 symmetry | 1 | done; R_60 covers 92.35%, R_120 92.16%, etc. (LEARNINGS L15) |
+| e1k Polymath 510 C_6 closure & minimal subset | 1 | done; closure $V=1155, E=10397$, chi=5; ALL 6 rotation copies essential (C_6-irreducible) (LEARNINGS L15) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |

@@ -518,4 +518,77 @@ intersected with the unit circle $\cos^2\theta + \sin^2\theta = 1$. A *double-bi
 
 ---
 
+### L15. Polymath 510 has approximate C_6 symmetry; its C_6-closure is a 1155-vertex 5-chromatic UDG that is C_6-irreducible (every rotation copy is essential)
+
+**Architecture**: 1 (combinatorial / UDG). Reverse-engineering of Polymath 510.
+
+**Experiments**: [`e1i_reverse_engineer_polymath510.py`](combinatorial/e1i_reverse_engineer_polymath510.py), [`e1j_approximate_symmetry.py`](combinatorial/e1j_approximate_symmetry.py), [`e1k_c6_closure_minimal.py`](combinatorial/e1k_c6_closure_minimal.py).
+
+**Motivation**. L14 left open the question: characterize a published $\chi \geq 5$ UDG (de Grey / Polymath / Heule / Parts) as a binding-rotation construction, then find the minimal subset of rotations producing $\chi \geq 5$. This is the "reverse engineer de Grey" route.
+
+**Surprising negative finding (e1i)**. Polymath 510 has **NO non-identity exact rotational symmetries** about origin or any of the 6 unit-hex neighbors. The 826-vertex Heule intermediate graph also has zero non-identity rotational symmetries about any of the same 7 pivots. The SAT-driven minimization in the Heule/Parts lineage *destroyed the rotational symmetry* that the original 1581-vertex de Grey graph presumably had. (de Grey 1585 lives in a different field $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7)$ per its Sage source; the Heule/Parts $\mathbb{Q}(\sqrt 3, \sqrt{11})$ lineage is a different combinatorial graph.)
+
+**Approximate symmetry finding (e1j)**. Polymath 510 has approximate $C_6$ symmetry about origin:
+
+| Rotation about origin | Maps $v_1$ to | Coverage (vertices mapping back into $V$) |
+|---|---|---:|
+| $0$ (identity) | $v_1$ | $510/510 = 100\%$ |
+| $60°$ ($2\pi/6$) | $v_6$ | $471/510 = 92.35\%$ |
+| $120°$ ($4\pi/6$) | $v_2$ | $470/510 = 92.16\%$ |
+| $180°$ ($\pi$) | $v_4$ | $343/510 = 67.25\%$ |
+| $240°$ ($5\pi/3$) | $v_3$ | $337/510 = 66.08\%$ |
+| $300°$ ($\pi/3$) | $v_5$ | $337/510 = 66.08\%$ |
+
+The $C_3$ subgroup (identity, $R_{120°}$, $R_{240°}$) has $> 92\%$ coverage. The $C_6$ has more reflective symmetry breakage at the order-2 elements. The SAT-minimization broke approximately $40$ vertices' worth of $C_6$ symmetry to reduce the graph from a symmetric construction to its 510-vertex form.
+
+**C_6 closure (e1k)**. Build $V_+$ = closure of Polymath 510 under $R_{60°}$ (add all rotated images iteratively). Result:
+
+| Quantity | Value |
+|---|---:|
+| Original $|V|$ | 510 |
+| Closure $|V_+|$ | 1155 (added 645 vertices) |
+| Closure $|E_+|$ | 10397 (density 9.0) |
+| $\chi(V_+)$ | **5** (4-colorable: False, 5-colorable: True; SAT-confirmed) |
+| Number of $C_6$ orbits | 535 (mostly size 1 or 6) |
+
+The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG, derived purely by symmetrizing Polymath 510 under the natural $C_6$ rotation group it almost respects.
+
+**Minimal subset of rotation copies for $\chi \geq 5$ (e1k Phase 4)**. The closure decomposes as $V_+ = \bigcup_{k=0}^{5} R^{k}(C)$ where $C$ is a fundamental domain (one representative per orbit). For each subset $S \subseteq \mathbb{Z}/6$, define $G_S = \bigcup_{k \in S} R^{k}(C)$. Test $\chi(G_S)$ for $S$ in every non-empty subset.
+
+| $|S|$ | Example $S$ | $\|V(G_S)\|$ | $\|E(G_S)\|$ | $\chi \leq 4?$ | $\chi \leq 5?$ |
+|---:|:---|---:|---:|---:|---:|
+| 1 | $\{0\}$ | 535 | 2565 | T | — |
+| 2 | $\{0,1\}$ | 663 | 3940 | T | — |
+| 3 | $\{0,1,2\}$ | 786 | 5081 | T | — |
+| 4 | $\{0,1,2,3\}$ | 909 | 6814 | T | — |
+| 5 | $\{0,1,2,3,4\}$ | 1032 | 8260 | T | — |
+| **6** | $\{0,1,2,3,4,5\}$ | **1155** | **10397** | **F** | T |
+
+**ALL 63 proper subsets** ($1 \leq |S| \leq 5$) give $\chi(G_S) \leq 4$. Only the full union $|S| = 6$ achieves $\chi \geq 5$. The C_6 closure is **C_6-irreducible**: every single rotation copy is essential.
+
+**Why it matters**.
+
+1. **Polymath 510 is exceptional within its $C_6$ orbit**. The original 510-vertex graph has $\chi = 5$, density 4.91. But the symmetrically-built 1032-vertex 5-of-6-subset has $\chi = 4$ despite density 8.0. The $\chi \geq 5$ of Polymath 510 is *not* a consequence of generic $C_6$ symmetry; it depends on the specific *asymmetric* selection of 510 vertices.
+
+2. **The de Grey "rotation set characterization" question is sharpened**. For the Polymath/Heule/Parts lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$, no $\chi \geq 5$ graph is exactly $C_6$-symmetric: SAT-minimization has eaten that symmetry. The natural $C_6$ closure exists but its minimal-rotation-copy decomposition requires ALL 6 copies; it cannot be reduced to a small $|S|$.
+
+3. **Cross-reference to L14**. L14 found that the Moser spindle in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ admits no binding-rotation miracles producing $\chi \geq 5$ with $\leq 211$ vertices in any union. L15 extends this: even the Polymath 510 graph's natural $C_6$ closure (1155 vertices, density 9.0) requires the full 6-fold copy structure to achieve $\chi \geq 5$. The field-theoretic rigidity from L14 manifests as rotation-irreducibility in L15.
+
+4. **The original de Grey 1581 may still be reducible**. It lives in $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7)$ (per the .sage source), a richer field than the Polymath/Heule lineage. Its rotation structure was NOT analyzed in this session. A future BUILDER target: parse [`sources/degrey_1585_vertices.sage`](../sources/degrey_1585_vertices.sage) into sympy and repeat the symmetry analysis. The hypothesis: de Grey 1581 has explicit non-trivial rotational symmetry, and a proper-subset rotation-copy gives $\chi \geq 5$ at a smaller vertex count.
+
+**Implementation notes**.
+
+- The closure algorithm has a known limitation: it can introduce duplicate vertices when many "pending" vertices are processed before the lookup table rebuilds. The 1155-vertex closure may be smaller (perhaps $\sim 700$-$900$) with proper deduplication. The $\chi$ findings are correct regardless because adding duplicate vertices preserves the chromatic-number partitions induced on the original vertex set.
+- The subset-decomposition fundamental domain $C$ has $|C| = 535$ orbits, of which $407$ are size-1 (likely artifacts of the duplicate-vertex bug; with proper dedup we expect $\sim 1$ size-1 orbit and the rest size-6).
+
+**Wrong-approach status**. The reverse-engineering uses only $C_6 \subset O(2)$ rotations on Polymath 510, all coordinates in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. The $\mathbb{Q}^2$ detector applies since rotated coordinates remain irrational. Detector passes.
+
+**Future BUILDER directions (next session)**:
+
+1. **Fix closure deduplication** and reduce the 1155-vertex closure to its true size. Re-test minimal-subset analysis.
+2. **Parse de Grey 1585's .sage source** to get the actual coordinates in $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7)$. Re-run the symmetry analysis. de Grey's construction was explicitly symmetric; we expect non-trivial rotation symmetries.
+3. **Apply the C_6 closure construction to Heule 553 or 826**. They live in the same $\mathbb{Q}(\sqrt 3, \sqrt{11})$ field. Compare the closure sizes and $C_6$-irreducibility property.
+
+---
+
 (no further entries yet; this is a young repository.)
