@@ -31,8 +31,19 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [x] de Grey 1585 obstruction is extremely delocalized: every reasonable structural reduction drops chi to 4 (e1r, LEARNINGS L18)
   - [x] Polymath 510 is essentially a translated substructure of de Grey 1585 (62% vertex overlap under T = (2, 0)) (e1s, LEARNINGS L19)
   - [x] Universal "two 4-chromatic halves + bridges" pattern: same mechanism in de Grey 1585 (778+807+155) and Polymath 510 (315+195+833) (e1t, LEARNINGS L20)
-  - [ ] Search for 3-way coupling or hierarchical coupling that could force chi >= 6 (the universal pattern caps at chi = 5)
-  - [ ] Try replicating the universal pattern in a yet-smaller form: two 4-chromatic halves of size ~50 each + bridges; SAT-check chi
+  - [x] Covering lemma: chi(H_1 + H_2 + B) >= 5 iff B is a set cover of the 4-coloring product (e1v, LEARNINGS L21)
+  - [x] List-coloring reformulation: chi >= 5 iff H_2 not list-colorable from L(v) = [4] \ F(v) (e1w, LEARNINGS L22)
+  - [x] L21's 14-vertex Moser² no-K_4 abstract chi-5 graph is NOT UDG-realizable (e1x numerical + h2 Positivstellensatz, LEARNINGS L23)
+  - [x] Triple-coupling theorem for chi >= 6 lifts L22 to three halves (e1y, LEARNINGS L24)
+  - [x] Four obstruction classes catalogued: W5² 12v adjacent-singleton, W5×Moser global, Moser² empty-list, W5×Golomb sparse-singleton (h3, LEARNINGS L25)
+  - [x] Polymath 510 vertex-critical for chi >= 5: all 510 single-removals are 4-colorable (h1 Phase 1, LEARNINGS L26)
+  - [ ] Complete H1 Phase 2 pair sweep: resume h1_parts_shave.py from index 56,500 (~2 hours; checkpointed)
+  - [ ] Polymath 510 × Polymath 510 + no-K_4 bridges: chi >= 6 search via L24 triple-lift at the 5-color level (next chi-6 UDG target)
+  - [ ] Search for 7-vertex 4-chromatic UDG distinct from Moser spindle (would re-open the 14v UDG chi-5 route; L25 future direction 1)
+  - [ ] Pair Moser with 8-9-vertex UDGs from e1l (chain/pivot constructions); test no-K_4 chi-5 minima
+  - [ ] Apply same-j linear-difference trick (h2) to de Grey 1585 and Polymath 510 bridges as a structural rank check
+  - [ ] Lean formalization of the h2 Positivstellensatz certificate (`moser14_not_udg` theorem)
+  - [ ] Investigate Haugstrup's R^4 600-cell / 120-cell construction (Polymath16 18th thread Jan 2026); extract graph, run L25 obstruction analysis
 
 ## Architecture 2: Measurable / spectral
 
@@ -74,8 +85,14 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Fill in HN-2b `¬ moserSpindle.Colorable 3` (proved via native_decide over $3^7$ functions)
 - [x] Fill in HN-2c `moserSpindle.chromaticNumber = 4` (glued via `Nat.sInf_upward_closed_eq_succ_iff` and `Colorable.mono`)
 - [x] Fill in HN-2d bridge `moserSpindle` to `planeUnitDistanceGraph` — `four_le_chromaticNumberOfPlane` proved (commit pending)
+- [x] L21 covering lemma formalized (`lean/HadwigerNelson/L21CoveringLemma.lean`, h4 VERIFIER, zero sorries)
+- [x] L22 list-coloring theorem formalized (`lean/HadwigerNelson/L22ListColoring.lean`, h4 VERIFIER, zero sorries, `L21_iff_L22` proved)
+- [x] Bridge graph definitions formalized (`lean/HadwigerNelson/Bridges.lean`)
 - [ ] Fill in HN-5 Q^2 chi = 2 (Woodall parity argument; predicate already over ℚ so should be tractable)
 - [ ] Fill in HN-6 L^infty chi = 4 (Chilakamarri construction)
+- [ ] L23 h2 Positivstellensatz certificate formalization: `moser14_not_udg` theorem
+- [ ] L24 triple-lift theorem formalization (3-half chi >= 6 form)
+- [ ] Concrete instantiation: `bridgeGraph moserSpindle moserSpindle B_14` chromatic = 5 via L22 + `native_decide` (H4 noted out-of-scope)
 
 ## Cross-cutting
 

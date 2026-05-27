@@ -5,3 +5,6 @@ import HadwigerNelson.Basic
 import HadwigerNelson.MoserSpindle
 import HadwigerNelson.MoserBridge
 import HadwigerNelson.Controls
+import HadwigerNelson.Bridges
+import HadwigerNelson.L21CoveringLemma
+import HadwigerNelson.L22ListColoring

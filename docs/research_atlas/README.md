@@ -162,6 +162,20 @@ The Hadwiger-Nelson analog of the zeta-function repo's Davenport-Heilbronn disci
 
 A proposed proof method that gives $\chi(\mathbb{R}^2) \geq 5$ should fail on the detector appropriate to its architecture. If it does not, the method has overshot and is structurally wrong.
 
+## 2024-2026 update
+
+Survey [`2026-05-26-recent-advances-briefing.md`](2026-05-26-recent-advances-briefing.md) covers post-Polymath16 literature. Headlines:
+
+- **$\chi(\mathbb{R}^2)$ unchanged**: Parts 509 (2020) still the smallest known 5-chromatic UDG. No 6-chromatic UDG announced. $\chi_m(\mathbb{R}^2) \geq 5$ (Falconer 1981) still the measurable lower bound. $\chi_f(\mathbb{R}^2) \geq 4$ (Matolcsi-Ruzsa-Varga-Zsámboki 2023) still the fractional lower bound.
+- **Higher dimensions are moving**: Parts pushed $\chi(\mathbb{R}^6) \geq 14$, $\chi(\mathbb{R}^7) \geq 17$, $\chi(\mathbb{R}^8) \geq 25$ in 2025-2026 via $E_n$-lattice constructions ([arXiv:2603.14581](https://arxiv.org/abs/2603.14581)). Asger Haugstrup constructed **triangle-free 6-chromatic UDGs in $\mathbb{R}^4$** using 600-cells and 120-cells.
+- **de Grey's 2026 conjecture**: for all $d \geq 2$ and $3 \leq n \leq d+2$, there exists a $(d+n-1)$-chromatic unit-distance graph in $\mathbb{R}^d$ that does not contain any $n$-simplex. For $d = 2$ the conjecture caps at $\chi = 5$ (since UDGs in $\mathbb{R}^2$ have $\omega \leq 3$, ruling out $n \geq 5$). **If de Grey's conjecture is tight, $\chi(\mathbb{R}^2) = 5$**. Posted on [Polymath16 thread 18](https://dustingmixon.wordpress.com/2026/01/17/polymath16-eighteenth-thread-back-with-a-new-conjecture/) (2026-01-17). Structural complement to LEARNINGS L21's $K_{n+1}$-trick ladder.
+- **Map-type / interval-of-distances variants** (Voronov 2023, Sokolov-Voronov 2025, [arXiv:2502.01958](https://arxiv.org/abs/2502.01958)): for proper colorings whose regions are polygonal (or whose forbidden distance is the interval $[1-\varepsilon, 1+\varepsilon]$), $\chi \geq 7$. These results do *not* imply $\chi_m \geq 7$; restricted-model colorings are strictly stronger than Lebesgue-measurable.
+- **Two-distance variant**: 6-chromatic 2-distance graph for $d = 2 + 6\sqrt 2$ and $d = 3$ ([Amer. Math. Monthly 2025](https://www.tandfonline.com/doi/abs/10.1080/00029890.2025.2559554)).
+- **Wrong-approach detector sharpening** (Alon-Bucić-Sauermann 2023, revised 2024, [arXiv:2302.09058](https://arxiv.org/abs/2302.09058)): for *almost all* norms on $\mathbb{R}^2$ (Baire category), the unit-distance graph has $\chi = 4$. The Euclidean norm is non-generic. Any Architecture 3 method that does not exploit Euclidean-specific structure is structurally wrong.
+- **ML / neural**: Mundinger-Pokutta-Spiegel-Zimmer 2024 ([arXiv:2404.05509](https://arxiv.org/abs/2404.05509)) and 2025 ([arXiv:2501.18527](https://arxiv.org/abs/2501.18527)) used deep-annealing neural-network search to extend the continuum of six-colorings of $\mathbb{R}^2$ to $0.354 \leq d \leq 0.657$ (first 30-year improvement on this variant). **Upper-bound side only**; no ML / RL on the lower-bound side yet.
+
+Per-architecture status, intersection with LEARNINGS L20-L22, and three concrete next-experiment ideas in the briefing.
+
 ## Open frontiers
 
 - Is $\chi(\mathbb{R}^2) = 5, 6,$ or $7$?
@@ -169,6 +183,7 @@ A proposed proof method that gives $\chi(\mathbb{R}^2) \geq 5$ should fail on th
 - Does $\chi_m = \chi$ under MA or some choice-weakening axiom?
 - Can the Lovász $\vartheta$ on Cayley graphs of $\mathbb{R}^2$ be computed analytically?
 - Is there a "natural" proof method that distinguishes the $\chi \leq 7$ bound from the $\chi \geq 5$ bound asymptotically?
+- Is de Grey's 2026 conjecture (for all $d \geq 2$ and $3 \leq n \leq d+2$, there exists a $(d+n-1)$-chromatic $n$-simplex-free UDG in $\mathbb{R}^d$) true? If yes and tight, $\chi(\mathbb{R}^2) = 5$.
 
 ## References
 
@@ -179,3 +194,16 @@ A proposed proof method that gives $\chi(\mathbb{R}^2) \geq 5$ should fail on th
 - Polymath16, *Hadwiger-Nelson problem*, online project (2018).
 - D.R. Woodall, *Distances realized by sets covering the plane*, J. Combin. Theory A 14 (1973). The $\mathbb{Q}^2$ result.
 - S. Shelah and A. Soifer, *Axiom of choice and chromatic number of the plane*, J. Combin. Theory A 103 (2003).
+
+### 2024-2026 additions
+
+- G. Sokolov and V. Voronov, *On the chromatic number of the plane for map-type colorings*, [arXiv:2502.01958](https://arxiv.org/abs/2502.01958) (2025).
+- V. Voronov, *The chromatic number of the plane with an interval of forbidden distances is at least 7*, [arXiv:2304.10163](https://arxiv.org/abs/2304.10163) (2023).
+- J. Parts, *The chromatic number of $\mathbb{R}^8$ is at least 25*, [arXiv:2603.14581](https://arxiv.org/abs/2603.14581) (2026).
+- P. Ágoston, *A lower bound on the number of colours needed to nicely colour a sphere*, [arXiv:2404.14398](https://arxiv.org/abs/2404.14398) (2024-2025).
+- N. Alon, M. Bucić, L. Sauermann, *Unit and distinct distances in typical norms*, [arXiv:2302.09058](https://arxiv.org/abs/2302.09058) (2023, rev 2024). Almost-all norms on $\mathbb{R}^2$ give $\chi = 4$; sharpens the wrong-approach detector.
+- K. Mundinger, M. Zimmer, A. Kiem, C. Spiegel, S. Pokutta, *Neural discovery in mathematics: do machines dream of colored planes?*, [arXiv:2501.18527](https://arxiv.org/abs/2501.18527) (2025).
+- K. Mundinger, S. Pokutta, C. Spiegel, M. Zimmer, *Extending the continuum of six-colorings*, [arXiv:2404.05509](https://arxiv.org/abs/2404.05509); Geombinatorics Quarterly (2024).
+- F. Vallentin, S. Weißbach, M. C. Zimmermann, *The chromatic number of 4-dimensional lattices*, [arXiv:2407.03513](https://arxiv.org/abs/2407.03513) (2024).
+- G. Exoo, D. Ismailescu, *A 5-chromatic same-distance graph in the hyperbolic plane*, [arXiv:2303.06801](https://arxiv.org/abs/2303.06801) (2023).
+- Polymath16, *Eighteenth thread: Back with a new conjecture!*, [Short, Fat Matrices blog](https://dustingmixon.wordpress.com/2026/01/17/polymath16-eighteenth-thread-back-with-a-new-conjecture/) (2026-01-17). Includes Haugstrup's triangle-free 6-chromatic UDGs in $\mathbb{R}^4$ and de Grey's structural conjecture.

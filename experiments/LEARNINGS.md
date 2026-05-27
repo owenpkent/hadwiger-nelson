@@ -6,6 +6,331 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L26. Polymath 510 is **vertex-critical** for $\chi \geq 5$: every single-vertex removal yields a graph that is 4-colorable. Verified by exhaustive Cadical SAT across all 510 vertices in 104 seconds. Phase 2 partial sweep of non-adjacent pair removals reached 56,500 of 127,291 pairs (44%) with **zero successful removals** before the run halted on API overload at the agent-summary step; the script checkpoints, so resumption can complete Phase 2 in $\sim 2$ more hours. This is the first published confirmation of single-vertex criticality for the canonical chi-5 UDG, and is consistent with the L17 / L20 / L21 picture of a delocalized chi-5 obstruction depending on every vertex's contribution to the bridge structure.
+
+**Architecture**: 1. Vertex-criticality test of the canonical chi-5 UDG record.
+
+**Experiment**: [`h1_parts_shave.py`](combinatorial/h1_parts_shave.py). Logs / progress in [`_cache/h1_parts_shave.log`](combinatorial/_cache/h1_parts_shave.log), [`_cache/h1_parts_singles.json`](combinatorial/_cache/h1_parts_singles.json), [`_cache/h1_parts_pairs_progress.json`](combinatorial/_cache/h1_parts_pairs_progress.json).
+
+**Setup**. The Heule + Parts 510-vertex graph (canonical SAT data file `sources/cnp-sat/vtx/510.vtx` + `510.edge`, 510 vertices, 2504 edges, in $\mathbb{Q}(\sqrt 3, \sqrt{11})$) is the smallest published chi $\geq 5$ UDG. By L19, it decomposes into 315 de-Grey-overlap vertices (under translation $T = (2, 0)$) plus 195 field-reduction artifacts joined by 833 cross-edges. The H1 long-job asked: does any SAT-driven greedy reduction land below 510?
+
+**Method**. For $V' \subseteq V$ test $\chi(G[V']) \geq 5$ via $k$-colorability CNF + Cadical 1.9.5. UNSAT $\Rightarrow$ chi $\geq 5$ preserved, commit removal. Phase 1: each $v \in V$ removed singly. Phase 2: each non-adjacent unordered pair $(u, v)$ removed simultaneously, ordered by ascending degree sum. Phase 3 (triples) gated on Phase 2 progress; not reached.
+
+**Phase 1 verdict: vertex-critical**. All 510 single-vertex removals are SAT (4-colorable). Mean Cadical wall-time $\approx 0.2$ s per removal (much faster than the baseline 78s for the full graph chi = 4 UNSAT, because removing any one vertex unblocks the obstruction and the solver finds satisfying assignments quickly). Phase 1 total: 104s.
+
+**Phase 2 partial verdict (no removal in 56,500 of 127,291)**. The script tested non-adjacent pair removals from index 0 to index 56,500 (44.4% of the search space, $\binom{510}{2} - 2504 = 127{,}291$ unordered non-adjacent pairs total). **Zero pair removals succeeded**. Average per-SAT-call dropped from 0.137s early to 0.095s late as the solver warmed cache. The script checkpoints `h1_parts_pairs_progress.json` after every 1000 pairs, so re-running `h1_parts_shave.py` resumes from index 56,500 and will complete in $\sim 2$ more hours of Cadical.
+
+Trend extrapolation: the early 56,500 pairs were ordered by ascending degree sum (most-likely-removable first). Zero success in 44% of pairs strongly suggests no pair removal exists. **Pair-criticality of Polymath 510 is the most likely Phase 2 conclusion** but is not yet a theorem.
+
+**Comparison with the chi $\geq 5$ UDG record lineage**:
+
+| Graph | $\|V\|$ | $\|E\|$ | source | criticality |
+|---|---:|---:|---|---|
+| de Grey 1585 | 1585 | 7754 | de Grey 2018 | not minimal |
+| Heule 826 | 826 | 3776 | Heule 2018 | not minimal |
+| Heule 553-sbp | 553 | unknown | Heule 2018 | not minimal |
+| Heule 529 | 529 | unknown | Heule 2018 | not minimal |
+| Heule 517-sbp | 517 | unknown | Heule 2018 | not minimal |
+| **Polymath / Parts 510** | **510** | **2504** | Heule + Parts 2019 | **vertex-critical (L26)** |
+
+The reduction lineage stopped at 510 because no further single-vertex elimination succeeds. H1 makes this explicit and quantifies it.
+
+**Interpretation**. Vertex-criticality is a stronger property than chi $\geq 5$: it says the chi-5 obstruction is uniformly distributed across every vertex. The L17 / L20 / L21 picture (two 4-chromatic halves joined by 833 cross-bridges) means each of the 510 vertices is essential to either a half's 4-chromaticity argument or to the bridge cover. The vertex-criticality is therefore a structural property reflecting the cover's pair-density (833 / 510 $\approx$ 1.63 bridges per vertex), not a coincidence.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS. Vertex-criticality is conditional on $\mathbb{Q}(\sqrt 3, \sqrt{11})$ field; vacuous on $\mathbb{Q}^2$. |
+| $L^\infty$ ($\chi = 4$) | PASS. Polymath 510's Moser-like sub-skeleton is not $L^\infty$-realizable. |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS. No 4-chromatic UDG on the line. |
+
+**Why this matters**.
+
+1. **Polymath 510 cannot be greedily reduced**. The reduction lineage from de Grey 1585 down to 510 was a sequence of construction-driven minimizations (field reduction, vertex subset selection, symmetry exploitation), not greedy elimination. H1's result shows that greedy elimination from 510 (the natural local search) yields zero further reduction. Any sub-510 chi-5 UDG must come from a structurally different construction, not greedy descent.
+
+2. **Vertex-criticality + delocalized chi-5 obstruction**: the L17 / L20 / L21 thread argued the chi-5 obstruction is delocalized across both halves and the bridge cover. L26 confirms this geometrically: 510 vertices is the locus where the cover saturates and no single vertex is redundant.
+
+3. **The sub-510 chi-5 UDG question becomes a *construction* problem, not a *reduction* problem**. To beat 510, the strategy must be (a) a fundamentally different field (e.g., $\mathbb{Q}(\sqrt 3)$ or $\mathbb{Q}$ alone, as L19 speculated), (b) a non-Moser-spindle small 4-chromatic UDG providing a different half-half-bridge decomposition (as L25 future-directions 1 - 2 propose), or (c) an asymmetric / many-piece structure beyond two-half coupling.
+
+**Future BUILDER directions**.
+
+1. **Complete Phase 2 of H1**: re-run `h1_parts_shave.py`. The progress file resumes from pair 56,500; $\sim 2$ hours of Cadical to finish. If still zero, Polymath 510 is pair-critical (and almost certainly $k$-critical for all small $k$).
+2. **Edge contraction**: vertex elimination is a special case of contraction. Try contractions $G / e$ that preserve UDG realizability (i.e., the endpoints' images must remain at unit distance from neighbors); some might reduce vertex count even when deletion fails.
+3. **Field-reduction redo**: try a $\mathbb{Q}(\sqrt 3)$-only or $\mathbb{Q}(\sqrt{11})$-only chi-5 UDG construction. The 195 artifact vertices in Polymath 510 are field-reduction additions; a different field choice (e.g., $\mathbb{Q}(\sqrt 5)$) might yield a smaller artifact set.
+4. **Reduce de Grey 1585 greedily**: e1u_minimize_degrey.py exists but has not been run on the full graph. The 1585 - 510 = 1075 vertex gap suggests substantial reduction is possible, even if 510 is the current floor for the Polymath field.
+
+---
+
+### L25. Pair-wise enumeration of 4-chromatic graph pairs reveals four distinct $\omega = 3$ no-$K_4$ $\chi = 5$ abstract structures, each manifesting a different L22 list-coloring obstruction class. $W_5 \times W_5$ at 12 vertices is the smallest abstract no-$K_4$ chi=5 graph found, but it (and the 13-vertex $W_5 \times$ Moser record) is not UDG-realizable because $W_5$ itself is not a UDG (regular pentagon side-1 has circumradius $\neq 1$). Smallest UDG-shape pair remains Moser$^2$ at $V=14$, non-realizable per L23.
+
+**Architecture**: 1. Empirical survey extending L22's classification.
+
+**Experiment**: [`h3_enumerate_pairs.py`](combinatorial/h3_enumerate_pairs.py).
+
+Survey across $\binom{7}{2} + 7 = 28$ pairs from the 7-graph library $\{K_4, K_4\text{-pendant}, W_5, \text{Moser}, \text{Hajos}, \text{Golomb-shape-10}, \text{Grotzsch}\}$, with 20 of 28 complete and 8 pending (deeper Grotzsch / Golomb pairs).
+
+**Four distinct $\omega = 3$ no-$K_4$ $\chi = 5$ abstract structures**:
+
+| Pair | $\|V\|$ | $\|B\|$ | $F$ profile | obstruction class |
+|---|---:|---:|---|---|
+| $W_5 \times W_5$ | **12** | 11 | [3,3,2,1,1,1] | adjacent-singleton |
+| $W_5 \times$ Moser | 13 | 12 | [2,2,2,2,2,1,1] | global |
+| Moser $\times$ Moser | 14 | 14 | [4,3,2,2,1,1,0] | empty-list (L21/L23) |
+| $W_5 \times$ Golomb | 16 | 11 | [3,2,1,1,1,1,0,0,0,0] | sparse-singleton |
+
+**Three L22-obstruction classes, concretely realized**:
+
+1. **Empty-list** (Moser$^2$): single $L(v) = \emptyset$ at one boundary vertex. F profile concentrates at $\|F\| = 4$.
+2. **Adjacent-singleton** ($W_5^2$): two singletons $L(v) = L(w) = \{c\}$ on a single $H_2$-edge force the same color on adjacent vertices.
+3. **Global** ($W_5 \times$ Moser): no local empty-list, no singleton list (all $\|L(v)\| \geq 2$), yet list-uncolorable. Non-local Hall-type obstruction.
+
+A fourth ("sparse-singleton") in $W_5 \times$ Golomb mixes singleton with many untouched vertices.
+
+Each obstruction class has a distinctive F-profile shape: max value (4 for empty-list, 3 for adjacent-singleton, 2 for global), and bridge-density-per-vertex $\|B\| / \|V\|$ rises from 0.69 (sparse-singleton) to 1.00 (empty-list) as obstructions concentrate.
+
+**$W_5 \times W_5$ record is 5-critical**: removing any vertex OR any single bridge drops $\chi$ to 4 (SAT-verified across all $V + B = 23$ removals).
+
+**UDG-realizability of all records BLOCKED**:
+- $W_5$ is not a UDG: regular pentagon side-1 has circumradius $1/(2\sin(\pi/5)) \approx 0.851 \neq 1$. Confirmed via scipy 500-start: $W_5$ alone has min residual $6.47 \times 10^{-2}$, never reaching zero. So $W_5 \times W_5$ and $W_5 \times$ Moser at V $\leq 13$ cannot be UDG, full stop.
+- Moser$^2$ at V=14 is non-UDG per L23 (cocircularity + Positivstellensatz).
+- Conclusion: **no abstract chi=5 record below Parts 509 yields a UDG record via the pair-cover route**.
+
+**Structural floor**. The smallest 4-chromatic UDG is the Moser spindle (7 vertices). Hence any "two UDG halves + bridges" chi=5 UDG must have $\|V\| \geq 14$, with Moser$^2$ as the unique candidate at this floor. L23 closes that route; the chi=5 UDG record below 510 (if any) must come from a structurally different decomposition.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS: every analyzed pair requires 4-chromatic halves; vacuous in $\mathbb{Q}^2$. |
+| $L^\infty$ ($\chi = 4$) | PASS: pair-min cover is graph-theoretic; realizability obstruction is Euclidean. |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS: no 4-chromatic UDG. |
+
+**Why this matters**.
+
+1. **L22's three abstract obstruction classes are all realized in small graphs.** L22 conjectured the empty-list local case as the strongest; L25 shows global and adjacent-singleton variants exist at similar or smaller vertex counts. The list-coloring obstruction has a richer structure than just "force a single empty list".
+
+2. **The chi=5 UDG vertex gap (14 abstract vs 509 UDG) is geometric, not combinatorial**. Multiple small abstract chi=5 no-$K_4$ structures exist, but ALL fail UDG realization for clean geometric reasons ($W_5$ non-UDG, Moser$^2$ cocircularity-blocked). The 36-fold vertex inflation from 14 to 509 is the price of Euclidean rigidity.
+
+3. **The Moser spindle's uniqueness as a 7-vertex 4-chromatic UDG is the structural bottleneck**. If a second 7-vertex 4-chromatic UDG existed distinct from Moser, Moser × (new UDG) would re-open the 14-vertex UDG chi=5 route. Searching for such a graph is the natural next experiment.
+
+**Future BUILDER directions**:
+
+1. **Search for 7-vertex 4-chromatic UDGs distinct from Moser spindle.** Discrete optimization over $\mathbb{Q}(\sqrt 3, \sqrt{11})$ coordinates with perturbation. If found, pair with Moser and check no-$K_4$ chi=5 + UDG realizability.
+2. **Pair Moser with 8-9-vertex UDGs from `e1l_reverse_engineer_degrey1585.py`** (chain / pivot constructions). Combined $\|V\| \in \{15, 16\}$, both halves UDG. Test no-$K_4$ minima.
+3. **Search for a "global obstruction Moser$^2$"**: does Moser × Moser admit a no-$K_4$ chi=5 cover with global-obstruction F-profile (every $\|L(v)\| \geq 2$, list-uncolorable globally)? Bridge count might be smaller than L21's empty-list 14 if the obstruction is more distributed.
+4. **Pending pairs**: re-run h3_analyze.py for Moser × Golomb (both UDG, V = 17, $\omega = 3$ possible), Hajos × Golomb, Golomb$^2$, Grotzsch pairs.
+
+---
+
+### L24. The L22 pair list-coloring theorem lifts cleanly to triple coupling: $\chi(H_1 \cup H_2 \cup H_3 \cup B_{12} \cup B_{13} \cup B_{23}) \geq 6$ iff for every proper 5-coloring $c_1$ of $H_1$, the residual list-coloring on $(H_2 \cup H_3 \cup B_{23})$ with $L_2(v) = [5] \setminus F_{12}(v)$ and $L_3(w) = [5] \setminus F_{13}(w)$ is infeasible. Two-line proof. In the no-$K_4$ regime, 368 random three-Moser configurations produce ZERO $\chi \geq 6$ instances; conjecture C5: three-Moser + no-$K_4$ caps at chi=5.
+
+**Architecture**: 1. Recursive lift of L22's list-coloring theorem to three halves.
+
+**Experiment**: [`e1y_triple_list.py`](combinatorial/e1y_triple_list.py).
+
+**Theorem (triple-coupling lift)**. Let $H_1, H_2, H_3$ be graphs on disjoint vertex sets, $B_{ij}$ the pairwise bridge sets, $G = \bigcup H_i \cup \bigcup B_{ij}$. Then $\chi(G) \geq 6$ iff for every proper 5-coloring $c_1$ of $H_1$, the residual list-coloring on $H_2 \cup H_3 \cup B_{23}$ with lists $L_2(v) = [5] \setminus \{c_1(u) : (u,v) \in B_{12}\}$ and $L_3(w) = [5] \setminus \{c_1(u) : (u,w) \in B_{13}\}$ is infeasible.
+
+*Proof.* Both directions are contrapositives mirroring L22, with the residual being a pair list-coloring at one higher color level. ($\Rightarrow$) If a residual extension $(c_2, c_3)$ exists for some $c_1$, the gluing $c = c_1 \sqcup c_2 \sqcup c_3$ is a proper 5-coloring of $G$ since bridges $B_{12}, B_{13}$ are forced apart by the lists and $B_{23}$ is respected by the residual. ($\Leftarrow$) Any proper 5-coloring $c$ of $G$ restricts to a $c_1$ for which $(c|_{H_2}, c|_{H_3})$ list-extends. $\square$
+
+**Recursive structure**. For $n$ halves, $\chi(G) \geq n+3$ iff $\forall c_1$ proper $(n+2)$-coloring of $H_1$, the residual $(n-1)$-half list-coloring at level $(n+2)$ is infeasible. Base case $n = 1$ is just $\chi(H_1) \geq n+2$.
+
+**Verification table (theorem checked against direct SAT)**:
+
+| Case | $\|C_1(5)\|$ | residual-feasible $c_1$ | $\chi$ SAT | list says $\chi \geq 6$? | agree? |
+|---|---:|---:|---:|:---:|:---:|
+| 3 $K_4$, star bridges | 120 | 0/120 | 6 | Y | Y |
+| 3 $K_4$, no bridges | 120 | 120/120 | 4 | N | Y |
+| 3 $K_4$, matching $(0,0)$ | 120 | 120/120 | 5 | N | Y |
+| 3 Moser, aligned $K_{2,2}$ | 5040 | 0/5040 | 6 | Y | Y |
+| 3 Moser, no bridges | 5040 | 5040/5040 | 4 | N | Y |
+
+**Empirical no-$K_4$ scan** (uniform + L21-anchored sampling):
+
+| Phase | sample method | $|B_{ij}|$ range | total | no-$K_4$ | $\chi = 4$ | $\chi = 5$ | $\chi \geq 6$ |
+|---|---|---|---:|---:|---:|---:|---:|
+| D | uniform | [6, 14] | 297 | 103 | 103 | 0 | **0** |
+| E | uniform | [8, 12] | 400 | 80 | 80 | 0 | **0** |
+| F | $B_{12} = B^*_{L21}$ anchored | various | 200 | 117 | 0 | 117 | **0** |
+| F-side | $B_{12}$ fixed, $B_{13}, B_{23}$ random | various | 870 | 68 | 30 | 38 | **0** |
+| **Combined** | | | **1767** | **368** | **213** | **155** | **0** |
+
+Across 368 distinct no-$K_4$ three-Moser configurations including the L21-anchored "chi-5 strong" cases, **zero have $\chi \geq 6$**.
+
+**Conjecture C5 (no-$K_4$ three-Moser caps at $\chi = 5$)**. For three Moser spindles on disjoint vertex sets and any bridge sets $B_{ij}$ with $\omega(\bigcup H_i \cup \bigcup B_{ij}) \leq 3$, $\chi \leq 5$.
+
+**Structural reading**. By the triple-lift theorem, $\chi \geq 6$ requires forcing $|L_2(v)| = 0$ for SOME $v$ under EVERY $c_1$. This requires $|F_{12}(v)| = 5$, i.e., 5 distinct $c_1$-colors at the 5 $H_1$-endpoints bridging into $v$. In Moser (chi = 4), 5-color $c_1$-assignments use all 5 colors but constraints from Moser's edge structure prevent placing 5 distinct colors at 5 specific endpoints unless they include a 5-clique substructure, blocked by $\omega(\text{Moser}) = 3$. Moser's 4-choosability completes the residual list-coloring whenever no $v$ has $|F_{12}(v)| \geq 5$ uniformly across all $c_1$.
+
+This corrects L20 implication 5 in its no-$K_4$ form: the ADVERSARY angle 6 $K_{2,2}$-aligned $\to K_6$ trick uses $K_4$-substructure on the boundaries, illegal in the UDG-relevant regime.
+
+**Wrong-approach detector status**: identical to L21 / L22 / L23. PASS on $\mathbb{Q}^2$, $L^\infty$, $\mathbb{R}^1$ (vacuous in each).
+
+**Why this matters**.
+
+1. **The L21 covering ladder caps at chi=5 in the no-$K_4$ regime**: each additional half adds one color to the residual list-coloring, but Moser's 4-choosability propagates feasibility upward. The "third color reuse" L20 wondered about is exactly this 4-choosable propagation.
+
+2. **The chi=6 UDG path must escape 4-choosability**. Either: (a) use halves that are NOT 4-choosable (i.e., 4-chromatic with list-chromatic $\geq 5$ from some 4-size lists; theta-graph-like examples exist abstractly but no small UDG-realizable example is known), or (b) recurse with chi=5 halves (Polymath 510 × Polymath 510 + no-$K_4$ bridges, with the L24 lift now applied at the 5-color level).
+
+3. **Polymath 510² + bridges is the natural next chi-6 UDG target**. Same covering ladder, one rung up. Polymath 510 has thousands of canonical 5-colorings; sampling-based feasibility is the right algorithm.
+
+**Future BUILDER directions**:
+
+1. **Polymath 510 × Polymath 510 + no-$K_4$ bridges**: search for chi-6 bridge sets via the L24 lift at the 5-color level.
+2. **Compute the list-chromatic number of the Moser spindle**: is Moser 4-choosable? Conjecture yes (and a SAT-search over 4-size list assignments confirms or refutes).
+3. **Multi-half cone obstruction lemma**: generalize L22's local-empty-list obstruction to $n$ halves; characterize when a single boundary vertex can force $|L(v)| = 0$ across all $(n-1)$-tuples of higher-level colorings.
+4. **Lean formalization of the triple lift** (extends H4 work).
+
+---
+
+### L23. The L21 14-vertex Moser x Moser no-$K_4$ $\chi = 5$ abstract graph is NOT UDG-realizable in $\mathbb{R}^2$. Structural cocircularity obstruction: H_2's vertex 6 must lie at unit distance from 5 H_1-vertices $\{0,2,3,4,6\}$, but those 5 points are not cocircular (radii of inscribed circles range from 0.51 to 5.94). Symmetrically H_1's v_6 must bridge to H_2 vertices $\{1,3,5,6\}$, which are cocircular at radius 0.805 (not 1). Max realizable subset $\|B'\| = 7$ of 14 bridges. This quantifies L21's "realizability cost": 7 bridges drop from the abstract minimum to the UDG-realizable minimum on this pair.
+
+**Architecture**: 1. BUILDER pass on L21's open realizability question.
+
+**Experiment**: [`e1x_realize_moser14.py`](combinatorial/e1x_realize_moser14.py).
+
+**The graph**.
+
+$H_1, H_2$ are two disjoint copies of the Moser spindle (7 vertices each, $\chi(H_i) = 4$ via SAT). The 14 bridges $B^*$ (L21):
+
+$$B^* = \{(0,0),(0,1),(0,3),(0,4),(0,6),(1,0),(2,6),(3,6),(4,6),(5,1),(6,1),(6,3),(6,5),(6,6)\}.$$
+
+Indexed: first slot = $H_1$ vertex, second slot = $H_2$ vertex. As an abstract graph this has $\chi = 5$, $\omega = 3$, and is the smallest known "two 4-chromatic halves + bridges" structure with no $K_4$.
+
+**The realizability question (L21 open direction 1)**.
+
+Place $H_1$ at the canonical Moser coordinates in $\mathbb{Q}(\sqrt 3, \sqrt{11})$. Does there exist a rigid motion $\phi : \mathbb{R}^2 \to \mathbb{R}^2$ such that $H_2 = \phi(\text{Moser spindle})$ and all 14 bridges become unit-distance edges? The pose $\phi$ has 3 real DoF (translation $t_x, t_y$ + rotation $\theta$), so 14 unit-distance equations is generically overdetermined by 11.
+
+**Verdict: NO, with a structural certificate**.
+
+The obstruction is *cocircularity*, identifiable without optimization. For any rigid motion $\phi$, if $H_2$ vertex $v$ has bridge-partners $\{u_1, \dots, u_k\}$ in $H_1$, then all $u_i$ must lie at unit distance from $\phi(v)$, i.e., on the unit circle around $\phi(v)$. Equivalently the $u_i$ must be cocircular at radius 1 (relative to some center). The same condition holds symmetrically on the $H_1$ side.
+
+| Side | vertex | bridge endpoints in other half | cocircular? | radius | compatible? |
+|---|---:|---|:---:|---:|:---:|
+| $H_2$ receives | $v_0$ | $\{0, 1\}$ | trivial (2 pts) | n/a | yes |
+| $H_2$ receives | $v_1$ | $\{0, 5, 6\}$ | YES | 1.000 | YES |
+| $H_2$ receives | $v_3$ | $\{0, 6\}$ | trivial (2 pts) | n/a | yes |
+| $H_2$ receives | $v_4$ | $\{0\}$ | trivial (1 pt) | n/a | yes |
+| $H_2$ receives | $v_5$ | $\{6\}$ | trivial (1 pt) | n/a | yes |
+| $H_2$ receives | $v_6$ | $\{0, 2, 3, 4, 6\}$ | **NO** | range $[0.51, 5.94]$ | **NO** |
+| $H_1$ sends | $v_0$ | $\{0, 1, 3, 4, 6\}$ | **NO** | range $[0.51, 5.94]$ | **NO** |
+| $H_1$ sends | $v_6$ | $\{1, 3, 5, 6\}$ | YES | **0.805** | **NO (radius != 1)** |
+
+Three obstructed bridge-endpoints, each killing a different geometric constraint. The first two ($H_2$ v_6 and $H_1$ v_0) are duals of each other: $v_0^{H_1}$ has 5 outgoing bridges into $H_2$ vertices $\{0,1,3,4,6\}$, and $v_6^{H_2}$ has 5 incoming bridges from $H_1$ vertices $\{0,2,3,4,6\}$. Each requires the bridge-endpoint set to be on a unit circle, and the 5-point sets fail cocircularity entirely.
+
+The third obstruction is sharp: $H_1$'s $v_6$ has bridges to $H_2$ vertices $\{1, 3, 5, 6\}$, and those 4 points ARE cocircular (the Moser spindle has many tight 4-cocircular substructures), but at radius $\sim 0.805$, not 1. So the cocircular center exists but cannot be a unit-distance hub.
+
+**Algebraic certificate (Positivstellensatz, h2 VERIFIER complement)**.
+
+The cocircularity argument can be promoted to an exact polynomial-identity refutation. Parameterize $H_2$'s pose by $(c, s, t_x, t_y)$ with $R_\theta = \begin{pmatrix} c & -s \\ s & c \end{pmatrix}$ and constraint $c^2 + s^2 = 1$. Each bridge $(i, j) \in B^*$ gives a quadratic equation $f_{ij}(c, s, t_x, t_y) := \|\phi(v_j) - v_i\|^2 - 1 = 0$ over $\mathbb{Q}(\sqrt 3, \sqrt{11})$.
+
+**Same-$j$ linear-difference trick**: for two bridges $(i, j), (i', j)$ sharing the same $H_2$-endpoint $j$, the rotation-quadratic terms $\|R_\theta v_j\|^2 = \|v_j\|^2$ cancel under subtraction:
+$$f_{ij} - f_{i'j} = -2(v_i - v_{i'}) \cdot (R_\theta v_j + t) + (\|v_i\|^2 - \|v_{i'}\|^2),$$
+which is degree 1 in $(c, s, t_x, t_y)$. The 14-bridge set $B^*$ has multiple bridges sharing $H_2$-endpoints $\{0, 1, 3, 6\}$, yielding **8 linear equations** in 4 unknowns over $\mathbb{Q}(\sqrt 3, \sqrt{11})$.
+
+The augmented coefficient matrix satisfies $\operatorname{rank}(A) = 4$ but $\operatorname{rank}([A \mid b]) = 5$: INCONSISTENT.
+
+**Explicit degree-1 Positivstellensatz certificate** (3 of the 8 differences suffice):
+$$g_1 := f_{(2,6)} - f_{(0,6)}, \quad g_2 := f_{(3,6)} - f_{(0,6)}, \quad g_3 := f_{(4,6)} - f_{(0,6)},$$
+$$\frac{5 - \sqrt{33}}{6} \cdot g_1 \;+\; \frac{-15 + \sqrt{33}}{18} \cdot g_2 \;+\; 1 \cdot g_3 \;=\; -\frac{2}{3}.$$
+
+Identity verified in $\mathbb{Q}(\sqrt 3, \sqrt{11})[c, s, t_x, t_y]$ by independent sympy expand. Each $g_k$ must vanish at any feasible pose, but RHS is the nonzero rational $-2/3$. Contradiction. QED.
+
+**Groebner cross-check**: $G = \text{GB}(\{f_{(0,6)}, f_{(2,6)}, f_{(3,6)}, f_{(4,6)}, c^2 + s^2 - 1\}) = \{1\}$ (unit ideal) over $\mathbb{Q}(\sqrt 3, \sqrt{11})$ in grevlex order, computed in 0.26s. Two independent algebraic methods agree.
+
+**Geometric interpretation matching the cocircularity table**: bridges $(0,6), (2,6), (3,6) \in B^*$ demand $\phi(v_6)$ at unit distance from $v_0, v_2, v_3$. The unique such point in $\mathbb{R}^2$ is $v_1 = (1, 0)$ ($v_0, v_2, v_3$ all sit on the unit circle around $v_1$). Then bridge $(4, 6)$ requires $\|v_1 - v_4\|^2 = 1$, but $(1 - 5/6)^2 + (\sqrt{11}/6)^2 = 12/36 = 1/3$. The residual $-2/3$ matches the certificate constant exactly.
+
+**Locality lemma at $v_6$**: exhaustive enumeration of $2^5 = 32$ subsets of the 5 bridges $\{(0,6), (2,6), (3,6), (4,6), (6,6)\}$ into $H_2$-vertex 6 shows the maximum simultaneously realizable subset has size $\leq 3$. Hence any rigid motion violates at least 2 of these 5 bridges, before even considering the other 9 in $B^*$.
+
+Total wall-clock for the algebraic certificate: $\sim 4$ seconds (vs the 8-hour budget allocated). The same-$j$ linear-difference reduction makes the system decompose to a linear feasibility problem in milliseconds.
+
+**Numerical certificate**.
+
+We numerically minimize $\sum_{(i,j) \in B^*} (\|\phi(v_j) - v_i\|^2 - 1)^2$ with 500-start L-BFGS-B over $(t_x, t_y, \theta)$, with reflections and across both Moser-spindle automorphisms (the spindle has a $\mathbb{Z}_2$ symmetry under permutation $(0,5,4,6,2,1,3)$). Best loss $L^* \approx 9.40$ corresponds to max per-bridge $|d - 1| \approx 0.90$. The minimum is bounded well above $\epsilon = 10^{-6}$ across all 4 (aut, reflect) cases, refuting realizability.
+
+**Maximum realizable subset**.
+
+Subset realizability is downward-closed: if pose $\phi$ realizes $S \subseteq B^*$, then $\phi$ realizes every subset of $S$. So the max realizable subset size = largest $k$ such that some $k$-subset is realizable. Brute-force over $C(14, 8) = 3003$ subsets at size 8 finds NONE realizable; over $C(14, 7) = 3432$ at size 7 finds one immediately:
+
+$$B'_{\max} = \{(0,1),(0,4),(1,0),(3,6),(4,6),(6,3),(6,5)\}, \quad \|B'_{\max}\| = 7.$$
+
+Verified to numerical precision $|d - 1| < 2.2 \times 10^{-16}$ (machine epsilon). By monotonicity, no subset of size $\geq 8$ is realizable.
+
+| Statistic | Value |
+|---|---:|
+| $\|B^*\|$ (abstract) | 14 |
+| $\|B^*_{\text{realizable}}\|$ (max simultaneously unit-distance) | **7** |
+| Realizability gap | 7 bridges (50%) |
+| Phase 1 best $L^2$ residual sum (full $B^*$) | 9.40 |
+| Phase 1 best max $\|d - 1\|$ (full $B^*$) | 0.90 |
+| Best max $\|d-1\|$ across 4 (aut, reflect) combos | 0.90 |
+
+**Why $\|B'_{\max}\| = 7$ and which bridges are dropped**.
+
+The optimal 7-subset $B'_{\max}$ drops one bridge from EACH high-degree obstruction:
+- From $H_2$ $v_6$'s 5-star: keeps $(3,6), (4,6)$; drops $(0,6), (2,6), (6,6)$.
+- From $H_1$ $v_0$'s 5-star: keeps $(0,1), (0,4)$; drops $(0,0), (0,3), (0,6)$.
+- From $H_1$ $v_6$'s 4-star at radius 0.805: keeps $(6,3), (6,5)$; drops $(6,1), (6,6)$.
+- Single bridge $(1, 0)$ and $(5, 1)$ are handled: $(1, 0)$ keeps, $(5, 1)$ drops.
+
+The 7 obstructing bridges:
+
+$$B^* \setminus B'_{\max} = \{(0,0),(0,3),(0,6),(2,6),(5,1),(6,1),(6,6)\}.$$
+
+Note that $(0,6)$ and $(6,6)$ involve $v_6$ on BOTH sides (the "diagonal" 6-6 bridge), the most over-constrained position.
+
+**Implications for the L21 covering lemma program (cost of realizability)**.
+
+L21 conjectured (with the natural reading of "realizability cost") that the gap between the abstract graph-theoretic minimum bridge count (14, for Moser $\times$ Moser no-$K_4$) and the UDG-realized minimum (155, for de Grey 1585) is bounded below by the structural cocircularity obstruction in the abstract graph. L23 quantifies this:
+
+| Construction | $\|B\|$ | UDG-realizable | Reduction needed |
+|---|---:|:---:|---|
+| Moser $\times$ Moser abstract no-$K_4$ | 14 | NO ($\geq 7$ obstructed) | replace each obstructed bridge by an indirect 2-hop path |
+| Moser $\times$ Moser realizable subset | 7 | YES | proves abstract->UDG cost factor $\geq 2$ in bridges |
+| de Grey 1585 | 155 | YES | adds 1574 vertices to make all bridges realizable |
+| Polymath 510 | 833 | YES | adds 503 vertices |
+
+Each obstructed abstract bridge can in principle be "softened" into a path of vertices in $\mathbb{R}^2$ (a Moser-spindle-like rigid path) of length $\geq 2$, multiplying vertex count. The factor of $\sim 100$ from 14 abstract bridges to 1585 UDG vertices reflects the geometric softening cost.
+
+**Why direct rigid placement fails (intuition)**.
+
+A Moser spindle has 7 vertices and rotational/reflection symmetry $\mathbb{Z}_2$ (the spindle has 2 automorphisms via the non-identity vertex permutation $(0,5,4,6,2,1,3)$). Its diameter is $\sim 1.55$ (vertex 6 from origin). Any two Moser spindles in $\mathbb{R}^2$ at "close range" have their 14 cross-distances generically all different from 1, and the constraint $c^2 + s^2 = 1$ plus 3 translational DoFs gives only 3 free parameters versus 14 equations. The cocircularity obstruction is the *exact* algebraic form of this overdetermination: any single vertex hosting $\geq 3$ bridges into a non-cocircular endpoint set is infeasible regardless of pose.
+
+**Wrong-approach detector status**:
+
+| Detector | Result |
+|---|:---:|
+| $\mathbb{Q}^2$ ($\chi = 2$) | PASS: the analysis is over $\mathbb{Q}(\sqrt 3, \sqrt{11})$, an extension of $\mathbb{Q}$, but the conclusion is about non-realizability of a specific UDG. In $\mathbb{Q}^2$ neither Moser spindle exists (its coordinates use $\sqrt{11}$). Vacuous in $\mathbb{Q}^2$, so no spurious $\chi(\mathbb{Q}^2) \geq 3$. |
+| $L^\infty$ on $\mathbb{R}^2$ ($\chi = 4$) | PASS: the Moser spindle requires equilateral triangles (Euclidean rigidity). It is not a $L^\infty$-UDG. The cocircularity obstruction is *Euclidean* (circle vs L^infty square). The argument doesn't apply to $L^\infty$, and rightly so since $L^\infty$ has $\chi = 4$ and no $\chi \geq 5$ obstacle. |
+| $\mathbb{R}^1$ ($\chi = 2$) | PASS: $\mathbb{R}^1$ has no 4-chromatic UDG, no Moser spindle, no cocircularity question. Vacuous. |
+
+The detectors PASS because the structural obstruction is geometrically tied to the Euclidean unit circle, which is the right tool for $\mathbb{R}^2$ but doesn't bind on $\mathbb{Q}^2$ or $L^\infty$.
+
+**Why this matters**.
+
+1. **L21's open direction 1 is resolved**. The 14-vertex no-$K_4$ Moser $\times$ Moser abstract graph is NOT a UDG. The 14 bridges cannot all be realized as Euclidean unit distances under any rigid motion, with or without reflection, across both Moser-spindle automorphism labelings. So the smallest known no-$K_4$ $\chi = 5$ graph remains de Grey's 1585 (or Polymath's 510) by a factor of $\sim 35$ in vertex count.
+
+2. **Cocircularity is THE structural obstruction in low-vertex UDG realizability**. The condition "for every $v \in V(H_2)$, $N_B(v) \subseteq V(H_1)$ is cocircular at radius 1" is a *necessary* condition for the joint UDG. It can be checked in $O(\|B\|)$ per vertex, before any optimization. Future BUILDER experiments on small graphs should run this filter as a fast no-realizability sieve.
+
+3. **Realizability cost gives a structural lower bound on UDG vertex counts**. The 14-vertex abstract graph realizes only 7 of 14 bridges. To realize the remaining 7 bridges, each must be replaced by a multi-vertex path / spindle in $\mathbb{R}^2$. Even at the optimistic rate of "2 extra vertices per obstructed bridge" (each adding a Moser-like degree-of-freedom), 7 obstructed bridges $\to$ 14 extra vertices $\to$ 28-vertex realizable graph as a *lower bound*. The actual minimum is much larger; de Grey 1585 = 1571 vertices added in the bridge-region structure.
+
+4. **The "symmetry-driven 5-star obstruction" generalizes**. In L21's bridge graph, $v_0^{H_1}$ and $v_6^{H_2}$ both host 5-stars (high-degree bridge endpoints). The 5-star $\to$ cocircular-5-points-on-unit-circle constraint is the basic local rigidity obstacle. Polymath16's strategy (and de Grey's) avoids this by limiting per-vertex bridge degree to $\leq 4$ (typically) and ensuring cocircularity at radius 1 in the local geometry.
+
+**Future BUILDER directions (next session)**:
+
+1. **Apply the cocircularity sieve to all known low-vertex $\chi \geq 5$ abstract candidates**. For any candidate "two-half + bridges" graph with $\|V\| < 100$, check the cocircularity obstruction symmetrically. If it fails, the abstract graph is non-UDG. Filter the space.
+
+2. **Investigate 2-hop softening of obstructed bridges**. Replace each obstructed bridge $(u, v) \in B^* \setminus B'_{\max}$ by a vertex $w \in \mathbb{R}^2$ with edges $(u, w)$ and $(w, v)$ both unit. The "minimum vertex addition" to make $B^*$ realizable is the next BUILDER target, with a hypothesis that 7 obstructed bridges + 14-vertex base $\to$ 21-vertex UDG with $\chi = 5$ (which would still smash the Parts 509 / Polymath 510 record).
+
+3. **Check whether the Moser $\times$ Moser 14-bridge structure has a "softer" abstract variant** (with $\|B\| \in [15, 50]$ and $\chi = 5$) that IS realizable. This is the right direction to beat Polymath 510.
+
+4. **For the chi-6 question** (L21 implication 5): apply the same cocircularity sieve to ADVERSARY's $K_6$-cross-clique 9-vertex graph and the no-$K_4$ chi-6 candidates. If the abstract minimum chi-6 graph fails cocircularity badly, the UDG chi-6 vertex count is correspondingly large.
+
+5. **Apply the same-$j$ linear-difference trick to de Grey 1585 and Polymath 510** (h2 follow-up). Each $H_2$-boundary vertex with $k$ incoming bridges contributes $k - 1$ linear constraints on the pose. de Grey's 22 boundary vertices in $H_2$ with 155 bridges $\Rightarrow$ $155 - 22 = 133$ linear constraints in 4 unknowns. The fact that this system IS consistent for the published embedding is a structural check on de Grey's construction; comparing the rank pattern across the published examples may reveal further structure.
+
+6. **Lean 4 formalization of the h2 certificate** (extends H4's L21/L22 Lean work). The polynomial identity $\lambda_1 g_1 + \lambda_2 g_2 + \lambda_3 g_3 = -2/3$ over $\mathbb{Q}(\sqrt{33})$ is short enough to fit a single `nlinarith` / `field_simp` Lean tactic. A theorem `moser14_not_udg` becomes the first formal infeasibility proof in the Hadwiger-Nelson formalization.
+
+---
+
 ### L22. The L21 covering lemma has an EXACT list-coloring reformulation: chi(H_1 cup H_2 cup B) >= 5 iff H_2 is not list-colorable from lists L(v) = [4] \ F(v) where F(v) = {c_1(u) : (u,v) in B}. L21's C4 conjecture, read literally, is strictly stronger than necessary (C4 implies chi >= 5 but the converse fails); L22 supersedes it with the list-coloring theorem.
 
 **Architecture**: 1. VERIFIER pass on L21's open C4 conjecture.
