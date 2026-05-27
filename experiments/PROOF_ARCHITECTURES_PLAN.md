@@ -74,6 +74,9 @@ The experimental thread is organized around the same four-architecture framework
 | e1i Polymath 510 / Heule 826 symmetry analysis | 1 | done; both have NO non-identity exact rotational symmetries (SAT-minimization destroyed them) (LEARNINGS L15) |
 | e1j Polymath 510 approximate C_6 symmetry | 1 | done; R_60 covers 92.35%, R_120 92.16%, etc. (LEARNINGS L15) |
 | e1k Polymath 510 C_6 closure & minimal subset | 1 | done; closure $V=1155, E=10397$, chi=5; ALL 6 rotation copies essential (C_6-irreducible) (LEARNINGS L15) |
+| e1l de Grey 1585 exact symmetry analysis | 1 | done; no non-identity exact rotational symmetries about 9 pivots (LEARNINGS L16) |
+| e1m de Grey 1585 approximate symmetry | 1 | done; approximate D_6 about $v_0 = (2, 0)$, ~50% coverage per non-identity element (LEARNINGS L16) |
+| e1n de Grey 1585 C_6 core extraction | 1 | done; 778-vertex core has chi = 4; chi>=5 depends on asymmetric residue (LEARNINGS L16) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |

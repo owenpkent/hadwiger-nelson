@@ -591,4 +591,79 @@ The closure $V_+$ is a 1155-vertex, 10397-edge, $C_6$-symmetric, 5-chromatic UDG
 
 ---
 
+### L16. de Grey 1585 has approximate C_6 (in fact D_6) symmetry about v_0 = (2, 0), with each non-identity rotation preserving ~50% of vertices
+
+**Architecture**: 1. Continues L15.
+
+**Experiments**: [`e1l_reverse_engineer_degrey1585.py`](combinatorial/e1l_reverse_engineer_degrey1585.py), [`e1m_degrey_approximate.py`](combinatorial/e1m_degrey_approximate.py).
+
+**Source**: [`sources/degrey_1585_vertices.sage`](../sources/degrey_1585_vertices.sage) (the original de Grey 2018 graph, in $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$).
+
+**Headline**.
+
+(a) **No exact rotational symmetries** (e1l): de Grey 1585 has zero non-identity rotational symmetries about ANY of 9 tested pivots (origin, centroid, $v_0$ through $v_6$, $(1, 0)$, midpoint of $v_0$ and $v_2$). The same negative result as Polymath 510 (L15) and Heule 826.
+
+(b) **The natural symmetry center is $v_0 = (2, 0)$, not the origin** (e1m). At pivot $v_0$, vertices form distance classes of size up to 60 (= 10 orbits of size 6 at one distance), strongly indicating an underlying $C_6$ structure.
+
+(c) **Approximate D_6 symmetry about $v_0$** (e1m). The 18 high-coverage rotations about $v_0$ split as:
+
+| Subgroup element | Coverage |
+|---|---:|
+| Identity (0°) | 1585 / 1585 = 100% |
+| $R_{60°}$ | 787 / 1585 = 49.65% |
+| $R_{120°}$ | 787 / 1585 = 49.65% |
+| $R_{180°}$ | 793 / 1585 = 50.03% |
+| $R_{240°}$ | 787 / 1585 = 49.65% |
+| $R_{300°}$ | 787 / 1585 = 49.65% |
+| 12 secondary 180° rotations (different centers) | ~785-787 / 1585 = ~49.5% |
+
+The 6 rotations about $v_0$ form the $C_6$ subgroup of $D_6$. The 12 secondary 180° rotations (about different centers like $v_{169}, v_{265}, \ldots$) correspond to the *reflections* of $D_6$, realized as $180°$ rotations about the midpoints of certain vertex pairs (since reflection-about-line through $v_0$ and another vertex equals 180°-rotation about the midpoint, in the plane).
+
+The graph effectively has approximate $D_6$ (dihedral, order 12) symmetry about $v_0 = (2, 0)$, with each non-identity element preserving exactly half of the 1585 vertices.
+
+**Interpretation**.
+
+1. **de Grey's natural center is $v_0$**, not the origin. The 2018 paper constructed $H = M + W$ where $M$ is a small base graph and $W$ is a wheel of rotated copies; $v_0 = (2, 0)$ is the geometric center of this Minkowski-sum construction. Origin is just a coordinate-system artifact.
+
+2. **The C_6-symmetric core has approximately 787 vertices**. These are the vertices preserved by all 6 rotations $\{R_{60°k}\}_{k=0}^{5}$ about $v_0$. The other ~798 are asymmetric perturbations — likely SAT-minimization residue from minimizing the original $H$ down to 1585.
+
+3. **The minimal-rotation-subset question is now concrete**. Extract the $C_6$-symmetric core ($V_{\text{sym}}$ = $\bigcap_{k=0}^5 R^k(V)$, ~787 vertices). Test $\chi(V_{\text{sym}})$. If $\chi(V_{\text{sym}}) \geq 5$, we have a $C_6$-symmetric chi $\geq 5$ UDG at ~787 vertices, smaller than Polymath 510's C_6-closure (1155 vertices, L15). If $\chi(V_{\text{sym}}) = 4$, the asymmetric extras are essential for de Grey's chi $\geq 5$ proof.
+
+**Cross-architectural implication**.
+
+L15 established that the SAT-minimized Polymath/Heule lineage in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ has zero rotational symmetry. L16 establishes that the original de Grey 2018 graph in the richer field $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ ALSO has zero EXACT rotational symmetry, but unlike Polymath 510 it retains substantial APPROXIMATE $D_6$ symmetry (~50% coverage per non-identity rotation).
+
+This suggests a structural hierarchy:
+- de Grey 1585: approximately D_6-symmetric about $v_0$.
+- Heule's minimization (553 vertices etc.): destroyed most of the $D_6$ structure, but
+- Polymath 510 retained approximate C_6 about origin at 92% coverage (L15 again).
+
+The Polymath/Heule lineage *moved* the natural center from $v_0$ (de Grey's original) to origin (their reformulation), and re-symmetrized while minimizing — landing on a different approximate symmetry.
+
+**Wrong-approach status**. All rotation analyses use exact algebraic coordinates and respect $O(2)$ symmetry. The $\mathbb{Q}^2$ detector passes (vertex coordinates use $\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11}$).
+
+**The C_6 core of de Grey 1585 has chi = 4 (e1n)**.
+
+Extract $V_{\text{sym}}$ = $\{v \in V : R^k(v) \in V$ for $k = 0..5\}$ about $v_0$. This gives 778 vertices (49.1% of 1585), 3806 edges (48.1% of 7909), density 4.89. SAT-check: **$\chi(V_{\text{sym}}) = 4$** (4-colorable: True; 3-colorable: False).
+
+**Structural conclusion**: the $\chi \geq 5$ property of de Grey 1585 depends essentially on the ~807 *asymmetric perturbation* vertices, NOT on the underlying $C_6$-symmetric core. The natural $C_6$-symmetric "skeleton" is only 4-chromatic.
+
+This parallels L15's finding for Polymath 510: in both cases, the natural rotational structure is 4-chromatic, and the chi $\geq 5$ property comes from *asymmetric residue*. **The Hadwiger-Nelson chi $\geq 5$ lineage achieves its bound DESPITE approximate rotational symmetry, not BECAUSE of it.**
+
+This is a sharp structural fact about the geometry of chi $\geq 5$ unit-distance graphs:
+
+| Graph | Source | Symmetry structure | Symmetric core chi |
+|---|---|---|---:|
+| Polymath 510 | $\mathbb{Q}(\sqrt 3, \sqrt{11})$ | Approximate $C_6$ about origin (92% coverage) | (full closure is chi 5, but C_6-irreducible: every rotation copy essential, L15) |
+| Heule 826 | $\mathbb{Q}(\sqrt 3, \sqrt{11})$ | NO non-identity exact symmetries | n/a |
+| **de Grey 1585** | $\mathbb{Q}(\sqrt 3, \sqrt 5, \sqrt 7, \sqrt{11})$ | Approximate $D_6$ about $v_0 = (2, 0)$ (~50% coverage per element) | **778-vertex core, chi = 4** |
+
+**Future BUILDER directions (next session)**:
+
+1. **Extract de Grey's $D_6$ core** (intersection of preserves of all 12 dihedral elements about $v_0$). Likely smaller than 778 vertices. Same SAT-check.
+2. **Compute the SAT-MUS of de Grey 1585**: which vertices are *essential* for chi $\geq 5$? If $V_{\text{sym}}$ is 4-colorable but $V_{\text{sym}} \cup \{$ a few asymmetric vertices $\}$ is 5-chromatic, identify those asymmetric vertices. They are the "obstruction core" — the structurally critical residue.
+3. **Compare Polymath 510 to de Grey 1585**: is Polymath 510 essentially the $C_6$-symmetric core of de Grey 1585 + some asymmetric residue, or built from a completely different starting point?
+
+---
+
 (no further entries yet; this is a young repository.)
