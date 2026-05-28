@@ -13,8 +13,13 @@ Files:
 - `HadwigerNelson/Basic.lean` `unitDistanceGraph` (over any PseudoMetricSpace), `planeUnitDistanceGraph` (Euclidean), `chromaticNumberOfPlane`, statements of `DeGreyLowerBound` and `IsbellUpperBound`, and a proved `unitDistanceGraph_adj` simp lemma
 - `HadwigerNelson/MoserSpindle.lean` HN-2 stub; `moserSpindle = ⊥` placeholder
 - `HadwigerNelson/Controls.lean` Q^2, L^infty, R^1 wrong-approach controls; each defined directly via `SimpleGraph.fromRel` on an explicit edge predicate (Q^2 edge predicate stays in ℚ, no `Real.sqrt`)
+- `HadwigerNelson/MoserBridge.lean` bridges `moserSpindle` to the Euclidean plane graph, deriving `4 ≤ chromaticNumberOfPlane`
+- `HadwigerNelson/Bridges.lean` the "two halves plus bridges" construction `bridgeGraph H₁ H₂ B` on the sum type `V₁ ⊕ V₂`, with adjacency simp lemmas
+- `HadwigerNelson/L21CoveringLemma.lean` the L21 covering lemma at the chi >= 5 level (`Fin 4`): the combined graph is 4-colorable iff the halves admit colorings disagreeing on every bridge
+- `HadwigerNelson/L22ListColoring.lean` the L21 lemma restated in list-coloring language (`Fin 4`): forbidden/allowed color sets `F(v)`, `L(v)` and the universal-list-uncolorability characterization of chi >= 5
+- `HadwigerNelson/L24TripleCoupling.lean` the L24 triple-coupling lift at the chi >= 6 level. The three-halves graph is realized as a NESTED bridge graph `bridgeGraph H₁ (bridgeGraph H₂ H₃ B₂₃) B₁`; the L21/L22 machinery is reproved generically over an arbitrary color type `α` (the proofs never use the number 4) and specialized to `Fin 5`. Main results: `tripleGraph_not_colorable_five_iff_list` and `tripleGraph_six_chromatic_of_universal_residual_uncolorable`. No `sorry`.
 
-Build result: `1859/1859` modules including all four `HadwigerNelson` modules.
+Build result: `1864/1864` modules. Entire project is `sorry`-free.
 
 ## Planned targets
 
@@ -29,6 +34,9 @@ Build result: `1859/1859` modules including all four `HadwigerNelson` modules.
 | HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | not started |
 | HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | parity argument on numerators after clearing denominators | medium | stub (Controls.lean) |
 | HN-6 | $\chi(L^\infty\text{-UDG on } \mathbb{R}^2) = 4$ | direct construction using a unit-square tiling | medium | stub (Controls.lean) |
+| HN-L21 | Covering lemma: `bridgeGraph` is 4-colorable iff the halves admit bridge-disagreeing colorings (chi >= 5 form) | `Sum.elim` gluing + case split on the three edge classes | medium | **proved** (L21CoveringLemma.lean) |
+| HN-L22 | List-coloring reformulation of L21: chi >= 5 iff `H₂` is universally list-uncolorable from `L_{c₁}` | set-theoretic bookkeeping over `forbiddenColors`/`allowedColors` | medium | **proved** (L22ListColoring.lean) |
+| HN-L24 | Triple-coupling lift: chi >= 6 iff for every 5-coloring of `H₁` the residual `H₂ ∪ H₃ ∪ B₂₃` is list-uncolorable from `L₂, L₃` | nested `bridgeGraph`; L21/L22 reproved generically over the color type, specialized to `Fin 5` | medium | **proved** (L24TripleCoupling.lean) |
 
 ## Bootstrap
 
