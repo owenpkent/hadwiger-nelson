@@ -83,6 +83,9 @@ The experimental thread is organized around the same four-architecture framework
 | e1r de Grey targeted reductions | 1 | done; every reduction (including 75% of original) drops chi to 4. Obstruction is extremely delocalized (LEARNINGS L18) |
 | e1s Polymath 510 vs de Grey 1585 vertex comparison | 1 | done; 315/510 = 62% of Polymath vertices match de Grey under T = (2, 0). Polymath 510 is a translated substructure of de Grey + 195 field-reduction artifacts (LEARNINGS L19) |
 | e1t Polymath/de-Grey overlap chi | 1 | done; 315-vertex overlap is chi = 4; 195-artifact is chi = 4. Polymath 510 has same "two halves + bridges" pattern as de Grey 1585 (LEARNINGS L20) |
+| h5 Polymath-squared chi >= 6 (diagonal) | 1 | done; $P_{510} \cup P_{510} + B$, 1020 vtx, $\|B\| = 2700$, no-$K_4$, triple-solver chi >= 6, NOT UDG-realizable (LEARNINGS L27) |
+| h6 bridge-minimum probe | 1 | done; tightened diagonal $\|B\|$ from 2700 to $\leq 2000$, graded rainbow forcing obstruction (LEARNINGS L28) |
+| h6 mixed-halves chi >= 6 (Direction A) | 1 | done; $P_{510} \cup P_{553} + B$, 1063 vtx, $\|B\| = 2400$, no-$K_4$, dual-solver chi >= 6, NOT UDG-realizable. First NON-diagonal chi-6 no-$K_4$ graph. Mixed halves do NOT beat 1020-vtx / 2000-bridge baseline; only win is field-structure diversity. 510x517 + 510x826 inconclusive (killed mid-SAT) (LEARNINGS L29) |
 | e2a Falconer baseline | 2 | not started |
 | e2b autocorrelation | 2 | not started |
 | e2c Fourier avoidance | 2 | not started |

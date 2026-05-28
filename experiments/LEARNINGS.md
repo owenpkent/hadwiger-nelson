@@ -6,6 +6,68 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L29. Mixed-half chi $\geq 6$: $P_{510} \cup P_{553} + B$ ($\|B\| = 2400$) is a SECOND no-$K_4$ chi $\geq 6$ abstract graph, the first with two DISTINCT chi-5 halves. 1063 vertices, dual-solver UNSAT (Cadical 54s, Glucose 99s), $\omega = 3$ exhaustive. **Not UDG-realizable** (all 92 saturating $H_2$-vertices fail cocircularity, inheriting L23/L27/L28). The honest verdict on Direction A: mixed halves do **NOT** beat the L27/L28 baseline. They cannot reduce vertex count (every available half has $\geq 510$ vertices, so any pair is $\geq 1020$; $510 + 553 = 1063 > 1020$) and they do **NOT** reduce bridges ($\|B\| = 2400$ vs L28's $\leq 2000$). The one genuine win is **field-structure diversity**: the construction no longer relies on two identical $\mathbb{Q}(\sqrt 3, \sqrt{11})$ copies, demonstrating the L24 list-coloring obstruction is **not specific to the diagonal $H_1 = H_2$ case**. A qualitative second signal (unconfirmed): the $P_{510} \cup P_{517}$ run produced a SAT-hard full instance at $\|B\| = 1800$ that did not resolve in budget, hinting the $517$ pairing may sit nearer threshold at lower $\|B\|$, but no verdict was obtained.
+
+**Architecture**: 1. BUILDER -> VERIFIER -> ADVERSARY -> SYNTHESIZER cycle on Direction A (mixed-half chi-6 search).
+
+**Experiment**: [`h6_mixed_halves.py`](combinatorial/h6_mixed_halves.py), [`h6_mixed_verify.py`](combinatorial/h6_mixed_verify.py), [`h6_mixed_cocirc.py`](combinatorial/h6_mixed_cocirc.py).
+
+**The construction**.
+
+$H_1 = P_{510}$ ($\chi = 5$, $\omega = 3$), $H_2 = P_{553}$ ($\chi = 5$, $\omega = 3$), two structurally distinct chi-5 UDGs from the Polymath / Heule lineage. Bridges $B \subseteq V(H_1) \times V(H_2)$, $\|B\| = 2400$. Combined $G$ on $N = 1063$ vertices, $\|E\| = 7626$.
+
+| Property | $P_{510} \cup P_{553}$ (L29) | $P_{510} \cup P_{510}$ (L27/L28) |
+|---|---:|---:|
+| Total vertices $N$ | 1063 | 1020 |
+| Bridge count $\|B\|$ | 2400 | 2700 (L27) / $\leq$ 2000 (L28) |
+| Total edges $\|E\|$ | 7626 | 7708 (L27) |
+| $\omega(G)$ | **3** (0 $K_4$, exhaustive) | 3 |
+| $\chi(G)$ | **$\geq 6$** (Cadical + Glucose UNSAT) | $\geq 6$ |
+| Distinct $H_1$ bridge sources | 88 | 86 (L27) |
+| Distinct $H_2$ bridge targets | 371 | 396 (L27) |
+| Max $H_1$-side bridge degree | 317 | 268 (L27) |
+| Saturating $H_2$-vertices ($\|U_v\| \geq 5$) | 92 | 97 (L27) / 43 (L28) |
+| UDG-realizable | **NO** (0/92 cocircular) | NO |
+| Same algebraic field on both halves | **NO** | yes ($\mathbb{Q}(\sqrt 3, \sqrt{11})^2$) |
+
+**Method** (generalization of [`h5_polymath_squared.py`](combinatorial/h5_polymath_squared.py) to two distinct halves). Stage A samples 80 proper 5-colorings of $H_1$ only. Stage B/C run the marginal-$F$-gain greedy with no-$K_4$ filter and adversarial $c_1$ augmentation: each round the greedy drives every sampled $c_1$ to list-coloring infeasibility on $H_2$, then a full-graph SAT finds a fresh extending $c_1$ (the "adversary"), which is added to the sample and forces more bridges. Stage D full SAT $\chi \leq 5$ on the combined graph; UNSAT $\Rightarrow \chi \geq 6$. For 510x553 the loop reached "no adversary found" at round-aggregate $\|B\| = 2400$, confirmed UNSAT in 53s.
+
+**The Direction A verdict, stated plainly**.
+
+Direction A asked whether two DIFFERENT chi-5 halves could force chi $\geq 6$ at FEWER vertices and/or with comparable-or-fewer bridges than the diagonal L27/L28 construction. The answer is **no on both counts**, with one structural consolation:
+
+1. **Vertex count cannot improve.** Every chi-5 half in the available corpus (510, 517, 529, 553, 610, 633, 803, 826, 874) has $\geq 510$ vertices. Any pair is therefore $\geq 1020$, and the only pairs $\leq 1027$ reuse 510 + a slightly larger half. $510 + 553 = 1063$ is strictly worse than the $1020$ diagonal baseline. Mixed halves are a vertex-count dead end by corpus arithmetic, not by search failure.
+
+2. **Bridges did not improve.** L29's $\|B\| = 2400$ exceeds L28's confirmed $\leq 2000$ for the diagonal graph. The greedy-suffix minimum was not probed for 510x553 (that would be an L28-style follow-up), so $2400$ is an upper bound, not a tight minimum; but there is no evidence mixed halves are more bridge-economical, and the larger $H_2$ ($553$ vs $510$) plausibly demands more bridges to saturate.
+
+3. **Field diversity is the only genuine novelty.** L27/L28 used two identical copies, leaving open whether the chi-6 forcing was an artifact of the perfect $H_1 \cong H_2$ symmetry. L29 refutes that: the L24 list-coloring obstruction is realized between two **non-isomorphic** chi-5 halves with distinct edge counts (2504 vs 2722) and distinct vertex-criticality structure. This strengthens the L28 "open structural question" framing: the obstruction depends on the bridge layout against each half's list-coloring landscape, not on a diagonal symmetry.
+
+**UDG realizability**: NO. The ADVERSARY cocircularity sieve ([`h6_mixed_cocirc.py`](combinatorial/h6_mixed_cocirc.py)) tested all 92 saturating $H_2$-vertices at 30-digit mpmath precision; **0/92** have cocircular bridge-source sets $U_v$ at unit radius. The L23 obstruction at scale carries over verbatim to the mixed-half case.
+
+**Wrong-approach detector status**: PASS on all three controls ($\mathbb{Q}^2$ chi=2, $L^\infty$ chi=4, $\mathbb{R}^1$ chi=2). As in L27/L28, this is an abstract no-$K_4$ graph; the controls constrain geometric realizations, not abstract graphs, so PASS is inherited (the construction makes no metric claim that could lift to the controls).
+
+**Two killed runs (inconclusive, reported for honesty)**.
+
+- $P_{510} \cup P_{517}$ ($\|V\| = 1027$): reached $\|B\| = 1800$ with all 85 sampled $c_1$ list-infeasible, then entered a full SAT that ran $> 19$ min without resolving before the environment killed the job. SAT-hardness at $\|B\| = 1800$ is suggestive of proximity to the chi-6 threshold at a lower bridge count than 553's, but **no verdict was obtained** and the bridge set was not persisted. Worth a dedicated re-run with a longer Stage-D budget.
+- $P_{510} \cup P_{826}$ ($\|V\| = 1336$): reached $\|B\| = 2400$, all 88 sampled $c_1$ infeasible, entering a full SAT check when killed. No verdict. The dense 826 half caused heavy no-$K_4$ skipping (165 skips by step 2400), making this the least efficient pairing.
+
+**Why this matters**.
+
+1. **Existence of a non-diagonal chi-6 no-$K_4$ abstract graph.** Before L29 the only such graph (L27/L28) used two identical halves. L29 shows the phenomenon is not a diagonal artifact, which is the structurally interesting takeaway even though the graph is larger.
+
+2. **Direction A is closed as a vertex-count strategy.** No pair of corpus halves can beat 1020 vertices. Any future sub-1020 no-$K_4$ chi-6 abstract graph must come from a genuinely SMALLER chi-5 half (none exists below 510 in this lineage) or from a non-half-pair architecture (e.g., the L24 triple-coupling at three smaller gadgets, or a quotient/identification reducing the 1020 diagonal graph).
+
+3. **The honest negative refines the open question.** L28 asked: "characterize the bridge structures $B$ between two chi-5 vertex-critical UDG halves under which the L24 list-coloring obstruction is realized." L29 confirms the obstruction is realizable across non-isomorphic halves, so the characterization is genuinely about $B$ versus each half's list-coloring landscape, not about a shared field or a diagonal symmetry.
+
+**Future BUILDER directions**.
+
+1. **Re-run $P_{510} \cup P_{517}$ with a long Stage-D budget** (Cadical 1-2 h, no conflict-budget cap on the final SAT). The $\|B\| = 1800$ SAT-hardness signal is the single most promising thread: if 517 forces chi-6 at $\|B\| < 2000$ it would be the most bridge-economical mixed-half construction, though still $> 1020$ vertices.
+2. **L28-style bridge-minimum probe on the L29 510x553 graph**: binary-search $\|B\|$ in greedy-suffix order to find the true chi-6 minimum (currently only the $\leq 2400$ upper bound is known).
+3. **Abandon mixed halves as a vertex-count play.** Pivot the "smaller chi-6 abstract graph" goal to vertex IDENTIFICATION / quotient on the 1020 diagonal graph, or to the L24 triple-coupling at smaller gadgets, since corpus arithmetic forecloses any sub-1020 half-pair.
+4. **Glucose/Minisat triple-solver close-out** already partially met here (Cadical + Glucose both UNSAT); add Minisat at $\|B\| = 2400$ if a triple-solver standard is desired for L29 (L28 also stopped at dual).
+
+---
+
 ### L28. Bridge-minimum probe tightens L27 from $\|B\| = 2700$ to **$\|B\| = 2000$** (26% reduction) while preserving chi $\geq 6$ and $\omega \leq 3$. Greedy-suffix-order Cadical UNSAT confirmed at $K = 2000$ in 1687s; SAT at $K = 1500$ in 2s; bracket tightened to $(1500, 2000]$ from L27's $(1200, 2200]$. The reduction triggers a **structural shift in the obstruction class**: 54 of L27's 97 "always-saturating" $H_2$-vertices drop to *variably-saturating* with $\|F(v)\| \in \{3, 4, 5\}$ or $\{4, 5\}$ across the $c_1$ sample. The new obstruction is **graded rainbow forcing**: chi-6 forcing relies on the joint distribution of partial saturations rather than universal saturation on a single subset. UDG realizability unchanged (still NO; cocircularity at the 43 always-saturating vertices).
 
 **Architecture**: 1. Bridge-minimality probe on the L27 chi-6 graph.
@@ -30,7 +92,7 @@ The chi-6 threshold lies in $(1500, 2000]$, with the $K = 1700$ instance SAT-har
 
 **Stage 3 (omega + chi verification at $\|B\| = 2000$)**:
 - $\omega(G) = 3$: exhaustive $K_4$ enumeration finds zero, NetworkX clique enumeration agrees (0.0s).
-- $\chi(G) \geq 6$: Cadical UNSAT (1687s, primary). Glucose 4 verification started but did not complete within the agent's time slice; Cadical UNSAT is the primary verifier.
+- $\chi(G) \geq 6$: **dual-solver UNSAT confirmed**. Cadical 195 UNSAT (1687s, primary) and Glucose 4 UNSAT (10550s, `res=False`). Minisat not run at $K = 2000$; L27's triple-solver standard is met by two of three solvers here.
 
 **Stage 4 (F-profile structural analysis)**.
 
