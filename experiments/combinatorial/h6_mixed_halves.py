@@ -62,6 +62,32 @@ EDGE_DIR = REPO_ROOT / "sources" / "cnp-sat" / "edge"
 
 # Set per-run in main() once the pair tag is known.
 _LOG_PATH = None
+# Set per-run in main(): a path where the combined graph is persisted the
+# INSTANT the greedy reaches sample-level-all-infeasible, BEFORE the expensive
+# full-graph SAT. This guarantees the bridge set survives an environment kill
+# during a long Stage-D solve. _cache/ is gitignored (regenerable artifact).
+_CHECKPOINT_PATH = None
+
+
+_PAIR_TAGS = (None, None)  # (h1_tag, h2_tag), set in main()
+
+
+def persist_checkpoint(N1, edges_H1, N2, edges_H2, B, n_colorings, why):
+    if _CHECKPOINT_PATH is None:
+        return
+    try:
+        _CHECKPOINT_PATH.write_text(json.dumps({
+            "h1_tag": _PAIR_TAGS[0], "h2_tag": _PAIR_TAGS[1],
+            "N1": N1, "N2": N2, "N_total": N1 + N2,
+            "edges_H1": edges_H1, "edges_H2": edges_H2,
+            "B": B, "B_size": len(B),
+            "n_colorings_at_checkpoint": n_colorings,
+            "checkpoint_reason": why,
+            "verdict": "UNRESOLVED_sample_all_infeasible"}, default=list))
+        log(f"  [checkpoint] persisted |B|={len(B)} graph to "
+            f"{_CHECKPOINT_PATH.name} ({why})")
+    except Exception as exc:  # never let persistence kill the search
+        log(f"  [checkpoint] WARNING failed to persist: {exc}")
 
 
 def log(msg: str):
@@ -442,6 +468,10 @@ def greedy_bridge_cover(N1, edges_H1, N2, edges_H2, colorings,
             log(f"  step {n_added}: residual infeas={n_inf}, feas={n_feas}, to={n_to}/{S}")
             if n_feas == 0:
                 log(f"  SAMPLE-level all-infeasible at |B|={len(B)}; full SAT check.")
+                # Persist BEFORE the expensive SAT so an environment kill during
+                # a long Stage-D solve never loses this bridge set again.
+                persist_checkpoint(N1, edges_H1, N2, edges_H2, B, S,
+                                   f"greedy_step_{n_added}_all_infeasible")
                 edges_full = (list(edges_H1)
                               + [(N1 + a, N1 + b) for (a, b) in edges_H2]
                               + [(a, N1 + b) for (a, b) in B])
@@ -591,7 +621,7 @@ def full_sat_verification(N1, edges_H1, N2, edges_H2, B, time_limit=1800):
 
 
 def main():
-    global _LOG_PATH
+    global _LOG_PATH, _CHECKPOINT_PATH, _PAIR_TAGS
     ap = argparse.ArgumentParser()
     ap.add_argument("--h1", required=True, help="tag of first half (e.g. 510)")
     ap.add_argument("--h2", required=True, help="tag of second half (e.g. 517)")
@@ -600,6 +630,8 @@ def main():
     ap.add_argument("--time-limit", type=int, default=11000)
     ap.add_argument("--max-bridges", type=int, default=4000)
     ap.add_argument("--adversary-rounds", type=int, default=30)
+    ap.add_argument("--sat-time-limit", type=int, default=600,
+                    help="conf-budget proxy for the in-loop full SAT (seconds*50000 conflicts)")
     args = ap.parse_args()
 
     tag = f"{args.h1}x{args.h2}"
@@ -608,6 +640,8 @@ def main():
     summary_path = CACHE / f"h6mix_{tag}_summary.json"
     search_log = CACHE / f"h6mix_{tag}_search_log.json"
     graph_path = CACHE / f"h6mix_{tag}_graph.json"
+    _CHECKPOINT_PATH = graph_path
+    _PAIR_TAGS = (args.h1, args.h2)
 
     log("=" * 76)
     log(f"h6_mixed_halves: chi>=6 search, H_1={args.h1}, H_2={args.h2}")
@@ -643,7 +677,7 @@ def main():
     best_B, history, verdict_C, colorings_final = greedy_with_adversarial_aug(
         N1, edges_H1, N2, edges_H2, colorings, u_color_table, u_entropy,
         max_bridges=args.max_bridges, no_k4=True, time_limit=args.time_limit,
-        sat_check_every=300, sat_time_limit=600, candidate_pool_size=120,
+        sat_check_every=300, sat_time_limit=args.sat_time_limit, candidate_pool_size=120,
         max_adversary_rounds=args.adversary_rounds)
     colorings = colorings_final
     log(f"Stage C verdict: {verdict_C}, final |B|={len(best_B)}, "
