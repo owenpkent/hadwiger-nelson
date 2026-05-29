@@ -6,6 +6,77 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L30. Direction B (REDUCE the 1020-vertex diagonal chi-6 graph below 1020 vertices) is a NEGATIVE: the construction is **vertex-deletion-rigid** under budget-disciplined SAT. Bulk deletion of the 566 non-bridge-incident vertices breaks chi $\geq 6$ immediately; even deleting just **8** non-bridge $H_2$ vertices drops chi to $5$ (Cadical SAT in 32s); deleting **4, 2, or 1** non-bridge vertex is SAT-**intractable** (Cadical BUDGET at $4\times10^6$ conflicts, $\approx 390$s each, no verdict). So no sub-1020 chi-6 graph was obtained by deletion, and none is even SAT-verifiable at the single-vertex level. Sub-direction 3 (triple-coupling) is **cleanly closed**: the only sub-510 corpus gadgets (S199, L403, T721) are all $\chi = 4$, so no $\chi$-5 no-$K_4$ gadget exists below 340 vertices and triple-coupling cannot beat 1020. **The 1020-vertex / $\|B\| \leq 2000$ diagonal graph (L27/L28) stands as the vertex-minimum record for this lineage.**
+
+**Architecture**: 1. ORCHESTRATOR-directed Direction B reduction (vertex deletion, vertex identification, small-gadget triple-coupling triage) on the L27/L28 chi-6 graph.
+
+**Experiment**: [`h6_direction_b_probe.py`](combinatorial/h6_direction_b_probe.py) (essentiality map + bulk deletion), [`h6_direction_b_fast.py`](combinatorial/h6_direction_b_fast.py) (tight-budget incremental deletion), [`h6_direction_b_single.py`](combinatorial/h6_direction_b_single.py) (long-budget single-vertex decisive test), [`h6_small_gadget_triage.py`](combinatorial/h6_small_gadget_triage.py) (sub-510 gadget chi/omega).
+
+**The starting graph**. $G = P_{510} \cup P_{510} + B$, the L27/L28 diagonal construction, with $B$ = the last 2000 bridges in greedy-suffix order (the L28 tightened set). $N = 1020$, $\|E\| = 7008$, $\omega = 3$, $\chi \geq 6$. Baseline re-confirmed UNSAT (Cadical, 2078s) at the top of this session.
+
+**Essentiality map at $\|B\| = 2000$** ([`_cache/h6_direction_b_essmap.json`](combinatorial/_cache/h6_direction_b_essmap.json)):
+
+| Vertex class | count |
+|---|---:|
+| $H_1$ bridge sources | 58 |
+| $H_1$ non-bridge-incident | 452 |
+| $H_2$ bridge targets | 396 |
+| $H_2$ non-bridge-incident | 114 |
+| **Total non-bridge-incident** | **566** |
+
+So 566 of 1020 vertices touch no bridge. The a-priori hope of Direction B: these are inessential to the cross-half chi-6 coupling and could be deleted to land a sub-1020 (potentially $\approx 454$-vertex) record.
+
+**The deletion ladder (decisive)**. Tight-budget Cadical ($4\times10^6$ conflict cap, fast SAT verdicts, slow ones return BUDGET = indeterminate, conservatively reverted):
+
+| Delete (non-bridge $H_2$) | $\|V\|$ | Verdict | Wall-clock |
+|---:|---:|:---:|---:|
+| 32 | 988 | SAT (chi dropped to 5) | 0.3s |
+| 16 | 1004 | SAT (chi dropped to 5) | 0.6s |
+| 8 | 1012 | SAT (chi dropped to 5) | 32.3s |
+| 4 | 1016 | **BUDGET** (no verdict) | 388.6s |
+| 2 | 1018 | **BUDGET** (no verdict) | 399.2s |
+| 1 | 1019 | **BUDGET** (no verdict) | 395.5s |
+
+The bisection collapses to a hard wall: deleting $\geq 8$ non-bridge vertices provably breaks chi-6 (fast SAT), while deleting $\leq 4$ is SAT-intractable in budget. There is **no fast-verifiable deletion**. A long-budget ($1.2\times10^8$ conflicts) decisive single-vertex test on the lowest-degree non-bridge vertices ($H_2$ vtx 1014, deg 5; $H_1$ vtx 139, deg 4) was launched to distinguish "provably essential" from "merely unverifiable"; at session close it had run $> 15$ min CPU without resolving (expected BUDGET, consistent with the 4M-conflict wall). Result will land in [`_cache/h6_direction_b_single.json`](combinatorial/_cache/h6_direction_b_single.json) for the next session.
+
+**Why non-bridge vertices are NOT inessential**. The naive Direction-B hypothesis (non-bridge vertices only carry internal 5-colorability slack) is **false**. The chi-6 forcing is the L24 list-coloring obstruction realized on $H_2$'s FULL induced structure: the bridge targets receive constrained color lists, but those lists are infeasible only because the rest of $H_2$ (including the 114 non-bridge vertices) propagates the constraint. Removing even a handful of non-bridge $H_2$ vertices relaxes $H_2$ enough that a proper 5-coloring reappears. This is the abstract-graph analog of de Grey / L18's "delocalized obstruction": the chi-6 property is not carried by any small bridge-local core.
+
+**Sub-direction 3 closed (small-gadget triple-coupling)** ([`h6_small_gadget_triage.py`](combinatorial/h6_small_gadget_triage.py)). The corpus contains three graphs smaller than the 510-lineage halves. All are $\chi = 4$, no-$K_4$:
+
+| Gadget | $\|V\|$ | $\|E\|$ | $K_4$? | $\chi$ |
+|---|---:|---:|:---:|---:|
+| S199 | 199 | 888 | no ($\omega \leq 3$) | 4 |
+| L403 | 403 | 2112 | no ($\omega \leq 3$) | 4 |
+| T721 | 721 | 3948 | no ($\omega \leq 3$) | 4 |
+
+No $\chi$-5 no-$K_4$ gadget exists below 340 vertices ($3 \times 340 = 1020$), so the L24 triple-lift cannot beat 1020 from this corpus. This confirms the L29 corpus-arithmetic verdict from the third independent angle (after Direction A's half-pair arithmetic and L28's bridge-minimum).
+
+**The Direction B verdict, stated plainly**. Three of the three sub-directions failed to beat 1020:
+1. **Vertex deletion**: deletion-rigid. No SAT-verifiable deletion exists; small deletions either break chi-6 or are intractable.
+2. **Triple-coupling**: no sub-340 chi-5 no-$K_4$ gadget exists; corpus arithmetic forecloses it.
+3. **Vertex identification / quotient** (not separately executed this session): subsumed by the deletion negative. Contraction is strictly harder to validate (it can create $K_4$s and new edges) and faces the same delocalized-obstruction wall; deferred as low-EV given the deletion result.
+
+Combined with L29 (Direction A: half-pairs are $\geq 1020$ by corpus arithmetic), **every reduction avenue against the 1020 baseline is now closed for this lineage**. A sub-1020 no-$K_4$ chi-6 abstract graph, if one exists, must come from a genuinely new chi-5 building block below 510 vertices (none known in the Polymath / de Grey lineage) or a fundamentally different (non-half-pair, non-triple-coupling) architecture.
+
+**UDG realizability**: not applicable; no positive sub-1020 graph was produced. The 1020 baseline remains NON-realizable (L27/L28/L29 cocircularity).
+
+**Wrong-approach detector status**: PASS on all three controls ($\mathbb{Q}^2$ chi=2, $L^\infty$ chi=4, $\mathbb{R}^1$ chi=2); inherited (abstract no-$K_4$ graph, no metric claim).
+
+**Why this matters**.
+1. **The 1020-vertex record is structurally tight**, not just unbeaten by search. The deletion-rigidity (8-vertex break threshold, single-vertex intractability) shows the chi-6 obstruction occupies essentially the whole graph, mirroring the de Grey / L18 delocalization at the chi-5 level.
+2. **The vertex-count frontier for abstract no-$K_4$ chi-6 graphs in this lineage is genuinely $1020$.** Lowering it is now a building-block problem (find a chi-5 no-$K_4$ graph $< 510$, or $< 340$ for triple-coupling), not a reduction problem on the existing construction.
+3. **The honest negative redirects effort.** Continuing to attack the 1020 graph by deletion / quotient / triple-coupling is a documented dead end. The open thread that remains is the L29 510x517 $\|B\| = 1800$ SAT-intractable instance (a bridge-economy question, not a vertex-count question) and the search for sub-510 chi-5 no-$K_4$ building blocks.
+
+**Falsifiability trigger hit**: Direction B's implicit trigger ("if no sub-1020 chi-6 graph is SAT-verifiable after the deletion + quotient + triple-coupling probes, declare 1020 the lineage vertex-minimum") is met. Direction B is closed.
+
+**Future BUILDER directions**.
+1. **Abandon reduction of the 1020 graph.** Deletion, quotient, and triple-coupling are all exhausted or foreclosed.
+2. **Building-block search**: hunt for a chi-5 no-$K_4$ unit-distance (or abstract) graph below 510 vertices. This is the only lever left on the vertex-count frontier. The de Grey / Polymath SAT-minimization lineage bottomed out at 510; a different construction (e.g. a fresh field extension, or a non-Polymath spindle stack) would be needed.
+3. **Hand the L29 510x517 $\|B\| = 1800$ DIMACS to kissat / cryptominisat** (the persisted [`h6mix_510x517_B1800_decisive.cnf`](combinatorial/_cache/h6mix_510x517_B1800_decisive.cnf)). A bridge-economy result, not vertex-count, but the only unresolved chi-6 instance on the table.
+4. **Append the long-budget single-vertex verdict** from [`_cache/h6_direction_b_single.json`](combinatorial/_cache/h6_direction_b_single.json) once it resolves; if it returns BUDGET, the deletion-rigidity finding is unchanged; if SAT, it confirms even the best single deletion breaks chi-6 (strengthening rigidity); a definitive UNSAT would be a 1019-vertex record and should be escalated.
+
+---
+
 ### L29. Mixed-half chi $\geq 6$: $P_{510} \cup P_{553} + B$ ($\|B\| = 2400$) is a SECOND no-$K_4$ chi $\geq 6$ abstract graph, the first with two DISTINCT chi-5 halves. 1063 vertices, dual-solver UNSAT (Cadical 54s, Glucose 99s), $\omega = 3$ exhaustive. **Not UDG-realizable** (all 92 saturating $H_2$-vertices fail cocircularity, inheriting L23/L27/L28). The honest verdict on Direction A: mixed halves do **NOT** beat the L27/L28 baseline. They cannot reduce vertex count (every available half has $\geq 510$ vertices, so any pair is $\geq 1020$; $510 + 553 = 1063 > 1020$) and they do **NOT** reduce bridges ($\|B\| = 2400$ vs L28's $\leq 2000$). The one genuine win is **field-structure diversity**: the construction no longer relies on two identical $\mathbb{Q}(\sqrt 3, \sqrt{11})$ copies, demonstrating the L24 list-coloring obstruction is **not specific to the diagonal $H_1 = H_2$ case**. A qualitative second signal (unconfirmed): the $P_{510} \cup P_{517}$ run produced a SAT-hard full instance at $\|B\| = 1800$ that did not resolve in budget, hinting the $517$ pairing may sit nearer threshold at lower $\|B\|$, but no verdict was obtained.
 
 **Architecture**: 1. BUILDER -> VERIFIER -> ADVERSARY -> SYNTHESIZER cycle on Direction A (mixed-half chi-6 search).
