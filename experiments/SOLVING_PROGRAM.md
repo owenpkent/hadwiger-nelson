@@ -84,7 +84,7 @@ L14 (refined): The L11-identified "actual research problem" is now executed. The
 
 **Novelty**: low (already published). Useful as calibration before Shot 1.
 
-**Status**: not started; deferred unless Shot 1 hits unexpected obstacles.
+**Status**: COMPLETED 2026-05-29 (e3i, LEARNINGS L35). SUCCESS. Obtained the full paper source (arXiv:2207.14179v3), extracted the exact 23-point configuration $X_{23}$ ($\mathbb{Q}(\sqrt 3, \sqrt{11})$; 47 unit-distance edges, 27 distinct distances, all exact-verified by sympy), and independently re-derived the published DUAL certificate: $\varphi(t) = w_0 J_0(t) + \sum w_1(i) + \sum w_2(i,j) J_0(t\|x_i-x_j\|)$ has global min 0.99995003 at $t = 3.7749$ (paper 3.77488, all digits), giving the rigorous bound $(w_T + \nu)/(1-\mu) = 0.246997 < 0.2470 < 1/4$. Integer $\chi_m(\mathbb{R}^2) \geq 5$ achieved via the strict-$1/4$ covering argument ($4 \times 0.246997 = 0.98799 < 1$). The repo's PRIMAL IE-LP (IE1+IE2, no IEC congruence) on the same $X_{23}$ gives 0.2584 = KMOR 2015 frontier; the gap to 0.247 is exactly the 5868 (IEC) congruence constraints, identified and bounded as the next step. Wrong-approach detector PASS (1D gives $m_1(\mathbb{R}) = 0.5$, no overshoot). De-risks Shot 5'.
 
 ### Shot 4: Lean formalization of de Grey 2018 (χ ≥ 5 fully kernel-verified)
 
