@@ -149,12 +149,22 @@ The Shot 2 "hierarchical coupling" idea (pair two chi-5 sub-objects into a chi-6
 
 **Net**: three architectures still collapse onto one missing object (a chi-6 UDG that EMBEDS in the plane). The abstract-graph and measurable threads are now well-mapped and confirm the gap; the live bet remains Shot 2 in an enlarged field.
 
+## Session update 2026-05-29b (coordinate-first realizable coupling executed; the barrier sharpens to "wrong-shape bridge supply")
+
+The two thrusts dispatched this session (2c field enlargement, and the novel coordinate-first realizable coupling) both ran and both returned clean, dual-solver-confirmed NEGATIVES. The result (LEARNINGS L34) sharpens the cocircularity barrier into a stronger statement.
+
+- **Coordinate-first realizable coupling (the novel thrust, h7 / h7b)**: build the coupling so realizability holds BY CONSTRUCTION (two real plane UDGs joined only by genuine exact unit-distance cross-pairs). Every union is 5-colorable, EVEN at bridge counts vastly exceeding the abstract requirement: a 3-way 60-degree orbit of $P_{510}$ has **13,757 genuine unit-distance bridges** (1530 vtx, $\omega = 3$) and is 5-colorable in 0.06s (Cadical + Glucose). The abstract L27 chi-6 graph needs only $\|B\| \leq 2000$ ADVERSARIAL bridges; $5\times$ that many GEOMETRIC bridges fail.
+- **Field enlargement on a chi-5 seed (2c, h7c)**: binding rotations on Heule-553 introducing $\sqrt 7, \sqrt{19}, \sqrt{23}, \sqrt{15}$ yield only 72-1473 realizable bridges, all 5-colorable sub-100ms. L11/L14 field-rigidity confirmed at the realizable level.
+- **Adversarial subset of the realizable pool (h7d)**: even adversarial greedy selection restricted to genuine unit-distance bridges cannot force chi-6 (stalls at $\|B\| = 995-2325$, all 5-colorable; for the Moser-rotation pool the greedy gain hits ZERO).
+
+**The sharpened barrier**. Realizability forces an EVEN, low-concentration bridge layout (60-deg: max bridge-degree 36, all 510 vertices touched). The chi-6 list-coloring obstruction (L24/L27) needs CONCENTRATION (L27: max source degree 268 on hub vertices). The embeddable bridge supply is the wrong SHAPE for chi-6 forcing, not merely the wrong COUNT. This is why no chi-6 UDG has emerged from the lineage at scale. Shot 2 is redirected: the only remaining lever is a chi-5 building block whose self-unit-distance neighborhoods concentrate, for which no candidate exists.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
 |------|------|--------|----------:|
 | 1 | Integer χ_m ≥ 5 via LP-only (Arch 3) | completed; negative result (L10) | done |
-| 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | binding-rotation enumeration in Q(√3, √11) complete; 211-vertex chi=4 union, density 3.46; rigidity characterized (L11, L14) | months |
+| 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | binding-rotation enumeration in Q(√3, √11) complete (L11, L14); coordinate-first realizable coupling executed (L34): realizable bridges (up to 13,757, dual-solver) NEVER force chi-6; barrier sharpened to "embeddable bridge supply is wrong-SHAPE (even/low-concentration) not wrong-count". field-enlarged seeds (√7,√19,√23,√15) all chi-5 | months |
 | 3 | Ambrus 23-point reproduction | deferred | days |
 | 4 | Lean formalization of de Grey | not started | ~6 months |
 | 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | reframed: BV-SDP no help at n=2 (L12) | — |

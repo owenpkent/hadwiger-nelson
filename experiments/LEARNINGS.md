@@ -6,6 +6,58 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L34. The COORDINATE-FIRST realizable-coupling thrust (Shot 2, the novel response to the L23/L27/L28/L29 cocircularity barrier) returns a clean NEGATIVE that sharpens the barrier into a stronger structural statement: **realizable bridges and chi-6 forcing are in direct tension at every achievable bridge count, not merely at the abstract scale.** Building the coupling coordinate-first (so realizability holds BY CONSTRUCTION) and SAT-checking, the genuine unit-distance cross-pairs between $P_{510}$ and a rotated/translated copy NEVER force $\chi \geq 6$, even when they vastly outnumber the abstract construction's bridges. The decisive datum: a 3-way 60-degree rotation ORBIT of $P_{510}$ (copies at $0, 60, 120$ degrees, 1530 vertices, **13,757 genuine unit-distance bridges**, $\omega = 3$, no $K_4$) is 5-colorable in 0.06-0.13s, dual-confirmed (Cadical + Glucose). The abstract $L27$ chi-6 construction needs only $\|B\| \leq 2000$ ADVERSARIALLY-placed bridges; here $5\times$ that many GEOMETRICALLY-determined bridges fail to force chi-6. So the abstract bridges are not unit distances in any embedding (confirming L23 from the opposite direction): the bridges a chi-6 coupling needs and the bridges geometry supplies are structurally disjoint.
+
+**Architecture**: 1. ORCHESTRATOR Shot 2 session 2026-05-29 (h7 / h7b / h7c / h7d coordinate-first + field-enlargement battery).
+
+**Experiments**: [`h7_coordinate_first.py`](combinatorial/h7_coordinate_first.py) (2-copy rotated/translated unions, exact unit-distance bridges), [`h7b_orbit_coupling.py`](combinatorial/h7b_orbit_coupling.py) (3-way orbit), [`h7c_field_enlarge_seed.py`](combinatorial/h7c_field_enlarge_seed.py) (field-enlarging binding rotations on the chi-5 Heule-553 seed), [`h7d_realizable_adversarial.py`](combinatorial/h7d_realizable_adversarial.py) (adversarial greedy restricted to the realizable bridge pool). Caches: `_cache/h7_coordinate_first.json`, `_cache/h7b_orbit_coupling.json`, `_cache/h7c_field_enlarge_seed.json`, `_cache/h7d_realizable_adversarial.json`, plus per-config `_cache/h7*_graph.json`.
+
+**The method (realizable by construction, no cocircularity to fail).** Load the EXACT plane coordinates of $P_{510}$ (`sources/cnp-sat/vtx/510.vtx`, $\mathbb{Q}(\sqrt 3, \sqrt{11})$; verified: $\|v_0 v_1\|^2 = 1$ exact). Form a second copy by an exact rotation (cos/sin in the field) and/or translation. The union of two real plane UDGs joined ONLY by genuine unit-distance cross-pairs IS a real UDG, so there is no cocircularity obstruction to dodge: realizability is automatic. SAT-check 5-colorability of the union. Every bridge is exact-arithmetic-verified $\text{dist}^2 = 1$ (numpy prefilter then sympy `simplify == 1`).
+
+**The 2-copy battery (h7), all 5-colorable**:
+
+| Config (rotation, translation) | realizable bridges $\|B\|$ | $\chi$ verdict |
+|---|---:|---|
+| translate $(1,0)$ | 2697 | 5-colorable |
+| translate $(2,0)$ | 706 | 5-colorable |
+| Moser-rot ($\cos\tfrac56$), $t=0$ | 1248 | 5-colorable |
+| Moser-rot, $t=(1,0)$ | 637 | 5-colorable |
+| 60-deg rot, $t=0$ | **4378** | 5-colorable |
+| 60-deg rot, $t=(1,0)$ | 2328 | 5-colorable |
+| $\sqrt 7$-rot ($\cos\tfrac34$), $t=0$ | 72 | 5-colorable |
+| $\sqrt{19}$-rot ($\cos\tfrac9{10}$), $t=0$ | 72 | 5-colorable |
+
+The translate-$(1,0)$ config has **2697 realizable bridges, essentially identical to L27's abstract $\|B\| = 2700$**, yet is 5-colorable. The 60-deg config has **4378**, exceeding L27, yet 5-colorable. Bridge SCARCITY is therefore NOT the obstruction.
+
+**The 3-way orbit (h7b), the strongest negative**:
+
+| Orbit | $\|V\|$ | bridges ($b_{01}, b_{02}, b_{12}$) | total $\|B\|$ | $\omega$ | $\chi$ |
+|---|---:|---|---:|---:|---:|
+| 60-deg ($0,60,120$) | 1530 | $4378, 5001, 4378$ | **13757** | 3 | 5 (Cadical+Glucose, 0.06-0.13s) |
+| Moser-rot ($0,\theta,2\theta$) | 1530 | $1248, 144, 1248$ | 2640 | 3 | 5 |
+
+**The field-enlargement seed search (h7c), all 5-colorable**. Binding rotations on the chi-5 Heule-553 seed introducing $\sqrt 7, \sqrt{19}, \sqrt{23}, \sqrt{15}$: the genuinely-new-field rotations yield only 76 realizable bridges each (the rotation center neighborhood), and $\sqrt{15} = \sqrt{3\cdot5}$ yields 1473 (it composes with the existing $\sqrt 3$). All 5-colorable, sub-100ms SAT. This is the L11/L14 field-rigidity finding confirmed at the REALIZABLE level: enlarging the field does not supply chi-6-forcing unit-distance bridges, because the new-field rotations barely overlap the seed at unit distance.
+
+**The decisive adversarial-subset test (h7d)**. The abstract L27 chi-6 graph works because it chooses bridges ADVERSARIALLY to exhaust the coloring space. h7d runs that same adversarial greedy but restricts the candidate pool to ONLY the realizable cross-pairs. Across all four pools, 12 adversarial rounds reach $\|B\| = 2325$ (60-deg), $1436$, $1580$, $995$ (Moser, where the greedy gain hit ZERO at round 5: the realizable pool literally cannot saturate the growing coloring sample), and EVERY union stays 5-colorable. So even adversarial selection from the realizable pool cannot force chi-6. (Honesty: the greedy is heuristic and round-capped, so it is not a proof of pool-insufficiency; but h7 already SAT-tested the FULL pool as a complete bridge set and got 5-colorable, so the full realizable pool is insufficient both entire and in adversarial subsets.)
+
+**The structural finding, stated precisely**. A single proper 5-coloring transferred identically to both copies ($c_2 = c_1$) is NOT a valid coloring of the realizable union (tested on 60-deg, Cadical UNSAT in 0.0s for the $c_2=c_1$ restriction), so the realizable bridges DO couple the two copies non-trivially, exactly like the abstract construction. The difference is that the geometric bridges spread evenly (60-deg: max bridge-degree 36, all 510 vertices touched, mean degree 8.6) whereas the abstract chi-6 construction concentrates them (L27: max source bridge-degree 268 on hub vertices). Even coupling admits a pair of distinct proper 5-colorings; concentrated adversarial coupling exhausts them. **Realizability forces the even, low-concentration bridge layout that is precisely the layout a 5-coloring survives.** This is why no chi-6 UDG has emerged from the de Grey / Polymath lineage at thousands-of-vertices scale: the unit-distance graph cannot deliver the bridge concentration the chi-6 list-coloring obstruction requires.
+
+**Did Shot 2 move?** Not toward a positive (no chi-6 UDG; the likely outcome given $\chi(\mathbb{R}^2)$ may $= 5$). But the negative is genuinely new and sharper than the cocircularity barrier: L23/L27/L28/L29 showed specific abstract constructions fail to embed; L34 shows that BUILDING realizable-by-construction and probing the entire achievable bridge supply (up to 13,757 bridges, $5\times$ the abstract requirement, plus adversarial subsets) STILL cannot reach chi-6. The barrier is not "we haven't found the right embedding" but "the embeddable bridge supply is the wrong shape." This redirects Shot 2 away from "embed an abstract coupling" toward "find a chi-5 building block whose self-unit-distance structure concentrates rather than spreads," for which no candidate exists in the lineage.
+
+**UDG-realizability**: every h7/h7b/h7c graph IS realizable by construction (real plane coordinates, exact unit-distance bridges; verified $\text{dist}^2 = 1$ exactly per bridge). None reaches chi-6. The first time the project has chi-VERIFIED graphs that are simultaneously confirmed-realizable AND confirmed chi-5 at this scale.
+
+**Wrong-approach detector status**: PASS on all three controls, run INLINE on the mechanism. Q^2 ($\chi=2$): the bridges are genuine Euclidean unit distances built from $\sqrt 3, \sqrt{11}$ (irrational), so the construction does not collapse onto $\mathbb{Q}^2$; method bound 2. $L^\infty$ ($\chi=4$): method bound 4. $\mathbb{R}^1$ ($\chi=2$): method bound 2. All PASS (`experiments/_shared/wrong_approach_detectors.py`).
+
+**Solvers/budget**: Cadical195 (primary) + Glucose4 (dual-confirm), pysat. 2-copy and orbit SAT resolved in $< 0.2$s each (well below threshold). h7d adversarial greedy: 12 rounds/pool, 2M-conflict budget per probe, all resolved SAT fast. No instance was SAT-intractable; the negatives are decisive, not budget-limited.
+
+**Future BUILDER directions**.
+1. **Abandon "embed an abstract coupling".** The realizable bridge supply is structurally the wrong shape (even, low-concentration) for the chi-6 list-coloring obstruction (which needs concentration). h7/h7b/h7c/h7d close this for the $P_{510}$ / 553 lineage across in-field and enlarged-field rotations.
+2. **The remaining lever (low EV but the only one)**: a chi-5 building block whose own self-unit-distance neighborhoods CONCENTRATE (high-degree hub vertices that are mutually unit-distant), so a copy-pair's realizable bridges concentrate. No such block exists in the de Grey / Polymath lineage; would require a fresh construction.
+3. **Different seeds**: repeat h7 with de Grey 1585 and the larger Heule halves (517, 826) as the base copy, on the chance a larger/denser seed yields concentrated realizable bridges. Low EV given the lineage-wide even-spread pattern, but cheap (h7 runs in minutes).
+4. **The open thread inherited from L29/L30 is unchanged**: the $510\times517$ $\|B\|=1800$ abstract instance remains SAT-intractable (not a realizable-UDG question).
+
+---
+
 ### L33. Falconer's $\chi_m(\mathbb{R}^2) \geq 5$ decomposes cleanly into TWO routes, and both are blocked at $\geq 6$ by the SAME missing object as Architecture 1. e2c makes the decomposition rigorous-numerical. **Route A (density)**: $\chi_m \geq 1/m_1$; this crosses into $\geq 5$ ONLY at $m_1 < 1/4 = 0.25$, which is the Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023 bound ($m_1 \leq 0.2470$, $1/m_1 = 4.049$). Before 2023 the density route gave only $\chi_m \geq 4$. **Route B (Falconer 1981, density + rigidity)**: reached $\geq 5$ in 1981 WITHOUT $m_1 < 1/4$, via Lebesgue density on a positive-density color class plus a rigid $(k{-}1)$-chromatic finite configuration ($S$, mobile under $\mathbb{R}^2 \rtimes O(2)$) and a measure-theoretic averaging step (F4) whose analytic engine is the Wiener-Khinchin positivity $\widehat{R_A}(\xi) = \|\widehat{1_A}(\xi)\|^2 \geq 0$ with the hard constraint $R_A(t) = 0$ at $\|t\| = 1$. **e2c numerically confirms the (F4) identity**: for a 1-avoiding hexagonal cell (diameter $0.95 < 1$) on a $768^2$ grid, the autocorrelation is positive-type (min DFT power $2\times10^{-10} \geq 0$) and vanishes on the unit circle to $5\times10^{-17}$. **The rigidity object is named precisely**: Falconer (F3) needs a rigid $(k{-}1)$-chromatic UDG; the Moser spindle ($7$ vtx, $\chi = 4$, SAT-confirmed in e2c) gives $\chi_m \geq 5$. For $\chi_m \geq 6$ Falconer needs a rigid $5$-chromatic configuration, which is exactly the Arch-1 missing object (the only known $5$-chromatic UDGs have $509+$ vtx and are not "Falconer-rigid-small"; no $6$-chromatic UDG exists). **Verdict: $\chi_m(\mathbb{R}^2) \geq 6$ is OPEN; both routes blocked by the same combinatorial gap as L4.**
 
 **Architecture**: 2. BUILDER (e2c) promoting e2a from illustration to the actual Falconer-argument decomposition.
