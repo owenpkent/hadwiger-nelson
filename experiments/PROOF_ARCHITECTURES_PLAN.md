@@ -23,9 +23,9 @@ The experimental thread is organized around the same four-architecture framework
 **Aim**: prove $\chi_m(\mathbb{R}^2) \geq 6$ or push the spectral / Fourier bounds.
 
 **Experiments**:
-- `e2a_falconer_baseline.py` — reproduce Falconer's $\chi_m \geq 5$.
-- `e2b_autocorrelation.py` — compute autocorrelation upper bounds.
-- `e2c_fourier_avoidance.py` — Fourier-analytic bounds on distance-1-avoiding sets.
+- `e2a_falconer_autocorrelation.py` — autocorrelation of a 1-avoiding hexagonal cell; the Plancherel seed (illustration).
+- `e2b_spectral_sdp.py` — OFV 2-point radial-Fourier ($J_0$/Hankel) LP + DMOV-style 3-point matrix SDP for $m_1(\mathbb{R}^2)$; cross-validated against Arch-3 e3c.
+- `e2c_falconer_rigorous.py` — Falconer's $\chi_m \geq 5$ decomposed: Wiener-Khinchin witness + exact density-route arithmetic + the rigid 4-chromatic configuration (Moser spindle).
 
 **Wrong-approach gate**: experiments must reference the $O(2)$ rotation group; reductions to $\mathbb{R}^1$ should hit a trivial bound, not the actual $\chi_m \geq 5$ value.
 
@@ -87,10 +87,11 @@ The experimental thread is organized around the same four-architecture framework
 | h6 bridge-minimum probe | 1 | done; tightened diagonal $\|B\|$ from 2700 to $\leq 2000$, graded rainbow forcing obstruction (LEARNINGS L28) |
 | h6 mixed-halves chi >= 6 (Direction A) | 1 | done; $P_{510} \cup P_{553} + B$, 1063 vtx, $\|B\| = 2400$, no-$K_4$, dual-solver chi >= 6, NOT UDG-realizable. First NON-diagonal chi-6 no-$K_4$ graph. Mixed halves do NOT beat 1020-vtx / 2000-bridge baseline; only win is field-structure diversity. 510x826 inconclusive (killed mid-SAT) (LEARNINGS L29) |
 | h6 mixed-halves 510x517 re-run (Direction A loose thread) | 1 | done; bridge set rebuilt + PERSISTED at $\|B\| = 1800$ (1027 vtx, 6883 edges, $\omega = 3$ exhaustive), then uncapped Cadical ran ~66.5 min without resolving => SAT-intractable in budget. Not a chi-6 confirmation, not a refutation. DIMACS persisted (`h6mix_510x517_B1800_decisive.cnf`) for future kissat/cryptominisat handoff. New tooling: checkpoint-persist in `h6_mixed_halves.py` + decoupled `h6_mixed_decisive_sat.py`. L29 unchanged, no L30 (LEARNINGS L29 addendum) |
-| h6 Direction B reduce below 1020 (deletion / quotient / triple-coupling) | 1 | done; NEGATIVE. 1020-vtx diagonal graph is deletion-rigid: deleting >= 8 non-bridge H2 vtx breaks chi-6 (Cadical SAT 32s), deleting <= 4 is SAT-intractable (BUDGET ~390s). 566 non-bridge vtx are NOT inessential (delocalized obstruction). Triple-coupling closed: S199/L403/T721 all chi=4, no sub-340 chi-5 no-K_4 gadget. 1020-vtx / $\|B\| \leq 2000$ stands as lineage vertex-minimum. Long-budget single-vtx test in-flight (LEARNINGS L30) |
-| e2a Falconer baseline | 2 | not started |
-| e2b autocorrelation | 2 | not started |
-| e2c Fourier avoidance | 2 | not started |
+| h6 Direction B reduce below 1020 (deletion / quotient / triple-coupling) | 1 | done; PARTIAL. New record: a **1019-vtx** no-K_4 chi >= 6 graph (delete H2 vtx 1014; UNSAT confirmed twice, 1973s + independent 1892s). NOT single-vertex-rigid, but bulk-deletion-rigid: deleting >= 8 non-bridge H2 vtx breaks chi-6 (Cadical SAT 32s), deleting 2/4 is SAT-intractable (BUDGET ~390s). 566 non-bridge vtx are NOT inessential (delocalized obstruction tolerating one peripheral loss). Triple-coupling closed: S199/L403/T721 all chi=4, no sub-340 chi-5 no-K_4 gadget. True vertex-minimum OPEN: <= 1019, with 1018/1016 SAT-intractable to decide (LEARNINGS L30) |
+| e2a Falconer autocorrelation (illustration) | 2 | done; FFT autocorrelation of a 1-avoiding hexagonal cell vanishes on the unit circle (pedagogical seed) |
+| e2b spectral SDP/LP for $m_1(\mathbb{R}^2)$ | 2 | done; 2-point bound reproduced EXACTLY ($m_1 \leq 0.287119$ basic, $0.268412$ 3-triangle; cross-validation gate PASS vs e3c/OFV 2010 to $<5\mathrm{e}{-7}$); $\mathbb{R}^1$ detector PASS ($0.5$); 3-point matrix (SDP) lift gives NO improvement on the unit-triangle family ($0.26840$); tightening lives in IE-atom LP (Arch 3) / full DMOV $O(2)$-isotypic SDP (beyond SCS backend) (LEARNINGS L32) |
+| e2c Falconer $\chi_m \geq 5$ rigorous-numerical | 2 | done; Plancherel/Wiener-Khinchin witness (positive-type, $R_A(1)=0$ to $5\mathrm{e}{-17}$); density route crosses to $\geq 5$ only at Ambrus 2023 $m_1 < 1/4$; rigidity route needs a $5$-chromatic rigid config $=$ Arch-1 missing object; $\chi_m \geq 6$ OPEN (LEARNINGS L33) |
+| Arch-2 survey: measurable / spectral frontier | 2 | done; consolidated $\chi_m \geq 5$ unimproved 45 yrs, $\geq 6$ OPEN, "$\geq 6$" results are hyperbolic/convex-tile misattributions; $k$-point hierarchy mapped; companion atlas `arch2_measurable.md` written (LEARNINGS L31) |
 | e3a fractional small | 3 | not started (subsumed by e3a Lovász theta below) |
 | e3a Lovász $\vartheta$ on Polymath16 510 | 3 | done; $\vartheta = 170.24$, loose chi >= 3 (LEARNINGS L5) |
 | e3b OFV Bessel-LP for $m_1(\mathbb{R}^2)$ | 3 | done; $m_1 \leq 0.287$ giving $\chi_m \geq 4$ in 30 ms via cvxpy + HiGHS (LEARNINGS L6) |

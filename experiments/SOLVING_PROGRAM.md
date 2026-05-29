@@ -136,6 +136,19 @@ Shot 2 (sub-goals revised):
 - 2b: Test whether the universal pattern can be replicated in much smaller form (e.g., halves of size 50-100 each + dense bridges).
 - 2c: Repeat binding-rotation enumeration in de Grey's full field Q(sqrt 3, sqrt 5, sqrt 7, sqrt 11) — the SAT-minimized Polymath field is provably insufficient.
 
+## Session update 2026-05-29 (abstract chi-6 coupling executed; the barrier is now cocircularity)
+
+The Shot 2 "hierarchical coupling" idea (pair two chi-5 sub-objects into a chi-6 structure) and the "3-way coupling" idea above have now been EXECUTED at the ABSTRACT-graph level, and the result sharpens the open problem rather than resolving it.
+
+- **Abstract chi-6 coupling WORKS** (L24, L27-L30). Coupling two chi-5 halves (Polymath 510) by a no-K_4 bridge set forces chi >= 6: a 1020-vertex no-K_4 graph (L27), tightened to $\|B\| \leq 2000$ (L28), and shown near-vertex-minimal with a single shave to **1019 vertices** (L30, the current abstract record, dual-confirmed UNSAT). Mixed halves (P_510 + P_553, 1063 vtx) give a second non-diagonal instance (L29). The L24 triple-coupling lift (chi >= 6 iff a residual list-coloring is universally infeasible) is the governing theorem and is now MACHINE-CHECKED in Lean ([`lean/HadwigerNelson/L24TripleCoupling.lean`](../lean/HadwigerNelson/L24TripleCoupling.lean), no sorry).
+- **But every such graph FAILS UDG-realizability** (L23, L27, L28, L29; the "cocircularity sieve"). The saturating vertices each require 22-27 bridge endpoints to lie exactly on a unit circle; the geometry forbids it. Neither mixed halves nor vertex reduction lifts this obstruction.
+
+**The reframe of the reframe.** The abstract coupling mechanism is no longer the open problem. The open problem is precisely **making a chi-6 coupling UDG-realizable**: finding plane coordinates (in some algebraic field) for which the required bridge edges ARE unit distances AND the saturating-vertex cocircularity conditions hold. This is geometric / field-theoretic, and it points Shot 2 squarely at sub-goal 2c (enlarge the field beyond the SAT-minimized $\mathbb{Q}(\sqrt 3, \sqrt{11})$) and at building couplings COORDINATE-FIRST rather than abstract-first.
+
+**Measurable frontier corrected** (L31-L33). $\chi_m(\mathbb{R}^2) \geq 5$ (Falconer 1981) is the best known; **$\chi_m \geq 6$ is OPEN** (the cited "$\geq 6$" results are hyperbolic-plane or convex-tile misattributions). Falconer's machine inputs a rigid $(k{-}1)$-chromatic UDG; $\chi_m \geq 6$ needs a rigid 5-chromatic configuration, the SAME missing object as Architecture 1. The OFV 2-point spectral bound ($m_1 \leq 0.287$) was reproduced and cross-validated (e2b); the 3-point matrix lift gives no improvement on the unit-triangle family.
+
+**Net**: three architectures still collapse onto one missing object (a chi-6 UDG that EMBEDS in the plane). The abstract-graph and measurable threads are now well-mapped and confirm the gap; the live bet remains Shot 2 in an enlarged field.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
@@ -147,5 +160,8 @@ Shot 2 (sub-goals revised):
 | 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | reframed: BV-SDP no help at n=2 (L12) | — |
 | 5' | Ambrus IE-LP framework + beam search | implemented (e3g, e3h); greedy width-1 reaches 0.2584 at 17 pts matching KMOR 2015; plateau at local optimum (L13) | weeks for width-2 / swap |
 | 6 | Custom radially-clustered 5-chromatic UDG search | not started | research-grade open |
+| 2-abs | Abstract chi-6 coupling (two chi-5 halves + bridges) | done; 1020-vtx (L27) -> $\|B\|\leq2000$ (L28) -> 1019-vtx record (L30); mixed halves P510+P553 (L29). ALL no-K_4 chi>=6 but NOT UDG-realizable (cocircularity). The barrier is now precisely cocircularity, not abstract existence | done |
+| 2-lean | Lean machine-check of the chi>=6 coupling theorem (L24) | done; L21/L22 covering ladder + L24 triple-coupling lift formalized, no sorry (lean/HadwigerNelson/) | done |
+| 2-meas | Measurable frontier consolidation (e2b/e2c) | done; chi_m>=5 is the frontier, chi_m>=6 OPEN (L31); OFV 2-pt bound reproduced + cross-validated, 3-pt no gain (L32); Falconer decomposition, same missing object (L33) | done |
 
 Update this document after each major milestone.

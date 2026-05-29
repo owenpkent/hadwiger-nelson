@@ -112,7 +112,7 @@ This refines L4's "missing 6-chromatic UDG" framing: the missing object is not a
 
 **Status**: $\chi_m(\mathbb{R}^2) \geq 5$ since Falconer 1981, **no improvement in 45 years**. The widely-cited "$\chi_m \geq 6$" results live in the hyperbolic plane or in restricted-region variants, not in the canonical $\mathbb{R}^2$. **Cross-architecture coupling** (see LEARNINGS L4): the obstruction to pushing Falconer's $\chi_m \geq 5$ to $\chi_m \geq 6$ is at the lemma level the same as the obstruction to $\chi \geq 6$ in Architecture 1, namely the missing 6-chromatic finite UDG.
 
-**Deep dive**: [`arch2_measurable_lineage.md`](arch2_measurable_lineage.md).
+**Deep dive**: [`arch2_measurable_lineage.md`](arch2_measurable_lineage.md) (chronology, Falconer proof, $\chi_m \geq 6$ misattribution audit). Spectral / SDP companion: [`arch2_measurable.md`](arch2_measurable.md) (the $k$-point SDP hierarchy, OFV 2-point and DMOV 3-point, project experiments e2a/e2b/e2c with certificates, sharpened $\chi_m \geq 6$-is-open verdict; LEARNINGS L31-L33).
 
 ### Architecture 3: Fractional / Lovász $\vartheta$ / spectral / LP for $m_1(\mathbb{R}^2)$
 
