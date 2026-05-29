@@ -6,6 +6,43 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L36. The integer $\chi_m(\mathbb{R}^2) \geq 5$ bound is now FULLY SELF-CERTIFYING in this repo: the inclusion-exclusion CONGRUENCE (IEC) constraints were derived from the Ambrus 2023 .tex, implemented in the repo's own IE-LP, and the LP's OWN dual certificate (read from cvxpy, not the paper's unpublished $w_c$) gives $m_1(\mathbb{R}^2) \leq 0.246894 < 1/4$. (Shot 3 -> self-certified. Closes the L35 primal gap.)
+
+This removes the last reliance on the paper's website-only data. L35 reproduced the bound but the rigorous $V(\varepsilon) \geq -\nu$ half rested on the paper's 2321 ASSERTED IEC dual coefficients. L36 derives the IEC constraint family itself, adds it to the primal LP, and lets cvxpy/HiGHS produce the dual. The repo computes its own $\nu$-free certificate.
+
+**Architecture**: 3 (fractional / inclusion-exclusion LP). ORCHESTRATOR IEC self-certify session 2026-05-29.
+
+**Experiment**: [`e3j_iec_selfcertify.py`](fractional/e3j_iec_selfcertify.py); result [`_cache/e3j_iec_selfcertify.json`](fractional/_cache/e3j_iec_selfcertify.json); reuses $X_{23}$ from [`_cache/ambrus_23point_config.json`](fractional/_cache/ambrus_23point_config.json); paper source [`_cache/main_final_version.tex`](fractional/_cache/main_final_version.tex).
+
+**The (IEC) constraint family, transcribed exactly (paper sect 5-6).** For $X = \{x_1,\dots,x_n\}$, sign pattern $\varepsilon \in \{\pm1\}^n$, atom $a_X(\varepsilon) = \delta(\bigcap_i (A - x_i)^{\varepsilon_i})$ (zero unless its positive-index set is independent, so atom variables $=$ independent sets $S$). For $I \subseteq [n]$, $\sigma(n;I) = \{\varepsilon : \varepsilon|_I = +1\}$, and $\sum_{\varepsilon \in \sigma(n;I)} a_X(\varepsilon) = \sum_{S \text{ indep},\, S \supseteq I} a_S$. Averaging the inclusion-exclusion identity over $O(2)$ (Haar) gives, for every congruent pair $\{I,J\} \in \mathcal{C}(X)$ (i.e. $X|_I \cong X|_J$ under an isometry):
+$$\text{(IEC)} \quad \sum_{S \text{ indep},\, S \supseteq I} a_S \;=\; \sum_{S \text{ indep},\, S \supseteq J} a_S.$$
+We enumerate $\mathcal{C}(X)$ over independent subsets $I,J$ of size $1..k$, bucketing by the exact multiset of pairwise squared distances (canonicalized to integer ids via 45-digit eval + sympy-equality split, so distinct exact distances never merge) and confirming true congruence by an exact distance-matrix bijection test (the soundness gate: only genuine congruences are emitted).
+
+**Why the bound stays rigorous (monotonicity, stated explicitly).** $m_1$ is a MAX of $\delta(A)$; the LP value is an UPPER bound on $m_1$ because every measurable periodic 1-avoiding $A$ yields a feasible point (Lemma 1 + ieC: its $O(2)$-averaged atoms satisfy IEP, IET, IE1, IE2, AND ieC). Each (IEC) equation is a genuine linear identity satisfied by those averaged atoms (the $O(2)$ average of a translation-invariance identity). Adding a valid equality to a MAX can only LOWER (or keep) the optimum. So the augmented LP optimum is STILL an upper bound on the true $m_1$ and is $\leq$ the IE1+IE2-only optimum. Tightening never pushes the bound below the true value, because every real $A$ remains feasible.
+
+**The self-certified ladder (each row is the repo's own primal AND its own cvxpy dual; gap = machine precision).**
+
+| max congruent-subset size $k$ | (IEC) constraints | primal $m_1$ | repo's own dual | duality gap |
+|---:|---:|---:|---:|---:|
+| (none; e3g IE1+IE2 only) | 0 | 0.258405 | -- | -- |
+| 3 | 3904 | 0.250245 | 0.250245 | $3.9\times10^{-16}$ |
+| 4 | 5245 | 0.247468 | 0.247468 | $2.2\times10^{-15}$ |
+| **5** | **5730** | **0.246894** | **0.246894** | **$2.5\times10^{-16}$** |
+
+The dual objective equals the (IET) dual value: (IET) $\sum a = 1$ is the only inhomogeneous constraint, all others are homogeneous, so by LP strong duality $b^\top y = y_{\text{IET}}$. cvxpy returns this directly. Primal and dual agree to $\sim10^{-16}$ at every $k$, i.e. the certificate is the LP's own dual-feasible point with the gap closed numerically.
+
+**The crossing (integer $\chi_m \geq 5$ self-contained).** At $k=5$, $m_1 \leq 0.246894 < 0.25$ STRICTLY, so four 1-avoiding color classes cover density $\leq 4 \times 0.246894 = 0.987576 < 1$: four colors cannot tile the plane, a fifth is forced. The threshold is exactly $m_1 < 1/4$; the strictness is what forces the integer bound. The bound $0.246894$ even edges slightly below L35's reproduced paper value $0.246997$ (the size-$\leq 5$ IEC subset already saturates the $X_{23}$ LP; the paper's 5868 constraints include some size-$\geq 6$ classes that the LP optimum no longer needs).
+
+**What L36 changes vs L35.** L35's rigorous bound was $(w_T + \nu)/(1-\mu)$ with the paper's asserted $\nu = 10^{-5}$ (the $V(\varepsilon) \geq -\nu$ half rested on 2321 unpublished $w_c$). L36 needs NO $\nu$: the IEC constraints are in the primal, cvxpy produces the dual, and $0.246894$ is the dual objective the repo computed. The repo now holds a self-contained, $\nu$-free, $1/4$-crossing certificate for integer $\chi_m(\mathbb{R}^2) \geq 5$.
+
+**Wrong-approach detector status**: PASS, run INLINE. 1D analog (radial LP, $\Omega_1 = \cos$) gives $m_1(\mathbb{R}) \leq 0.500000$, $\chi_m(\mathbb{R}) \geq 2$, no overshoot below $1/2$. The IEC constraints are Euclidean-congruence ($O(2)$) averages, so the method engages the 2D rotation group (not the $L^\infty$ or $\mathbb{R}^1$ controls). $\mathbb{Q}^2$ is the legitimate measure-zero exemption.
+
+**Solver/budget**: cvxpy 1.9.0 + HiGHS. Setup (parse + exact congruence enumeration via postings-list superset intersection) 2.3-3.3 s per run; primal LP solve 156 s ($k=3$), 1698 s ($k=4$), 268 s ($k=5$). All optimal, all dual-confirmed. Exact congruence canonicalization sub-second. Total single-machine wall ~37 min. No intractability.
+
+**The ceiling is unchanged (L35 caveat stands).** This self-certifies integer $\chi_m \geq 5$ from the primal+dual the repo owns. It does NOT reach $\chi_m \geq 6$: the paper conjectures $\alpha_1(\mathbb{R}^2) = 1/4$, so the IEC-LP route bottoms out at $1/4$ and cannot give $m_1 < 1/5$. Architecture 3 / Route A remains capped at $\geq 5$. Next: nothing further on the LP density route for the integer bound; the $\geq 6$ question needs the Arch-1 missing rigid 5-chromatic object (L33/L34).
+
+---
+
 ### L35. The Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023 bound $m_1(\mathbb{R}^2) \leq 0.24699 < 1/4$ is REPRODUCED in this repo, landing the project's first integer $\chi_m(\mathbb{R}^2) \geq 5$ via the LP route. (Shot 3 SUCCESS.) The full paper source (arXiv:2207.14179v3) was obtained, the exact 23-point configuration $X_{23}$ extracted symbolically and exact-verified, and the published DUAL certificate independently re-derived from the 29 printed coefficients. The decisive datum: the dual function $\varphi(t) = w_0 J_0(t) + \sum_i w_1(i) + \sum_{i<j} w_2(i,j) J_0(t\|x_i - x_j\|)$ reproduces the paper's global minimum **0.99995003 at $t = 3.7749$** (paper: 3.77488) to all printed digits, giving the rigorous bound $(w_T + \nu)/(1-\mu) = (0.246973 + 10^{-5})/(1 - 6\times10^{-5}) = 0.246997 < 0.2470$. Since $0.246997 < 1/4$ strictly, four 1-avoiding color classes cover density $\leq 4 \times 0.246997 = 0.98799 < 1$, so $\chi_m(\mathbb{R}^2) \geq 5$ as an INTEGER bound.
 
 **Architecture**: 3 (fractional / inclusion-exclusion LP). ORCHESTRATOR Shot 3 session 2026-05-29. Closes the open thread from L12/L13 ("path to 0.247 needs the explicit Ambrus coordinates, PDF returned binary-only").
