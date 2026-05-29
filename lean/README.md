@@ -17,6 +17,7 @@ Files:
 - `HadwigerNelson/Bridges.lean` the "two halves plus bridges" construction `bridgeGraph H₁ H₂ B` on the sum type `V₁ ⊕ V₂`, with adjacency simp lemmas
 - `HadwigerNelson/L21CoveringLemma.lean` the L21 covering lemma at the chi >= 5 level (`Fin 4`): the combined graph is 4-colorable iff the halves admit colorings disagreeing on every bridge
 - `HadwigerNelson/L22ListColoring.lean` the L21 lemma restated in list-coloring language (`Fin 4`): forbidden/allowed color sets `F(v)`, `L(v)` and the universal-list-uncolorability characterization of chi >= 5
+- `HadwigerNelson/DeGreyLowerBound.lean` HN-4 groundwork: the chi >= 5 BRIDGE THEOREM. If a graph admits a hom into `planeUnitDistanceGraph` and is not 4-colorable, then `5 <= chromaticNumberOfPlane`. The chi >= 5 analog of `MoserBridge`. Plus a coordinate-packaged corollary `five_le_chromaticNumberOfPlane_of_coords`. No `sorry`; only `[propext, Classical.choice, Quot.sound]`. See `SHOT4_PLAN.md` for the remaining SAT-certificate and embedding pieces.
 - `HadwigerNelson/L24TripleCoupling.lean` the L24 triple-coupling lift at the chi >= 6 level. The three-halves graph is realized as a NESTED bridge graph `bridgeGraph H₁ (bridgeGraph H₂ H₃ B₂₃) B₁`; the L21/L22 machinery is reproved generically over an arbitrary color type `α` (the proofs never use the number 4) and specialized to `Fin 5`. Main results: `tripleGraph_not_colorable_five_iff_list` and `tripleGraph_six_chromatic_of_universal_residual_uncolorable`. No `sorry`.
 
 Build result: `1864/1864` modules. Entire project is `sorry`-free.
@@ -31,7 +32,7 @@ Build result: `1864/1864` modules. Entire project is `sorry`-free.
 | HN-2c | `moserSpindle.chromaticNumber = 4` (combined) | glue HN-2a+b via `Nat.sInf_upward_closed_eq_succ_iff` + `Colorable.mono` | medium | **proved** (MoserSpindle.lean) |
 | HN-2d | Bridge `moserSpindle` to `planeUnitDistanceGraph` and derive `4 ≤ chromaticNumberOfPlane` | 7 explicit plane coords with `Real.sqrt 3 / 11 / 33`, 11 unit-distance lemmas via `nlinarith`, graph hom, `chromaticNumber_le_of_forall_imp` | medium | **proved** (MoserBridge.lean) |
 | HN-3 | Hexagonal tiling gives $\chi(\mathbb{R}^2) \leq 7$ | measure-theoretic tiling + Eisenstein-lattice coloring | hard | not started |
-| HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | not started |
+| HN-4 | de Grey's $\chi(\mathbb{R}^2) \geq 5$ | 1581-vertex graph + verified SAT/DRAT certificate | very hard | **bridge theorem proved** (DeGreyLowerBound.lean); SAT-certificate + 2500-edge embedding remain (see SHOT4_PLAN.md) |
 | HN-5 | $\chi(\mathbb{Q}^2) = 2$ (Woodall) | parity argument on numerators after clearing denominators | medium | stub (Controls.lean) |
 | HN-6 | $\chi(L^\infty\text{-UDG on } \mathbb{R}^2) = 4$ | direct construction using a unit-square tiling | medium | stub (Controls.lean) |
 | HN-L21 | Covering lemma: `bridgeGraph` is 4-colorable iff the halves admit bridge-disagreeing colorings (chi >= 5 form) | `Sum.elim` gluing + case split on the three edge classes | medium | **proved** (L21CoveringLemma.lean) |

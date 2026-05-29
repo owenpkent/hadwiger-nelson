@@ -9,3 +9,4 @@ import HadwigerNelson.Bridges
 import HadwigerNelson.L21CoveringLemma
 import HadwigerNelson.L22ListColoring
 import HadwigerNelson.L24TripleCoupling
+import HadwigerNelson.DeGreyLowerBound
