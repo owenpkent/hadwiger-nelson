@@ -39,6 +39,8 @@ The dual objective equals the (IET) dual value: (IET) $\sum a = 1$ is the only i
 
 **Solver/budget**: cvxpy 1.9.0 + HiGHS. Setup (parse + exact congruence enumeration via postings-list superset intersection) 2.3-3.3 s per run; primal LP solve 156 s ($k=3$), 1698 s ($k=4$), 268 s ($k=5$). All optimal, all dual-confirmed. Exact congruence canonicalization sub-second. Total single-machine wall ~37 min. No intractability.
 
+**Independent-backend confirmation of the crossing.** The $k=4$ threshold-crossing LP was re-solved with a different solver family: SCS (first-order ADMM, vs HiGHS's simplex / interior-point) returns $m_1 = 0.248091 < 0.25$ (2747 s), independently confirming the $1/4$ crossing and hence integer $\chi_m \geq 5$. SCS's slightly higher value is its looser first-order tolerance; both solvers agree the bound is strictly below $1/4$. (CLARABEL was also attempted but fails on this equality-constraint-heavy LP, a conic-solver limitation, not a feasibility issue.) The crossing is therefore solver-independent; the 23-point config's 47 unit edges were also independently re-verified by exact sympy arithmetic.
+
 **The ceiling is unchanged (L35 caveat stands).** This self-certifies integer $\chi_m \geq 5$ from the primal+dual the repo owns. It does NOT reach $\chi_m \geq 6$: the paper conjectures $\alpha_1(\mathbb{R}^2) = 1/4$, so the IEC-LP route bottoms out at $1/4$ and cannot give $m_1 < 1/5$. Architecture 3 / Route A remains capped at $\geq 5$. Next: nothing further on the LP density route for the integer bound; the $\geq 6$ question needs the Arch-1 missing rigid 5-chromatic object (L33/L34).
 
 ---
