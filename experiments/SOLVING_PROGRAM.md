@@ -106,7 +106,7 @@ The repo's PRIMAL IE-LP (IE1+IE2, no IEC congruence) on $X_{23}$ gives 0.2584 = 
 
 **Novelty**: significant. No current formal verification of χ(R²) ≥ 5 in any proof assistant. Would be the canonical reference.
 
-**Status**: not started; depends on Lean substrate maturity (HN-2 chain landed, HN-3, HN-5, HN-6 still ahead).
+**Status**: GROUNDWORK DONE (2026-05-29). The chi >= 5 BRIDGE THEOREM is proved in Lean (lean/HadwigerNelson/DeGreyLowerBound.lean, no sorry, standard axioms only): a graph hom into planeUnitDistanceGraph + non-4-colorability yields 5 <= chromaticNumberOfPlane (the chi >= 5 analog of MoserBridge's chi >= 4). This reduces all of Shot 4 to supplying ONE non-4-colorable embeddable UDG. Remaining (~5-6 months, nothing mathematically open, see lean/SHOT4_PLAN.md): (A) an LRAT-checked not-Colorable-4 certificate for Heule 553 (smallest certificated target), (B) a 2500-edge exact-arithmetic embedding into R^2 (Singular cofactors -> code-generated linear_combination lemmas).
 
 ## Compute and infrastructure considerations
 
@@ -170,7 +170,7 @@ The two thrusts dispatched this session (2c field enlargement, and the novel coo
 | 1 | Integer χ_m ≥ 5 via LP-only (Arch 3) | completed; negative result (L10) | done |
 | 2 | χ ≥ 6 via field-theoretic UDG search (Arch 1) | binding-rotation enumeration in Q(√3, √11) complete (L11, L14); coordinate-first realizable coupling executed (L34): realizable bridges (up to 13,757, dual-solver) NEVER force chi-6; barrier sharpened to "embeddable bridge supply is wrong-SHAPE (even/low-concentration) not wrong-count". field-enlarged seeds (√7,√19,√23,√15) all chi-5 | months |
 | 3 | Ambrus 23-point reproduction | done; reproduced (L35) then SELF-CERTIFIED via IEC (e3j, L36): repo's own dual $m_1 \leq 0.246894 < 1/4$, no paper $\nu$, integer $\chi_m \geq 5$ self-contained | done |
-| 4 | Lean formalization of de Grey | not started | ~6 months |
+| 4 | Lean formalization of de Grey | groundwork DONE: chi>=5 bridge theorem proved (DeGreyLowerBound.lean, no sorry); LRAT cert + 2500-edge embedding remain (lean/SHOT4_PLAN.md) | ~5-6 months |
 | 5 | 2-particle Bachoc-Vallentin SDP for tighter LP | reframed: BV-SDP no help at n=2 (L12) | — |
 | 5' | Ambrus IE-LP framework + beam search | implemented (e3g, e3h); greedy width-1 reaches 0.2584 at 17 pts matching KMOR 2015; plateau at local optimum (L13). IEC congruence constraints now implemented (e3j, L36): on $X_{23}$ they tighten the repo's own LP from 0.2584 to 0.246894, self-certifying integer $\chi_m \geq 5$ without the paper's duals | IEC done; further beam search capped at $\alpha_1 = 1/4$ |
 | 6 | Custom radially-clustered 5-chromatic UDG search | not started | research-grade open |
