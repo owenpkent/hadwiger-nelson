@@ -163,6 +163,16 @@ The two thrusts dispatched this session (2c field enlargement, and the novel coo
 
 **The sharpened barrier**. Realizability forces an EVEN, low-concentration bridge layout (60-deg: max bridge-degree 36, all 510 vertices touched). The chi-6 list-coloring obstruction (L24/L27) needs CONCENTRATION (L27: max source degree 268 on hub vertices). The embeddable bridge supply is the wrong SHAPE for chi-6 forcing, not merely the wrong COUNT. This is why no chi-6 UDG has emerged from the lineage at scale. Shot 2 is redirected: the only remaining lever is a chi-5 building block whose self-unit-distance neighborhoods concentrate, for which no candidate exists.
 
+## Session update 2026-05-30 (reference library read; multi-class measurable LP opened as the one un-capped route to chi_m >= 6)
+
+A 22-text reference library was acquired, read, and deeply noted (`sources/LIBRARY.md`, `sources/notes/`; LEARNINGS L37). The read sharpened the measurable frontier into a hard dichotomy and opened a concrete new thrust.
+
+- **Single-class density is PROVABLY CAPPED at chi_m >= 5.** Croft's explicit avoiding set has density $0.22936 > 1/5$, so $m_1(\mathbb{R}^2) \geq 0.22936$ and $1/m_1 \leq 4.36 < 5$: no improvement to the upper bound on $m_1$ can push the single-class bound to 6 (it would need $m_1 < 1/5$). The repo already reached the cap (L35/L36, $m_1 \leq 0.246894 < 1/4$). So Architecture 3 / Route A is closed at 5. (A transient note-08 mis-citation, "density only reaches 4", was corrected against L35/L36; the density route does reach 5, via Ambrus 2023.)
+- **Multi-class measurable LP opened (e3k, LEARNINGS L38).** The one measurable route NOT capped: a feasibility LP over distributions of PROPER k-colorings of a configuration, each color's autocorrelation forced Bochner-positive and zero at distance 1. Infeasible for k => chi_m >= k+1. Prototyped and correct on small configs (Moser, Moser+hexagon: feasible, as they must be). Two barriers: enumeration explodes past ~11 points (need the Lasserre/moment marginal relaxation, de Laat-Vallentin, in `sources/`), and the base LP needs a multi-class analog of the inclusion-exclusion CONGRUENCE (IEC) constraints to be sharp.
+- **The concrete next constraint is now specified** (`sources/notes/12`, from the Ambrus 2023 PDF). "Formulation 1" (per-color congruence $\sum_{\sigma|_I=c} a_\sigma = \sum_{\sigma|_J=c} a_\sigma$) is valid but likely just reproduces $\geq 5$. "Formulation 2" (joint-pattern CROSS-COLOR congruence: $\sum_{\sigma|_I=\rho} a_\sigma = \sum_{\sigma|_J=\rho'} a_\sigma$ over isometry-transported color labelings $\rho \mapsto \rho'$) encodes red-next-to-blue couplings the single-class object cannot see, so it is NOT covered by the $\alpha_1 = 1/4$ cap. Formulation 2 is the candidate to make the $k=5$ LP infeasible, hence the one identified path to $\chi_m(\mathbb{R}^2) \geq 6$.
+
+**Net**: the integer Architecture-1 bottleneck (a chi-6 UDG that embeds in the plane) is unchanged, but a genuinely NEW, un-capped, continuous (no-SAT) attack now exists on the measurable side. Concrete next build: implement the Lasserre-marginal version of e3k with Formulation-2 IEC (reuse the $C(X)$ congruent-pair enumerator from `e3j_iec_selfcertify.py`; IEC constraints touch only the $a_\sigma$ atoms, not the Bochner block), validate $k=4$ on $X_{23}$ reproduces $\geq 5$ (margin $> 0$), then run $k=5$ as the open $\geq 6$ frontier.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
@@ -177,5 +187,6 @@ The two thrusts dispatched this session (2c field enlargement, and the novel coo
 | 2-abs | Abstract chi-6 coupling (two chi-5 halves + bridges) | done; 1020-vtx (L27) -> $\|B\|\leq2000$ (L28) -> 1019-vtx record (L30); mixed halves P510+P553 (L29). ALL no-K_4 chi>=6 but NOT UDG-realizable (cocircularity). The barrier is now precisely cocircularity, not abstract existence | done |
 | 2-lean | Lean machine-check of the chi>=6 coupling theorem (L24) | done; L21/L22 covering ladder + L24 triple-coupling lift formalized, no sorry (lean/HadwigerNelson/) | done |
 | 2-meas | Measurable frontier consolidation (e2b/e2c) | done; chi_m>=5 is the frontier, chi_m>=6 OPEN (L31); OFV 2-pt bound reproduced + cross-validated, 3-pt no gain (L32); Falconer decomposition, same missing object (L33) | done |
+| 7-mc | Multi-class measurable LP for chi_m >= 6 (the one un-capped route) | prototyped (e3k, L38): joint k-coloring autocorrelation feasibility LP, correct on small configs. Single-class density PROVABLY capped at 5 (Croft floor > 1/5). Next: Lasserre-marginal version + Formulation-2 cross-color IEC (sources/notes/12); validate k=4 on X_23 reproduces >=5, then k=5 as the open >=6 frontier | research-grade open; multi-session |
 
 Update this document after each major milestone.
