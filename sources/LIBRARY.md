@@ -11,13 +11,15 @@ Last updated 2026-05-30.
 
 This file covers two kinds of material:
 
-1. **Texts** (`books/`, `papers/`): 19 human-readable references added 2026-05-30. First
+1. **Texts** (`books/`, `papers/`): 22 human-readable references added 2026-05-30. First
    wave (11): 8 from Owen's drop + 3 fetched from arXiv (Exoo-Ismailescu, Voronov et al.,
    Bachoc et al.). Second wave (7): the Oliveira-Vallentin SDP / distance-avoiding-set
    lineage (5 items, entries #12-16), the Knuth Dancing Links pre-fascicle (#17), and a
    Hamming-cube distance-graph paper (#18). Third wave (1): the KMOR primary source (#19),
-   which corrected a material numerical error in note 08. Notes below are deep: per-text
-   bibliographic data, which of the four proof architectures it serves, the specific
+   which corrected a material numerical error in note 08. Fourth wave (3): the Ambrus et al.
+   2023 density paper (#20, the $m_1 < 1/4$ / $\chi_m \ge 5$ crossing, previously only a tex
+   in experiments/), plus two tangential Ambrus-circle papers (#21-22). Notes below are deep:
+   per-text bibliographic data, which of the four proof architectures it serves, the specific
    chapters/sections worth reading, and how each connects to the project's current bottleneck.
 2. **Machine data** (repo root of `sources/` + `cnp-sat/`): the de Grey / Heule /
    Polymath16 graph files (`.dimacs`, `.vtx`, `.edge`, `.cnf`). These are
@@ -373,6 +375,33 @@ bound (an explicit construction). Note: the density route's actual crossing into
 $\chi_m(\mathbb{R}^2) \ge 5$ came LATER, with Ambrus et al. 2023 ($m_1 \le 0.246894 < 1/4$, repo
 L35/L36); KMOR 2016 was the just-short predecessor. KMOR also proves the block-structure result
 (block-structured avoiding sets have density $< 1/(2n)$).
+
+---
+
+## Fourth wave (added 2026-05-30): the Ambrus 2023 density paper + tangential Ambrus-circle
+
+### 20. Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki-2023-Density-of-Planar-Sets-Avoiding-Unit-Distances_arXiv-2207.14179.pdf
+**G. Ambrus, A. Csiszarik, M. Matolcsi, D. Varga, P. Zsamboki, "The density of planar sets avoiding
+unit distances," arXiv:2207.14179 (2023), Math. Metric Geometry.** **A2/A3, HIGH value.** Proves
+$m_1(\mathbb{R}^2) \le 0.2470 < 1/4$ (Erdos's conjecture), hence $\chi_m(\mathbb{R}^2) \ge 5$ by the
+single-class density route. This is the paper the repo had reproduced and self-certified from its
+`.tex` (LEARNINGS L35/L36); the PDF closes the prior library gap. Notes:
+[`notes/12-ambrus-2023-density-planar-avoiding-sets.md`](notes/12-ambrus-2023-density-planar-avoiding-sets.md),
+which extracts the inclusion-exclusion CONGRUENCE (IEC) constraint construction in full and gives a
+concrete "Formulation 2" (joint-pattern cross-color IEC) as the candidate path for the e3k
+multi-class LP toward $\chi_m \ge 6$ (LEARNINGS L38). Constants cross-checked vs L35/L36: no discrepancy.
+
+### 21. Ambrus-Bozzai-2023-Colorful-Vector-Balancing_arXiv-2302.10865.pdf
+**G. Ambrus, R. Bozzai, "Colorful vector balancing," arXiv:2302.10865 (2023).** **Tangential.**
+Signed-sum (discrepancy) bounds via a Gaussian-random-walk partial-coloring argument. Same lead
+author as #20 but different topic; no shared distance-graph object. A possible future A3 rounding
+reference only. Notes: [`notes/13-ambrus-circle-tangential-vector-balancing-helly.md`](notes/13-ambrus-circle-tangential-vector-balancing-helly.md).
+
+### 22. Arun-2023-Further-Bounds-on-Helly-Numbers-of-Product-Sets.pdf
+**S. Arun, "Further bounds on the Helly numbers of product sets" (2023).** **Tangential / adjacent.**
+Helly numbers of product sets $A^d$ via empty-polygon / extremal counting; lattice-intrinsic and
+$\mathbb{Q}^2$-blind, no transferable technique to HN. Connected to the Ambrus discrete-geometry
+circle by citation, not content. Notes: [`notes/13-...`](notes/13-ambrus-circle-tangential-vector-balancing-helly.md).
 
 ---
 

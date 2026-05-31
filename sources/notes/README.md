@@ -24,6 +24,8 @@ section/chapter-level detail with theorem statements and page/line references.
 | [09-knuth-dancing-links.md](09-knuth-dancing-links.md) | Knuth TAOCP V4 Pre-Fascicle 5C *Dancing Links* (2019 draft) | A1 |
 | [10-balogh-chen-li-hamming-distance.md](10-balogh-chen-li-hamming-distance.md) | Balogh-Chen-Li (2026), Hamming-cube distance graph | (adjacent; A3 methods) |
 | [11-keleti-matolcsi-oliveira-ruzsa-avoiding-sets.md](11-keleti-matolcsi-oliveira-ruzsa-avoiding-sets.md) | Keleti-Matolcsi-Oliveira-Ruzsa (2016), planar avoiding sets | A2/A3 (primary source for $m_1(\mathbb{R}^2)$; corrects note 08) |
+| [12-ambrus-2023-density-planar-avoiding-sets.md](12-ambrus-2023-density-planar-avoiding-sets.md) | Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki (2023), $m_1 < 1/4$ | A2/A3 (the $\chi_m \ge 5$ density crossing = repo L35/L36; IEC template for e3k) |
+| [13-ambrus-circle-tangential-vector-balancing-helly.md](13-ambrus-circle-tangential-vector-balancing-helly.md) | Ambrus-Bozzai (2023) vector balancing; Arun (2023) Helly numbers | tangential (Ambrus-circle adjacency) |
 
 ## Cross-cutting findings (the through-line on the bottleneck)
 
@@ -108,6 +110,11 @@ bottleneck **structural and explainable**, not merely "not done yet":
 
 ## Library gaps surfaced by the read (priority for acquisition)
 
+- ~~Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023 (the $m_1 < 1/4$ / $\chi_m \ge 5$ density paper)~~
+  **ACQUIRED 2026-05-30** (note 12). Was previously only a `.tex` in `experiments/fractional/_cache`;
+  now the PDF is in `sources/papers/`. Note 12 extracts the IEC congruence construction in full and
+  gives a concrete "Formulation 2" (joint-pattern cross-color IEC) as the candidate path for the
+  e3k multi-class LP toward $\chi_m \ge 6$.
 - ~~Oliveira-Vallentin SDP / distance-avoiding-set papers~~ **ACQUIRED 2026-05-30** (note 08:
   DeCorte-Oliveira-Vallentin 2022 + Oliveira 2016 + Vallentin 2008/2014). These were the prior
   top gap; they reach $\chi_m \ge 5$ and prove the $\ge 6$ density ceiling.

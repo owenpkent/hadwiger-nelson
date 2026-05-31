@@ -6,6 +6,38 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L38. The multi-class (joint k-coloring) measurable LP is now FORMALIZED and PROTOTYPED (e3k), opening the one measurable route to $\chi_m(\mathbb{R}^2) \geq 6$ not provably capped at 5. The prototype is correct on small configs but not yet sharp; the two concrete barriers to making it bite are identified: (a) scalability (proper-coloring enumeration explodes past ~11 points), and (b) sharpness (the base autocorrelation LP needs a multi-class analog of the IEC congruence constraints, the same ingredient that drove the single-class 2015->2023 crossing in L36).
+
+**Architecture**: 2/3 (measurable / fractional). Follows the L37 library read, which established that single-class density is provably capped at $\chi_m \geq 5$ (Croft floor $m_1 \geq 0.22936 > 1/5$), so $\geq 6$ needs a JOINT argument over all color classes.
+
+**Experiment**: [`e3k_multiclass_lp.py`](fractional/e3k_multiclass_lp.py); result [`_cache/e3k_multiclass_lp.json`](fractional/_cache/e3k_multiclass_lp.json).
+
+**The object (full formulation in the e3k docstring).** A measurable proper $k$-coloring partitions $\mathbb{R}^2$ into $k$ 1-avoiding sets $A_1,\dots,A_k$. For a finite configuration $X$ with unit-distance graph $G(X)$, translating the coloring induces a distribution $a_\sigma \geq 0$ over PROPER $k$-colorings $\sigma$ of $G(X)$ ($\sum_\sigma a_\sigma = 1$). The per-color autocorrelation is the pair-marginal $f_c(x_i-x_j) = \sum_{\sigma:\sigma(i)=\sigma(j)=c} a_\sigma$, which must be Bochner-positive ($f_c(r) = \int J_0(2\pi rs)\,d\nu_c(s)$, $\nu_c \geq 0$) with $f_c(1)=0$. If this LP is INFEASIBLE for $k$ colors on some $X$, then $\chi_m(\mathbb{R}^2) \geq k+1$. We detect infeasibility via a Phase-1 (minimize $\sum|\text{slack}|$ on the pair-couplings); margin $>0$ certifies $\geq k+1$.
+
+**Why this is the right object.** It is genuinely JOINT: all $k$ classes are constrained by the same configuration simultaneously and must arise from one underlying point distribution. Unlike the single-class density bound (capped at 5 by the Croft floor), there is no known floor argument blocking the multi-class LP from reaching $\chi_m \geq 6$. This is the open frontier flagged in `sources/notes/08`.
+
+**Prototype results (proof-of-concept, full coloring enumeration).**
+
+| Config | points | $k$ | proper $k$-colorings | margin | verdict |
+|---|---:|---:|---:|---:|---|
+| Moser spindle | 7 | 4 | 384 | 0.0 | feasible (correct: too small to force $\geq 5$) |
+| Moser spindle | 7 | 5 | 5040 | 0.0 | feasible |
+| Moser + hexagon | 11 | 4 | 4224 | 0.0 | feasible |
+| Moser + hexagon | 11 | 5 | 307440 | 0.0 | feasible |
+| Ambrus $X_{23}$ | 23 | 4 | $>3\times10^5$ | -- | ENUMERATION INTRACTABLE |
+
+Sanity passes (small configs are measurably $k$-colorable, margin 0). No obstruction detected on enumerable configs.
+
+**The two barriers, made concrete.**
+1. **Scalability.** Full proper-$k$-coloring enumeration is exponential; $X_{23}$ already exceeds $3\times10^5$ proper 4-colorings. The fix is a Lasserre / moment relaxation over pairwise color-marginals (de Laat-Vallentin 2015, in `sources/`), which never enumerates colorings: variables are the marginals $y_{c,ij} = \delta(A_c \cap (A_c-(x_i-x_j)))$ with PSD moment-matrix consistency, exactly the multi-class analog of the single-class atom LP.
+2. **Sharpness.** The base LP (autocorrelation + Bochner only) gives margin 0 even on Moser+hexagon, mirroring the single-class IE-LP that gives only $0.2584$ ($\geq 4$) without the IEC congruence constraints. The multi-class LP almost certainly needs a multi-class analog of the IEC (O(2)-averaged inclusion-exclusion CONGRUENCE) constraints (L36) to detect the $\geq 5$ obstruction, let alone $\geq 6$.
+
+**Wrong-approach detector status**: the construction is Euclidean (uses $O(2)$-averaged Bochner $J_0$, distance-1 avoidance); it is a measurable bound so $\mathbb{Q}^2$ is the legitimate measure-zero exemption. Not yet run against the 1D control (no nontrivial bound yet to check).
+
+**Next step (concrete).** Implement the Lasserre-marginal version with the multi-class IEC congruence constraints, and run $k=4$ on $X_{23}$ as the validation target (should reproduce $\geq 5$, i.e. margin $> 0$). If validated, run $k=5$ on $X_{23}$ and richer configs as the open $\geq 6$ frontier. Until validated, this is INFRASTRUCTURE, not a new bound. The multi-class IEC construction is now specified in `sources/notes/12-ambrus-2023-density-planar-avoiding-sets.md` (the Ambrus 2023 PDF, now in-library): "Formulation 1" (per-color congruence $\sum_{\sigma|_I=c} a_\sigma = \sum_{\sigma|_J=c} a_\sigma$, valid, likely just reproduces $\geq 5$) and "Formulation 2" (joint-pattern cross-color congruence, NOT covered by the $\alpha_1=1/4$ cap, the candidate to force $k=5$ infeasible $\Rightarrow \chi_m \geq 6$). Reuse the $C(X)$ congruent-pair enumerator from `e3j_iec_selfcertify.py`; the IEC constraints touch only the $a_\sigma$ atoms, not the Bochner $\nu$ block, so they slot in cleanly.
+
+---
+
 ### L37. A 19-text reference library was acquired, read, and deeply noted (`sources/LIBRARY.md`, `sources/notes/`), and the read RECONCILED the literature's measurable-bound story with this repo's own L35/L36: the single-class avoiding-set density route reaches $\chi_m(\mathbb{R}^2) \geq 5$ (Ambrus et al. 2023, $m_1 \leq 0.2469 < 1/4$), is CAPPED there, and the chain of planar density bounds is now pinned with exact constants and primary-source citations.
 
 **Architecture**: 2/3 (measurable/spectral + fractional). Literature SURVEYOR pass 2026-05-30.
