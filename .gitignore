@@ -12,6 +12,12 @@ ENV/
 .pytest_cache/
 .mypy_cache/
 
+# Reference library PDFs (copyrighted texts, ~107 MB; keep local, do not commit)
+sources/books/*.pdf
+sources/papers/*.pdf
+# Extracted plaintext of those PDFs (regenerable; bulky)
+sources/_extracted/
+
 # Experiment artifacts
 experiments/**/_cache/
 experiments/**/*.png

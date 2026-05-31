@@ -16,6 +16,16 @@ $$
 5 \leq \chi(\mathbb{R}^2) \leq 7.
 $$
 
+> **Reference library.** An annotated catalog of 19 source texts (books + papers) is in
+> [`sources/LIBRARY.md`](../../sources/LIBRARY.md), with deep architecture-oriented reading notes
+> and a cross-cutting synthesis in [`sources/notes/`](../../sources/notes/README.md). Two
+> through-lines from that read: (1) embeddability of a graph as a planar UDG is governed by
+> Euclidean dimension $\mathrm{Edim}(G) \leq 2\Delta(G)$, i.e. by max degree not chromatic number,
+> the structural reason the $\chi \geq 6$ embeddable-graph bottleneck is hard; (2) the measurable
+> bound $\chi_m(\mathbb{R}^2) \geq 5$ is reached both by Falconer 1981 and by the single-class
+> density / LP route (Ambrus et al. 2023, $m_1 \leq 0.247 < 1/4$; repo L35/L36), and that density
+> route is provably CAPPED at 5 (Croft floor $m_1 \geq 0.229 > 1/5$).
+
 ## Known bounds
 
 ### Lower bound: $\chi \geq 5$ (de Grey, 2018)

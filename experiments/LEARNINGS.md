@@ -6,6 +6,28 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L37. A 19-text reference library was acquired, read, and deeply noted (`sources/LIBRARY.md`, `sources/notes/`), and the read RECONCILED the literature's measurable-bound story with this repo's own L35/L36: the single-class avoiding-set density route reaches $\chi_m(\mathbb{R}^2) \geq 5$ (Ambrus et al. 2023, $m_1 \leq 0.2469 < 1/4$), is CAPPED there, and the chain of planar density bounds is now pinned with exact constants and primary-source citations.
+
+**Architecture**: 2/3 (measurable/spectral + fractional). Literature SURVEYOR pass 2026-05-30.
+
+**Artifacts**: `sources/LIBRARY.md` (annotated catalog, 19 texts), `sources/notes/` (11 architecture-oriented note files + README synthesis). PDFs and extracted text are gitignored; notes are tracked.
+
+**The settled planar density ledger (reconciled with L35/L36).** Upper bounds on $m_1(\mathbb{R}^2)$ (max density of a measurable unit-distance-avoiding set; $\chi_m \geq 1/m_1$):
+- 2-point Bessel LP (Oliveira-Vallentin 2010): $m_1 \leq 0.2683$, gives $\chi_m \geq 4$.
+- KMOR 2016 (Moser-spindle subgraph + 6-point inclusion-exclusion, BQP facets): $m_1 \leq 0.258795$, still $\chi_m \geq 4$ (just short of $1/4$).
+- Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023 (inclusion-exclusion CONGRUENCE constraints on a 23-point config): $m_1 \leq 0.246894 < 1/4$, gives $\chi_m(\mathbb{R}^2) \geq 5$. This is L35/L36 (reproduced and self-certified in-repo).
+The lower bound (Croft tortoise construction): $m_1 \geq 0.22936$. Since $0.22936 > 1/5$, $1/m_1 \leq 4.36 < 5$, so single-class density CANNOT reach $\chi_m \geq 6$ (consistent with L36's "Route A capped at 5"). $\chi_m(\mathbb{R}^2) \geq 5$ is ALSO Falconer 1981 by a separate earlier measurable argument.
+
+**The completely-positive characterization (DeCorte-Oliveira-Vallentin 2022, now in-library).** The cone of completely-positive functions characterizes $m_1(\mathbb{R}^n)$ EXACTLY (not just an upper bound), giving a convergent Lasserre hierarchy $\vartheta' = \mathrm{las}_1 \geq \mathrm{las}_2 \to \alpha$. This is the research-strength frame for the repo's IEC-LP (L36): the IEC constraints are a computable truncation of this cone. It also gives the high-dimensional record bounds ($n=3,\dots,8$).
+
+**Correction discipline (a lesson, logged honestly).** The literature notes were drafted partly from secondary citations and at one stage asserted the density route "caps at $\chi_m \geq 4$" (over-correcting an earlier "$m_1 \leq 0.229$" number error). Both were wrong: the repo's OWN L35/L36 already establishes the density $\chi_m \geq 5$ crossing via Ambrus 2023. RULE: before correcting a synthesized literature claim, check the repo's verified results (this file), not just one primary paper. Notes now carry the settled version with explicit correction banners.
+
+**Other texts read (relevance to the four architectures).** A1: de Grey 2018, Exoo-Ismailescu 2018, Voronov et al. 2022 (embedded 5-chromatic UDGs, the embedding machinery for the bottleneck), Heule 2019 (SAT proof trimming, 553->529), Knuth SAT fascicle + Dancing Links. A2/A3: Stein-Shakarchi (Fourier foundations), Scheinerman-Ullman (fractional chromatic), Bachoc et al. 2014 (operator spectral bound), the Oliveira-Vallentin SDP cluster, KMOR 2016. A4: Soifer (canonical HN reference; also A1/A2), Kechris (descriptive set theory foundations for Borel $\chi$). Structural cross-cutting finding (note 01/05): embeddability is governed by Euclidean dimension $\mathrm{Edim}(G) \leq 2\Delta(G)$, i.e. by max degree not chromatic number, which is WHY the embeddable graphs (flexible, low-degree) are stuck at $\chi = 4$ and the $\chi = 5$ constructions had to use rigidity ($\sqrt3, \sqrt{11}$). This is the same wall as L33/L34.
+
+**Gaps surfaced**: the Ambrus 2023 PDF (worked in `experiments/fractional/_cache` but not in `sources/papers/`); Kechris-Solecki-Todorcevic 1999 (Borel $\chi$, the $G_0$ dichotomy); the Polymath16 Geombinatorics writeup (blog/wiki only).
+
+---
+
 ### L36. The integer $\chi_m(\mathbb{R}^2) \geq 5$ bound is now FULLY SELF-CERTIFYING in this repo: the inclusion-exclusion CONGRUENCE (IEC) constraints were derived from the Ambrus 2023 .tex, implemented in the repo's own IE-LP, and the LP's OWN dual certificate (read from cvxpy, not the paper's unpublished $w_c$) gives $m_1(\mathbb{R}^2) \leq 0.246894 < 1/4$. (Shot 3 -> self-certified. Closes the L35 primal gap.)
 
 This removes the last reliance on the paper's website-only data. L35 reproduced the bound but the rigorous $V(\varepsilon) \geq -\nu$ half rested on the paper's 2321 ASSERTED IEC dual coefficients. L36 derives the IEC constraint family itself, adds it to the primal LP, and lets cvxpy/HiGHS produce the dual. The repo computes its own $\nu$-free certificate.

@@ -71,7 +71,11 @@ hadwiger-nelson/
 │   ├── fractional/              Arch 3: fractional χ, spectral, Lovász ϑ
 │   └── axiomatic/               Arch 4: set-theoretic / Shelah-Soifer
 ├── lean/                        Lean 4 / Mathlib formal verification skeleton
-├── sources/                     source PDFs
+├── sources/                     source data + reference library
+│   ├── LIBRARY.md               annotated catalog of 19 source texts
+│   ├── notes/                   deep per-text reading notes + synthesis
+│   ├── cnp-sat/                 Polymath16/Heule graph + SAT data
+│   └── *.dimacs / *.vtx / ...   de Grey / Heule / Polymath16 graph files
 ├── visualizations/              manim scenes
 ├── CLAUDE.md                    project instructions for Claude Code
 ├── README.md                    this file
