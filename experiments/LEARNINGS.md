@@ -6,6 +6,34 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L45. Shot B (the integer route): the L42 open target -- a chi-5 UDG with LONG-RANGE color forcing (a non-adjacent pair forced-different in every proper 5-coloring) -- is ABSENT across the ENTIRE accessible de Grey / Polymath16 lineage, not just $P_{510}$. Twelve chi-5 UDGs (510, 517, 529, 553, 610, 633, 803, 826, 874, L403, S199, T721; $n$ from 199 to 874) were swept: in every one, **forced-different $\Leftrightarrow$ adjacent** with ZERO exceptions and ZERO indeterminate SAT calls. This upgrades L42's $P_{510}$ observation to a lineage-wide structural fact and sharpens the chi-6 open problem: the missing object is not "somewhere in the known lineage, found by better search", it is genuinely absent from the lineage and must be constructed by a new principle.
+
+**Architecture**: 1 (combinatorial). Direct test of the L42 reframing ("find a chi-5 UDG with long-range color forcing").
+
+**Experiment**: [`shotB_longrange_forcing.py`](combinatorial/shotB_longrange_forcing.py); result [`_cache/shotB_longrange_forcing.json`](combinatorial/_cache/shotB_longrange_forcing.json).
+
+**Method.** For each graph: confirm 5-colorable (all PASS), then test whether any NON-ADJACENT pair $(a,b)$ is forced-different via `merged_unsat` (merge $a,b$ to force same color; the merged graph is 5-UNSAT $\Leftrightarrow$ every proper 5-coloring separates them). Tested the high-degree core exhaustively (forcing concentrates among hubs, per L42's locality finding) plus a random non-adjacent sample across the whole graph: 1340-3015 pairs per graph, ~24000 merges total, each a Cadical SAT call with a 400k-conflict budget. Adjacent pairs are correctly detected as trivially forced (78-273 sampled per graph, validating the test); every non-adjacent pair tested can share a color (1262-2742 per graph).
+
+**Why this is the predicted-but-load-bearing outcome.** L42's DOF count argued non-realizability of the chi-6 coupling is structural (rigid halves are over-determined; long-range forcing is a measure-zero coincidence). L45 confirms the dual statement on the supply side: the chi-5 generators the lineage actually provides have NO long-range forcing at all. So both the L28 single-forced-clique route (closed by Lemma L, L42) and the broader "graded" route depend on an object no known chi-5 UDG contains. The open problem is now crisp and falsifiable: **does any chi-5 unit-distance graph have a non-adjacent forced-different pair?** No example is known; this sweep makes the question the precise gate for chi $\geq 6$ on the integer side.
+
+**Wrong-approach detector status.** Intrinsically Euclidean (the graphs are unit-distance embeddings in $\mathbb{R}^2$); the target object (long-range forcing) is exactly the structure the $\mathbb{Q}^2$ control ($\chi=2$) and the lineage both lack. No bound moved.
+
+---
+
+### L44. Shot A (the measurable route): the LOSSLESS S_k color-symmetrization of the multi-class moment relaxation is proved and computationally VALIDATED, de-risking the one remaining engineering blocker (the symmetry-reduced order-2 SDP, L41/L43). The Phase-1 objective and every constraint (normalization, marginalization, per-color Bochner, IEC Formulation 1/2) are invariant under relabeling the $k$ colors, over a convex feasible set, so the $S_k$-average of any feasible point is feasible with no worse objective: the optimum lives on the color-symmetric subspace. Restricting to it is lossless. Confirmed on triangle/rhombus/Moser at $k=4,5$, LP and PSD, base and +IEC (24/24): the symmetrized margin equals the plain margin and NEVER exceeds it (no fake certificate), and is often numerically CLEANER (e.g. Moser $k=4$ PSD+IEC $2.5\times10^{-9}\to2.5\times10^{-11}$; fewer variables, less solver noise).
+
+**Architecture**: 2/3 (measurable / fractional). The foundation step for the L41/L43 symmetry-reduced SDP.
+
+**Experiments**: [`shotA_symmetry_validation.py`](fractional/shotA_symmetry_validation.py); [`e3m_moment_backend.py`](fractional/e3m_moment_backend.py) (new default-off `symmetrize` flag adding the $S_k$ orbit equalities). Spec: [`SHOTA_SYMMETRY_REDUCTION_PLAN.md`](fractional/SHOTA_SYMMETRY_REDUCTION_PLAN.md). Result [`_cache/shotA_symmetry_validation.json`](fractional/_cache/shotA_symmetry_validation.json).
+
+**Why it matters.** L41 pinned the measurable $\geq 6$ attack to the order-2 SDP whose PSD block ($\|B\|\sim4141$ for $X_{23}$) is the cost. The principled fix is to block-diagonalize by symmetry. $S_k$ (permuting colors) is a FREE symmetry present for every config, and the spec shows it collapses the order-1 PSD from size $1+nk$ to one $(1+n)\times(1+n)$ block plus one $n\times n$ block, INDEPENDENT of $k$ (trivial $\oplus$ standard isotypic decomposition of the $S_k$-permutation action on colors). L44 validates the theorem this rests on; the block-diagonalized BUILDER (the actual scale win) and the harder $O(2)$-congruence reduction are the specified follow-ons. Discipline carried over: a wrong reduction silently fakes a $\chi_m$ bound (cf. L40), so the validation explicitly checks the symmetric margin never tightens past the trusted one.
+
+**Honest scope.** The `symmetrize` flag only ADDS equalities; it does not yet shrink the PSD matrix, so it buys correctness-validation, not scale. The scale win is the next build (Part 1 of the spec: the order-1 symmetry-adapted basis, fully cross-checkable against e3m on small configs).
+
+**Wrong-approach detector status.** Euclidean by construction ($O(2)$-averaged $J_0$ Bochner kernel); measurable bound, $\mathbb{Q}^2$ legitimately exempt. No bound produced (foundation/validation only).
+
+---
+
 ### L43. The multi-class measurable backend was run on the REAL validation target for the first time (Ambrus $X_{23}$, $k=4$), and the predicted negative landed: degree-1 IEC (subset size $\leq 2$) gives margin $0$ (LP) / $7.5\times10^{-9}$ noise-floor (PSD), i.e. **NO certificate** -- it does not even reproduce the known $\chi_m \geq 5$. This empirically confirms the L40 caveat (the single-class route needed IEC up to size 5; degree-1 carries only size $\leq 2$) on the actual config, closing the open question "is degree-1 enough at $X_{23}$ scale?" with a clean NO. The entire measurable $\geq 6$ thread now rests on ONE concrete engineering blocker: a symmetry-reduced order-2+ SDP (carries IEC up to size 4, toward the size-5 the single-class needed). Plus an infrastructure fix: $X_{23}$ is now restored to a TRACKED location and wired into the backend.
 
 **Architecture**: 2/3 (measurable / fractional). First end-to-end run of the e3k->e3l->e3m stack on $X_{23}$ (prior L40/L41 validations were "no $X_{23}$ needed", on small configs only).

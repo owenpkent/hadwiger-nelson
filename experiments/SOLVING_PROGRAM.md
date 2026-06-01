@@ -223,6 +223,15 @@ Shot-B (restore $X_{23}$) is DONE and the first prerequisite from update 2026-06
 
 **Net.** Infrastructure for the continuous measurable attack is complete and now exercised on the real config; the lone remaining engineering task (symmetry-reduced order-2 SDP) is well-defined and not mathematically open. The Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
 
+## Session update 2026-06-01f (both prize routes advanced one concrete rung: Shot A foundation + Shot B lineage sweep)
+
+Two coordinated first-increments toward the actual prize, one per live route.
+
+- **Shot A (measurable, L44).** De-risked the lone remaining measurable blocker (the symmetry-reduced order-2 SDP) by proving + validating the LOSSLESS $S_k$ color-symmetrization: the optimum lives on the color-symmetric subspace (convexity + relabeling-invariance), so block-diagonalizing by $S_k$ is sound. Validated 24/24 on small configs (symmetrized margin = plain, never larger, often cleaner). The spec (`SHOTA_SYMMETRY_REDUCTION_PLAN.md`) shows $S_k$ alone collapses the order-1 PSD from $1+nk$ to a $(1+n)\times(1+n)$ plus an $n\times n$ block, independent of $k$. Next: the order-1 symmetry-adapted builder (fully cross-checkable), then order-2 + $X_{23}$.
+- **Shot B (integer, L45).** Tested the L42 open target directly across the WHOLE accessible chi-5 UDG lineage (12 graphs, $n=199..874$): NO long-range color forcing anywhere. forced-different $\Leftrightarrow$ adjacent holds family-wide, 0 exceptions, 0 indeterminate. The chi-6 ingredient is genuinely absent from the known lineage and must be built by a new principle. The open problem is now crisp: does ANY chi-5 UDG have a non-adjacent forced-different pair?
+
+**Net.** Neither moved a bound (honest), but both sharpened the prize into a precise next action: measurable = build the block-diagonalized SDP on the now-validated symmetric subspace; integer = construct (not search for) a chi-5 UDG with long-range forcing.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |

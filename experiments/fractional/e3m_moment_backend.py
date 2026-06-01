@@ -149,12 +149,23 @@ def _assignment_to_terms(assignment):
 
 def build_moment_relaxation(X, dmat2_canon, edges, k, *, use_psd=True,
                             iec_keys=None, n_freq=300, freq_max=20.0,
-                            slack_tol=1e-6, solver=None):
+                            slack_tol=1e-6, solver=None, symmetrize=False):
     """Solve the degree-1 moment (Lasserre order-1) Phase-1 relaxation for k colors.
 
     iec_keys: iterable of e3l canonical constraint keys (frozenset of two
     (vertex,color) assignment-frozensets), restricted here to |assignment| <= 2.
     Returns a result dict; margin > slack_tol or infeasible => chi_m >= k+1.
+
+    symmetrize: if True, restrict the moments to the S_k color-permutation-invariant
+    subspace (Shot A). The Phase-1 objective and ALL constraints (normalization,
+    marginalization, per-color Bochner, IEC F1/F2) are invariant under relabeling
+    colors, and the feasible set is convex, so the S_k-average of any feasible point
+    is feasible with no worse objective. Hence the optimum is attained on the
+    symmetric subspace and these added equalities are LOSSLESS (margin unchanged).
+    This is the safe, verifiable foundation for the block-diagonalized SDP that
+    actually breaks the PSD scale wall (the O(2)-congruence reduction is the harder
+    follow-on). Here we only ADD equalities (no PSD-size reduction yet), so this
+    flag VALIDATES losslessness rather than buying scale.
     """
     n = X.shape[0]
     iec_keys = list(iec_keys or [])
@@ -208,6 +219,24 @@ def build_moment_relaxation(X, dmat2_canon, edges, k, *, use_psd=True,
             continue  # touches a moment of order > 2 (out of this relaxation)
         cons.append(L == R)
         n_iec += 1
+
+    # (SYM) S_k color-permutation symmetrization (Shot A; lossless, see docstring).
+    # Orbits under relabeling colors: every singleton y1[i,c] shares one value per i;
+    # every Bochner mass nu[c,:] shares one value; per pair, all diagonal entries
+    # Y[c,c] are one value and all off-diagonal Y[c,c'] (c != c') are another.
+    if symmetrize:
+        for i in range(n):
+            for c in range(1, k):
+                cons.append(y1[i, c] == y1[i, 0])
+        for c in range(1, k):
+            cons.append(nu[c, :] == nu[0, :])
+        for (i, j), Y in y2.items():
+            for c in range(k):
+                if c > 0:
+                    cons.append(Y[c, c] == Y[0, 0])
+                for cp_ in range(k):
+                    if c != cp_ and not (c == 0 and cp_ == 1):
+                        cons.append(Y[c, cp_] == Y[0, 1])
 
     # (PSD) Lasserre order-1 moment matrix.
     if use_psd:
