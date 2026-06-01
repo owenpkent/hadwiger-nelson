@@ -193,6 +193,16 @@ The L38 "concrete next build" is now complete on both halves (e3l sharpness, L39
 
 **Net.** The continuous (no-SAT) measurable route to $\chi_m \geq 6$ now has a complete, validated, scalable engine. Remaining to actually run the frontier: (1) restore $X_{23}$ to a tracked location (Shot-B), (2) run $k=4$ on $X_{23}$ as the $\geq 5$ validation; if degree-1 IEC (subset size $\leq 2$) is too weak, lift to the order-2 moment matrix (subsets $\leq 4$, IEC up to size 4, toward the size-5 the single-class L36 needed), (3) $k=5$ on $X_{23}$ and richer rigid configs is the open $\geq 6$ frontier. The Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
 
+## Session update 2026-06-01c (order-2 lift built; the measurable infrastructure stack is complete and the single remaining blocker is now explicit)
+
+The order-2 moment relaxation (e3n, L41) is implemented and validated, completing the L38-L41 infrastructure stack for the measurable $\chi_m \geq 6$ attack.
+
+- **e3n is correct** (cert path live: triangle $k=2$ infeasible; no false certificate: feasible configs margin $\sim0$ with IEC up to subset size 3, the size order-1 cannot carry) and is a valid relaxation.
+- **But naive order-2 does not scale.** The moment matrix $\|B\| = 1+nk+(\binom{n}{2}k^2-Ek)$ explodes ($n=4\to93$, $n=7\to321$, $X_{23}\to4141$); even $n=4$ takes $\sim13$ s in cvxpy/CLARABEL, and a first build OOMed $>1$ GB at $\|B\|\sim180$ (fixed with a sparse $\mathrm{vec}(M)=Sy$ construction, but the PSD canonicalization cost remains). Lowering the Bochner grid does not help: the PSD block is the cost.
+- **The single remaining engineering blocker is now explicit.** Running the order-2 frontier on $X_{23}$ requires a SYMMETRY-REDUCED SDP: block-diagonalize the moment matrix by the $O(2)$-averaged congruence action so the PSD cone splits into small isotypic blocks (de Laat-Vallentin; DeCorte-Oliveira-Vallentin 2022, note 08). The naive e3n is the reference implementation that the symmetry-reduced version must reproduce on small configs.
+
+**Net.** Stack status: e3k (formulation) -> e3l (IEC sharpness, validated) -> e3m (degree-1 backend, validated, scalable) -> e3n (order-2, correct but naive-unscalable). Two concrete prerequisites remain before the measurable $\geq 6$ frontier can actually be run: a restored+tracked $X_{23}$, and a symmetry-reduced order-2 SDP. Both are well-defined; neither is mathematically open. The integer Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |

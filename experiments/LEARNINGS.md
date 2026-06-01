@@ -6,6 +6,29 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L41. The ORDER-2 moment relaxation (e3n) is implemented, correct, and validated, and it pins down the decisive obstacle to the measurable $\chi_m \geq 6$ attack: the naive (no-symmetry) order-2 SDP DOES NOT SCALE. Even $n=4$ (a $93\times93$ PSD) takes $\sim 13$ s in cvxpy/CLARABEL, the moment-matrix dimension $\|B\| = 1 + nk + (\binom{n}{2}k^2 - Ek)$ explodes ($n=7\to321$, $n=10\to693$, $n=19\to2645$, $X_{23}\to4141$), and a first attempt OOMed ($>1$ GB at $\|B\|\sim180$). So the order-2 frontier on $X_{23}$ REQUIRES symmetry reduction (the $O(2)$ / congruence block-diagonalization of de Laat-Vallentin / DeCorte-Oliveira-Vallentin), not a bigger naive run. The naive engine is a correct, valid relaxation and is the reference implementation the symmetry-reduced SDP must reproduce.
+
+**Architecture**: 2/3 (measurable / fractional). The strength-increment build flagged in L40 (carry IEC up to subset size 4 vs the degree-1 backend's size 2).
+
+**Experiment**: [`e3n_moment_order2.py`](fractional/e3n_moment_order2.py); result [`_cache/e3n_moment_order2.json`](fractional/_cache/e3n_moment_order2.json).
+
+**The object.** The order-2 Lasserre moment matrix is indexed by the empty pattern, all singleton patterns $(i,c)$, and all PROPER pair patterns $((i,c),(j,c'))$; entry $M[\alpha,\beta]$ is the joint color-density of the merged pattern $S_\alpha\cup S_\beta$ (a moment on $\le 4$ vertices), $=0$ if the patterns disagree on a shared vertex or the merge is improper. EQUAL merged patterns share ONE variable, which auto-enforces moment consistency. Plus: $M\succeq0$, normalization, singleton$\leftarrow$pair marginalization, per-color Bochner (the $J_0$ autocorrelation block from e3m), and the e3l IEC keys (Formulation 1+2) up to subset size 4 as moment equalities. Valid for the true moments of any measurable proper $k$-coloring, so order-2-infeasible $\Rightarrow \chi_m \geq k+1$.
+
+**Validation (all PASS).**
+- CERT PATH LIVE: triangle $k=2$ (not 2-colorable) returns INFEASIBLE under the order-2 PSD (the matrix detects the obstruction the LP misses), $\Rightarrow \chi_m \geq 3$. Order-2 is at least as strong as order-1.
+- NO FALSE CERTIFICATE: feasible (colorable) configs triangle $k=4$ and rhombus $k=4$ give margin $\le 3\times10^{-12}$ (CLARABEL noise floor) WITH IEC up to subset size 3 (672 IEC constraints on the rhombus, beyond order-1's size-2 ceiling).
+- IEC-CARRYING: order-2 carries the size-3 (and, structurally, size-4) IEC keys that order-1 cannot, the whole point of the lift.
+
+**The two scalability walls, made concrete.** (1) MEMORY: the first implementation built the moment matrix as a cvxpy scalar `bmat` of $\|B\|^2$ entries; cvxpy's canonicalization of that OOMed ($>1$ GB at $\|B\|\sim180$, i.e. $n=7$). Fixed by building $M$ as a SINGLE sparse linear map $\mathrm{vec}(M)=Sy+c_1$ from the moment-variable vector. (2) TIME: even after the fix, the cvxpy PSD canonicalization + CLARABEL solve is $\sim 13$ s at $\|B\|=93$ ($n=4$) and grows with $\|B\|$; $n=7$ is minutes, $X_{23}$ ($\|B\|\sim4141$) is out of reach. Lowering the Bochner frequency grid ($300\to40$) does not help, confirming the PSD block (not the autocorrelation block) is the cost.
+
+**Honest limitation.** No STRICT order-2 $>$ order-1 empirical separation was found: on the small configs that solve, both orders catch the same trivial graph-infeasibilities (triangle $k=2$, Moser $k=3$) and neither bites the measurable $\chi_m\geq5$ obstruction (which the single-class route needed 23 points to see). Order-2's added power (IEC up to size 4, larger PSD coupling) is structural and only becomes testable at $X_{23}$ scale, which needs the symmetry-reduced SDP.
+
+**What this directs.** The continuous measurable route to $\chi_m\geq6$ now has a fully mapped infrastructure stack: e3k (formulation) $\to$ e3l (IEC sharpness, validated) $\to$ e3m (degree-1 scalable backend, validated) $\to$ e3n (order-2, correct but naive-unscalable). The single remaining engineering blocker is explicit: a SYMMETRY-REDUCED order-2 SDP (block-diagonalize the moment matrix by the $O(2)$-averaged congruence action so the PSD cone splits into small isotypic blocks; de Laat-Vallentin, DeCorte-Oliveira-Vallentin 2022, note 08), plus a restored+tracked $X_{23}$. Only then can $k=4$ on $X_{23}$ (validate $\geq5$) and $k=5$ (open $\geq6$) actually run. The Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
+
+**Wrong-approach detector status.** Euclidean by construction ($O(2)$-averaged $J_0$ Bochner kernel, exact unit-distance congruences); measurable bound, $\mathbb{Q}^2$ legitimately exempt. No nontrivial bound produced, so the 1D control is not engaged.
+
+---
+
 ### L40. The scalable MOMENT / Lasserre backend (e3m) is built and validated: it solves the multi-class measurable LP WITHOUT enumerating colorings, so it runs at $X_{23}$ scale and beyond, resolving L38/L39 barrier (a) scalability. A degree-1 (pairwise color-marginal) relaxation with a Lasserre order-1 PSD moment matrix, per-color Bochner autocorrelation, and the e3l IEC keys (now LINEAR on the moments) cross-validates against e3l (margin 0 on small configs), passes the $\chi_m \leq 7$ gate, and scales to 19-point configs in seconds. The session also produced a sharp METHODOLOGICAL lesson: a "certificate" here is a positive slack margin, so SOLVER ACCURACY is load-bearing. The first-order SCS solver (noise floor $\sim 10^{-5}$) manufactured a SPURIOUS $\chi_m \geq 6$ "certificate" (margin $1.0\times10^{-5}$) on a 10-point config; the interior-point CLARABEL solver ($\sim 10^{-9}$ floor) collapses it to $1.6\times10^{-10}$. No configuration certifies anything.
 
 **Architecture**: 2/3 (measurable / fractional). The scalable companion to e3l (L39); together they complete the L38 "concrete next build" (both barriers).
