@@ -11,8 +11,8 @@ A research-and-study project on the **chromatic number of the plane**: the small
 
 | Architecture | Thread | Current state |
 |--------------|--------|---------------|
-| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826/1585; binding-rotation search exhausted in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ (L14); reverse-engineered Polymath 510 and de Grey 1585 as the "two 4-chromatic halves + bridges" coupling construction (L15-L20); covering lemma + list-coloring reformulation (L21-L22, both Lean-formalized); L21's 14-vertex Moser$^2$ abstract chi-5 graph proven NOT UDG-realizable via Positivstellensatz (L23); triple-coupling theorem for chi $\geq 6$ (L24); four obstruction classes catalogued (L25); Polymath 510 vertex-critical (L26); first no-$K_4$ chi $\geq 6$ abstract graph $P_{510}^2$ + 2700 bridges, 1020 vtx (L27), tightened to $\|B\| \leq 2000$ then shaved to a **1019-vertex record** (L28, L30) and a second NON-diagonal instance $P_{510} \cup P_{553}$ (L29); ALL not UDG-realizable, barrier sharpened (L34) to "realizable bridges are the wrong shape for chi-6" (Direction A + Shot 2 closed); L24 triple-coupling lift and the chi $\geq 5$ bridge theorem (HN-4) Lean-formalized |
-| 2. Measurable / spectral | Falconer 1981; OFV/DMOV spectral SDP | $\chi_m(\mathbb{R}^2) \geq 5$ (Falconer) is the best known and **$\chi_m \geq 6$ is OPEN** (the cited "$\geq 6$" results are hyperbolic-plane / convex-tile misattributions) (L31); OFV 2-point Bessel bound reproduced + cross-validated, 3-point no gain (e2b, L32); Falconer's $\chi_m \geq 5$ decomposed, gated on the same missing rigid 5-chromatic UDG as Arch 1 (e2c, L33) |
+| 1. Combinatorial / UDG (SAT-driven) | de Grey 2018 → Polymath16 → smaller 5-chromatic UDGs | $\chi \geq 4$ Lean-verified (Moser spindle); $\chi \geq 5$ multi-solver SAT-verified on 510/517/529/553/826/1585; binding-rotation search exhausted in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ (L14); reverse-engineered Polymath 510 and de Grey 1585 as the "two 4-chromatic halves + bridges" coupling construction (L15-L20); covering lemma + list-coloring reformulation (L21-L22, both Lean-formalized); L21's 14-vertex Moser$^2$ abstract chi-5 graph proven NOT UDG-realizable via Positivstellensatz (L23); triple-coupling theorem for chi $\geq 6$ (L24); four obstruction classes catalogued (L25); Polymath 510 vertex-critical (L26); first no-$K_4$ chi $\geq 6$ abstract graph $P_{510}^2$ + 2700 bridges, 1020 vtx (L27), tightened to $\|B\| \leq 2000$ then shaved to a **1019-vertex record** (L28, L30) and a second NON-diagonal instance $P_{510} \cup P_{553}$ (L29); ALL not UDG-realizable, barrier sharpened (L34) to "realizable bridges are the wrong shape for chi-6" (Direction A + Shot 2 closed); the cocircularity barrier was adversarially PRESSURE-TESTED (L42): no chi-6 UDG, but reduced to a crisp Lemma (in $P_{510}$ forced-different $=$ adjacent, so a realizable rainbow hub would need a unit-distance $K_5$), and the cocircularity obstruction itself is the classical $K_{2,3}$-freeness of UDGs; L24 triple-coupling lift and the chi $\geq 5$ bridge theorem (HN-4) Lean-formalized |
+| 2. Measurable / spectral | Falconer 1981; OFV/DMOV spectral SDP; multi-class moment LP | $\chi_m(\mathbb{R}^2) \geq 5$ (Falconer) is the best known and **$\chi_m \geq 6$ is OPEN** (the cited "$\geq 6$" results are misattributions) (L31); OFV 2-point Bessel bound reproduced + cross-validated, 3-point no gain (e2b, L32); Falconer's $\chi_m \geq 5$ decomposed, gated on the same missing rigid 5-chromatic UDG as Arch 1 (e2c, L33); single-class density PROVABLY capped at $\geq 5$ (Croft floor $> 1/5$), so $\geq 6$ needs a JOINT argument (L37); the multi-class (joint $k$-coloring) measurable moment LP built + validated as the one un-capped route (e3k formulation $\to$ e3l IEC sharpness $\to$ e3m degree-1 backend $\to$ e3n order-2; L38-L41), but the naive order-2 SDP does not scale to $X_{23}$ (needs symmetry reduction) and has not yet produced a bound |
 | 3. Fractional / Lovász $\vartheta$ | OFV 2010, KMOR 2015, Ambrus 2023 LP lineage | reproduced Ambrus 2023 and **SELF-CERTIFIED it in-repo**: the repo's own IE-LP + IEC congruence dual gives $m_1(\mathbb{R}^2) \leq 0.2469 < 1/4$, i.e. **integer $\chi_m \geq 5$** (e3i/e3j, L35/L36), solver-cross-checked; the LP density route is now capped at $\geq 5$ (conjectured $\alpha_1 = 1/4$) |
 | 4. Set-theoretic / axiomatic | Shelah-Soifer phenomenon | dossier landed (arch4_set_theoretic_lineage.md); 2003 conditional was made vacuous by de Grey 2018 (L7) |
 
@@ -115,21 +115,26 @@ lake exe cache get   # fetches Mathlib v4.13.0 oleans
 lake build           # 1859 modules
 ```
 
-See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate of experiments (e1a-e1t, e2a, e3a-e3h all landed).
+See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate of experiments (Arch 1: e1a-e1y, h1-h7, f1pt; Arch 2/3: e2a-e2c, e3a-e3n all landed).
+
+## Publishable findings
+
+See [`docs/PUBLISHABLE_FINDINGS.md`](docs/PUBLISHABLE_FINDINGS.md) for an honest, tiered assessment of what is and is not publishable. Bottom line: **nothing moves the known bounds.** The strongest candidate (F1, the structural explanation of the $\chi \geq 6$ wall) was adversarially pressure-tested (L42) and is real-but-modest: its geometric core is the classical $K_{2,3}$-freeness of unit-distance graphs, and what survives is one clean open problem -- *find a chi-5 UDG with long-range color forcing (a non-adjacent pair forced-different in every proper 5-coloring)*, exactly what a chi-6 coupling needs and what the de Grey / Polymath lineage lacks.
 
 ## Long-range research program
 
 See [`experiments/SOLVING_PROGRAM.md`](experiments/SOLVING_PROGRAM.md) for the six-shot taxonomy of substantive attacks on the conjecture. Three of four architectures gate on the same missing combinatorial object: **a finite unit-distance graph in $\mathbb{R}^2$ with chromatic number $\geq 6$**. Found once, three barriers collapse.
 
-## Latest sessions
+## Latest findings
 
-See [`experiments/orchestrator_sessions/`](experiments/orchestrator_sessions/) for per-session ORCHESTRATOR records. Most recent:
-- `session_011_polymath_degrey_overlap.md` — Polymath 510 is a translated substructure of de Grey 1585; 62% vertex overlap under $T = (2, 0)$.
-- `session_010_obstruction_mechanism.md` — de Grey 1585's chi = 5 obstruction is a three-component coupling (C_6 core + asymmetric half + 155 bridges). Universal "two halves + bridges" pattern.
-- `session_009_degrey1585.md` — de Grey 1585 symmetry analysis: natural center $v_0 = (2, 0)$; approximate D_6; C_6-symmetric core has chi = 4.
-- `session_008_reverse_engineer_polymath510.md` — Polymath 510 has approximate C_6 about origin (92% coverage); C_6 closure is 1155v, chi = 5, C_6-irreducible.
-- `session_007_field_theoretic_binding.md` — Binding-rotation enumeration in $\mathbb{Q}(\sqrt 3, \sqrt{11})$ for chi >= 6; 211-vertex union, density 3.46, chi = 4.
-- `session_006_ambrus_beam.md` — Shot 5 reframed to Ambrus IE-LP; greedy beam search to $m_1 \leq 0.2584$ matching KMOR 2015.
+Newest at the top; see [`experiments/LEARNINGS.md`](experiments/LEARNINGS.md) for full entries.
+- **L42** — F1 (cocircularity barrier) adversarially pressure-tested: no chi-6 UDG; reduced to a crisp Lemma; cocircularity $=$ classical $K_{2,3}$-freeness; open reframing "long-range color forcing." See [`docs/PUBLISHABLE_FINDINGS.md`](docs/PUBLISHABLE_FINDINGS.md) and [`experiments/combinatorial/F1_pressure_test.md`](experiments/combinatorial/F1_pressure_test.md).
+- **L38-L41** — the multi-class measurable moment LP toward $\chi_m \geq 6$: formulation (e3k), IEC sharpness (e3l), degree-1 backend (e3m), order-2 (e3n, naive build does not scale).
+- **L37** — 19-text reference library read; single-class density route pinned as capped at $\chi_m \geq 5$.
+- **L35/L36** — integer $\chi_m(\mathbb{R}^2) \geq 5$ reproduced and self-certified in-repo.
+- **L34** — coordinate-first realizable couplings (up to 13,757 unit-distance bridges) never force chi-6 (later sharpened by L42).
+
+Per-session ORCHESTRATOR records (Arch-1 reverse-engineering, sessions 006-011) are in [`experiments/orchestrator_sessions/`](experiments/orchestrator_sessions/).
 
 ## When in doubt
 

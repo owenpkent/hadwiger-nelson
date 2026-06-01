@@ -203,6 +203,16 @@ The order-2 moment relaxation (e3n, L41) is implemented and validated, completin
 
 **Net.** Stack status: e3k (formulation) -> e3l (IEC sharpness, validated) -> e3m (degree-1 backend, validated, scalable) -> e3n (order-2, correct but naive-unscalable). Two concrete prerequisites remain before the measurable $\geq 6$ frontier can actually be run: a restored+tracked $X_{23}$, and a symmetry-reduced order-2 SDP. Both are well-defined; neither is mathematically open. The integer Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
 
+## Session update 2026-06-01d (publishability assessed; F1 barrier pressure-tested and sharpened)
+
+A tiered, no-inflation publishability assessment was written ([`docs/PUBLISHABLE_FINDINGS.md`](../docs/PUBLISHABLE_FINDINGS.md)). Bottom line: nothing here moves the bounds. The strongest candidate, F1 (the structural explanation of the post-de-Grey $\chi \geq 6$ wall), was then adversarially pressure-tested (L42).
+
+- **No break** (no chi-6 UDG; bounds unchanged) but F1 SHARPENED from a vague "wrong-shape bridge" heuristic into a partly-rigorous mechanism. Decisive SAT-certified fact: in $P_{510}$, two vertices are forced-different in every proper 5-coloring IFF they are adjacent (color forcing is purely local). So the single-hub chi-6 route reduces to **Lemma (L)**: "can 5 cocircular-at-unit points be rainbow-forced?", which fails because that needs a unit-distance $K_5$ ($\omega = 3$, impossible), and cocircular points induce a sub-$C_6$.
+- **Two honesty corrections.** (1) The cocircularity obstruction is the CLASSICAL $K_{2,3}$-freeness of UDGs (two circles meet in $\leq 2$ points), not a discovery. (2) L34's "even spread forces 5-colorability" is rigid-orbit-specific and was retracted as the general mechanism.
+- **The useful output is an open problem**, not a theorem: find a chi-5 UDG with LONG-RANGE color forcing (a non-adjacent forced-different pair). That is exactly what a chi-6 coupling needs and what the de Grey / Polymath lineage lacks. This is the right, falsifiable target for Shot 2, replacing "embed an abstract coupling."
+
+**Net.** The publishability picture is honest and current: no bound moved; the best candidate is a modest experimental-math note resting on a classical obstruction plus one clean reframing, pending a Polymath16 prior-art check. Shot 2's redirected target (long-range color forcing) is now precisely stated.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |

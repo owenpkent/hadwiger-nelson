@@ -2,6 +2,8 @@
 
 Master research map for the chromatic number of the plane.
 
+> For an honest, tiered assessment of which project findings are (and are not) publishable, see [`../PUBLISHABLE_FINDINGS.md`](../PUBLISHABLE_FINDINGS.md). Bottom line: nothing here moves the known bounds; the strongest candidate (the structural explanation of the $\chi \geq 6$ wall) was pressure-tested down to a modest note plus one clean open problem (find a chi-5 UDG with long-range color forcing).
+
 ## The problem
 
 Let $G_{\mathbb{R}^2}$ be the graph on vertex set $\mathbb{R}^2$ with edges between points at Euclidean distance exactly $1$. The **chromatic number of the plane** is

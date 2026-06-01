@@ -47,6 +47,10 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [ ] Glucose / Minisat verification at K=2000 to match L27 triple-solver standard
   - [ ] Smaller chi-6 abstract via mixed halves: try P_510 × P_517 + bridges (V=1027 marginally smaller), or P_510 + Moser + B via L24 triple form
   - [x] R5 rainbow-forcing conjecture (every chi-k vertex-critical graph forces rainbow on U with V\U inducing chi-(k-1)) REFUTED by C_5 counterexample at k=3, U={v_0, v_2, v_4}; proper 3-coloring (1,2,1,2,3) has c(U)={1,3} missing color 2. The Polymath 510 empirical rainbow is a consequence of L24 list-coloring infeasibility plus Polymath 510's specific algebraic structure, not a vertex-criticality + pigeonhole theorem.
+  - [x] Coordinate-first realizable couplings (h7/h7b/h7c/h7d): up to 13,757 genuine unit-distance bridges, all 5-colorable; barrier sharpened to "realizable bridges are the wrong shape for chi-6" (L34)
+  - [x] Adversarial pressure-test of the cocircularity barrier (F1): no chi-6 UDG; reduced to Lemma (L) "can 5 cocircular-at-unit points be rainbow-forced?" (no: needs unit-distance K_5); in P_510 forced-different = adjacent; cocircularity = classical K_{2,3}-freeness (f1pt_*.py, F1_pressure_test.md, L42)
+  - [ ] Shot-2 redirect (from L42): find a chi-5 UDG with LONG-RANGE color forcing (a non-adjacent pair forced-different in every proper 5-coloring) -- exactly what a chi-6 coupling needs and what the lineage lacks
+  - [ ] Polymath16 prior-art check on the "long-range color forcing" reframing (is forced-different=adjacent for de Grey-lineage graphs already known?)
   - [ ] Cocircularity-softened UDG construction for L27: replace each obstructed bridge with 2-hop softening to estimate actual minimum chi-6 UDG vertex count
   - [ ] Search for 7-vertex 4-chromatic UDG distinct from Moser spindle (would re-open the 14v UDG chi-5 route; L25 future direction 1)
   - [ ] Pair Moser with 8-9-vertex UDGs from e1l (chain/pivot constructions); test no-K_4 chi-5 minima
@@ -56,9 +60,16 @@ Task tracker for the Hadwiger-Nelson research repo.
 
 ## Architecture 2: Measurable / spectral
 
-- [ ] Survey: Falconer 1981 proof of chi_m >= 5
-- [ ] Implement autocorrelation / Fourier bound experiments
-- [ ] Document recent chi_m >= 6 results and what they require
+- [x] Survey: Falconer 1981 proof of chi_m >= 5; consolidated measurable frontier (chi_m >= 5 best known, >= 6 OPEN; "do >= 6" citations are misattributions) (L31; atlas arch2_measurable.md)
+- [x] Falconer autocorrelation illustration (e2a) + OFV 2-point Bessel SDP/LP reproduced & cross-validated, 3-point no gain (e2b, L32)
+- [x] Falconer chi_m >= 5 decomposed; gated on the same missing rigid 5-chromatic UDG as Arch 1 (e2c, L33)
+- [x] Single-class density PROVABLY capped at chi_m >= 5 (Croft floor 0.22936 > 1/5); >= 6 needs a JOINT argument (L37)
+- [x] Multi-class (joint k-coloring) measurable moment LP, the one un-capped route to chi_m >= 6:
+  - [x] Formulation + enumeration prototype (e3k, L38); Formulation-1/2 cross-color IEC "sharpness" layer (e3l, L39)
+  - [x] Degree-1 scalable moment backend (never enumerates colorings), validated (e3m, L40)
+  - [x] Order-2 Lasserre lift (IEC up to subset size 4), correct but naive build does not scale (e3n, L41)
+  - [ ] Symmetry-reduced order-2 SDP (O(2)/congruence block-diagonalization) to run at X_23 scale
+  - [ ] Restore + TRACK the Ambrus X_23 config (gitignored, absent from clean clone) to validate k=4 -> chi_m >= 5 from the joint angle, then k=5 as the open >= 6 frontier
 
 ## Architecture 3: Fractional / Lovász theta
 
