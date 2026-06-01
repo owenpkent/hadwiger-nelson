@@ -128,10 +128,17 @@ reduced solver must, before any bound is claimed:
   solve OOMs at 171 GiB: X_23 order-2 has 98627 MOMENT VARIABLES, which S_k does NOT
   reduce (it acts on the color axis, shrinking blocks; the variable count is a
   vertex-combinatorial quantity). 
-- NEXT (Part 2, now REQUIRED not optional): the O(2)-congruence reduction. It acts on
-  the VERTEX axis: congruent vertex-subsets share a moment, collapsing the 98627
-  variables toward the few hundred distinct congruence types (X_23 has only 27
-  distinct distances). This is the OTHER half of the reduction; without it the order-2
-  moment-variable count alone blocks X_23 regardless of the PSD block sizes. Build it,
-  cross-check vs e3q on small configs (margins must match), then run X_23 k=4
-  (retest >=5) and k=5 (open >=6).
+- DONE (2026-06-01, L49): Part 2, the O(2)-congruence reduction
+  (`congruence_reduce=True`). Built and validated: reproduces e3n WITH size-<=4 IEC on
+  triangle + rhombus (the congruence identification IS the IEC, done structurally; no
+  fake certificate). BUT the variable collapse is only ~2x: triangle 7->3, rhombus
+  19->9, X_23 98627->48342. X_23 is geometrically generic at the 4-point level (27
+  distinct distances but distinct 4-point combinations), so O(2) is weak exactly where
+  the variables concentrate (size-4 moments).
+- THE HONEST BOUNDARY: both reductions are now built and correct (S_k blocks, L47;
+  O(2) variables, L49), but together they do NOT bring X_23 order-2 into dense-cvxpy
+  range (48342 vars x blocks up to 735 => dense affine map far past memory). The
+  measurable chi_m>=6 order-2 frontier needs a CUSTOM SPARSE conic assembly (de
+  Laat-Vallentin / DeCorte-Oliveira-Vallentin never form dense maps), or a new idea.
+  The next effort is sparse-solver engineering, NOT more symmetry. This is a real
+  research-software undertaking; flag it before committing weeks to it.

@@ -72,6 +72,39 @@ def _orbit_rep(key, k):
     return frozenset(out)
 
 
+def _congruence_rep(key, dist_id, k):
+    """O(2)+S_k congruence-canonical form of a moment key. The O(2)-averaged moment
+    of a colored sub-configuration depends only on its CONGRUENCE type (the IEC
+    principle, note 12), so congruent colored vertex-subsets share a variable. The
+    canonical form jointly minimizes, over all point permutations, the pair
+    (distance-class submatrix, first-appearance color partition). 'one'/'zero' pass
+    through. dist_id maps each unordered vertex pair to its distance-class integer."""
+    if key in ("one", "zero"):
+        return key
+    items = sorted(key)
+    verts = [v for (v, _) in items]
+    cols = [c for (_, c) in items]
+    m = len(verts)
+    best = None
+    for perm in permutations(range(m)):
+        dpart = []
+        for a in range(m):
+            for b in range(a + 1, m):
+                va, vb = verts[perm[a]], verts[perm[b]]
+                dpart.append(dist_id[(min(va, vb), max(va, vb))])
+        remap = {}
+        cpart = []
+        for a in range(m):
+            c = cols[perm[a]]
+            if c not in remap:
+                remap[c] = len(remap)
+            cpart.append(remap[c])
+        cand = (tuple(dpart), tuple(cpart))
+        if best is None or cand < best:
+            best = cand
+    return best
+
+
 def _build_basis(n, k, edges):
     basis = [frozenset()]
     for i in range(n):
@@ -165,18 +198,35 @@ def _sym(A):
 
 
 def build_blockdiag_order2(X, dmat2_canon, edges, k, *, iec_keys=None,
+                           congruence_reduce=False,
                            n_freq=300, freq_max=20.0, slack_tol=1e-6, solver=None):
     """S_k-reduced order-2 Phase-1 relaxation. Reproduces e3n margins (symmetrized,
-    lossless) with the PSD split into small multiplicity blocks."""
+    lossless) with the PSD split into small multiplicity blocks.
+
+    congruence_reduce: if True, ALSO identify O(2)-congruent colored sub-configs as
+    one moment variable (Part 2). This is structurally equivalent to imposing the
+    Formulation-1/2 IEC up to subset size 4, so iec_keys is then ignored. It reduces
+    the moment-VARIABLE count along the vertex axis (S_k only reduces the color axis /
+    block sizes), but only as much as the configuration is geometrically degenerate."""
     n = X.shape[0]
     edges = set((min(a, b), max(a, b)) for (a, b) in edges)
-    iec_keys = list(iec_keys or [])
+    iec_keys = [] if congruence_reduce else list(iec_keys or [])
     basis = _build_basis(n, k, edges)
     D = len(basis)
 
-    # Symmetrized moment variables: one per S_k-orbit of the non-trivial merged keys.
-    # Also record the incidence positions (a,b) -> orbit, and the constant ('one').
-    orbit_positions = defaultdict(list)   # orbit_rep -> list of (a, b)
+    if congruence_reduce:
+        vals = sorted({dmat2_canon[(i, j)] for i in range(n) for j in range(i + 1, n)},
+                      key=lambda e: float(e))
+        valpos = {v: idx for idx, v in enumerate(vals)}
+        dist_id = {(i, j): valpos[dmat2_canon[(i, j)]]
+                   for i in range(n) for j in range(i + 1, n)}
+        keyfn = lambda kk: _congruence_rep(kk, dist_id, k)
+    else:
+        keyfn = lambda kk: _orbit_rep(kk, k)
+
+    # Symmetrized moment variables: one per orbit (S_k) or congruence class (+O(2)) of
+    # the non-trivial merged keys. Record incidence positions and the constant ('one').
+    orbit_positions = defaultdict(list)
     one_positions = []
     for a in range(D):
         Ba = basis[a]
@@ -187,7 +237,7 @@ def build_blockdiag_order2(X, dmat2_canon, edges, k, *, iec_keys=None,
             if key == "one":
                 one_positions.append((a, b))
                 continue
-            orbit_positions[_orbit_rep(key, k)].append((a, b))
+            orbit_positions[keyfn(key)].append((a, b))
 
     orbits = list(orbit_positions)
     oindex = {o: idx for idx, o in enumerate(orbits)}
@@ -199,7 +249,7 @@ def build_blockdiag_order2(X, dmat2_canon, edges, k, *, iec_keys=None,
             return cp.Constant(1.0)
         if key == "zero":
             return cp.Constant(0.0)
-        idx = oindex.get(_orbit_rep(key, k))
+        idx = oindex.get(keyfn(key))
         return y[idx] if idx is not None else cp.Constant(0.0)
 
     # Symmetry-adapted blocks; precompute, per (block, orbit), the small matrix
@@ -373,8 +423,46 @@ def _f(m):
     return "None" if m is None else f"{m:.2e}"
 
 
+def validate_congruence():
+    """Gate Part 2: e3q with congruence_reduce=True (O(2) variable identification)
+    must reproduce e3n WITH the size-<=4 IEC, since identifying congruent variables
+    is structurally the same as imposing the IEC equalities. Also reports the
+    variable collapse (S_k orbits -> congruence classes)."""
+    print("\ne3q Part 2: congruence reduction vs e3n+IEC (must match) + var collapse")
+    print("=" * 78, flush=True)
+    configs = [("triangle", _triangle_vertices_exact), ("rhombus", _rhombus_vertices_exact)]
+    all_ok = True
+    rows = []
+    for name, fn in configs:
+        X, dc, edges = build_exact_config(fn())
+        for k in (4, 5):
+            keys = iec_keys_upto4(X, dc, edges, k, max_size=4)
+            ref = build_order2_relaxation(X, dc, edges, k, iec_keys=keys, max_basis=5000)
+            sk = build_blockdiag_order2(X, dc, edges, k, congruence_reduce=False,
+                                        iec_keys=set())
+            cg = build_blockdiag_order2(X, dc, edges, k, congruence_reduce=True)
+            mr, mc = ref.get("infeasibility_margin"), cg.get("infeasibility_margin")
+            ok = _agree(mr, mc) and ((mc is None) or (mr is None) or mc <= mr + TOL)
+            all_ok = all_ok and ok
+            print(f"  [{name} k={k}] e3n+IEC={_f(mr)} e3q+cong={_f(mc)}  vars "
+                  f"S_k={sk.get('n_orbit_vars')}->cong={cg.get('n_orbit_vars')}  "
+                  f"{'OK' if ok else '!! MISMATCH'}", flush=True)
+            rows.append({"config": name, "k": k, "e3n_iec_margin": mr,
+                         "cong_margin": mc, "sk_vars": sk.get("n_orbit_vars"),
+                         "cong_vars": cg.get("n_orbit_vars"), "ok": ok})
+    print(f"\nCONGRUENCE reduction reproduces e3n+IEC: {'PASS' if all_ok else 'FAIL'}",
+          flush=True)
+    CACHE.mkdir(exist_ok=True)
+    with (CACHE / "e3q_congruence_validation.json").open("w") as f:
+        json.dump({"experiment": "e3q_congruence_validation", "rows": rows,
+                   "all_reproduce": all_ok}, f, indent=2)
+    return all_ok
+
+
 def main():
-    return 0 if validate() else 1
+    ok1 = validate()
+    ok2 = validate_congruence()
+    return 0 if (ok1 and ok2) else 1
 
 
 if __name__ == "__main__":

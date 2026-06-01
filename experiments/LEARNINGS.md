@@ -6,6 +6,24 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L49. Shot A Part 2 (the O(2)-congruence reduction) is BUILT and VALIDATED CORRECT, and it delivers a decisive NEGATIVE that reshapes the measurable order-2 program: on $X_{23}$ the congruence reduction collapses the order-2 moment variables only $98627 \to 48342$ ($\sim$2x), NOT the order of magnitude needed. $X_{23}$ is geometrically generic at the 4-point level (27 distinct distances, but their 4-point COMBINATIONS are mostly congruence-distinct), so the $O(2)$ reduction is weak exactly where the variables concentrate (size-4 moments). Conclusion: both symmetry reductions are now built and correct ($S_k$ shrinks PSD blocks, L47; $O(2)$ identifies variables, L49), but TOGETHER they are insufficient to bring $X_{23}$ order-2 into dense-cvxpy range. The remaining tool is genuine SPARSE SDP assembly (de Laat-Vallentin custom solver), not more symmetry.
+
+**Architecture**: 2/3 (measurable / fractional). Completes the symmetry-reduction program (Parts 1+2) flagged since L41/L48.
+
+**Experiment**: [`e3q_blockdiag_order2.py`](fractional/e3q_blockdiag_order2.py) (`congruence_reduce=True`); result [`_cache/e3q_congruence_validation.json`](fractional/_cache/e3q_congruence_validation.json).
+
+**The construction.** The $O(2)$-averaged moment of a colored sub-configuration depends only on its CONGRUENCE type (the IEC principle, note 12, the KMOR Remark 3.3 lineage), so congruent colored vertex-subsets are IDENTIFIED as one variable: each moment key is canonicalized over point-permutations to its (distance-class submatrix, first-appearance color partition). This is structurally equivalent to imposing the Formulation-1/2 IEC up to subset size 4, but as variable identification rather than constraints.
+
+**Correctness gate (PASS).** e3q with `congruence_reduce=True` reproduces e3n WITH the size-$\le4$ IEC on triangle and rhombus ($k=4,5$): margins agree (all $\le5\times10^{-11}$, feasible) and never exceed the reference (no fake certificate). So the congruence identification is the IEC, done structurally. Independently, the colored-config enumeration reproduced the e3q $S_k$ variable count exactly (98627), cross-checking the bookkeeping.
+
+**The variable collapse, measured.** $S_k$ orbits $\to$ congruence classes: triangle $7\to3$, rhombus $19\to9$, and $X_{23}$ $98627\to48342$ ($\sim$2x throughout). The 2x is intrinsic to a generic config: with only 27 distinct distances the size-$\le2$ moments collapse a lot, but the size-4 moments (the bulk) are mostly congruence-distinct.
+
+**What this settles.** The two-axis reduction (L48) is now complete and correct: $S_k$ on the color axis (blocks independent of $k$, L47), $O(2)$ on the vertex axis (variables by congruence, L49). Neither nor both make $X_{23}$ order-2 fit dense cvxpy (48342 vars $\times$ blocks up to 735 $\Rightarrow$ a dense affine map far past memory). The measurable $\chi_m\ge6$ order-2 frontier therefore requires a custom SPARSE conic assembly (the de Laat-Vallentin / DeCorte-Oliveira-Vallentin machinery never forms dense maps), or a genuinely new reduction. This is the honest boundary of what symmetry alone buys, and it redirects the next effort from "more symmetry" to "sparse solver engineering" (or a different idea entirely).
+
+**Wrong-approach detector status.** Euclidean by construction; the $O(2)$ identification IS the Euclidean-congruence structure that separates $\mathbb{R}^2$ from $\mathbb{Q}^2$. Measurable bound, $\mathbb{Q}^2$ exempt. No bound produced.
+
+---
+
 ### L48. Shot A scaling test: the S_k-reduced order-2 SDP (e3q, L47) was pushed to $X_{23}$ and pinned the EXACT remaining blocker, which is a SECOND reduction, not an optimization. With an O(D^2) fix to the symmetry-adapted basis (precompute $Z=V^\top R_2 V$ once; intertwiner blocks are slices of $Z$, vs the original $O(m^2 D^2)$ that hung), the $X_{23}$ $k=4$ order-2 basis ($\|B\|=3953$) builds in **17.5 s** into 4 blocks of size 253-735 ($\sim$150x less PSD work than the naive $3953^2$, which OOMs at 25 GB). But the full solve then OOMs at 171 GiB on the affine map $(\text{mult}^2)\times(n_{\text{orb}})$ because $X_{23}$ has **98627 order-2 moment variables**. CONCLUSION: $S_k$ symmetry shrinks the PSD BLOCKS but NOT the moment-VARIABLE count; the variables are collapsed only by CONGRUENCE (the $O(2)$ reduction, Part 2). So both reductions are necessary for $X_{23}$ order-2; $S_k$ alone is insufficient. This elevates Part 2 from "only if needed" to "required", and is the concrete next build.
 
 **Architecture**: 2/3 (measurable / fractional). Scaling analysis of e3q (L47).
