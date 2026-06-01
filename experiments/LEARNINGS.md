@@ -6,6 +6,20 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L48. Shot A scaling test: the S_k-reduced order-2 SDP (e3q, L47) was pushed to $X_{23}$ and pinned the EXACT remaining blocker, which is a SECOND reduction, not an optimization. With an O(D^2) fix to the symmetry-adapted basis (precompute $Z=V^\top R_2 V$ once; intertwiner blocks are slices of $Z$, vs the original $O(m^2 D^2)$ that hung), the $X_{23}$ $k=4$ order-2 basis ($\|B\|=3953$) builds in **17.5 s** into 4 blocks of size 253-735 ($\sim$150x less PSD work than the naive $3953^2$, which OOMs at 25 GB). But the full solve then OOMs at 171 GiB on the affine map $(\text{mult}^2)\times(n_{\text{orb}})$ because $X_{23}$ has **98627 order-2 moment variables**. CONCLUSION: $S_k$ symmetry shrinks the PSD BLOCKS but NOT the moment-VARIABLE count; the variables are collapsed only by CONGRUENCE (the $O(2)$ reduction, Part 2). So both reductions are necessary for $X_{23}$ order-2; $S_k$ alone is insufficient. This elevates Part 2 from "only if needed" to "required", and is the concrete next build.
+
+**Architecture**: 2/3 (measurable / fractional). Scaling analysis of e3q (L47).
+
+**Experiment**: [`e3q_blockdiag_order2.py`](fractional/e3q_blockdiag_order2.py) (the $Z=V^\top R_2 V$ basis optimization, which preserves the L47 correctness gate: triangle + rhombus still reproduce e3n, 8/8).
+
+**The two-axis picture (now explicit).** An order-$t$ moment relaxation on $n$ points with $k$ colors has (a) a PSD matrix of side $\sim\binom{n}{\le t}k^{\le t}$ and (b) $\sim\binom{n}{\le 2t}\cdot(\text{colorings})$ moment variables. The $S_k$ color symmetry acts on the COLOR axis: it makes block sizes independent of $k$ (L46/L47) but leaves the VERTEX-combinatorial variable count untouched ($X_{23}$ order-2: $\binom{23}{\le4}$-scale $\Rightarrow$ 98627 orbit variables). The configuration's $O(2)$-congruence symmetry acts on the VERTEX axis: congruent vertex-subsets share a moment, collapsing the 98627 toward the few hundred distinct congruence types (recall the single-class $X_{23}$ had only 27 distinct distances and $\sim$5868 congruence constraints). Part 2 is therefore not a refinement but the OTHER half of the reduction.
+
+**Honest status.** No bound moved. e3q is correct (L47 gate) and its basis scales to $X_{23}$; the order-2 frontier run ($k=4$ retest $\ge5$, $k=5$ open $\ge6$) is blocked on the $O(2)$-congruence variable reduction (Part 2), now the single well-defined next build. The naive e3n OOMs at 25 GB on Moser already, so e3q is strictly the more capable engine; it just needs its companion reduction to reach $X_{23}$.
+
+**Wrong-approach detector status.** Euclidean by construction; measurable bound, $\mathbb{Q}^2$ exempt. No bound produced.
+
+---
+
 ### L47. Shot A, Part 1 step 2 DELIVERED: the S_k-block-diagonalized ORDER-2 measurable SDP (e3q) is built and validated correct (reproduces the naive e3n margins on triangle + rhombus, $k=4,5$, base and +IEC, 8/8, no fake certificate), with the PSD split into a handful of small blocks whose size is INDEPENDENT of $k$ and a 50-380x speedup. This is the rung that turns the L41 order-2 scale wall into a tractable SDP. Getting it correct required a genuine representation-theoretic step the order-1 case did not: the order-2 rep has S_k-irreps with MULTIPLICITY > 1, so the naive "eigenvectors of one invariant matrix" basis provably FAILS to block-diagonalize (caught in prototyping: max off-block entry 9.9, not 0); the correct construction is the Murota-style multiplicity alignment (validated: alignment residual $\sim10^{-13}$).
 
 **Architecture**: 2/3 (measurable / fractional). Executes Part 1 step 2 of [`SHOTA_SYMMETRY_REDUCTION_PLAN.md`](fractional/SHOTA_SYMMETRY_REDUCTION_PLAN.md); the order-2 analog of L46.

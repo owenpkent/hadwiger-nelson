@@ -122,8 +122,16 @@ reduced solver must, before any bound is claimed:
   alignment (the naive eigenbasis provably fails at order 2: irreps with
   multiplicity > 1; alignment residual ~1e-13). PSD splits into ~4 blocks of size
   independent of k (rhombus 93->max 17 at k=4; 146->max 17 at k=5); 50-380x faster.
-- NEXT (engineering, not math): tile the Reynolds average (orbit-sum instead of
-  k! conjugations) and the orbit-einsum precompute, which currently thrash at n>=7.
-  Then run order-2 reduced on X_23 (|B|~4141): k=4 retests >=5 (with IEC up to size
-  4, the strength order-1 lacked in L43), k=5 is the open >=6 frontier.
-- THEN (Part 2, only if needed): the O(2)-congruence reduction.
+- DONE (2026-06-01, L48): pushed e3q to X_23. With the Z = V^T R2 V basis fix, the
+  X_23 k=4 order-2 basis (|B|=3953) builds in 17.5 s into 4 blocks of size 253-735
+  (~150x less PSD work than the naive 3953^2, which OOMs at 25 GB). BUT the full
+  solve OOMs at 171 GiB: X_23 order-2 has 98627 MOMENT VARIABLES, which S_k does NOT
+  reduce (it acts on the color axis, shrinking blocks; the variable count is a
+  vertex-combinatorial quantity). 
+- NEXT (Part 2, now REQUIRED not optional): the O(2)-congruence reduction. It acts on
+  the VERTEX axis: congruent vertex-subsets share a moment, collapsing the 98627
+  variables toward the few hundred distinct congruence types (X_23 has only 27
+  distinct distances). This is the OTHER half of the reduction; without it the order-2
+  moment-variable count alone blocks X_23 regardless of the PSD block sizes. Build it,
+  cross-check vs e3q on small configs (margins must match), then run X_23 k=4
+  (retest >=5) and k=5 (open >=6).

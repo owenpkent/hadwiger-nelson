@@ -116,6 +116,12 @@ def _symmetry_adapted_blocks(basis, k, seed=1):
             s = i
     Vs = [V[:, a:b] for (a, b) in esp]
     dims = [b - a for (a, b) in esp]
+    spans = list(esp)
+
+    # Precompute Z = V^T R2 V ONCE (two D x D matmuls). Every intertwiner block
+    # V_a^T R2 V_b is then the slice Z[a-rows, b-cols] -- O(D^2) total instead of the
+    # O(m^2 D^2) of forming each product separately (which does not scale past n~7).
+    Z = V.T @ (R2 @ V)
 
     m = len(esp)
     parent = list(range(m))
@@ -127,8 +133,12 @@ def _symmetry_adapted_blocks(basis, k, seed=1):
         return x
 
     for a in range(m):
+        ra0, ra1 = spans[a]
         for b in range(a + 1, m):
-            if dims[a] == dims[b] and np.linalg.norm(Vs[a].T @ R2 @ Vs[b]) > 1e-6:
+            if dims[a] != dims[b]:
+                continue
+            rb0, rb1 = spans[b]
+            if np.linalg.norm(Z[ra0:ra1, rb0:rb1]) > 1e-6:
                 parent[find(a)] = find(b)
 
     comps = defaultdict(list)
@@ -139,9 +149,11 @@ def _symmetry_adapted_blocks(basis, k, seed=1):
     for members in comps.values():
         d = dims[members[0]]
         ref = members[0]
+        r0, r1 = spans[ref]
         F_list = [Vs[ref]]
         for t in members[1:]:
-            O = Vs[t].T @ R2 @ Vs[ref]      # intertwiner ref -> t
+            t0, t1 = spans[t]
+            O = Z[t0:t1, r0:r1]             # intertwiner ref -> t (slice of Z)
             U, _, Wt = np.linalg.svd(O)
             F_list.append(Vs[t] @ (U @ Wt))  # orthogonal aligner
         blocks.append((F_list, d))
@@ -200,24 +212,44 @@ def build_blockdiag_order2(X, dmat2_canon, edges, k, *, iec_keys=None,
     orbit_ab = [(np.array([a for (a, _) in orbit_positions[o]], dtype=int),
                  np.array([b for (_, b) in orbit_positions[o]], dtype=int))
                 for o in orbits]
+    n_orb = len(orbits)
+    # The affine map T (mult^2 x n_orb) per block is dense. S_k shrinks the BLOCKS
+    # but not the moment-VARIABLE count (n_orb), which is vertex-combinatorial; on
+    # X_23 order-2 n_orb ~ 98627 and the largest block ~735, so T alone is ~170 GiB
+    # (L48). That variable explosion is what the O(2)-congruence reduction (Part 2)
+    # collapses. Guard against the OOM so the limit is reported, not crashed into.
+    max_mult = max(len(F) for F, _ in blocks)
+    gib = max_mult * max_mult * n_orb * 8 / 2**30
+    if gib > 8.0:
+        return {"n_points": n, "k": k, "basis_size": D, "n_orbit_vars": n_orb,
+                "n_blocks": len(blocks), "max_block": max_mult,
+                "status": "SKIPPED_AFFINE_MAP_TOO_LARGE",
+                "affine_map_gib": round(gib, 1),
+                "note": "S_k reduces blocks but not the moment-variable count; "
+                        "needs the O(2)-congruence reduction (Part 2) to collapse "
+                        f"the {n_orb} moment variables before X_23-scale order-2 runs"}
     for F_list, d in blocks:
         mult = len(F_list)
         Fstack = np.stack(F_list, axis=0)        # (mult, D, d)
-        # C[s,t] = (1/d) sum_{(a,b) in pos} F_s[a] . F_t[b]
-        #        = (1/d) einsum('spl,tpl->st', F_s[a_pos], F_t[b_pos])
+
         def Cmat(a_idx, b_idx):
             if a_idx.size == 0:
                 return np.zeros((mult, mult))
             A = Fstack[:, a_idx, :]              # (mult, P, d)
             B = Fstack[:, b_idx, :]
             return np.einsum('spl,tpl->st', A, B) / d
+
+        # Build the block as a SINGLE affine map vec(C) = Cconst_vec + T @ y, rather
+        # than summing n_orb weighted cp.Constant matrices (which made cvxpy's
+        # canonicalization blow up at n>=7). T is (mult^2, n_orb).
         Cconst = Cmat(one_a, one_b)
-        expr = cp.Constant(Cconst)
+        T = np.zeros((mult * mult, n_orb))
         for oi, (a_idx, b_idx) in enumerate(orbit_ab):
             Co = Cmat(a_idx, b_idx)
             if np.any(np.abs(Co) > 1e-12):
-                expr = expr + y[oi] * cp.Constant(Co)
-        cons.append(expr >> 0)
+                T[:, oi] = Co.reshape(-1)
+        vecC = cp.Constant(Cconst.reshape(-1)) + cp.Constant(T) @ y
+        cons.append(cp.reshape(vecC, (mult, mult), order="C") >> 0)
 
     # (NORM) each point one color.
     for i in range(n):
