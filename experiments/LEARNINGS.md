@@ -6,6 +6,18 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L50. Intermediate-config probe (before committing to the sparse solver): order-2 does NOT strictly beat order-1 on any runnable configuration, confirming there is no cheap shortcut to validate the order-2 lift -- the sparse SDP at $X_{23}$ scale is genuinely necessary. On Moser ($n=7$) at $k=2,3,4,5$ and double-Moser ($n=10$) at $k=2$, the order-1 block-diagonalized SDP (e3p) and the order-2 one (e3q + congruence) AGREE on every case: both CERTIFY the graph-theoretically non-$k$-colorable cases ($k<\chi$: Moser $k=2,3$, double-Moser $k=2$, all "infeasible") and both are feasible (margin at noise floor) for $k\ge\chi$. No strict separation (order-2 certifies where order-1 does not) anywhere it could be run.
+
+**Architecture**: 2/3 (measurable / fractional). Decision-support probe for the L49 boundary (is the sparse solver avoidable?).
+
+**Experiment**: e3p (L46) vs e3q+`congruence_reduce` (L47/L49) head-to-head; partial result (double-Moser $k\ge3$ order-2 hard-crashed on memory at $n=10$, an additional data point on the naive-assembly scaling wall).
+
+**Why no separation, and why it matters.** Order-2's advantage over order-1 is (a) the larger PSD coupling and (b) IEC up to subset size 4 vs size 2. Both are INVISIBLE on small configs: the graph-coloring obstruction ($k<\chi$) is caught by the order-1 PSD already (the moment matrix detects the clique/odd-cycle), and the measurable (autocorrelation/IEC) obstruction that genuinely separates the orders only appears at $X_{23}$ scale (the single-class route needed 23 points and IEC size 5 to cross $1/4$). So no config between Moser and $X_{23}$ exhibits the separation, and one cannot cheaply confirm that order-2 helps before paying for the $X_{23}$-scale sparse solver. Combined with L49 (symmetry alone is insufficient at $X_{23}$), the measurable $\chi_m\ge6$ attack has a single, unavoidable, well-defined prerequisite: a custom sparse conic backend.
+
+**Wrong-approach detector status.** Euclidean by construction; measurable bound, $\mathbb{Q}^2$ exempt. No bound produced.
+
+---
+
 ### L49. Shot A Part 2 (the O(2)-congruence reduction) is BUILT and VALIDATED CORRECT, and it delivers a decisive NEGATIVE that reshapes the measurable order-2 program: on $X_{23}$ the congruence reduction collapses the order-2 moment variables only $98627 \to 48342$ ($\sim$2x), NOT the order of magnitude needed. $X_{23}$ is geometrically generic at the 4-point level (27 distinct distances, but their 4-point COMBINATIONS are mostly congruence-distinct), so the $O(2)$ reduction is weak exactly where the variables concentrate (size-4 moments). Conclusion: both symmetry reductions are now built and correct ($S_k$ shrinks PSD blocks, L47; $O(2)$ identifies variables, L49), but TOGETHER they are insufficient to bring $X_{23}$ order-2 into dense-cvxpy range. The remaining tool is genuine SPARSE SDP assembly (de Laat-Vallentin custom solver), not more symmetry.
 
 **Architecture**: 2/3 (measurable / fractional). Completes the symmetry-reduction program (Parts 1+2) flagged since L41/L48.
