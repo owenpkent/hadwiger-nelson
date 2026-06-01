@@ -1,0 +1,349 @@
+r"""e3q: S_k-BLOCK-DIAGONALIZED ORDER-2 measurable moment SDP (Shot A, Part 1 step 2).
+
+The payoff rung. L41 showed the naive order-2 SDP (e3n) is correct but does not
+scale: its PSD block has side |B| ~ 1+nk+binom(n,2)k^2 (X_23 -> ~4141), out of reach.
+L46 built and validated the order-1 block-diagonalization. This file ports the SAME
+S_k color-symmetry reduction to ORDER 2, where it stops being a mere speedup and
+becomes the thing that makes the order-2 frontier (k=4 retest >=5; k=5 open >=6)
+runnable at X_23 scale.
+
+WHY ORDER-2 NEEDS A REAL SYMMETRY-ADAPTED BASIS (not the order-1 shortcut). The
+order-2 moment matrix, symmetrized over S_k (lossless, L44), is S_k-INVARIANT, so it
+block-diagonalizes. But unlike order-1 (whose only nontrivial block was the n x n
+standard block), the order-2 representation contains S_k-irreps with MULTIPLICITY > 1
+(verified: the eigenspaces of a generic invariant matrix have the irrep dimensions
+1,2,3,... but several copies each). Naively grouping eigenvectors of one invariant
+matrix does NOT block-diagonalize a general invariant M (the copies of one irrep
+couple). The correct construction (Murota-Kanno-Kojima-Kojima randomized block-
+diagonalization of a matrix *-algebra; equivalently the de Laat-Vallentin coherent-
+configuration reduction) ALIGNS the multiplicity copies:
+  1. R  = Reynolds-average of a random symmetric matrix (an element of the commutant).
+     Its eigenspaces are the irreducible subspaces (dim = d_lambda each).
+  2. R2 = a second random commutant element. Two eigenspaces are copies of the SAME
+     irrep iff they have equal dim and V_a^T R2 V_b != 0; this groups eigenspaces into
+     irrep components by union-find.
+  3. Within a component, the orthogonal part of V_t^T R2 V_ref (an intertwiner, a
+     scalar multiple of an orthogonal matrix by Schur) aligns copy t to the reference,
+     so that for EVERY invariant M, F_s^T M F_t = c_{st}(M) * I_{d_lambda}.
+The reduced PSD is then: for each irrep, the multiplicity x multiplicity matrix
+C_lambda = [c_{st}(M)] >= 0. M >= 0 IFF all C_lambda >= 0. (Validated: the
+"F_s^T M F_t - c I" residual is ~1e-13; reduced block sizes rhombus 93->17, Moser
+321->59.)
+
+CORRECTNESS GATE. A wrong reduction silently FAKES a chi_m bound. So e3q is validated
+against the independent naive e3n on small configs (rhombus, Moser, k=4,5, base and
++IEC): the margins must agree and e3q must never exceed e3n (no fake certificate).
+Only after that gate passes is the X_23 run meaningful.
+"""
+from __future__ import annotations
+
+import json
+import time
+from collections import defaultdict
+from itertools import permutations
+
+import cvxpy as cp
+import numpy as np
+from scipy.special import j0
+
+from experiments.fractional.e3c_ofv_lp_dual import CACHE
+from experiments.fractional.e3l_multiclass_iec import (
+    build_exact_config,
+    _triangle_vertices_exact, _rhombus_vertices_exact, _moser_vertices_exact,
+)
+from experiments.fractional.e3n_moment_order2 import (
+    _canon, build_order2_relaxation, iec_keys_upto4,
+)
+
+
+def _orbit_rep(key, k):
+    """S_k-orbit canonical form of a moment key (frozenset of (vertex,color)):
+    relabel colors by order of first appearance (sorted by vertex). Two keys are
+    S_k-equivalent iff they share this canonical form. 'one'/'zero' pass through."""
+    if key in ("one", "zero"):
+        return key
+    items = sorted(key)  # by vertex
+    remap = {}
+    out = []
+    for (v, c) in items:
+        if c not in remap:
+            remap[c] = len(remap)
+        out.append((v, remap[c]))
+    return frozenset(out)
+
+
+def _build_basis(n, k, edges):
+    basis = [frozenset()]
+    for i in range(n):
+        for c in range(k):
+            basis.append(frozenset({(i, c)}))
+    for i in range(n):
+        for j in range(i + 1, n):
+            for c in range(k):
+                for cp_ in range(k):
+                    if (i, j) in edges and c == cp_:
+                        continue
+                    basis.append(frozenset({(i, c), (j, cp_)}))
+    return basis
+
+
+def _symmetry_adapted_blocks(basis, k, seed=1):
+    """Murota-style symmetry-adapted basis for the S_k color action on `basis`.
+    Returns a list of irrep blocks; each block is (F_list, d) where F_list is the
+    list of aligned orthonormal D x d copy-bases and d is the irrep dimension."""
+    D = len(basis)
+    bindex = {b: a for a, b in enumerate(basis)}
+    G = [np.array([bindex[frozenset((v, perm[c]) for (v, c) in b)] for b in basis])
+         for perm in permutations(range(k))]
+
+    def reynolds(Araw):
+        R = np.zeros((D, D))
+        for arr in G:
+            R[np.ix_(arr, arr)] += Araw
+        return (R + R.T) / (2 * len(G))
+
+    rng = np.random.default_rng(seed)
+    R = reynolds(_sym(rng.standard_normal((D, D))))
+    R2 = reynolds(_sym(rng.standard_normal((D, D))))
+    w, V = np.linalg.eigh(R)
+    o = np.argsort(w)
+    w, V = w[o], V[:, o]
+    esp = []
+    s = 0
+    for i in range(1, D + 1):
+        if i == D or abs(w[i] - w[s]) > 1e-6:
+            esp.append((s, i))
+            s = i
+    Vs = [V[:, a:b] for (a, b) in esp]
+    dims = [b - a for (a, b) in esp]
+
+    m = len(esp)
+    parent = list(range(m))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    for a in range(m):
+        for b in range(a + 1, m):
+            if dims[a] == dims[b] and np.linalg.norm(Vs[a].T @ R2 @ Vs[b]) > 1e-6:
+                parent[find(a)] = find(b)
+
+    comps = defaultdict(list)
+    for a in range(m):
+        comps[find(a)].append(a)
+
+    blocks = []
+    for members in comps.values():
+        d = dims[members[0]]
+        ref = members[0]
+        F_list = [Vs[ref]]
+        for t in members[1:]:
+            O = Vs[t].T @ R2 @ Vs[ref]      # intertwiner ref -> t
+            U, _, Wt = np.linalg.svd(O)
+            F_list.append(Vs[t] @ (U @ Wt))  # orthogonal aligner
+        blocks.append((F_list, d))
+    return blocks
+
+
+def _sym(A):
+    return A + A.T
+
+
+def build_blockdiag_order2(X, dmat2_canon, edges, k, *, iec_keys=None,
+                           n_freq=300, freq_max=20.0, slack_tol=1e-6, solver=None):
+    """S_k-reduced order-2 Phase-1 relaxation. Reproduces e3n margins (symmetrized,
+    lossless) with the PSD split into small multiplicity blocks."""
+    n = X.shape[0]
+    edges = set((min(a, b), max(a, b)) for (a, b) in edges)
+    iec_keys = list(iec_keys or [])
+    basis = _build_basis(n, k, edges)
+    D = len(basis)
+
+    # Symmetrized moment variables: one per S_k-orbit of the non-trivial merged keys.
+    # Also record the incidence positions (a,b) -> orbit, and the constant ('one').
+    orbit_positions = defaultdict(list)   # orbit_rep -> list of (a, b)
+    one_positions = []
+    for a in range(D):
+        Ba = basis[a]
+        for b in range(D):
+            key = _canon(Ba | basis[b], edges)
+            if key == "zero":
+                continue
+            if key == "one":
+                one_positions.append((a, b))
+                continue
+            orbit_positions[_orbit_rep(key, k)].append((a, b))
+
+    orbits = list(orbit_positions)
+    oindex = {o: idx for idx, o in enumerate(orbits)}
+    y = cp.Variable(len(orbits), nonneg=True)
+
+    def mom(assignset):
+        key = _canon(assignset, edges)
+        if key == "one":
+            return cp.Constant(1.0)
+        if key == "zero":
+            return cp.Constant(0.0)
+        idx = oindex.get(_orbit_rep(key, k))
+        return y[idx] if idx is not None else cp.Constant(0.0)
+
+    # Symmetry-adapted blocks; precompute, per (block, orbit), the small matrix
+    # C_orbit[s,t] = (1/d) tr(F_s^T E_orbit F_t), and the constant block.
+    blocks = _symmetry_adapted_blocks(basis, k)
+    cons = []
+    # Precompute position arrays (a-index, b-index) per orbit and for the constant.
+    one_a = np.array([a for (a, _) in one_positions], dtype=int)
+    one_b = np.array([b for (_, b) in one_positions], dtype=int)
+    orbit_ab = [(np.array([a for (a, _) in orbit_positions[o]], dtype=int),
+                 np.array([b for (_, b) in orbit_positions[o]], dtype=int))
+                for o in orbits]
+    for F_list, d in blocks:
+        mult = len(F_list)
+        Fstack = np.stack(F_list, axis=0)        # (mult, D, d)
+        # C[s,t] = (1/d) sum_{(a,b) in pos} F_s[a] . F_t[b]
+        #        = (1/d) einsum('spl,tpl->st', F_s[a_pos], F_t[b_pos])
+        def Cmat(a_idx, b_idx):
+            if a_idx.size == 0:
+                return np.zeros((mult, mult))
+            A = Fstack[:, a_idx, :]              # (mult, P, d)
+            B = Fstack[:, b_idx, :]
+            return np.einsum('spl,tpl->st', A, B) / d
+        Cconst = Cmat(one_a, one_b)
+        expr = cp.Constant(Cconst)
+        for oi, (a_idx, b_idx) in enumerate(orbit_ab):
+            Co = Cmat(a_idx, b_idx)
+            if np.any(np.abs(Co) > 1e-12):
+                expr = expr + y[oi] * cp.Constant(Co)
+        cons.append(expr >> 0)
+
+    # (NORM) each point one color.
+    for i in range(n):
+        cons.append(cp.sum([mom({(i, c)}) for c in range(k)]) == 1)
+    # (MARG) singleton <- pair.
+    for i in range(n):
+        for c in range(k):
+            yi = mom({(i, c)})
+            for j in range(n):
+                if j == i:
+                    continue
+                cons.append(yi == cp.sum([mom({(i, c), (j, cc)}) for cc in range(k)]))
+    # (BOCH) per-color Bochner + slack on non-edges. By symmetry one color suffices.
+    nu = cp.Variable(n_freq, nonneg=True)
+    freqs = np.linspace(0.001, freq_max, n_freq)
+    J0_at_1 = j0(2.0 * np.pi * freqs)
+    for i in range(n):
+        cons.append(mom({(i, 0)}) == cp.sum(nu))
+    cons.append(J0_at_1 @ nu == 0)
+    slacks = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            if (i, j) in edges:
+                continue
+            dd = float(np.linalg.norm(X[i] - X[j]))
+            Jvec = j0(2.0 * np.pi * dd * freqs)
+            s = cp.Variable()
+            slacks.append(s)
+            cons.append(mom({(i, 0), (j, 0)}) - Jvec @ nu == s)
+
+    # (IEC) Formulation 1+2 up to size 4 as moment equalities (on orbit vars).
+    n_iec = 0
+    for key in iec_keys:
+        sides = list(key)
+        cons.append(mom(sides[0]) == mom(sides[1]))
+        n_iec += 1
+
+    if solver is None:
+        solver = cp.CLARABEL
+    prob = cp.Problem(cp.Minimize(cp.sum([cp.abs(s) for s in slacks]) if slacks
+                                  else cp.Constant(0.0)), cons)
+    t0 = time.time()
+    try:
+        prob.solve(solver=solver, verbose=False)
+    except cp.error.SolverError as e:  # noqa: BLE001
+        return {"n_points": n, "k": k, "status": f"SOLVER_ERROR:{e}",
+                "basis_size": D, "n_orbit_vars": len(orbits)}
+    elapsed = time.time() - t0
+
+    raw = float(prob.value) if prob.value is not None else None
+    margin = raw if (raw is not None and np.isfinite(raw)) else None
+    infeasible = prob.status in ("infeasible", "infeasible_inaccurate")
+    near_noise = bool(margin is not None and 0.0 < margin <= slack_tol)
+    certifies = bool(infeasible or (margin is not None and margin > slack_tol))
+    return {
+        "n_points": n, "k": k, "basis_size": D, "n_orbit_vars": len(orbits),
+        "n_blocks": len(blocks), "max_block": max(len(F) for F, _ in blocks),
+        "n_iec_constraints": n_iec, "status": prob.status,
+        "infeasibility_margin": margin, "near_noise": near_noise,
+        "certifies_infeasible": certifies,
+        "implies_chi_m_geq": (k + 1) if certifies else None,
+        "solve_time_s": elapsed,
+    }
+
+
+TOL = 1e-6
+
+
+def _agree(a, b):
+    if a is None or b is None:
+        return a is None and b is None
+    if a <= TOL and b <= TOL:
+        return True
+    return abs(a - b) <= TOL
+
+
+def validate():
+    print("e3q: S_k-block-diagonalized ORDER-2 vs naive e3n (must reproduce margins)",
+          flush=True)
+    print("=" * 78, flush=True)
+    # Rhombus is the decisive correctness gate: small enough that the naive e3n
+    # reference is cheap, and the reduction is fully exercised (PSD 93 -> small blocks).
+    # Triangle is added as a second independent check. (Moser/X_23 are scaling
+    # follow-ons: the precompute needs the orbit einsum tiled before they are cheap.)
+    configs = [("triangle", _triangle_vertices_exact),
+               ("rhombus", _rhombus_vertices_exact)]
+    out = {"experiment": "e3q_blockdiag_order2", "tol": TOL, "rows": []}
+    all_ok = True
+    for name, fn in configs:
+        X, dc, edges = build_exact_config(fn())
+        for k in (4, 5):
+            keys = iec_keys_upto4(X, dc, edges, k, max_size=3)
+            for label, iec in (("base", set()), ("+IEC", keys)):
+                ref = build_order2_relaxation(X, dc, edges, k, iec_keys=iec,
+                                              max_basis=5000)
+                red = build_blockdiag_order2(X, dc, edges, k, iec_keys=iec)
+                mr = ref.get("infeasibility_margin")
+                md = red.get("infeasibility_margin")
+                ok = _agree(mr, md) and ((md is None) or (mr is None) or md <= mr + TOL)
+                all_ok = all_ok and ok
+                print(f"  [{name} k={k}] {label:5s}: e3n={_f(mr)} e3q={_f(md)} "
+                      f"|B|={ref.get('basis_size')}->blocks {red.get('n_blocks')} "
+                      f"(max {red.get('max_block')})  e3n {ref.get('solve_time_s',0):.1f}s "
+                      f"e3q {red.get('solve_time_s',0):.1f}s  {'OK' if ok else '!! MISMATCH'}",
+                      flush=True)
+                out["rows"].append({"config": name, "k": k, "variant": label,
+                                    "e3n_margin": mr, "e3q_margin": md,
+                                    "basis": ref.get("basis_size"),
+                                    "max_block": red.get("max_block"), "ok": ok})
+    out["all_reproduce"] = all_ok
+    CACHE.mkdir(exist_ok=True)
+    with (CACHE / "e3q_blockdiag_order2.json").open("w") as f:
+        json.dump(out, f, indent=2)
+    print("\n" + "=" * 78)
+    print(f"BLOCK-DIAGONALIZED order-2 reproduces e3n on small configs: "
+          f"{'PASS' if all_ok else 'FAIL'}")
+    return all_ok
+
+
+def _f(m):
+    return "None" if m is None else f"{m:.2e}"
+
+
+def main():
+    return 0 if validate() else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

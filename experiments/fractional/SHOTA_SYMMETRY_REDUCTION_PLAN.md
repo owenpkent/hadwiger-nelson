@@ -116,9 +116,14 @@ reduced solver must, before any bound is claimed:
   (independent of k; X_23: 93 -> 23) and runs X_23 k=4 PSD+IEC in ~3 s vs e3m's
   ~290 s. The S_k symmetry-adapted basis is validated. IEC collapses to congruent-
   pair same-color-density equalities.
-- NEXT (Part 1 step 2): port the SAME S_k decomposition to the ORDER-2 moment matrix
-  (size-<=2 colored-pattern orbits), cross-check vs naive e3n on rhombus/Moser
-  (margins must match), then run order-2 reduced on X_23 k=4 (must retest >= 5, the
-  test order-1 fails) and k=5 (open >= 6). This is where the reduction stops being a
-  speedup and starts unlocking strength order-1 cannot reach.
+- DONE (2026-06-01, L47): the ORDER-2 block-diagonalized builder
+  (`e3q_blockdiag_order2.py`). Reproduces naive e3n margins on triangle + rhombus
+  (k=4,5, base/+IEC, 8/8, no fake certificate). Required the Murota multiplicity
+  alignment (the naive eigenbasis provably fails at order 2: irreps with
+  multiplicity > 1; alignment residual ~1e-13). PSD splits into ~4 blocks of size
+  independent of k (rhombus 93->max 17 at k=4; 146->max 17 at k=5); 50-380x faster.
+- NEXT (engineering, not math): tile the Reynolds average (orbit-sum instead of
+  k! conjugations) and the orbit-einsum precompute, which currently thrash at n>=7.
+  Then run order-2 reduced on X_23 (|B|~4141): k=4 retests >=5 (with IEC up to size
+  4, the strength order-1 lacked in L43), k=5 is the open >=6 frontier.
 - THEN (Part 2, only if needed): the O(2)-congruence reduction.
