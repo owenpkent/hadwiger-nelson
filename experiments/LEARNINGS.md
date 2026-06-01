@@ -6,6 +6,37 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L39. The multi-class IEC congruence constraints (BOTH formulations from L38 barrier (b), the "sharpness" ingredient) are now IMPLEMENTED and VALIDATED (e3l), and the validation cleanly SEPARATES the two L38 barriers: the sharpness machinery is built and provably sound (passes the $\chi_m \leq 7$ correctness gate with thousands of cross-color constraints), yet it is INERT on every enumerable rigid configuration ($\leq 7$ points). So barrier (a) scalability, not (b) sharpness, is the binding wall: Formulation-2's extra strength (if any) only manifests at $X_{23}$-scale configs, beyond explicit coloring enumeration.
+
+**Architecture**: 2/3 (measurable / fractional). Follows L38 (e3k base LP) and the `sources/notes/12` Formulation-1/2 specification.
+
+**Experiment**: [`e3l_multiclass_iec.py`](fractional/e3l_multiclass_iec.py); result [`_cache/e3l_multiclass_iec.json`](fractional/_cache/e3l_multiclass_iec.json).
+
+**What was built.** Onto the e3k joint $k$-coloring autocorrelation LP (distribution $a_\sigma$ over proper $k$-colorings; per-color Bochner-positive $J_0$ autocorrelation; $f_c(1)=0$), e3l adds the multi-class inclusion-exclusion CONGRUENCE constraints as HARD equalities on the $a_\sigma$ atoms:
+- **Formulation 1** (per-color monochromatic): for each color $c$ and congruent independent pair $\{I,J\}$, $\sum_{\sigma|_I = c} a_\sigma = \sum_{\sigma|_J = c} a_\sigma$. This is $k$ parallel copies of the single-class L36 certificate.
+- **Formulation 2** (full joint-pattern, the genuine multi-class object): for each congruent pair $\{I,J\}$ with witnessing vertex bijection $b: I \to J$ and ANY local labeling $\rho: I \to [k]$ transported to $\rho' = \rho \circ b^{-1}$, $\sum_{\sigma|_I = \rho} a_\sigma = \sum_{\sigma|_J = \rho'} a_\sigma$. These encode cross-color ("red-next-to-blue") congruences the single-class object cannot see, and are NOT covered by the $\alpha_1 = 1/4$ density cap. F1 is the $\rho \equiv$ const special case (verified: $\mathcal{F}_1 \subseteq \mathcal{F}_2$ in every run, e.g. Moser $k=4$: $\mathcal{F}_2 \cap \mathcal{F}_1 = 100 = \|\mathcal{F}_1\|$).
+
+**Soundness (two gates, both pass).** (i) Construction-time: every emitted congruent pair is re-verified to preserve the exact canonical squared-distance matrix (only genuine isometries produce constraints); all bijections are enumerated and constraints deduped to a canonical key (the L38/note-12 over-tightness caveat handled). (ii) The load-bearing empirical gate: $\chi_m(\mathbb{R}^2) \leq 7$ is PROVEN (Isbell), so the $k=7$ LP must stay feasible (margin 0) with all IEC. On the congruence-rich rhombus, $k=7$ with **3234** IEC constraints (3192 cross-color) gives margin **0.0**: PASS. An invalid IEC would have broken this. The infeasibility-certificate path is also live (a graph with no proper $k$-coloring returns a `chi_m >= k+1` certificate, confirming margin-0 is a genuine "feasible" verdict, not a dead LP).
+
+**Result table (infeasibility margin; margin $>0 \Rightarrow \chi_m \geq k+1$).**
+
+| config | pts | $k$ | base | +F1 | +F1+F2 | F2 cross-color extra |
+|---|---:|---:|---:|---:|---:|---:|
+| triangle | 3 | 4 | 0 | 0 | 0 | 84 |
+| triangle | 3 | 5 | 0 | 0 | 0 | 135 |
+| rhombus | 4 | 4 | 0 | 0 | 0 | 648 |
+| rhombus | 4 | 5 | 0 | 0 | 0 | 1220 |
+| Moser | 7 | 4 | 0 | 0 | 0 | 4756 |
+| Moser | 7 | 5 | 0 | 0 | 0 | 9055 |
+
+Even ~9000 cross-color congruence constraints on the Moser spindle detect NO obstruction at $k=4$ or $k=5$. This is the honest, expected outcome (the single-class route needed 23 points to cross $1/4$); the value is that the constraint layer is now correct, sound, and ready.
+
+**Why this matters / what it changes.** L38 listed two barriers as if co-equal. L39 shows they are not: (b) sharpness is SOLVED at the constraint level (the machinery exists and is validated), and the remaining wall is entirely (a) scalability. Formulation 2 carries genuinely new (cross-color) information not present in $k$ copies of L36, but that information is invisible until the configuration is large enough to host the obstruction. The path to actually testing $\chi_m \geq 5$ (and the open $\geq 6$) is now unambiguous: port these exact IEC keys onto a Lasserre / moment marginal backend (de Laat-Vallentin; DeCorte-Oliveira-Vallentin 2022) that never enumerates colorings, then run $k=4$ on $X_{23}$ (must reproduce $\geq 5$) and $k=5$ as the frontier. e3l is the validated constraint layer for that backend; the IEC keys are backend-agnostic (they touch only the $a_\sigma$ / moment block, not the Bochner block).
+
+**Wrong-approach detector status.** Euclidean by construction ($O(2)$-averaged $J_0$ Bochner kernel, exact unit-distance congruences); the IEC validity rests on the $O(2)$ Haar average (Section 4), the same structure that separates $\mathbb{R}^2$ from $\mathbb{Q}^2$ (no dense rotation orbits) and $\mathbb{R}^1$ (no $O(2)$). Measurable bound, so $\mathbb{Q}^2$ is the legitimate measure-zero exemption.
+
+---
+
 ### L38. The multi-class (joint k-coloring) measurable LP is now FORMALIZED and PROTOTYPED (e3k), opening the one measurable route to $\chi_m(\mathbb{R}^2) \geq 6$ not provably capped at 5. The prototype is correct on small configs but not yet sharp; the two concrete barriers to making it bite are identified: (a) scalability (proper-coloring enumeration explodes past ~11 points), and (b) sharpness (the base autocorrelation LP needs a multi-class analog of the IEC congruence constraints, the same ingredient that drove the single-class 2015->2023 crossing in L36).
 
 **Architecture**: 2/3 (measurable / fractional). Follows the L37 library read, which established that single-class density is provably capped at $\chi_m \geq 5$ (Croft floor $m_1 \geq 0.22936 > 1/5$), so $\geq 6$ needs a JOINT argument over all color classes.

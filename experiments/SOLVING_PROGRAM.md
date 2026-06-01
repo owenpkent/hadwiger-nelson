@@ -173,6 +173,16 @@ A 22-text reference library was acquired, read, and deeply noted (`sources/LIBRA
 
 **Net**: the integer Architecture-1 bottleneck (a chi-6 UDG that embeds in the plane) is unchanged, but a genuinely NEW, un-capped, continuous (no-SAT) attack now exists on the measurable side. Concrete next build: implement the Lasserre-marginal version of e3k with Formulation-2 IEC (reuse the $C(X)$ congruent-pair enumerator from `e3j_iec_selfcertify.py`; IEC constraints touch only the $a_\sigma$ atoms, not the Bochner block), validate $k=4$ on $X_{23}$ reproduces $\geq 5$ (margin $> 0$), then run $k=5$ as the open $\geq 6$ frontier.
 
+## Session update 2026-06-01 (multi-class IEC constraint layer built + validated; scalability isolated as the sole remaining wall)
+
+The L38 next-build's "sharpness" half is now DONE and the two barriers are cleanly separated (LEARNINGS L39, `e3l_multiclass_iec.py`).
+
+- **Both IEC formulations implemented and sound.** Formulation 1 (per-color monochromatic congruence) and Formulation 2 (full joint-pattern cross-color congruence, with bijection-transported labelings and canonical-key dedup) are added as hard equalities on the $a_\sigma$ atoms of the e3k LP. Construction-time soundness gate: every emitted pair re-verified to preserve the exact distance matrix. $\mathcal{F}_1 \subseteq \mathcal{F}_2$ confirmed in every run.
+- **The load-bearing correctness gate passes.** $\chi_m(\mathbb{R}^2) \leq 7$ is proven, so $k=7$ must stay feasible with all IEC; on the rhombus, $k=7$ with 3234 IEC constraints (3192 cross-color) gives margin 0. An invalid IEC would have broken this. The infeasibility-certificate path is also confirmed live.
+- **But the machinery is inert at enumerable scale.** Every rigid config up to the Moser spindle (7 pts), at $k=4$ and $k=5$, gives margin 0 under base / +F1 / +F1+F2, even with ~9000 cross-color constraints. The joint Formulation-2 object does NOT bite at small scale.
+
+**Reframe.** L38 treated (a) scalability and (b) sharpness as co-equal barriers. They are not: (b) is solved at the constraint level (e3l), and (a) scalability is now the SOLE wall. Formulation 2 carries genuinely new cross-color information, but it is invisible until the configuration is large enough to host the obstruction (single-class needed 23 points). The unambiguous next build is a Lasserre / moment marginal backend (de Laat-Vallentin; DeCorte-Oliveira-Vallentin 2022) that never enumerates colorings; the e3l IEC keys are backend-agnostic and port directly. (Note: the $X_{23}$ validation config currently lives only in the gitignored `_cache`, so reproducing the $k=4 \to \geq 5$ validation from a clean clone needs it re-transcribed and tracked first.)
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
@@ -187,6 +197,6 @@ A 22-text reference library was acquired, read, and deeply noted (`sources/LIBRA
 | 2-abs | Abstract chi-6 coupling (two chi-5 halves + bridges) | done; 1020-vtx (L27) -> $\|B\|\leq2000$ (L28) -> 1019-vtx record (L30); mixed halves P510+P553 (L29). ALL no-K_4 chi>=6 but NOT UDG-realizable (cocircularity). The barrier is now precisely cocircularity, not abstract existence | done |
 | 2-lean | Lean machine-check of the chi>=6 coupling theorem (L24) | done; L21/L22 covering ladder + L24 triple-coupling lift formalized, no sorry (lean/HadwigerNelson/) | done |
 | 2-meas | Measurable frontier consolidation (e2b/e2c) | done; chi_m>=5 is the frontier, chi_m>=6 OPEN (L31); OFV 2-pt bound reproduced + cross-validated, 3-pt no gain (L32); Falconer decomposition, same missing object (L33) | done |
-| 7-mc | Multi-class measurable LP for chi_m >= 6 (the one un-capped route) | prototyped (e3k, L38): joint k-coloring autocorrelation feasibility LP, correct on small configs. Single-class density PROVABLY capped at 5 (Croft floor > 1/5). Next: Lasserre-marginal version + Formulation-2 cross-color IEC (sources/notes/12); validate k=4 on X_23 reproduces >=5, then k=5 as the open >=6 frontier | research-grade open; multi-session |
+| 7-mc | Multi-class measurable LP for chi_m >= 6 (the one un-capped route) | prototyped (e3k, L38); IEC constraint layer (Formulation 1 + 2) now BUILT + VALIDATED (e3l, L39): passes the chi_m<=7 soundness gate with 3234 IEC constraints (margin 0), but INERT on all enumerable configs (<=7 pts, margin 0 even with ~9000 cross-color constraints). Separates L38's two barriers: (b) sharpness SOLVED at constraint level, (a) scalability is now the SOLE wall. Next: port the (backend-agnostic) IEC keys onto a Lasserre/moment backend; validate k=4 on X_23 reproduces >=5, then k=5 as the open >=6 frontier | research-grade open; scalability is the binding wall |
 
 Update this document after each major milestone.
