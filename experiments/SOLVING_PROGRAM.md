@@ -213,6 +213,16 @@ A tiered, no-inflation publishability assessment was written ([`docs/PUBLISHABLE
 
 **Net.** The publishability picture is honest and current: no bound moved; the best candidate is a modest experimental-math note resting on a classical obstruction plus one clean reframing, pending a Polymath16 prior-art check. Shot 2's redirected target (long-range color forcing) is now precisely stated.
 
+## Session update 2026-06-01e (X_23 restored+tracked and run end-to-end through the backend; degree-1 is provably too weak; L43)
+
+Shot-B (restore $X_{23}$) is DONE and the first prerequisite from update 2026-06-01b is cleared. The validation run was then executed on the real target, and it pins the measurable thread to its single remaining blocker.
+
+- **$X_{23}$ is now TRACKED.** The 23-point Ambrus config (3.7 KB) was moved out of the gitignored `_cache` into `experiments/fractional/data/ambrus_23point_config.json`; `e3i_ambrus_reproduce.py` `load_config()` now prefers it (`_cache` fallback for old checkouts), and `e3m_moment_backend.py` gained `_ambrus_x23_vertices_exact()` + an opt-in `run_x23_validation()`. A clean clone can now reproduce the $X_{23}$ run.
+- **The $k=4$ validation ran (L43) and gave the PREDICTED negative.** Degree-1 IEC on $X_{23}$ (5836 F1 + 65048 F1+F2 constraints, no symmetry explosion) gives margin $0$ (LP) and $7.5\times10^{-9}$ (PSD, noise floor, `near_noise`): NO certificate. It does not even reproduce $\chi_m \geq 5$. This is exactly what L40 forecast: degree-1 carries IEC only up to subset size 2, while the single-class crossing of $1/4$ needed size 5. The question "is degree-1 enough at $X_{23}$ scale?" is now answered: NO.
+- **The measurable $\geq 6$ route is pinned to ONE blocker.** Both update-2026-06-01c prerequisites collapse to a single task: the symmetry-reduced order-2 SDP (carries IEC up to size 4). The restored $X_{23}$ removes the other prerequisite. e3n is the correct naive reference; the symmetry-reduced version is the build that lets $k=4$ (retest $\geq5$) and $k=5$ (open $\geq6$) actually run.
+
+**Net.** Infrastructure for the continuous measurable attack is complete and now exercised on the real config; the lone remaining engineering task (symmetry-reduced order-2 SDP) is well-defined and not mathematically open. The Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
+
 ## Status table
 
 | Shot | Goal | Status | Lead time |
@@ -227,6 +237,6 @@ A tiered, no-inflation publishability assessment was written ([`docs/PUBLISHABLE
 | 2-abs | Abstract chi-6 coupling (two chi-5 halves + bridges) | done; 1020-vtx (L27) -> $\|B\|\leq2000$ (L28) -> 1019-vtx record (L30); mixed halves P510+P553 (L29). ALL no-K_4 chi>=6 but NOT UDG-realizable (cocircularity). The barrier is now precisely cocircularity, not abstract existence | done |
 | 2-lean | Lean machine-check of the chi>=6 coupling theorem (L24) | done; L21/L22 covering ladder + L24 triple-coupling lift formalized, no sorry (lean/HadwigerNelson/) | done |
 | 2-meas | Measurable frontier consolidation (e2b/e2c) | done; chi_m>=5 is the frontier, chi_m>=6 OPEN (L31); OFV 2-pt bound reproduced + cross-validated, 3-pt no gain (L32); Falconer decomposition, same missing object (L33) | done |
-| 7-mc | Multi-class measurable LP for chi_m >= 6 (the one un-capped route) | prototyped (e3k, L38); IEC layer (Formulation 1+2) BUILT+VALIDATED (e3l, L39); SCALABLE moment/Lasserre backend BUILT+VALIDATED (e3m, L40): degree-1 color-marginal moments + order-1 PSD matrix + Bochner + IEC keys (linear on moments), never enumerates colorings. Cross-validates vs e3l, passes chi_m<=7 gate, scales to 19 pts in seconds. Both L38 barriers now cleared at the infrastructure level. Lesson: solver accuracy is load-bearing (SCS faked a chi_m>=6 cert at 1e-5; CLARABEL kills it). Next: restore+track X_23, run k=4 (validate >=5); lift to order-2 moments if degree-1 too weak; k=5 = open >=6 frontier | engine ready; needs X_23 + possibly order-2 lift |
+| 7-mc | Multi-class measurable LP for chi_m >= 6 (the one un-capped route) | prototyped (e3k, L38); IEC layer (Formulation 1+2) BUILT+VALIDATED (e3l, L39); SCALABLE moment/Lasserre backend BUILT+VALIDATED (e3m, L40): degree-1 color-marginal moments + order-1 PSD matrix + Bochner + IEC keys (linear on moments), never enumerates colorings. Cross-validates vs e3l, passes chi_m<=7 gate, scales to 19 pts in seconds. Both L38 barriers now cleared at the infrastructure level. Lesson: solver accuracy is load-bearing (SCS faked a chi_m>=6 cert at 1e-5; CLARABEL kills it). X_23 now RESTORED+TRACKED and run end-to-end (L43): degree-1 IEC on X_23 k=4 gives margin 0 / noise floor (NO cert), confirming degree-1 (IEC size<=2) is too weak as L40 predicted. k=5 = open >=6 frontier | sole blocker: symmetry-reduced order-2 SDP (IEC size 4) |
 
 Update this document after each major milestone.

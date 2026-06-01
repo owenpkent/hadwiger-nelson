@@ -65,6 +65,10 @@ from experiments.fractional.e3g_ambrus_ie_lp import (
     enumerate_independent_sets,
 )
 
+# The X_23 configuration is small (~4 KB) and load-bearing for the whole
+# multi-class measurable thread (e3k-e3n), so it lives in a TRACKED data dir,
+# not the gitignored _cache. We keep a _cache fallback for older checkouts.
+DATA_CONFIG_PATH = pathlib.Path(__file__).parent / "data" / "ambrus_23point_config.json"
 CONFIG_PATH = CACHE / "ambrus_23point_config.json"
 
 
@@ -73,7 +77,8 @@ CONFIG_PATH = CACHE / "ambrus_23point_config.json"
 # ---------------------------------------------------------------------------
 
 def load_config() -> dict:
-    with CONFIG_PATH.open() as f:
+    path = DATA_CONFIG_PATH if DATA_CONFIG_PATH.exists() else CONFIG_PATH
+    with path.open() as f:
         return json.load(f)
 
 

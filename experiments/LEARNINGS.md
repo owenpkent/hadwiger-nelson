@@ -6,6 +6,28 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L43. The multi-class measurable backend was run on the REAL validation target for the first time (Ambrus $X_{23}$, $k=4$), and the predicted negative landed: degree-1 IEC (subset size $\leq 2$) gives margin $0$ (LP) / $7.5\times10^{-9}$ noise-floor (PSD), i.e. **NO certificate** -- it does not even reproduce the known $\chi_m \geq 5$. This empirically confirms the L40 caveat (the single-class route needed IEC up to size 5; degree-1 carries only size $\leq 2$) on the actual config, closing the open question "is degree-1 enough at $X_{23}$ scale?" with a clean NO. The entire measurable $\geq 6$ thread now rests on ONE concrete engineering blocker: a symmetry-reduced order-2+ SDP (carries IEC up to size 4, toward the size-5 the single-class needed). Plus an infrastructure fix: $X_{23}$ is now restored to a TRACKED location and wired into the backend.
+
+**Architecture**: 2/3 (measurable / fractional). First end-to-end run of the e3k->e3l->e3m stack on $X_{23}$ (prior L40/L41 validations were "no $X_{23}$ needed", on small configs only).
+
+**Experiments**: [`e3m_moment_backend.py`](fractional/e3m_moment_backend.py) (added `_ambrus_x23_vertices_exact` + opt-in `run_x23_validation`); [`e3i_ambrus_reproduce.py`](fractional/e3i_ambrus_reproduce.py) (loader now prefers tracked `data/ambrus_23point_config.json`, `_cache` fallback). Result [`_cache/e3o_x23_k4_validation.json`](fractional/_cache/e3o_x23_k4_validation.json).
+
+**The run.** $X_{23}$: 23 points, **47 unit edges** (matches the L37 ledger). IEC enumeration at $k=4$ is fast (0.7 s) and does NOT explode (5836 Formulation-1 + 65048 Formulation-1+2 constraints; the lattice-symmetry blow-up that hit the hex patch in L40 does not occur on the lower-symmetry $X_{23}$, 27 distinct distances). The degree-1 moment relaxation (variable count polynomial in $n$, never enumerates colorings) solves the 65k-equality system in $\sim4.5$ min per variant (LP $272$ s, PSD $290$ s; the PSD returned `optimal_inaccurate`, but the margin is sub-$10^{-6}$ regardless, correctly flagged `near_noise`).
+
+| variant | status | margin | certifies |
+|---|---|---:|---|
+| base (no IEC) | optimal | $0$ | no |
+| LP +IEC (65048) | optimal | $0$ | no |
+| PSD +IEC (65048) | optimal_inaccurate | $7.5\times10^{-9}$ | no (noise floor) |
+
+**Why this is the predicted outcome, not a failure.** L40 flagged that the degree-1 backend carries IEC only up to subset size 2, while the single-class 2015->2023 crossing of $1/4$ needed IEC up to size 5. So degree-1 was always expected to be too weak at $X_{23}$; this run CONFIRMS it on the real config rather than assuming it. The machinery is sound (the L40/L41 gates still hold: $k=7$ stays feasible, the triangle-$k=2$ / Moser-$k=3$ certificate path is live), so margin 0 is a genuine "feasible at this relaxation order", not a dead LP.
+
+**What it directs.** The measurable route to $\chi_m \geq 6$ is now pinned to a single, fully-specified, mathematically-non-open engineering task: the symmetry-reduced order-2 SDP (block-diagonalize the order-2 moment matrix by the $O(2)$-averaged congruence action; de Laat-Vallentin, DeCorte-Oliveira-Vallentin 2022, note 08). e3n is the correct-but-naive-unscalable reference ($\|B\|\sim4141$ for $X_{23}$, OOM/timeout without symmetry); order-2 carries IEC up to size 4. Only then can $k=4$ on $X_{23}$ retest the $\geq 5$ validation, and $k=5$ open the $\geq 6$ frontier. The Architecture-1 bottleneck (a chi-6 UDG that embeds) is unchanged.
+
+**Wrong-approach detector status.** Euclidean by construction ($O(2)$-averaged $J_0$ Bochner kernel, exact unit-distance congruences from the Moser-spindle ring $\mathbb{Q}(\sqrt3,\sqrt{11})$); IEC validity rests on the $O(2)$ Haar average. Measurable bound, $\mathbb{Q}^2$ legitimately exempt. No nontrivial bound produced, so the 1D control is not engaged.
+
+---
+
 ### L42. F1 (the cocircularity / "wrong-shape-bridge" barrier) was PRESSURE-TESTED adversarially: no break (no chi-6 UDG), but the vague heuristic is now sharpened into a partly-rigorous mechanism plus a clean open reframing, and two honesty corrections. The decisive new fact, SAT-certified: **in $P_{510}$, two vertices are forced to differ in every proper 5-coloring IFF they are adjacent (a unit-distance edge)** -- color forcing is purely LOCAL (0/300 random non-adjacent pairs forced; 78/78 forced-different pairs in the 40-vertex high-degree core are edges). Separately, a literature check shows the cocircularity obstruction is the CLASSICAL fact that $K_{2,3}$ is not a unit-distance graph (two unit circles meet in $\leq 2$ points), not novel; F1's only candidate novelty is the color-forcing-locality reframing.
 
 **Architecture**: 1 (combinatorial). ADVERSARY pressure-test of finding F1 in `docs/PUBLISHABLE_FINDINGS.md`.

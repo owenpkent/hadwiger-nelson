@@ -124,6 +124,19 @@ def _hex_patch_vertices_exact(R: int):
     return verts
 
 
+def _ambrus_x23_vertices_exact():
+    """The 23-point Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023 configuration,
+    in exact (re, im) sympy coordinates (field Q(√3, √11)). This is the validation
+    target for the measurable chi_m >= 6 route: it is the smallest config the
+    single-class density LP needed to cross 1/4 (=> chi_m >= 5), so the multi-class
+    k=4 moment relaxation WITH IEC must reproduce a >= 5 obstruction (margin > 0).
+    Loads the tracked config via e3i (no _cache dependency)."""
+    from experiments.fractional.e3i_ambrus_reproduce import (
+        load_config, parse_points_exact, to_xy_exact,
+    )
+    return [to_xy_exact(z) for z in parse_points_exact(load_config())]
+
+
 # ---------------------------------------------------------------------------
 # Moment-relaxation builder.
 # ---------------------------------------------------------------------------
@@ -330,6 +343,34 @@ def reverify(name, verts_fn, k, *, use_psd, iec_keys):
     r = build_moment_relaxation(X, dc, e, k, use_psd=use_psd, iec_keys=iec_keys,
                                 slack_tol=1e-6)
     return r.get("infeasibility_margin"), r.get("certifies_infeasible")
+
+
+def run_x23_validation(k=4, do_psd=True):
+    """The measurable-route validation target: run the degree-1 moment relaxation
+    WITH IEC on the Ambrus X_23 config. k=4 must reproduce chi_m >= 5 (margin > 0)
+    if degree-1 IEC (subset size <= 2) is strong enough; a margin at the solver
+    noise floor instead means degree-1 is too weak (the single-class route needed
+    IEC up to size 5), pointing to the order-2 lift (e3n + symmetry reduction).
+
+    Opt-in (minutes-long, ~65k IEC equalities at k=4), so it is NOT in main()'s
+    default suite. Run: python -c "from experiments.fractional.e3m_moment_backend
+    import run_x23_validation; run_x23_validation()".
+    """
+    print(f"e3m X_23 validation: k={k} multi-class moment relaxation + IEC")
+    print("=" * 78)
+    out = run_config("X_23", _ambrus_x23_vertices_exact, k, do_psd=do_psd, do_iec=True)
+    CACHE.mkdir(exist_ok=True)
+    out_path = CACHE / f"e3m_x23_k{k}.json"
+    with out_path.open("w") as f:
+        json.dump({"experiment": "e3m_x23_validation", "result": out}, f, indent=2)
+    print(f"\narchived: {out_path}")
+    certs = [lbl for lbl, r in out["runs"].items() if r.get("certifies_infeasible")]
+    if certs:
+        print(f"CERTIFIES chi_m >= {k+1} via: {certs} (re-verify the margin at high accuracy)")
+    else:
+        print(f"No certificate at k={k}: degree-1 IEC margins at noise floor "
+              f"(=> order-2 lift needed; see e3n).")
+    return out
 
 
 def main():
