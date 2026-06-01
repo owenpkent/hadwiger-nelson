@@ -25,45 +25,58 @@ known to them. None should be claimed as novel without a literature check.
 
 ### F1. A structural explanation of why $\chi \geq 6$ has resisted post-2018 SAT search
 
+**STATUS: pressure-tested 2026-06-01 (adversary, LEARNINGS L42). No break (no chi-6
+UDG). Sharpened from a vague heuristic into a partly-rigorous mechanism plus a clean
+open problem. The geometric obstruction turned out to be classical; the candidate
+novelty narrowed to one reframing.** See `experiments/combinatorial/F1_pressure_test.md`.
+
 **The claim.** The reason no 6-chromatic unit-distance graph has emerged from the
 de Grey / Polymath16 / Heule lineage despite eight years of search is a specific
-geometric obstruction, not merely insufficient compute.
+structural obstruction, not merely insufficient compute.
 
-**The evidence (LEARNINGS L23, L24, L27-L30, L34).**
-- *Abstract chi-6 couplings exist.* Coupling two $\chi$-5 halves (Polymath-510) by a
-  no-$K_4$ bridge set forces $\chi \geq 6$: an explicit **1019-vertex** no-$K_4$
-  graph, dual-solver UNSAT-confirmed, is the current abstract record (L30). The
-  governing theorem (a triple-coupling lift, $\chi \geq 6$ iff a residual
-  list-coloring is universally infeasible) is machine-checked in Lean
-  (`lean/HadwigerNelson/L24TripleCoupling.lean`, no `sorry`).
-- *But they are never unit-distance realizable.* Each saturating vertex requires
-  22-27 bridge endpoints to lie exactly on a unit circle; the geometry forbids the
-  cocircularity (L23, L27-L29, the "cocircularity sieve").
-- *The sharpened barrier (L34).* Realizability forces an EVEN, low-concentration
-  bridge layout (a 60-degree orbit of Polymath-510 has 13,757 genuine
-  unit-distance bridges, max bridge-degree 36, all 510 vertices touched, and is
-  5-colorable in 0.06s). The chi-6 list-coloring obstruction instead needs
-  CONCENTRATION (L27: max source-degree 268 on hub vertices). So the embeddable
-  bridge supply is the wrong SHAPE for chi-6 forcing, not merely the wrong COUNT.
+**The sharpened, partly-rigorous core (L42).** The single-hub chi-6 forcing route
+reduces to one lemma:
 
-**Why it could be a paper.** It is a concrete, non-obvious, computationally
-supported explanation of a real phenomenon (the post-de-Grey wall). It reframes the
-search for a chi-6 UDG as a precise geometric question (realize a concentrated
-bridge layout on cocircular point sets in an algebraic field).
+> **Lemma (L).** Can 5 points cocircular at unit radius be rainbow-forced (forced to
+> 5 distinct colors in every proper 5-coloring) in a unit-distance graph? If yes and
+> it embeds, a hub at the circle center gives a chi-6 UDG; if no, the route is blocked.
 
-**What it is NOT yet.** Heuristic and experimental, not a theorem. There is no proof
-that "no chi-6 UDG of this coupled form exists"; the evidence is a finite battery of
-failed realizations and 5-colorable witnesses. To be publishable it needs (a) a
-crisp, falsifiable statement of the obstruction, (b) either a proof for a restricted
-class or an honest framing as an experimental finding, (c) a check that the
-"two halves + bridges" framing is exhaustive for the lineage.
+For the lineage it provably fails, by a clean SAT-certified mechanism: **in $P_{510}$,
+two vertices are forced-different in every proper 5-coloring if and only if they are
+adjacent** (0/300 random non-adjacent pairs forced; 78/78 forced pairs in the
+high-degree core are unit edges). So a rainbow-forced 5-set would be a unit-distance
+$K_5$, which does not exist ($\omega = 3$); and cocircular points are mutually
+non-adjacent except at 60-degree gaps (a sub-$C_6$, $\chi = 2$). Supporting: the max
+cocircular-at-unit subset of $P_{510}$ is 36 (one vertex's neighborhood, vs the
+abstract requirement 268); and a DOF count shows the abstract coupled chi-6 graphs
+are over-determined by $\sim 5000$ equations in 3 unknowns, so non-realizability is a
+counting fact, not a contingency. Smallest in-vitro gadget: the wheel $W_6$.
 
-**Venue.** Geombinatorics or an experimental-mathematics venue; arXiv note.
+**The novelty problem (literature check).** The geometric obstruction (cocircularity:
+a hub's unit-distance neighbors lie on its unit circle) is the CLASSICAL fact that
+$K_{2,3}$ is a forbidden subgraph for unit-distance graphs (two unit circles meet in
+at most two points; every graph on $\le 5$ vertices is a UDG iff it omits $K_4$ and
+$K_{2,3}$). That is textbook, not a discovery. F1's only candidate novelty is the
+**color-forcing-locality** observation: that chi-6 coupling needs LONG-RANGE color
+forcing (non-adjacent forced-different pairs) and the lineage has only LOCAL forcing
+(forced-different $=$ adjacent). Whether that reframing is itself new requires a
+check against the Polymath16 threads.
 
-**Confidence the core observation survives scrutiny.** Moderate. The 5-colorability
-of large realizable bridge families is solver-verified and robust; the
-"concentration vs. spread" framing is the part most likely to need sharpening or to
-turn out partially known.
+**What it is NOT.** Not a theorem about all UDGs. The mechanism is proved for
+$P_{510}$ and the triangular lattice only; the L28 graded (distributed-source)
+rainbow route is closed only empirically plus the DOF count, not by theorem. One
+L34 sentence ("realizability forces the even, low-concentration layout") was an
+over-statement specific to rigid orbits and is retracted in L42.
+
+**The genuinely useful output: a clean open problem.** Find a chi-5 unit-distance
+graph with **long-range color forcing** (a non-adjacent pair forced-different in
+every proper 5-coloring). That is exactly what a chi-6 coupling needs and exactly
+what the lineage lacks. This is the right, falsifiable target, and is the most
+publishable nugget here (a focused note: the reduction to Lemma (L), the
+forced-different$=$adjacent fact for $P_{510}$, and the reframing).
+
+**Venue.** Geombinatorics / experimental-mathematics note, IF the
+forced-different-locality reframing survives a Polymath16 prior-art check.
 
 ### F2. Structural anatomy of the de Grey / Polymath / Heule $\chi \geq 5$ lineage
 
@@ -184,7 +197,7 @@ That is the fastest way to learn whether F1 is a real paper or a known/false lea
 
 | Finding | Re-verified this session? | Prior-art checked? | Rigorous statement? |
 |---|---|---|---|
-| F1 cocircularity barrier | No | No | No (heuristic) |
+| F1 cocircularity barrier | Yes (L42 adversary) | Partial (cocircularity = classical $K_{2,3}$; reframing unchecked) | Partial (Lemma L + $P_{510}$ locality rigorous; "all UDGs" heuristic) |
 | F2 lineage anatomy | No | No | Partial |
 | F3 multi-class moment LP | Yes (e3l-e3n) | No | Valid relaxation, no bound |
 | F4 Ambrus reproduction | No (input missing) | N/A (reproduction) | Yes |
