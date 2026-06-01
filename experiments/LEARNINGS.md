@@ -6,6 +6,22 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L46. Shot A, Part 1 DELIVERED: the S_k-block-diagonalized order-1 measurable SDP (e3p) is built, proven correct (reproduces the full-size e3m margins EXACTLY on all small configs, 24/24), and demonstrates the scale win concretely: on $X_{23}$ $k=4$ it reproduces L43's margin-0 in **3.0 s with a $23\times23$ PSD**, versus e3m's **~290 s with a $93\times93$ PSD** (~100x). The order-1 Lasserre matrix (full side $1+nk$) collapses under the $S_k$ color action to a single $n\times n$ standard block, INDEPENDENT of $k$ (PSD sides observed: $13\to3$, $16\to3$, $17\to4$, $21\to4$, $29\to7$, $36\to7$; $X_{23}$: $93\to23$). The $S_k$ symmetry-adapted basis is now validated; porting it to order-2 (where it turns the intractable $\|B\|\sim4141$ into a handful of small blocks) is the next build.
+
+**Architecture**: 2/3 (measurable / fractional). Executes Part 1 of [`SHOTA_SYMMETRY_REDUCTION_PLAN.md`](fractional/SHOTA_SYMMETRY_REDUCTION_PLAN.md); follows L44 (lossless $S_k$ symmetrization).
+
+**Experiment**: [`e3p_blockdiag_order1.py`](fractional/e3p_blockdiag_order1.py); result [`_cache/e3p_blockdiag_order1.json`](fractional/_cache/e3p_blockdiag_order1.json).
+
+**The reduction (derived in the plan, verified numerically then in cvxpy).** On the $S_k$-symmetric subspace the singletons are fixed ($y_i(c)=1/k$) and each pair collapses to two values, the same-color density $p_{ij}=y_{ij}(c,c)$ and the different-color density $q_{ij}=y_{ij}(c,c')$, with $p_{ij}+(k-1)q_{ij}=1/k$. The order-1 moment matrix $M$ ($1+nk$) block-diagonalizes into (i) a TRIVIAL block of all-constant entries that is rank-1 and marginally PSD for every feasible point, hence VACUOUS, and (ii) a STANDARD block $S$ ($n\times n$) with $S_{ii}=1/k$, $S_{ij}=p_{ij}-q_{ij}$. $M\succeq0 \iff S\succeq0$ (the min-eigenvalue identity was checked directly: when $S$ is indefinite, $\lambda_{\min}(M)=\lambda_{\min}(S)$ exactly). Edges fix $p_{ij}=0\Rightarrow S_{ij}=-1/(k(k-1))$. IEC under symmetrization collapses (both Formulation 1 and 2, $\|I\|\le2$) to "congruent pairs share $p_{ij}$" (180 such equalities on $X_{23}$, vs the 65048 full cross-color IEC of L43, all encoded in the same $a_\sigma$-free $p$ variables).
+
+**Correctness gate (the load-bearing part).** Because a wrong reduction would silently FAKE a $\chi_m$ bound, e3p is validated against the independent full-size e3m (with `symmetrize=True`, lossless per L44) on triangle/rhombus/Moser at $k=4,5$, LP and PSD, base and +IEC: every margin agrees to $\le10^{-6}$ and the reduced margin NEVER exceeds the reference (no fake certificate). The reduced margins are typically numerically cleaner (fewer variables): e.g. Moser $k=4$ PSD $2.5\times10^{-11}\to8.4\times10^{-12}$.
+
+**What it unlocks.** Order-1 is known too weak (L43, margin 0), so e3p produces no new bound; its value is the validated, ~100x-faster basis change. The SAME $S_k$ decomposition applied to the ORDER-2 moment matrix is what turns the L41 scale wall ($\|B\|\sim4141$ for $X_{23}$, naive-OOM) into small isotypic blocks, making $k=4$ on $X_{23}$ (retest $\ge5$, the test order-1 fails) and $k=5$ ($\ge6$ frontier) actually runnable. The harder $O(2)$-congruence reduction (Part 2) is only needed if $S_k$ alone is insufficient at order 2.
+
+**Wrong-approach detector status.** Euclidean by construction ($O(2)$-averaged $J_0$ Bochner kernel); measurable bound, $\mathbb{Q}^2$ legitimately exempt. No bound produced (validated infrastructure).
+
+---
+
 ### L45. Shot B (the integer route): the L42 open target -- a chi-5 UDG with LONG-RANGE color forcing (a non-adjacent pair forced-different in every proper 5-coloring) -- is ABSENT across the ENTIRE accessible de Grey / Polymath16 lineage, not just $P_{510}$. Twelve chi-5 UDGs (510, 517, 529, 553, 610, 633, 803, 826, 874, L403, S199, T721; $n$ from 199 to 874) were swept: in every one, **forced-different $\Leftrightarrow$ adjacent** with ZERO exceptions and ZERO indeterminate SAT calls. This upgrades L42's $P_{510}$ observation to a lineage-wide structural fact and sharpens the chi-6 open problem: the missing object is not "somewhere in the known lineage, found by better search", it is genuinely absent from the lineage and must be constructed by a new principle.
 
 **Architecture**: 1 (combinatorial). Direct test of the L42 reframing ("find a chi-5 UDG with long-range color forcing").

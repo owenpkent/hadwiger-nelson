@@ -108,8 +108,17 @@ reduced solver must, before any bound is claimed:
   dual) before it is recorded as a bound.
 
 ## What is done vs open
-- DONE (2026-06-01): lossless S_k symmetrization theorem + computational validation
-  (`shotA_symmetry_validation.py`, e3m `symmetrize=True`).
-- NEXT: the order-1 block-diagonalized builder (Part 1 step 1), the cheap, fully
-  cross-checkable increment that proves the basis change before the order-2 lift.
-- THEN: order-2 reduced + X_23 k=4 (retest >= 5), k=5 (open >= 6).
+- DONE (2026-06-01, L44): lossless S_k symmetrization theorem + computational
+  validation (`shotA_symmetry_validation.py`, e3m `symmetrize=True`).
+- DONE (2026-06-01, L46): the order-1 block-diagonalized builder
+  (`e3p_blockdiag_order1.py`). Reproduces e3m full-size margins exactly on all small
+  configs (24/24, no fake certificate); reduces the PSD side from 1+nk to n
+  (independent of k; X_23: 93 -> 23) and runs X_23 k=4 PSD+IEC in ~3 s vs e3m's
+  ~290 s. The S_k symmetry-adapted basis is validated. IEC collapses to congruent-
+  pair same-color-density equalities.
+- NEXT (Part 1 step 2): port the SAME S_k decomposition to the ORDER-2 moment matrix
+  (size-<=2 colored-pattern orbits), cross-check vs naive e3n on rhombus/Moser
+  (margins must match), then run order-2 reduced on X_23 k=4 (must retest >= 5, the
+  test order-1 fails) and k=5 (open >= 6). This is where the reduction stops being a
+  speedup and starts unlocking strength order-1 cannot reach.
+- THEN (Part 2, only if needed): the O(2)-congruence reduction.
