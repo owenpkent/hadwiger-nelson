@@ -77,6 +77,34 @@ what the lineage lacks. This is the right, falsifiable target, and is the most
 publishable nugget here (a focused note: the reduction to Lemma (L), the
 forced-different$=$adjacent fact for $P_{510}$, and the reframing).
 
+**Update (2026-06-02, L51-L53): the open problem now splits cleanly into abstract
+(resolved) and geometric (the wall).**
+- *Abstract ingredient: exists, trivially.* The non-adjacent forced-different pair
+  is a one-move **vertex-split of a $K_4$-free 6-critical graph** (split $w$ into
+  $s,t$ by the color classes of a 5-coloring of $H-w$); explicit SAT-verified 48-vtx
+  triangle-free witness (L51). So it is **not** "absent, needing a new principle";
+  the *entire* chi-6-by-coupling obstruction is **W3, unit-distance realizability of
+  a clamp**.
+- *W3 is not decidable by counting (L52).* A calibrated unit-distance embedder fails
+  to realize the 48-vtx clamp (evidence), but the realizable $P_{510}$ has **worse**
+  over-determination ($+1487$ vs $+143$) and max degree ($36$ vs $22$), so DOF and
+  degree heuristics do not predict realizability. W3 is the algebraic solvability of
+  the cocircularity system.
+- *Theorem (R), an adversary-reviewed reduction generalizing Lemma (L) (L53).* A
+  clamp is realizable iff $H-w$ realizes with the split vertex's neighborhood on
+  **two distinct unit circles** ($A$ on $C(s,1)$, $B$ on $C(t,1)$, $s\neq t$). The
+  clamp needs only the pair $(s,t)$ forced-different, never a rainbow-forced 5-set,
+  so it **escapes** the unit-$K_k$ impossibility that closes the single-hub route.
+  Residual: a **flexible color-clamp** -- one unit-circumradius equation on a
+  degree-5 split vertex, a combinatorial-rigidity question (honest caveat: codim
+  counts equations, not solvability; a rigid $H-w$ has no flex, so the residual is
+  genuinely open). See `experiments/combinatorial/W3_CLAMP_REDUCTION.md`.
+
+**Sharpened target.** Does a $K_4$-free 6-critical graph have a degree-5 vertex $w$
+such that $H-w$ has a unit-distance realization flexing to put a 3-subset of $N(w)$
+at circumradius exactly 1? That is the precise chi$\ge6$ integer frontier; testing it
+needs a small/low-degree clamp (the realizable lineage, L45, has no clamp at all).
+
 **Venue.** Geombinatorics / experimental-mathematics note, IF the
 forced-different-locality reframing survives a Polymath16 prior-art check.
 
