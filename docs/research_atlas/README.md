@@ -195,7 +195,16 @@ Per-architecture status, intersection with LEARNINGS L20-L22, and three concrete
 - Does $\chi_m = \chi$ under MA or some choice-weakening axiom?
 - Can the Lovász $\vartheta$ on Cayley graphs of $\mathbb{R}^2$ be computed analytically?
 - Is there a "natural" proof method that distinguishes the $\chi \leq 7$ bound from the $\chi \geq 5$ bound asymptotically?
-- Is de Grey's 2026 conjecture (for all $d \geq 2$ and $3 \leq n \leq d+2$, there exists a $(d+n-1)$-chromatic $n$-simplex-free UDG in $\mathbb{R}^d$) true? If yes and tight, $\chi(\mathbb{R}^2) = 5$.
+- Is de Grey's 2026 conjecture (for all $d \geq 2$ and $3 \leq n \leq d+2$, there exists a $(d+n-1)$-chromatic $n$-simplex-free UDG in $\mathbb{R}^d$) true? If yes and tight, $\chi(\mathbb{R}^2) = 5$. **Note (L53):** the W3 realizable color-clamp ESCAPES this conjecture's premise. It forces a non-adjacent PAIR, never a unit-clique, so $\omega \leq 3$ does not cap $\chi$ at 5. This is the structural reason the backward-induction synthesis (L54) lands on 6, not 5.
+
+### Backward-from-2050 calibration (LEARNINGS L54)
+
+A backward-induction exercise (8 adversary-stress-tested 2050 "solution worlds" + 5 wildcards) calibrated where the program's probability mass sits. No lane moved; this is calibration, not a result.
+
+- **Most likely terminal answer**: $\chi(\mathbb{R}^2) = 6$, lower bound by a finite UDG (Architecture 1). Passes all three detectors for the right reason; routes through the named blocker.
+- **The cross-world linchpin**: a unit-distance-realizable flexible color-clamp (the W3 object of L51-L53). ~5 of the 8 credible worlds run through it; every surviving steelman of the measurable/axiomatic worlds re-imports it. The retrodiction confirms the blocker is correctly placed.
+- **Dark horse**: the definability split ($\chi = 5 < \chi_B = \chi_m = 7$, Architecture 4) - the only world whose headline invariant does not consume the missing chi-6 UDG, though its stated form fails the $L^\infty$ control.
+- **Two runnable wildcard probes** (target the L45 long-range-forcing gap from OUTSIDE the de Grey/Polymath lineage, intrinsically Euclidean so detector-safe by construction): (1) **monotile/substitution forcing** - hat/spectre matching rules as a scaffold that manufactures long-range forcing, per-tile chi-5 gadget, SAT-test L51 contraction-UNSAT on a small patch; (2) **renormalized clamp** - a transfer-matrix RG step whose leading eigenvalue $> 1$ would mean forcing accumulates across scales though zero at every finite scale checked.
 
 ## References
 
