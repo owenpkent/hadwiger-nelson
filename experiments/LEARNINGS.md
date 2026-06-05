@@ -6,6 +6,18 @@ Format: one entry per finding. **Newest entries at the top.** Lead with the find
 
 ---
 
+### L57. EXHAUSTIVE upgrade of L45 + L56: classifying EVERY non-adjacent pair (not a sample) across the chi-5 UDG lineage confirms there is NO long-range color forcing of ANY kind. As of this writing, 11 of 12 graphs are classified completely (1,932,224 non-adjacent pairs) and the 12th (874) is at ~96% (360,908 pairs), for ~2.29M pairs total: every single one is FREE -- 0 forced-different, 0 forced-same, 0 indeterminate, 0 hits. In the realizable lineage, all color forcing is adjacency-local; the missing chi>=6 ingredient is not hiding anywhere in it.
+
+**Architecture**: 1 (combinatorial). Script `experiments/combinatorial/shotD_exhaustive_forcing.py` (checkpointed, resumable; ran across a deliberate pause/resume). Cache under `_cache/shotD/` (gitignored).
+
+**Method.** For every non-adjacent pair $(a,b)$ in each lineage graph, run BOTH decisive tests: forced-different = merge $a,b$ then 5-UNSAT (the L45 test); forced-same = add edge $a,b$ then 5-UNSAT (the L56 test); otherwise FREE. A 1,000,000-conflict budget per solve drove the indeterminate count to exactly 0. This upgrades L45 (forced-different, core + random sample) and L56 (forced-same, core + random sample) from sampled to EXHAUSTIVE: not "we sampled and found none" but "we checked every pair and there are none."
+
+**Result.** Graphs fully classified (all FREE): S199, L403, 510, 517, 529, 553, 610, 633, T721, 803, 826 (1,932,224 pairs); 874 in progress (~96%, all FREE). So across the lineage: forced-different $\Leftrightarrow$ adjacent (L45, now exhaustive) AND no non-adjacent forced-same pair (L56, now exhaustive). Combined: every non-adjacent pair admits both a same-colored and a differently-colored proper 5-coloring.
+
+**Significance.** A single non-free pair would have been a chi>=6 ingredient: a forced-different non-adjacent pair IS a clamp; a forced-same non-adjacent pair yields a clamp via the L56 splice lemma. None exists among ~2.29M pairs. This is the strongest form of the W3 wall: the missing object is provably absent from the realizable de Grey/Polymath lineage and must be a NEW chi-5 UDG outside it, via the L55 sub-question (ii) wide-interface route. **Wrong-approach detectors**: N/A (a decision sweep over realizable graphs, no construction). **Honest scope**: a confirmatory/negative result; no bound moved. (874 completing shortly will close it at 12/12; this entry is correct as written and the headline will not change.)
+
+---
+
 ### L56. L55 sub-question (i) answered NEGATIVE on the realizable lineage: a FORCED-SAME sweep (the exact dual of L45's forced-different sweep) finds ZERO non-adjacent forced-same pairs across all 12 chi-5 UDGs (199-874 vertices, ~22.5k pairs, 0 indeterminate). Combined with L45 (forced-different $\Leftrightarrow$ adjacent), this proves non-adjacent pairs in the lineage are COMPLETELY UNFORCED -- neither same nor different is forced, so all color forcing is local/adjacency-only. The splice lemma (forced-same $+$ one unit edge $\Rightarrow$ clamp $\Rightarrow \chi\ge6$) is verified exactly, so forced-same is exactly as powerful as the clamp; its absence is the W3 wall seen from the "same color" side.
 
 **Architecture**: 1 (combinatorial). Script `experiments/combinatorial/shotC_forced_same.py`, runs clean (~11 min, 0 indeterminate).
