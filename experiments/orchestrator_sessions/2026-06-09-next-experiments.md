@@ -1,6 +1,6 @@
 # Next experiments (proposed 2026-06-09, post L58/L59)
 
-All runnable locally on the existing stack (python-sat/cadical, sympy exact arithmetic, networkx, cvxpy; no C compiler). Ranked by expected information per unit cost. Source material: LEARNINGS L58/L59 and the cached lens dossier (`orchestrator_sessions/_tmp_lens_material/COMPACT_DOSSIER.txt`).
+All runnable locally on the existing stack (python-sat/cadical, sympy exact arithmetic, networkx, cvxpy; no C compiler). Ranked by expected information per unit cost. Source material: LEARNINGS L58/L59 and the cached lens dossier (`orchestrator_sessions/2026-06-09-lens-dossier/COMPACT_DOSSIER.txt`).
 
 Standing rule from L59: candidate generation must PRESERVE chi-redundancy (never SAT-minimize), and every forcing sweep should pre-filter with the $O(n)$ criticality scan (`critscan_lineage.py` pattern), since only chi-redundant vertices can host forced pairs.
 
