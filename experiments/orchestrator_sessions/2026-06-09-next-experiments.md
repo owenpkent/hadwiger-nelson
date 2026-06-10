@@ -9,7 +9,9 @@ Standing rule from L59: candidate generation must PRESERVE chi-redundancy (never
 - **E0 DONE**: shotD 874 finished; L57 closed at 12/12 (2,309,264 pairs, all free).
 - **E1 DONE, POSITIVE (L60)**: 693 abstract equality-alternators in M^3(C5), one independently verified. The phase object exists.
 - **E3 DONE, NEGATIVE-as-predicted (L60)**: Z6 necklace of P510 is 5-SAT; lineage graphs have no phase to close on.
-- **NEW TOP PRIORITY -> E1b (alternator-W3)**: realize an equality-alternator as a UDG with two CONGRUENT non-adjacent pairs L, R = tau(L). This is the alternator analog of the clamp's W3, but width-2 with no cocircular rainbow, so it plausibly evades Theorem R's degree-5 obstruction. First sub-step: minimize the 693 alternators (smallest vertex/edge count, then check which admit a geometric automorphism swapping the two pairs = a built-in congruence tau), then attempt unit-distance realization (L52 calibrated embedder, or exact Groebner if a minimized alternator drops near <= 14 vtx). Decides whether the phase route's W3 is more tractable than the clamp's.
+- **E1b DONE (L61)**: minimizing all 693 alternators is VACUOUS (all stay 47 vtx) because a 6-critical host is irreducible; min alternator order = min K4-free 6-critical order (same bottleneck as the clamp). ~1/3 carry a pair-swap involution (built-in congruence). M^3(C5) is triangle-free (omega=2) = worst realizability substrate.
+- **E12 DONE, NEGATIVE (L62)**: born-realized alternator ABSENT from all 9 chi-5 lineage graphs (top-60 core, 500-coloring sampling filter); no two-edge forcing. Route 2 (free object from the lineage) is dead.
+- **NEW TOP PRIORITY -> route 1**: build/obtain a small omega=3 (triangle-RICH, K4-free) 6-critical graph as a realizable alternator/clamp host. Triangles = rigid unit rhombi/spindles, so this is both smaller than 47 and far more UDG-friendly. No nauty on this host, so the source must be a construction: Hajos/Ore merges of small chi-5 unit-distance pieces (Moser spindles), or the repo's h5/h6 lineage. Then build alternators/clamps on it and attempt exact (Groebner if <= 14) or numeric (L52 embedder) realization.
 
 ## E0. shotD graph 874 (DONE)
 
