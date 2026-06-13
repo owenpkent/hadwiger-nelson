@@ -1,7 +1,7 @@
 # sources/ — Library and reading notes
 
 Annotated catalog of the reference library for the Hadwiger-Nelson program.
-Last updated 2026-05-30.
+Last updated 2026-06-11.
 
 > **Deep reading notes** from a full read of every text live in
 > [`notes/`](notes/README.md) (one file per text/cluster, architecture-oriented, with
@@ -18,7 +18,10 @@ This file covers two kinds of material:
    Hamming-cube distance-graph paper (#18). Third wave (1): the KMOR primary source (#19),
    which corrected a material numerical error in note 08. Fourth wave (3): the Ambrus et al.
    2023 density paper (#20, the $m_1 < 1/4$ / $\chi_m \ge 5$ crossing, previously only a tex
-   in experiments/), plus two tangential Ambrus-circle papers (#21-22). Notes below are deep:
+   in experiments/), plus two tangential Ambrus-circle papers (#21-22). Fifth wave (4, added
+   2026-06-11 with L63): the Folkman-number cluster calibrating the K4-free 6-chromatic floor
+   (#23-24, #26) and the Kostochka-Yancey critical-density bound (#25), now load-bearing in the
+   L63 codegree squeeze. Notes below are deep:
    per-text bibliographic data, which of the four proof architectures it serves, the specific
    chapters/sections worth reading, and how each connects to the project's current bottleneck.
 2. **Machine data** (repo root of `sources/` + `cnp-sat/`): the de Grey / Heule /
@@ -402,6 +405,44 @@ reference only. Notes: [`notes/13-ambrus-circle-tangential-vector-balancing-hell
 Helly numbers of product sets $A^d$ via empty-polygon / extremal counting; lattice-intrinsic and
 $\mathbb{Q}^2$-blind, no transferable technique to HN. Connected to the Ambrus discrete-geometry
 circle by citation, not content. Notes: [`notes/13-...`](notes/13-ambrus-circle-tangential-vector-balancing-helly.md).
+
+### 23. Xu-Liang-Radziszowski-2016-Chromatic-Vertex-Folkman-Numbers_arXiv-1612.08136.pdf
+**X. Xu, M. Liang, S. P. Radziszowski, "Chromatic vertex Folkman numbers," arXiv:1612.08136v3,
+Electron. J. Combin. 25 (2018).** **A1, HIGH value (L63 calibration).** The chromatic refinement of
+vertex Folkman numbers: witnesses required to have the minimum possible $\chi$. Library anchor for
+the cell $F_v(2,2,2,2,2;4) = 16$: the minimum order of a $K_4$-free 6-chromatic graph is exactly 16,
+and the only 16-vtx witnesses are the two Ramsey (4,4)-graphs (Paley-type, $m \approx 60$, adjacent
+codegrees 3-4). Settles L51's abstract floor $[9,48]$ at 16 with no enumeration needed, calibrates
+the E13 factory (n=18 = floor + 2), and via the L63 codegree ceiling ($48$ at $n=16$) shows the
+UDG-necessary class is EMPTY at the Folkman floor. (The =16 primary proof is the "On minimal
+Folkman graphs" line, not freely downloadable; this paper is the accessible anchor.) No deep note yet.
+
+### 24. Nenov-2009-Vertex-Folkman-Numbers-Fv-2r-r1-r2_arXiv-0903.3151.pdf
+**N. Nenov, "On the vertex Folkman numbers $F_v(2,\ldots,2; r-1)$ and $F_v(2,\ldots,2; r-2)$,"
+arXiv:0903.3151.** **A1, medium.** Proves $F_v(2^r; r-1) = r+7$ for $r \ge 6$ and
+$F_v(2^r; r-2) = r+9$ for $r \ge 8$. Our HN cell ($r=5$, clique bound 4) sits BELOW the formula's
+range and is strictly harder ($16 > 12$): the $K_{r-1}$-free constraint binds hardest at small $r$.
+Useful comparator for how $K_q$-free critical density scales one clique level up. No deep note yet.
+
+### 25. Kostochka-Yancey-2012-Ore-Conjecture-Color-Critical-Graphs-Almost-True_arXiv-1209.1050.pdf
+**A. Kostochka, M. Yancey, "Ore's conjecture on color-critical graphs is almost true,"
+arXiv:1209.1050, J. Combin. Theory Ser. B (2014).** **A1, HIGH value (now load-bearing).** Primary
+source for the critical-density bound $f_k(n) \ge F(k,n)$: every $k$-critical graph has
+$m \ge ((k+1)(k-2)n - k(k-3))/(2(k-1))$; at $k=6$ this is $m \ge 2.8n - 1.8$, the FLOOR side of
+L63's squeeze against the $K_{2,3}$ codegree ceiling $n(1+\sqrt{8n-7})/4$, giving the rigorous
+"any 6-chromatic UDG has a 6-critical core with $n \ge 13$". Also behind the L58 adversary kill
+(clamp engines are over-braced: KY vs Laman). Sharp at $n \equiv 1 \pmod{k-1}$, so the floor is
+honest; whether $K_4$-freeness forces strictly higher density (E13b's empirical $4.2n$) is exactly
+what E14 probes. No deep note yet.
+
+### 26. Hassan-Xu-Radziszowski-2023-On-Some-Generalized-Vertex-Folkman-Numbers_RIT-J4.pdf
+**Z. R. Hassan, Y. Jiang, D. E. Narváez, S. Radziszowski, X. Xu, "On some generalized vertex
+Folkman numbers," Graphs and Combinatorics (2023); RIT PUBL J4.** **A1, medium / adjacent.**
+Generalizes the forbidden subgraph from $K_s$ to $H = J_k = K_k - e$, focusing on $k=4$. Adjacent
+to the HN cell in an interesting way: UDGs are $K_4$-free but RICH in $J_4 = K_4 - e$ (every unit
+rhombus / spindle pair is one), so $J_4$-free Folkman witnesses are NOT the right UDG model; the
+right class stays ($K_4$-free $+$ $K_{2,3}$-free), per L63. Kept as the current frontier of the
+Folkman-number toolbox (SAT-based, same lineage as the cnp-sat machinery). No deep note yet.
 
 ---
 
