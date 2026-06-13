@@ -47,9 +47,10 @@ route to $\chrom(\R^2) \ge 6$ would locate, somewhere in this realizable lineage
 of $\chrom = 5$ UDGs, a non-adjacent vertex pair forced to distinct colors in
 every proper $5$-coloring (a \emph{clamp}); realizing such a pair lifts the
 chromatic number to $6$. This note records a negative structural result: the
-realizable lineage contains no such forcing, and provably so. We prove an
-elementary \emph{Essential-Pair Lemma} which implies that a vertex-critical
-$5$-chromatic graph cannot host any forced non-adjacent pair. We confirm the
+realizable lineage contains no such forcing, and provably so. We recall an
+elementary lemma (the \emph{Essential-Pair Lemma}, essentially known) which
+implies that a vertex-critical $5$-chromatic graph cannot host any forced
+non-adjacent pair. We confirm the
 consequence by an exhaustive computational census: all $1{,}955{,}948$
 non-adjacent pairs across the nine $\chrom = 5$ lineage graphs are free, with zero
 forced pairs of either kind. Since the lineage is vertex-critical, this is a
@@ -118,9 +119,10 @@ obstruction (Section~\ref{sec:codegree}). Section~\ref{sec:discussion}
 synthesizes the picture and states the target object honestly.
 
 \paragraph{Scope and honesty.} This is a negative, explanatory note. We move no
-bound on $\chrom(\R^2)$. The contribution is threefold: (a) an elementary lemma
-explaining \emph{why} the realizable lineage is forcing-sterile; (b) an
-exhaustive computational census confirming it across the entire lineage; and
+bound on $\chrom(\R^2)$. The contribution is threefold: (a) the observation that
+the realizable lineage is forcing-sterile \emph{by construction}, obtained by
+applying a known elementary lemma to its vertex-criticality; (b) an exhaustive
+computational census confirming it across the entire lineage; and
 (c) a codegree framing that locates the missing $\chrom \ge 6$ object outside the
 reach of both the realizable lineage and the small dense graphs one would
 naively manufacture. None of the three ingredients is individually deep; the
@@ -196,11 +198,15 @@ anywhere.
 \section{The Essential-Pair Lemma}
 \label{sec:lemma}
 
-The following lemma is elementary. We are not aware of this exact statement in
-the literature, though it may well be folklore; the proof uses only the
-definition of a proper coloring.
-% TODO: literature check. We are not aware of this exact statement in the
-% literature but it may be folklore.
+The following lemma is elementary and essentially known. Its corollary, that a
+vertex-critical $k$-chromatic graph admits no forced non-adjacent pair, appears
+as Theorem~3.17 (``there are no implicit relations in critical graphs'') of
+Martin~\cite{Martin2009}, where forced-different and forced-same pairs are termed
+\emph{implicit-edges} and \emph{implicit-identities}; the single-deletion form we
+state is a one-line sharpening of his Theorems~3.2 and~3.17. The result is also
+implicit in standard critical-graph theory (Dirac and Gallai; see Jensen and
+Toft~\cite{JensenToft1995}). We state and prove it for self-containedness and
+make no priority claim; the proof uses only the definition of a proper coloring.
 
 \begin{lemma}[Essential-Pair Lemma]
 \label{lem:essential}
@@ -511,10 +517,11 @@ $n$, so a graph that respects~\eqref{eq:codeg-ceiling} need not be realizable.
 
 \paragraph{Honest limitations.} We list the caveats explicitly.
 \begin{enumerate}
-  \item \emph{The Essential-Pair Lemma is elementary.} Its proof uses only the
-        definition of a proper coloring. We are not aware of the exact statement
-        in the literature, but it may be folklore; we make no priority claim.
-        % TODO: literature check on Lemma 1.
+  \item \emph{The Essential-Pair Lemma is elementary and known.} Its corollary is
+        Theorem~3.17 of Martin~\cite{Martin2009} (phrased there via
+        ``implicit-edges'' and ``implicit-identities''), and it is implicit in
+        standard critical-graph theory~\cite{JensenToft1995}. We include a proof
+        only for self-containedness and make no priority claim.
   \item \emph{The $K_{2,3}$-free fact is classical.} It is the basis of the
         Spencer-Szemer\'edi-Trotter unit-distance edge bound. The novelty of
         Section~\ref{sec:codegree} is the synthesis with Kostochka-Yancey and the
