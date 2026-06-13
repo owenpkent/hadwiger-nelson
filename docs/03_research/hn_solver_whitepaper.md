@@ -133,10 +133,25 @@ prune. This is the fundamental ceiling.
 
 Ordered by expected payoff for this program:
 
-1. **Conflict / nogood learning.** The single highest-value addition. Even a
-   lightweight nogood store (record the partial assignment at each wipeout, and
-   skip dominated subtrees) would attack the no-learning ceiling directly and is
-   the difference between handling $M^3$ and $M^4$.
+1. **Conflict / nogood learning.** DONE and measured, with an instructive
+   outcome (see [`hn_solver_cdcl.py`](../../experiments/_shared/hn_solver_cdcl.py)).
+   We implemented conflict-directed backjumping (Prosser CBJ) plus nogood
+   learning, validated correct (zero verdict disagreements vs the chronological
+   solver and the portfolio over 200 random graphs x 3 colors). The clean
+   soundness fact that makes it tractable: under the symmetry ceiling a wipeout
+   happens only when a vertex's neighbors already occupy all $k$ colors, a pure
+   graph conflict, so conflict analysis needs no symmetry explanation.
+   **Result:** learning cuts the node count on $M^3(C_5)$ $k=5$ UNSAT from
+   447,720 (chronological) to **66,651, a 6.7x reduction**, and it slows the
+   per-Mycielski-level node explosion from ~500x to ~68x. But in pure Python the
+   wall time is unchanged (14.3 s vs 14.4 s): the nogood machinery makes each
+   node ~6.7x more expensive, exactly cancelling the node savings, and $M^4(C_5)$
+   stays intractable (<2,000 nodes/s). This empirically confirms the analysis of
+   this paper: **learning and a compiled-language port are complementary levers,
+   not substitutes.** Learning reduces the node count (algorithm); a Rust/PyO3
+   core reduces the per-node cost (constant factor); $M^4$ needs both. The next
+   step inside Python is watched-literal nogood propagation (the standard CDCL
+   trick) to cut the per-node nogood-checking cost that currently eats the win.
 2. **Stronger propagation.** Full arc-consistency on color domains, or a DSATUR
    dynamic ordering (branch on the vertex with the most distinctly-colored
    neighbors), would shrink the tree before learning is even needed.
