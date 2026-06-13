@@ -55,12 +55,23 @@ def greedy_clique(n, adj):
 
 # --------------------------- core search -------------------------------------
 
+class _Budget(Exception):
+    """Raised internally when the node budget is exhausted."""
+
+
 class _Search:
-    def __init__(self, n, adj, k):
+    def __init__(self, n, adj, k, node_limit=None):
         self.n = n
         self.adj = adj
         self.k = k
         self.color = [-1] * n
+        self.node_limit = node_limit
+        self.nodes = 0
+
+    def _tick(self):
+        self.nodes += 1
+        if self.node_limit is not None and self.nodes > self.node_limit:
+            raise _Budget()
 
     def _neighbor_colors(self, v):
         m = 0
@@ -94,6 +105,7 @@ class _Search:
         return (best[1], best[2])
 
     def find_one(self):
+        self._tick()
         pick = self._pick()
         if pick is None:
             return True
@@ -112,6 +124,7 @@ class _Search:
         return False
 
     def count(self, cap):
+        self._tick()
         pick = self._pick()
         if pick is None:
             return 1
@@ -142,17 +155,35 @@ def _seed_clique(s):
     return True
 
 
-def kcolor(n, edges, k, return_coloring=False):
+def kcolor(n, edges, k, return_coloring=False, node_limit=None):
     """Decide k-colorability from scratch. Returns a coloring list if
-    return_coloring and SAT, else True/False."""
+    return_coloring and SAT, True/False if decided, or None if the node budget
+    (node_limit search-tree expansions) is exhausted first."""
     adj = _adj(n, edges)
-    s = _Search(n, adj, k)
+    s = _Search(n, adj, k, node_limit=node_limit)
     if not _seed_clique(s):
         return False
-    ok = s.find_one()
+    try:
+        ok = s.find_one()
+    except _Budget:
+        return None
     if not ok:
         return False
     return list(s.color) if return_coloring else True
+
+
+def solve_counting_nodes(n, edges, k, node_limit=None):
+    """Like kcolor (decision only) but also returns the number of search-tree
+    nodes expanded: (verdict, nodes), verdict in {True, False, None}. Used by
+    the benchmark to report where the search blows up."""
+    adj = _adj(n, edges)
+    s = _Search(n, adj, k, node_limit=node_limit)
+    if not _seed_clique(s):
+        return False, s.nodes
+    try:
+        return s.find_one(), s.nodes
+    except _Budget:
+        return None, s.nodes
 
 
 def count_patterns(n, edges, k, cap=10 ** 9):
