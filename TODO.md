@@ -65,6 +65,25 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [ ] **L55 follow-up (ii)** (the remaining combinatorial route): smallest WIDE-interface ($\ge2$-vertex separator) gadget whose boundary-coloring transfer matrix is imprimitive AND W3-realizable = Theorem R's degree-$\ge5$ split; the monotile (Wildcard A) is a candidate substrate
   - [ ] **L55 follow-up (ii)**: smallest WIDE-interface ($\ge2$-vertex separator) gadget whose boundary-coloring transfer matrix is imprimitive (escapes the monoid) AND is W3-realizable. This is Theorem R's degree-$\ge5$ split restated as a transfer-matrix target; reframes Wildcard A's monotile gadget search
 
+### The W3 wall, exhausted, then the codegree wall (L51-L65)
+
+- [x] Abstract clamp EXISTS as a one-move vertex-split of a $K_4$-free 6-critical graph; 48-vtx triangle-free SAT-verified witness; obstruction relocated entirely onto W3 (lrf_abstract_clamp, L51)
+- [x] W3 not decidable by DOF/degree counting; reduced to algebraic cocircularity (Theorem R: clamp realizable iff $H-w$ realizes with $N(w)$ split on two unit circles) (L52-L53)
+- [x] Backward-from-2050 synthesis: most-likely terminal answer $\chi=6$ by a finite UDG; linchpin = the W3-realizable clamp (L54)
+- [x] Clamp question FACTORS via $S_k$ color-symmetry monoid $\{0,I,J{-}I,J\}$ into (i) forced-same gadget or (ii) wide-interface split (wildcard_b_rg_transfer, L55)
+- [x] Forced-same sweep NEGATIVE across the lineage (shotC, L56); EXHAUSTIVE forcing census: all ~2.29M non-adjacent pairs FREE (shotD, L57)
+- [x] Essential-Pair Lemma (= Martin 2009 Thm 3.17): vertex-critical chi-5 graphs host no forced pair; all 9 lineage graphs vertex-critical, so forcing-sterile BY CONSTRUCTION (critscan_lineage, L58-L59)
+- [x] Phase-gadget / equality-alternator route: abstract object EXISTS (e9, L60) but absent from the realizable lineage and needs a new host (e10-e12, L61-L62)
+- [x] Host factory (nauty-free Mycielski towers): K4-free 6-critical hosts down to 18 vtx, alternator-abundant; but the CODEGREE WALL ($K_{2,3}$-free $\Rightarrow m \le n(1+\sqrt{8n-7})/4$) excludes every manufactured host (e13/e13b, L63); Folkman floor = 16 (literature)
+- [x] E14: generate INSIDE the both-free class from $P_{510}$; the class is LIQUID (674 codegree-safe edges added, still 5-colorable); PORTFOLIO finding Cadical 12h vs Maple 155s (L64) -- **VERDICT STILL OPEN (e14c running)**
+- [x] E15: greedy in-class growth caps at $\chi=4$ across $n=17$-64 (greedy limit, not non-existence); drove by the from-scratch hn_solver (L65)
+- [x] Tooling: `_shared/portfolio_sat.py` (parallel-process SAT portfolio), `combinatorial/chromatic_lifter.py` (overshoot + invariants), `_shared/hn_solver.py` (from-scratch structure-first solver + benchmark); white paper `docs/03_research/hn_solver_whitepaper.md`
+- [x] Geombinatorics-style paper draft `paper/main.tex` (compiles clean, census total corrected to 1,955,948 = nine chi-5 graphs)
+- [ ] **E14 verdict**: let e14c overshoot resolve to UNSAT (first in-class chi-6 graph), STUCK (class caps below 6 from this seed), or the edge budget
+- [ ] **E15-v2**: find a small in-class chi-6 graph by violation-minimization from a NON-critical 6-chromatic seed (greedy-from-empty failed); a witness would be a new object directly feeding the paper
+- [ ] **hn_solver #1 improvement**: add conflict/nogood learning (the no-learning ceiling is why $M^4(C_5)$ / lineage-scale UNSAT are out of reach); then deploy it as a structural front end to the portfolio
+- [ ] **Paper finishing**: author block, acknowledgments, verify BibTeX volume/pages; decide on Geombinatorics submission
+
 ## Architecture 2: Measurable / spectral
 
 - [x] Survey: Falconer 1981 proof of chi_m >= 5; consolidated measurable frontier (chi_m >= 5 best known, >= 6 OPEN; "do >= 6" citations are misattributions) (L31; atlas arch2_measurable.md)
