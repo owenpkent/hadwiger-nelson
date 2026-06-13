@@ -1,0 +1,550 @@
+\documentclass[11pt]{article}
+
+% Standard, non-exotic packages only.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+% Theorem environments.
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+% Shorthands.
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\chrom}{\chi}
+\DeclareMathOperator{\Aut}{Aut}
+
+\title{Forcing-sterility of the realizable unit-distance lineage\\
+and a codegree obstruction to $\chi \ge 6$}
+
+% TODO: author block. Filled with a placeholder; replace before submission.
+\author{Hadwiger-Nelson computational program\\
+\small (working note)}
+\date{June 13, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The chromatic number of the plane, $\chrom(\R^2)$, is known only to lie in
+$[5,7]$. The lower bound $\chrom(\R^2) \ge 5$ rests on finite unit-distance
+graphs (UDGs): de Grey (2018) exhibited the first such graph with $\chrom \ge 5$,
+and the Polymath16 project reduced the order to roughly $510$ vertices. A natural
+route to $\chrom(\R^2) \ge 6$ would locate, somewhere in this realizable lineage
+of $\chrom = 5$ UDGs, a non-adjacent vertex pair forced to distinct colors in
+every proper $5$-coloring (a \emph{clamp}); realizing such a pair lifts the
+chromatic number to $6$. This note records a negative structural result: the
+realizable lineage contains no such forcing, and provably so. We prove an
+elementary \emph{Essential-Pair Lemma} which implies that a vertex-critical
+$5$-chromatic graph cannot host any forced non-adjacent pair. We confirm the
+consequence by an exhaustive computational census: all $1{,}955{,}948$
+non-adjacent pairs across the nine $\chrom = 5$ lineage graphs are free, with zero
+forced pairs of either kind. Since the lineage is vertex-critical, this is a
+one-line corollary of the Lemma, and the deeper point is conceptual: the lineage
+was produced by SAT-driven minimization, which drives graphs toward
+vertex-criticality, and criticality deletes exactly the vertices that could host
+forcing. The lineage is forcing-sterile \emph{by construction}. We then frame the
+search for the missing $\chrom \ge 6$ object through a codegree obstruction: every
+planar UDG is $K_{2,3}$-free, so its edge count is bounded by
+$m \le n\bigl(1 + \sqrt{8n-7}\bigr)/4$; combined with the Kostochka-Yancey lower
+bound for $6$-critical graphs and the vertex Folkman number
+$F_v(2,2,2,2,2;4) = 16$, this excludes every small dense Folkman-type host. The
+missing object must lie in the class of graphs that are simultaneously $K_4$-free
+and $K_{2,3}$-free, of order at least roughly $26$. We claim no new bound on
+$\chrom(\R^2)$.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+The Hadwiger-Nelson problem asks for the chromatic number $\chrom(\R^2)$ of the
+\emph{unit-distance graph} on the Euclidean plane: vertices are the points of
+$\R^2$, and two points are adjacent iff they are at distance exactly $1$. The
+classical bounds are
+\[
+  5 \le \chrom(\R^2) \le 7,
+\]
+and have resisted improvement for three quarters of a century. The upper bound
+$\chrom(\R^2) \le 7$ is the Isbell hexagonal coloring (tile the plane with regular
+hexagons of diameter slightly less than $1$ and color in a repeating
+$7$-pattern). The lower bound $\chrom(\R^2) \ge 5$ is recent and computational:
+de Grey~\cite{deGrey2018} constructed a finite unit-distance graph on $1581$
+vertices with $\chrom \ge 5$, verified by a SAT proof, and the Polymath16
+project~\cite{Polymath16} subsequently reduced the order of such graphs to
+roughly $510$ vertices. We refer to this family of explicitly realized $\chrom=5$
+UDGs as the \emph{realizable lineage}. For background on the problem and its
+history see Soifer~\cite{Soifer2009}.
+
+The natural finitary route to $\chrom(\R^2) \ge 6$ is to find a finite UDG with
+$\chrom \ge 6$. One concrete mechanism for manufacturing such a graph out of a
+$\chrom=5$ graph is a \emph{clamp}.
+
+\begin{definition}[Clamp]
+\label{def:clamp}
+Let $G$ be a $5$-chromatic graph and $(s,t)$ a non-adjacent pair of vertices. We
+call $(s,t)$ a \emph{clamp} if every proper $5$-coloring of $G$ assigns
+$c(s) \ne c(t)$.
+\end{definition}
+
+If a clamp $(s,t)$ in a UDG can be \emph{realized}, that is, if the geometry
+permits placing a vertex at unit distance from both $s$ and $t$ while preserving
+the unit-distance structure (so that an edge effectively appears across the
+forced-different pair), the chromatic number is lifted to $6$. The motivating
+question for this note is therefore:
+\begin{quote}
+\emph{Does the realizable lineage of $\chrom = 5$ UDGs contain a clamp (or any
+other forced non-adjacent pair) that could be exploited to reach
+$\chrom \ge 6$?}
+\end{quote}
+The answer of this note is \textbf{no, and provably so}. We make this precise
+through one elementary lemma (Section~\ref{sec:lemma}), confirm it with an
+exhaustive computational census (Section~\ref{sec:census}), explain it
+structurally by way of vertex-criticality (Section~\ref{sec:criticality}), and
+then reframe the search for the genuinely missing object through a codegree
+obstruction (Section~\ref{sec:codegree}). Section~\ref{sec:discussion}
+synthesizes the picture and states the target object honestly.
+
+\paragraph{Scope and honesty.} This is a negative, explanatory note. We move no
+bound on $\chrom(\R^2)$. The contribution is threefold: (a) an elementary lemma
+explaining \emph{why} the realizable lineage is forcing-sterile; (b) an
+exhaustive computational census confirming it across the entire lineage; and
+(c) a codegree framing that locates the missing $\chrom \ge 6$ object outside the
+reach of both the realizable lineage and the small dense graphs one would
+naively manufacture. None of the three ingredients is individually deep; the
+synthesis is the point.
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+All graphs are finite, simple, and undirected. For a graph $G$ we write $V(G)$
+for its vertex set, $n = |V(G)|$, $m = |E(G)|$, and $\chrom(G)$ for the chromatic
+number. A graph is \emph{$5$-chromatic} if $\chrom(G) = 5$. A proper
+$k$-coloring is a map $c : V(G) \to \{1, \dots, k\}$ with $c(u) \ne c(v)$ whenever
+$uv \in E(G)$.
+
+\begin{definition}[Vertex-critical]
+A graph $G$ is \emph{vertex-critical} (with respect to its chromatic number) if
+$\chrom(G - v) < \chrom(G)$ for every $v \in V(G)$. A $5$-chromatic graph is
+vertex-critical iff $\chrom(G - v) \le 4$ for every vertex $v$.
+\end{definition}
+
+\begin{definition}[Forcing of a non-adjacent pair]
+\label{def:forcing}
+Let $G$ be a $5$-chromatic graph and let $(s,t)$ be a pair of distinct,
+\emph{non-adjacent} vertices. We classify $(s,t)$ as follows.
+\begin{itemize}
+  \item \textsc{Forced-same}: every proper $5$-coloring of $G$ has $c(s) = c(t)$.
+  \item \textsc{Forced-different}: every proper $5$-coloring of $G$ has
+        $c(s) \ne c(t)$.
+  \item \textsc{Forced}: either \textsc{forced-same} or \textsc{forced-different}
+        holds.
+  \item \textsc{Free}: neither holds, i.e. there exist a proper $5$-coloring with
+        $c(s) = c(t)$ and a (possibly different) proper $5$-coloring with
+        $c(s) \ne c(t)$.
+\end{itemize}
+\end{definition}
+
+A clamp (Definition~\ref{def:clamp}) is exactly a forced-different non-adjacent
+pair. A forced-same pair is no weaker as a route to $\chrom \ge 6$: adding a
+single unit edge across a forced-same pair produces a forced-different pattern
+elsewhere (a splice argument), so forced-same and forced-different are
+interconvertible as $\chrom \ge 6$ ingredients. For the purposes of this note the
+relevant dichotomy is simply \emph{forced} versus \emph{free}: a single forced
+pair anywhere in the lineage would be a candidate $\chrom \ge 6$ ingredient.
+
+\paragraph{Deciding forcing by SAT.} Each forcing question reduces to two
+$k$-colorability decisions, both decidable by a standard $k$-coloring SAT
+encoding.
+\begin{itemize}
+  \item \textsc{Forced-different} holds for $(s,t)$ iff the graph $G / \{s,t\}$,
+        obtained by \emph{identifying} (merging) $s$ and $t$, is not
+        $5$-colorable. Merging forces $c(s) = c(t)$; if even that constrained
+        instance is $5$-UNSAT, then no proper $5$-coloring has $c(s) = c(t)$, so
+        every proper $5$-coloring has $c(s) \ne c(t)$.
+  \item \textsc{Forced-same} holds for $(s,t)$ iff the graph $G + st$, obtained by
+        \emph{adding} the edge $st$, is not $5$-colorable. Adding the edge forbids
+        $c(s) = c(t)$; if that instance is $5$-UNSAT, then no proper $5$-coloring
+        has $c(s) \ne c(t)$, so every proper $5$-coloring has $c(s) = c(t)$.
+  \item Otherwise $(s,t)$ is \textsc{free}.
+\end{itemize}
+Both tests are decisive: a $5$-UNSAT verdict from a complete solver is a proof,
+and a satisfying assignment is an explicit certificate of freeness on that side.
+
+\paragraph{Control objects.} Throughout we keep in mind the structural controls
+of the program. The unit-distance graph on $\Q^2$ has chromatic number $2$
+(Woodall~\cite{Woodall1973}); any purely combinatorial argument for
+$\chrom(\R^2) \ge 5$ must use the topology of $\R$ in a way that fails on $\Q^2$.
+The codegree obstruction of Section~\ref{sec:codegree} is genuinely Euclidean:
+it uses two-circle rigidity, which fails under the sup-norm (where unit
+``circles'' are squares and can share a segment). The Essential-Pair Lemma of
+Section~\ref{sec:lemma}, by contrast, is pure graph theory and claims no bound
+anywhere.
+
+\section{The Essential-Pair Lemma}
+\label{sec:lemma}
+
+The following lemma is elementary. We are not aware of this exact statement in
+the literature, though it may well be folklore; the proof uses only the
+definition of a proper coloring.
+% TODO: literature check. We are not aware of this exact statement in the
+% literature but it may be folklore.
+
+\begin{lemma}[Essential-Pair Lemma]
+\label{lem:essential}
+Let $G$ be a $5$-chromatic graph and let $(s,t)$ be a non-adjacent pair that is
+\emph{forced} (forced-same or forced-different). Then
+\[
+  \chrom(G - s) \ge 5 \quad\text{and}\quad \chrom(G - t) \ge 5.
+\]
+\end{lemma}
+
+\begin{proof}
+We prove $\chrom(G - s) \ge 5$; the statement for $t$ follows by symmetry.
+
+Suppose toward a contradiction that $\chrom(G - s) \le 4$. Fix a proper
+$4$-coloring of $G - s$ using colors $\{1,2,3,4\}$. We extend it to $G$ in two
+different ways.
+
+\emph{The ``different'' pattern.} Give $s$ the new color $5$. Every neighbor of
+$s$ lies in $G - s$ and so is colored with a color in $\{1,2,3,4\}$; hence no
+neighbor of $s$ has color $5$, and the extension is a proper $5$-coloring of $G$.
+In it, $c(s) = 5$. Since $t \ne s$ and $t$ is colored with a color in
+$\{1,2,3,4\}$, we have $c(s) \ne c(t)$. Thus the forced-different pattern is
+realized.
+
+\emph{The ``same'' pattern.} Starting again from the same proper $4$-coloring of
+$G - s$, set $c(s) = 5$ as before, and additionally \emph{recolor} $t$ to $5$.
+Because $s$ and $t$ are \textbf{non-adjacent}, every neighbor of $t$ also lies in
+$G - s$ (a neighbor of $t$ cannot be $s$), and so is colored in $\{1,2,3,4\}$;
+recoloring $t$ to $5$ therefore creates no monochromatic edge at $t$. The vertex
+$s$ likewise has all neighbors in $\{1,2,3,4\}$, so no edge at $s$ is
+monochromatic either. The result is a proper $5$-coloring of $G$ with
+$c(s) = 5 = c(t)$. Thus the forced-same pattern is realized.
+
+Both the same-colored and the differently-colored patterns occur in proper
+$5$-colorings of $G$. Hence $(s,t)$ is \textsc{free}
+(Definition~\ref{def:forcing}), contradicting the hypothesis that it is forced.
+Therefore $\chrom(G - s) \ge 5$, and by symmetry $\chrom(G - t) \ge 5$.
+\end{proof}
+
+\begin{corollary}
+\label{cor:critical-free}
+A vertex-critical $5$-chromatic graph contains \emph{no} forced non-adjacent
+pair: every non-adjacent pair is free.
+\end{corollary}
+
+\begin{proof}
+Let $G$ be vertex-critical and $5$-chromatic, so $\chrom(G - v) \le 4$ for every
+vertex $v$. If some non-adjacent pair $(s,t)$ were forced, then
+Lemma~\ref{lem:essential} would give $\chrom(G - s) \ge 5$, contradicting
+$\chrom(G - s) \le 4$. Hence no non-adjacent pair is forced.
+\end{proof}
+
+The content of Corollary~\ref{cor:critical-free} is intuitive once stated: a
+forced pair $(s,t)$ requires that the rest of the graph be ``heavy'' enough at
+both $s$ and $t$ to constrain their colors even without an edge between them, and
+that heaviness is precisely what survives the deletion of $s$ (or $t$). If the
+graph is already minimal in the sense that every vertex deletion drops the
+chromatic number, no such residual heaviness exists.
+
+\section{The exhaustive census}
+\label{sec:census}
+
+We now report the computational confirmation. The realizable lineage of
+$\chrom = 5$ UDGs studied here consists of nine graphs, of orders
+\[
+  510,\; 517,\; 529,\; 553,\; 610,\; 633,\; 803,\; 826,\; 874,
+\]
+descending from the de Grey / Polymath16 constructions. (An earlier triage table
+listed three further graphs, on $199$, $403$, and $721$ vertices, which on
+re-examination have $\chrom = 4$; they are excluded here, and their exclusion
+does not affect the census headline.)
+
+\paragraph{Method.} For every non-adjacent pair $(s,t)$ in each of the nine
+graphs we ran \emph{both} decisive SAT tests of Section~\ref{sec:prelim}:
+\begin{itemize}
+  \item forced-different is decided by \emph{merging} $s$ and $t$ (identifying the
+        two vertices) and testing whether the merged graph is $5$-UNSAT;
+  \item forced-same is decided by \emph{adding} the edge $st$ and testing whether
+        the augmented graph is $5$-UNSAT;
+  \item if neither test returns UNSAT, the pair is free.
+\end{itemize}
+A per-solve conflict budget was used and tuned so that the number of
+indeterminate solves was driven to exactly zero; every pair received a decisive
+classification.
+
+\paragraph{Result.} All $1{,}955{,}948$ non-adjacent pairs across the nine graphs
+were classified, and \textbf{every single one is free}: zero forced-same, zero
+forced-different, zero indeterminate. Table~\ref{tab:census} reports the
+per-graph counts.
+
+\begin{table}[ht]
+\centering
+\caption{Exhaustive forcing census over the realizable $\chrom = 5$ lineage. For
+each graph, every non-adjacent pair was classified by two decisive SAT tests
+(merge for forced-different, add-edge for forced-same). Every pair is free.}
+\label{tab:census}
+\begin{tabular}{r r r r r}
+\toprule
+Order $n$ & Non-adjacent pairs & Forced-same & Forced-diff. & Free \\
+\midrule
+510 & 127{,}291 & 0 & 0 & all \\
+517 & 130{,}807 & 0 & 0 & all \\
+529 & 136{,}986 & 0 & 0 & all \\
+553 & 149{,}906 & 0 & 0 & all \\
+610 & 182{,}745 & 0 & 0 & all \\
+633 & 196{,}862 & 0 & 0 & all \\
+803 & 317{,}859 & 0 & 0 & all \\
+826 & 336{,}452 & 0 & 0 & all \\
+874 & 377{,}040 & 0 & 0 & all \\
+\midrule
+\textbf{Total} & \textbf{1{,}955{,}948} & \textbf{0} & \textbf{0} &
+  \textbf{all} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Per-graph non-adjacent-pair counts are C(n,2) - m, computed directly from the
+% graph edge files; they sum to 1,955,948 over the nine chi=5 graphs. (The
+% figure 2,309,264 from an earlier run counted twelve graphs, including the
+% three chi=4 graphs S199/L403/T721 now excluded; that broader total is not the
+% nine-graph headline.)
+
+Equivalently: in the realizable lineage, every non-adjacent pair admits both a
+same-colored and a differently-colored proper $5$-coloring. All color forcing is
+\emph{adjacency-local}. A single non-free pair would have been a candidate
+$\chrom \ge 6$ ingredient (a forced-different pair is a clamp directly; a
+forced-same pair yields one by a splice). None exists.
+
+\section{The criticality explanation}
+\label{sec:criticality}
+
+The census of Section~\ref{sec:census} is not a coincidence, and it is not even
+a separate fact. A criticality scan over the same nine graphs (deciding
+$4$-colorability of $G - v$ for every vertex $v$, totaling on the order of
+$5{,}000$ solves) found that \emph{all nine lineage graphs are vertex-critical}:
+deleting any single vertex yields a $4$-colorable graph, with zero redundant
+vertices and zero indeterminate verdicts.
+
+\begin{theorem}
+\label{thm:sterile}
+Every graph in the realizable $\chrom = 5$ lineage is vertex-critical, and
+therefore (by Corollary~\ref{cor:critical-free}) contains no forced non-adjacent
+pair. Consequently the exhaustive census of Section~\ref{sec:census} is a
+one-line corollary of the Essential-Pair Lemma.
+\end{theorem}
+
+\begin{proof}
+Vertex-criticality is the computational output of the scan. Given it,
+Corollary~\ref{cor:critical-free} applies to each of the nine graphs and yields
+that no non-adjacent pair is forced, which is exactly the census conclusion.
+\end{proof}
+
+\paragraph{The conceptual heart.} Theorem~\ref{thm:sterile} explains the census
+mechanistically, and the explanation is the central point of this note. The
+realizable lineage was \emph{produced by SAT-driven minimization}: starting from
+a large $\chrom = 5$ UDG, one repeatedly deletes vertices and edges while
+preserving $\chrom = 5$, driving the graph toward a minimal core. Minimization of
+this kind drives a graph toward vertex-criticality. But by the Essential-Pair
+Lemma, criticality deletes \emph{exactly} the vertices that could host a forced
+pair: a forced pair $(s,t)$ certifies that $s$ and $t$ are chromatically
+\emph{redundant} (their deletion keeps $\chrom \ge 5$), and a vertex-critical
+graph has no redundant vertices. The production process therefore removes every
+clamp-capable endpoint before any forcing search is ever run.
+
+\begin{quote}
+\emph{The realizable lineage is forcing-sterile by construction.} The missing
+$\chrom \ge 6$ ingredient cannot be hiding in it, not because no one searched
+carefully, but because the very procedure that produced the lineage removed the
+only vertices that could carry the ingredient.
+\end{quote}
+
+This has a concrete methodological consequence. A clamp (or any forced pair) can
+only live at chromatically redundant vertices, so a candidate-generation
+procedure aimed at $\chrom \ge 6$ must \emph{preserve} redundancy: it must
+\textbf{not} minimize toward criticality. Equivalently, any forcing sweep can be
+pre-filtered by an $O(n)$ criticality scan (keep only redundant vertices) rather
+than testing all $O(n^2)$ pairs, since forcing can only occur at redundant
+endpoints. We note one caveat carried from prior work: redundancy is necessary
+but not sufficient. There exist non-minimal $5$-chromatic graphs (for instance a
+particular $C_6$-closure on $1155$ vertices) that are forcing-free despite having
+redundant vertices.
+
+\section{A codegree obstruction to small dense hosts}
+\label{sec:codegree}
+
+If the missing $\chrom \ge 6$ object is not in the realizable lineage
+(Sections~\ref{sec:census}-\ref{sec:criticality}), the alternative is to
+manufacture an abstract $\chrom = 6$ graph and realize it as a UDG. The natural
+supply is $K_4$-free $6$-chromatic graphs (one wants $K_4$-freeness because unit
+distances make $K_4$ geometrically rigid and hard to realize freely). These exist
+in abundance and can be made small. The obstruction recorded here is that they
+are \emph{too dense} to be planar UDGs.
+
+\paragraph{The codegree bound.} In the Euclidean plane, two distinct unit circles
+meet in at most $2$ points. Hence any two vertices of a planar UDG have at most
+$2$ common neighbors: \textbf{every planar UDG is $K_{2,3}$-free}. (This is the
+classical fact underlying the Spencer-Szemer\'edi-Trotter $O(n^{4/3})$ bound on
+the number of unit distances among $n$ points~\cite{SpencerSzemerediTrotter1984}.)
+
+The $K_{2,3}$-free condition bounds the edge count. Counting paths of length two
+through each vertex,
+\[
+  \sum_{v} \binom{d_v}{2} \;=\; \#\{\text{paths of length } 2\}
+  \;\le\; 2\binom{n}{2},
+\]
+because each unordered pair of vertices is the pair of endpoints of at most $2$
+such paths ($K_{2,3}$-freeness caps the common-neighbor count at $2$). By
+convexity, $\sum_v \binom{d_v}{2} \ge n \binom{2m/n}{2}$, and solving the
+resulting quadratic in $m$ gives
+\begin{equation}
+  m \;\le\; \frac{n\bigl(1 + \sqrt{8n - 7}\bigr)}{4}.
+  \label{eq:codeg-ceiling}
+\end{equation}
+We call the right-hand side the \emph{codegree ceiling}.
+
+\paragraph{Manufactured hosts overshoot it.} Empirically, the smallest reachable
+$K_4$-free $6$-chromatic (Folkman-type) hosts are dense, with edge-to-vertex
+ratio $m/n \approx 4.2$, far above the ceiling
+of~\eqref{eq:codeg-ceiling}. Concretely:
+\begin{itemize}
+  \item an $18$-vertex $K_4$-free $6$-critical host has $m = 76$, against a
+        ceiling of $\lfloor 57.17 \rfloor = 57$;
+  \item the classical Mycielskian $M^3(C_5)$ on $47$ vertices has $434$ vertex
+        pairs of common-neighbor count $\ge 3$, i.e. $434$ violations of the
+        $K_{2,3}$-free condition, with maximum codegree $11$.
+\end{itemize}
+Such graphs cannot be planar UDGs; the violation is structural (it persists for
+edge-critical cores, which have no slack to remove), not an artifact of any
+particular construction heuristic.
+
+\paragraph{A rigorous core-size floor.} The $K_4$-free assumption can be dropped
+for a clean lower bound on the order of the $6$-critical core. The
+Kostochka-Yancey theorem~\cite{KostochkaYancey2014} states that every
+$6$-critical graph has
+\[
+  m \;\ge\; 2.8\,n - 1.8.
+\]
+Comparing this floor with the codegree ceiling~\eqref{eq:codeg-ceiling}, the
+floor \emph{exceeds} the ceiling for $n \le 12$ (and they cross at $n = 13$).
+Hence:
+
+\begin{proposition}
+\label{prop:core13}
+Any $6$-chromatic unit-distance graph in the plane contains a $6$-critical core
+on at least $13$ vertices.
+\end{proposition}
+
+\begin{proof}
+A $6$-chromatic graph contains a $6$-critical subgraph $H$ (delete vertices and
+edges while $\chrom = 6$). As a subgraph of a planar UDG, $H$ is $K_{2,3}$-free,
+so $|E(H)| \le |V(H)|\bigl(1 + \sqrt{8|V(H)| - 7}\bigr)/4$. As a $6$-critical
+graph, $|E(H)| \ge 2.8\,|V(H)| - 1.8$. For $|V(H)| \le 12$ the lower bound
+exceeds the upper bound, a contradiction, so $|V(H)| \ge 13$.
+\end{proof}
+
+\paragraph{The Folkman floor and the empty window.} The minimum order of a
+$K_4$-free $6$-chromatic graph is the vertex Folkman number
+$F_v(2,2,2,2,2;4)$. The literature settles this at
+\[
+  F_v(2,2,2,2,2;4) = 16
+\]
+(see Xu-Liang-Radziszowski~\cite{XuLiangRadziszowski2018}). Its only $16$-vertex
+witnesses are the two Ramsey $(4,4)$-graphs (Paley-type), which have $m \approx 60$.
+Both violate the codegree ceiling, since~\eqref{eq:codeg-ceiling} gives exactly
+$48$ at $n = 16$ and $60 > 48$. Therefore the UDG-necessary class, that is, the
+class of graphs that are simultaneously $K_4$-free \emph{and} $K_{2,3}$-free, has
+no member at the Folkman floor. Because the ceiling~\eqref{eq:codeg-ceiling} only
+reaches average degree $7.5$ (the density of the Ramsey $(4,4)$-graphs) around
+$n \approx 26$, even Folkman-floor density excludes the UDG-necessary class below
+roughly $n \approx 26$.
+
+\paragraph{Novelty.} We stress that the ingredients here are not new. The
+$K_{2,3}$-free fact is classical (it is the combinatorial heart of the unit-distance
+incidence bound~\cite{SpencerSzemerediTrotter1984}), the Kostochka-Yancey bound
+is a published theorem, and the Folkman number is a literature value. The
+contribution of this section is the \emph{synthesis}: pinning the missing
+$\chrom \ge 6$ object simultaneously below by criticality (Kostochka-Yancey),
+above by planarity-of-incidence ($K_{2,3}$-freeness), and at the abstract floor
+by Folkman, to conclude that the object cannot be a small dense host.
+
+\section{Discussion and the target object}
+\label{sec:discussion}
+
+The two preceding lines of argument pincer the missing ingredient from opposite
+sides.
+\begin{itemize}
+  \item It cannot live in the realizable lineage
+        (Sections~\ref{sec:census}-\ref{sec:criticality}): the lineage is
+        vertex-critical and hence forcing-sterile, by the Essential-Pair Lemma.
+  \item It cannot be a small dense Folkman-type host
+        (Section~\ref{sec:codegree}): such hosts violate the codegree bound that
+        every planar UDG must satisfy.
+\end{itemize}
+What remains is a single sharpened target.
+
+\begin{quote}
+\textbf{Target object.} A $6$-chromatic graph in the \emph{UDG-necessary class}
+(simultaneously $K_4$-free and $K_{2,3}$-free), of order at least roughly $26$,
+together with an explicit unit-distance embedding in $\R^2$.
+\end{quote}
+
+In-class membership ($K_4$-free and $K_{2,3}$-free) is a \emph{necessary}
+condition for UDG-realizability, not a sufficient one. A graph passing both local
+obstructions still requires an actual coordinate embedding to move
+$\chrom(\R^2)$. The codegree ceiling, in particular, is a counting bound: the
+true maximum number of unit distances among $n$ points sits well below it at small
+$n$, so a graph that respects~\eqref{eq:codeg-ceiling} need not be realizable.
+
+\paragraph{Honest limitations.} We list the caveats explicitly.
+\begin{enumerate}
+  \item \emph{The Essential-Pair Lemma is elementary.} Its proof uses only the
+        definition of a proper coloring. We are not aware of the exact statement
+        in the literature, but it may be folklore; we make no priority claim.
+        % TODO: literature check on Lemma 1.
+  \item \emph{The $K_{2,3}$-free fact is classical.} It is the basis of the
+        Spencer-Szemer\'edi-Trotter unit-distance edge bound. The novelty of
+        Section~\ref{sec:codegree} is the synthesis with Kostochka-Yancey and the
+        Folkman number, not the ingredients.
+  \item \emph{The density observation is empirical.} The claim that reachable
+        $K_4$-free $6$-critical hosts sit at $m/n \approx 4.2$ is an observation
+        over roughly $35$ cores from one construction family, not a theorem about
+        all $K_4$-free $6$-critical graphs. Only the $n \le 12$ exclusion
+        (Proposition~\ref{prop:core13}) and the Folkman-floor exclusion are
+        rigorous.
+  \item \emph{No bound on $\chrom(\R^2)$ moved.} This note is negative and
+        explanatory. It tightens the description of where the missing object can
+        live; it does not produce the object.
+\end{enumerate}
+
+\paragraph{Outlook.} The results suggest a clear procedural lesson: generate
+\emph{inside} the UDG-necessary class rather than above it. Manufacturing
+$K_4$-free $6$-chromatic graphs and cutting them down fails the codegree bound;
+the alternative is to enforce $K_4$-freeness and $K_{2,3}$-freeness as hard
+invariants from the start, seeding from a real $\chrom = 5$ UDG (which lies in the
+class automatically) and adding only codegree-safe and $K_4$-safe structure until
+the chromatic number is forced upward. Whether that class forces $\chrom \ge 6$ at
+some attainable order, or instead caps at $\chrom = 5$ (the UDG analogue of
+$\chrom(\Q^2) = 2$), is the open question this framing isolates.
+
+\section*{Acknowledgments}
+% TODO: acknowledgments. This is a computational program note; the census and
+% criticality scans were run with standard SAT solvers on a single workstation.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
