@@ -52,7 +52,7 @@ def _greedy_clique(n, adj):
     return clq
 
 
-def kcolor_learn(n, edges, k, node_limit=None, max_learn=20,
+def kcolor_learn(n, edges, k, node_limit=None, max_learn=8,
                  return_coloring=False, return_stats=False):
     """Decide k-colorability via CBJ + nogood learning.
 
@@ -60,6 +60,14 @@ def kcolor_learn(n, edges, k, node_limit=None, max_learn=20,
     if the node budget is exhausted. With return_stats, returns (verdict, stats).
     max_learn = 0 disables nogood storage (pure CBJ); >0 caps the size of stored
     nogoods.
+
+    Tuning note (measured, L66): pure CBJ (max_learn=0) has the cheapest per-node
+    cost and is often the fastest in Python; small max_learn (about 8) reduces the
+    node count without too much checking overhead; LARGE max_learn (>=12) is
+    counterproductive in pure Python because the per-node nogood-checking cost
+    (linear scan, no watched literals) outweighs the node reduction. The node
+    reduction is real and would pay off in wall time with watched-literal
+    indexing or a compiled core.
     """
     adj = _adj(n, edges)
     stats = {"nodes": 0, "backjumps": 0, "learned": 0}

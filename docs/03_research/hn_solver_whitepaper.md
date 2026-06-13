@@ -141,17 +141,26 @@ Ordered by expected payoff for this program:
    soundness fact that makes it tractable: under the symmetry ceiling a wipeout
    happens only when a vertex's neighbors already occupy all $k$ colors, a pure
    graph conflict, so conflict analysis needs no symmetry explanation.
-   **Result:** learning cuts the node count on $M^3(C_5)$ $k=5$ UNSAT from
-   447,720 (chronological) to **66,651, a 6.7x reduction**, and it slows the
-   per-Mycielski-level node explosion from ~500x to ~68x. But in pure Python the
-   wall time is unchanged (14.3 s vs 14.4 s): the nogood machinery makes each
-   node ~6.7x more expensive, exactly cancelling the node savings, and $M^4(C_5)$
-   stays intractable (<2,000 nodes/s). This empirically confirms the analysis of
-   this paper: **learning and a compiled-language port are complementary levers,
-   not substitutes.** Learning reduces the node count (algorithm); a Rust/PyO3
-   core reduces the per-node cost (constant factor); $M^4$ needs both. The next
-   step inside Python is watched-literal nogood propagation (the standard CDCL
-   trick) to cut the per-node nogood-checking cost that currently eats the win.
+   **Result (after a parameter sweep that corrected a premature conclusion).**
+   The headline win is the BACKJUMPING with a cheap fixed order, not the nogoods.
+   On $M^3(C_5)$ $k=5$ UNSAT: the MRV chronological solver takes 447,720 nodes /
+   13.3 s; pure CBJ (max_learn=0) takes 516,549 nodes but **1.2 s, 11.4x faster**,
+   because the fixed-order per-node cost is far below MRV's per-node
+   minimum-remaining-values scan. Nogood learning then reduces the node count
+   (max_learn=8: 81,850 nodes, 6.3x fewer) but does NOT reduce wall time in pure
+   Python (2.5 s), and a large nogood cap is actively counterproductive
+   (max_learn=20: 66,651 nodes but 17.7 s, the per-node linear nogood scan
+   balloons). Across instances (CBJ max_learn=8 vs chronological): $M^2$ 2.6x,
+   $M^3$ 5.3x, sparse random UNSAT 2.5x, but a denser random where MRV's dynamic
+   ordering resolves in a few nodes is 0.2x (slower). So CBJ wins where the search
+   is genuinely hard and loses where smart ordering nails it quickly. $M^4(C_5)$
+   $k=6$ UNSAT stays out of reach in pure Python (pure CBJ needs >60M nodes; the
+   learning variant's node reduction is eaten by per-node cost). **Conclusion:**
+   backjumping is a real, free win on hard instances; nogood learning reduces
+   nodes but its wall-time payoff is gated on watched-literal propagation (O(1)
+   checks instead of the current linear scan) and/or a compiled core, which is
+   what $M^4$ needs. Methodological lesson: sweep the parameter before concluding
+   (a bad max_learn default first hid the 11x CBJ win).
 2. **Stronger propagation.** Full arc-consistency on color domains, or a DSATUR
    dynamic ordering (branch on the vertex with the most distinctly-colored
    neighbors), would shrink the tree before learning is even needed.
