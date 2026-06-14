@@ -90,7 +90,10 @@ def kcolor_learn(n, edges, k, node_limit=None, max_learn=8,
                   key=lambda x: -len(adj[x]))
     order = clq + rest
     pos = {v: i for i, v in enumerate(order)}
-    nbr_pos = [frozenset(pos[u] for u in adj[order[i]]) for i in range(n)]
+    # sorted tuple (not a set): makes the conflict "blamer" choice the
+    # smallest-position neighbor deterministically, so node counts are
+    # reproducible across interpreters (CPython vs PyPy).
+    nbr_pos = [tuple(sorted(pos[u] for u in adj[order[i]])) for i in range(n)]
 
     color = [-1] * n          # color[i] = color of order[i] (indexed by position)
     tried = [0] * n           # bitmask of colors already tried at position i

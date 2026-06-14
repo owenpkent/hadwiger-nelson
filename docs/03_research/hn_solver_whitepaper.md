@@ -164,10 +164,18 @@ Ordered by expected payoff for this program:
 2. **Stronger propagation.** Full arc-consistency on color domains, or a DSATUR
    dynamic ordering (branch on the vertex with the most distinctly-colored
    neighbors), would shrink the tree before learning is even needed.
-3. **Bitset domains + a tight inner loop.** Domains are already integer bitmasks;
-   pushing the hot path into `numpy`/bit tricks, or a Cython/C core, would buy
-   one to two orders of magnitude on the constant factor and make the
-   Python-vs-C losses disappear on trivial instances.
+3. **PyPy (DONE, ~5x free) then a compiled core.** Measured: running the
+   pure-Python solver under PyPy 3.11 gives a clean **5.0x** speedup on the
+   pure-CBJ path with zero code changes (M^3(C5) k=5 UNSAT: CPython 0.87 s vs
+   PyPy 0.17 s; 3.4x on the less-JIT-friendly nogood path). Stacked with the CBJ
+   win the M^3 instance went from 13.3 s (old MRV solver) to 0.17 s, ~78x, all in
+   Python. PyPy is the recommended first step. Caveat: it accelerates only the
+   pure-Python solver; pysat (the portfolio, the census) is a C extension that
+   runs poorly under PyPy, so keep those on CPython. Beyond PyPy, a Rust/PyO3
+   core (not C, for memory safety on the watched-literal machinery) buys the
+   remaining constant factor, but note M^4(C5) k=6 UNSAT did not finish even
+   under PyPy (>400M nodes), so the node count, addressed by item 1, is the wall
+   before the constant factor is.
 4. **Maximum-clique seeding.** Replace the greedy clique with an exact maximum
    clique on the high-degree core (cheap at program scale) for stronger immediate
    UNSAT certificates.
