@@ -72,7 +72,41 @@ def _greedy_clique(n, edges):
     return clq, adj
 
 
-def build_color_cnf_symbreak(n, edges, k, return_meta=False):
+def _max_clique(n, edges, core_size=64):
+    """Exact maximum clique restricted to the high-degree core (cliques live
+    among high-degree vertices, so this is both cheap and exact at program
+    scale). A bigger seed clique pins more colors and gives a stronger symmetry
+    break than the greedy clique. Falls back to greedy if networkx is missing or
+    the exact search finds nothing larger.
+
+    Cheap because the program's graphs are sparse and K4-free in the UDG-necessary
+    class (max clique <= 3) and triangle-free up the Mycielski tower (max clique
+    2); find_cliques on a bounded core never blows up there.
+    """
+    greedy, adj = _greedy_clique(n, edges)
+    if n == 0:
+        return greedy
+    try:
+        import networkx as nx
+    except Exception:
+        return greedy
+    deg = [len(adj[v]) for v in range(n)]
+    core = sorted(range(n), key=lambda x: -deg[x])[:max(1, min(n, core_size))]
+    cs = set(core)
+    G = nx.Graph()
+    G.add_nodes_from(core)
+    for u in core:
+        for w in adj[u]:
+            if w in cs and u < w:
+                G.add_edge(u, w)
+    best = greedy
+    for clq in nx.find_cliques(G):
+        if len(clq) > len(best):
+            best = clq
+    return best
+
+
+def build_color_cnf_symbreak(n, edges, k, return_meta=False, max_clique=True):
     r"""One-hot k-coloring CNF augmented with the color-permutation symmetry
     break that hn_solver applies natively, so a CDCL solver inherits it.
 
@@ -102,7 +136,7 @@ def build_color_cnf_symbreak(n, edges, k, return_meta=False):
     def var(v, c):
         return v * k + c + 1
 
-    clq, _ = _greedy_clique(n, edges)
+    clq = _max_clique(n, edges) if max_clique else _greedy_clique(n, edges)[0]
     if len(clq) > k:
         # omega > k: trivially UNSAT, return a contradiction
         unsat = [[1], [-1]]
@@ -233,6 +267,74 @@ def colorable_portfolio(n, edges, k, want_coloring=False, symbreak=False, **kw):
         out["coloring"] = [next(c for c in range(k) if var(v, c) in mset)
                            for v in range(n)]
     return out
+
+
+def solve_color(n, edges, k, symbreak=True, want_model=False, proof_path=None,
+                budget=None, solver="Cadical195", max_clique=True):
+    r"""Decide k-colorability and, on UNSAT, optionally emit a DRAT proof for a
+    certificate-grade record. This is the recommended entry point for the
+    in-class E14/E15 decisive solves: symbreak=True hands the CDCL solver the
+    color-permutation symmetry break (so M^4 k=6 / P510 k=4 become tractable, and
+    the UNSAT proofs are far smaller, ~66x on M^3), and proof_path captures the
+    machine-checkable certificate.
+
+    Returns a dict: result (bool|None for budget-exhausted), model (per-vertex
+    coloring list if want_model and SAT), proof_path (written iff UNSAT and
+    proof_path given), proof_lines (count), elapsed (s), clique (the seed clique),
+    encoding ("symbreak"|"naive").
+
+    Honest scope of the certificate: the DRAT proof certifies that the
+    symmetry-broken CNF is UNSAT. The symmetry-breaking clauses are sound (every
+    proper coloring keeps a representative), so this entails the graph is not
+    k-colorable; it is not a DRAT proof of the naive CNF (which is intractable,
+    the reason symmetry breaking is used). Verify externally with drat-trim if a
+    fully mechanical end-to-end check is wanted.
+    """
+    import time as _time
+    from pysat.solvers import (Cadical195, Cadical153, MapleChrono, MapleCM,  # noqa: F401
+                               Glucose42, Glucose3, Minisat22)
+    if symbreak:
+        clauses, var, meta = build_color_cnf_symbreak(
+            n, edges, k, return_meta=True, max_clique=max_clique)
+        clique = meta[1]
+    else:
+        clauses, var = build_color_cnf(n, edges, k)
+        clique = []
+    cls = {k_: v for k_, v in locals().items() if k_ in _SOLVER_TABLE}[solver]
+    want_proof = proof_path is not None
+    s = cls(bootstrap_with=clauses, with_proof=want_proof)
+    try:
+        t0 = _time.time()
+        if budget is not None:
+            s.conf_budget(budget)
+            res = s.solve_limited()
+        else:
+            res = s.solve()
+        elapsed = round(_time.time() - t0, 3)
+        model = None
+        if res and want_model:
+            mset = set(x for x in s.get_model() if x > 0)
+            model = [next(c for c in range(k) if var(v, c) in mset)
+                     for v in range(n)]
+        proof_lines = 0
+        written = None
+        if res is False and want_proof:
+            proof = s.get_proof()        # DRAT lines (pysat)
+            proof_lines = len(proof)
+            # An empty trace means Cadical refuted the formula in preprocessing /
+            # unit propagation (trivially checkable); only write a file for a real
+            # search proof, so an empty .drat is never left as a misleading record.
+            if proof_lines > 0:
+                pathlib_path = __import__("pathlib").Path(proof_path)
+                pathlib_path.parent.mkdir(parents=True, exist_ok=True)
+                pathlib_path.write_text("\n".join(proof) + "\n")
+                written = str(pathlib_path)
+        return {"result": res, "model": model, "proof_path": written,
+                "proof_lines": proof_lines, "elapsed": elapsed,
+                "clique": list(clique),
+                "encoding": "symbreak" if symbreak else "naive"}
+    finally:
+        s.delete()
 
 
 def _read_dimacs(path):

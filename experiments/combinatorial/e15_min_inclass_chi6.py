@@ -40,7 +40,7 @@ sys.path.insert(0, str(HERE.parent / "_shared"))
 from chromatic_lifter import (GraphState, UDG_NECESSARY, _model_pairs,  # noqa: E402
                               _hub_pairs, _take_allowed)
 import hn_solver  # noqa: E402
-from portfolio_sat import colorable_portfolio  # noqa: E402
+from portfolio_sat import colorable_portfolio, solve_color  # noqa: E402  (L68)
 from f1pt_lib import CACHE  # noqa: E402
 
 OUT = CACHE / "e15_min_inclass_chi6"
@@ -105,18 +105,24 @@ def chromatic_at(state):
 
 
 def confirm(state):
-    """Triple confirmation of an in-class 6-chromatic witness."""
+    """Triple confirmation of an in-class 6-chromatic witness, with a DRAT
+    certificate of the 5-UNSAT (L68). The portfolio cross-checks use the
+    symmetry-broken encoding (symbreak=True), the only one that decides in-class
+    5-UNSAT at lineage scale tractably; the 5-UNSAT run emits a machine-checkable
+    DRAT proof for a certificate-grade record of the target object."""
     edges = state.edges()
     n = state.n
+    cert5 = solve_color(n, edges, 5, symbreak=True,
+                        proof_path=str(OUT / "witness_5unsat.drat"))
     checks = {
         "k4_free": k4_free(state),
         "k23_free": k23_free(state),
         "hn_5_unsat": hn_solver.kcolor(n, edges, 5) is False,
         "hn_6_sat": hn_solver.kcolor(n, edges, 6) is True,
-        "portfolio_5_unsat": colorable_portfolio(n, edges, 5)["result"] is False,
-        "portfolio_6_sat": colorable_portfolio(n, edges, 6)["result"] is True,
+        "portfolio_5_unsat": cert5["result"] is False,
+        "portfolio_6_sat": colorable_portfolio(n, edges, 6, symbreak=True)["result"] is True,
     }
-    return all(checks.values()), checks
+    return all(checks.values()), checks, cert5
 
 
 def main():
@@ -133,17 +139,21 @@ def main():
             status, state = grow_once(n, rng)
             outcome["restarts"] = r + 1
             if status == "success":
-                ok, checks = confirm(state)
+                ok, checks, cert5 = confirm(state)
                 outcome["success"] = ok
                 outcome["m"] = len(state.edges())
                 outcome["checks"] = checks
                 if ok:
                     outcome["witness_edges"] = state.edges()
+                    outcome["drat_proof"] = cert5["proof_path"]
+                    outcome["drat_lines"] = cert5["proof_lines"]
                     print(f"n={n}: IN-CLASS 6-CHROMATIC WITNESS, m={outcome['m']}, "
-                          f"restart {r}, confirmed={ok}", flush=True)
+                          f"restart {r}, confirmed={ok}, "
+                          f"DRAT 5-UNSAT proof {cert5['proof_lines']} lines", flush=True)
                     if best is None:
                         best = {"n": n, "m": outcome["m"],
-                                "edges": state.edges()}
+                                "edges": state.edges(),
+                                "drat_proof": cert5["proof_path"]}
                         (OUT / "WITNESS_min.json").write_text(json.dumps(best, indent=1))
                 else:
                     print(f"n={n}: success but confirm FAILED {checks}", flush=True)

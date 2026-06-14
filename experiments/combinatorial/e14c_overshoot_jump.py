@@ -33,6 +33,7 @@ from e14_udg_class_host import (build_clauses, adj_sets, codegree_matrix,
 from e14b_overshoot import budgeted_solve, safe_batch, model_pairs, all_pairs
 from f1pt_lib import parse_vtx, parse_edges, VTX, EDGE, CACHE
 from pysat.solvers import MapleChrono, Glucose42
+from portfolio_sat import solve_color  # L68: DRAT certificate of the 5-UNSAT
 
 OUT = CACHE / "e14_udg_class"
 STATE_B = OUT / "STATE.json"          # fallback seed (470)
@@ -133,12 +134,18 @@ def main():
                 f.write(f"p cnf {n * 5} {len(cl)}\n")
                 for c in cl:
                     f.write(" ".join(map(str, c)) + " 0\n")
+            # L68: DRAT certificate of the symmetry-broken 5-UNSAT alongside the
+            # naive DIMACS, for a certificate-grade record of the target object.
+            cert = solve_color(n, edges, 5, symbreak=True,
+                               proof_path=str(OUT / f"e14c_plus{cur_added()}_5unsat.drat"))
             json.dump({"added": added, "status": "success_unsat",
                        "n_added": cur_added(), "crosscheck_glucose42": r2,
-                       "maple_seconds": round(dt)}, STATE_C.open("w"))
+                       "maple_seconds": round(dt),
+                       "drat_proof": cert["proof_path"],
+                       "drat_lines": cert["proof_lines"]}, STATE_C.open("w"))
             print(f"  cross-check Glucose42: {r2} "
-                  f"(False = confirmed 6-chromatic). DIMACS: {cnf.name}",
-                  flush=True)
+                  f"(False = confirmed 6-chromatic). DIMACS: {cnf.name}; "
+                  f"DRAT: {cert['proof_lines']} lines", flush=True)
             return
         if res is True:
             bi = 0

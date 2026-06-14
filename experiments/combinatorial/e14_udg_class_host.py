@@ -31,8 +31,10 @@ import sys, pathlib, json, time, random, itertools
 import numpy as np
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "_shared"))
 from f1pt_lib import parse_vtx, parse_edges, CACHE, VTX, EDGE
 from pysat.solvers import Cadical195
+from portfolio_sat import build_color_cnf_symbreak  # L68: symmetry-broken decisive solve
 
 OUT = CACHE / "e14_udg_class"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -65,7 +67,14 @@ def build_clauses(n, edges, k=5):
 
 
 def solve5(n, edges, budget=None, model=False):
-    cl, var = build_clauses(n, edges)
+    # L68: the DECISIVE 5-colorability solve uses the symmetry-broken encoding so
+    # Cadical inherits the color-permutation break (the in-class UNSAT proofs that
+    # cost ~2 CPU-hours in the naive encoding; symbreak made M^4/P510 tractable).
+    # build_color_cnf_symbreak shares the var(v,c) = v*5+c+1 convention, so model
+    # decoding below is unchanged. NOTE: sample_pool keeps the naive encoding on
+    # purpose; it needs DIVERSE colorings, which symmetry breaking canonicalizes
+    # away, and its random color assumptions fight the canonical frame.
+    cl, var = build_color_cnf_symbreak(n, edges, 5)
     s = Cadical195(bootstrap_with=cl)
     try:
         if budget:

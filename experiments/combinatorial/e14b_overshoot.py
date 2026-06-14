@@ -37,6 +37,7 @@ from e14_udg_class_host import (build_clauses, adj_sets, codegree_matrix,
                                 k4_safe, codeg_safe, apply_edge)
 from f1pt_lib import parse_vtx, parse_edges, VTX, EDGE, CACHE
 from pysat.solvers import MapleChrono, Glucose42
+from portfolio_sat import build_color_cnf_symbreak, solve_color  # L68
 
 OUT = CACHE / "e14_udg_class"
 STATE_A = OUT / "STATE.json"
@@ -48,8 +49,14 @@ BATCH = 15
 BUDGETS = [3_000_000, 12_000_000, 50_000_000]
 
 
-def budgeted_solve(n, edges, budget, solver_cls=MapleChrono, model=False):
-    cl, var = build_clauses(n, edges)
+def budgeted_solve(n, edges, budget, solver_cls=MapleChrono, model=False,
+                   symbreak=True):
+    # L68: the in-class decisive solve runs on the symmetry-broken encoding so the
+    # near-boundary 5-UNSAT proof (the ~2 CPU-hour cost) is cheap; var(v,c) is the
+    # same v*5+c+1, so model decoding is unchanged. A canonical model still yields
+    # valid same-color overshoot pairs.
+    cl, var = (build_color_cnf_symbreak(n, edges, 5) if symbreak
+               else build_clauses(n, edges))
     s = solver_cls(bootstrap_with=cl)
     try:
         s.conf_budget(budget)
@@ -132,9 +139,17 @@ def main():
             print(f"SUCCESS: 5-UNSAT at {len(added)} added edges ({dt:.0f} s); "
                   f"cross-checking with Glucose42...", flush=True)
             r2, _ = budgeted_solve(n, edges, 100_000_000, solver_cls=Glucose42)
+            # L68: emit a DRAT certificate of the symmetry-broken 5-UNSAT, the
+            # in-class chi>=6 target object, for a certificate-grade record.
+            cert = solve_color(n, edges, 5, symbreak=True,
+                               proof_path=str(OUT / "e14b_witness_5unsat.drat"))
             json.dump({"added": added, "status": "success_unsat",
-                       "crosscheck_glucose42": r2}, STATE_B.open("w"))
-            print(f"cross-check: {r2} (False=confirmed UNSAT)", flush=True)
+                       "crosscheck_glucose42": r2,
+                       "drat_proof": cert["proof_path"],
+                       "drat_lines": cert["proof_lines"]}, STATE_B.open("w"))
+            print(f"cross-check: {r2} (False=confirmed UNSAT); "
+                  f"DRAT proof: {cert['proof_lines']} lines -> "
+                  f"{cert['proof_path']}", flush=True)
             return
         if res is True:
             bi = 0

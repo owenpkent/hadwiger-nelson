@@ -193,9 +193,14 @@ Ordered by expected payoff for this program:
    remaining constant factor, but note M^4(C5) k=6 UNSAT did not finish even
    under PyPy (>400M nodes), so the node count, addressed by item 1, is the wall
    before the constant factor is.
-4. **Maximum-clique seeding.** Replace the greedy clique with an exact maximum
-   clique on the high-degree core (cheap at program scale) for stronger immediate
-   UNSAT certificates.
+4. **Maximum-clique seeding (DONE).** `build_color_cnf_symbreak` now pins an
+   EXACT maximum clique (computed on the high-degree core via `find_cliques`,
+   cheap because the program's graphs are sparse / K4-free / triangle-free) rather
+   than the greedy clique, for a stronger immediate fix; it falls back to greedy
+   if that is no smaller. On the triangle-free Mycielski tower this is a no-op
+   (max clique 2), but on the triangle-rich in-class UDGs it pins a full triangle
+   (e.g. clique [1,6,9] on the e15b n=29 graph), one more color fixed. Validated
+   still equisatisfiable (300 random graphs x 4 k, zero disagreements).
 5. **Incrementality for the forcing tests.** The census (L57) and the lifter
    (L64/L65) repeatedly ask "is $G + e$ / $G/e$ colorable." An incremental
    interface that reuses search state across single-edge perturbations would make
@@ -237,6 +242,24 @@ Ordered by expected payoff for this program:
    the combination that wins. This is the recommended default for the in-class
    E14-style decisions (L64): every portfolio member gets the break, so the
    Cadical-vs-MapleChrono heuristic swing shrinks.
+
+   **Wired into the in-class searches + DRAT certificates.** The E14 decisive
+   solves now run on the symmetry-broken encoding (`e14_udg_class_host.solve5`,
+   `e14b_overshoot.budgeted_solve` default `symbreak=True`, inherited by E14c);
+   `sample_pool` deliberately stays on the naive encoding because it needs DIVERSE
+   colorings, which symmetry breaking canonicalizes away. The E15 confirmation
+   (`e15_min_inclass_chi6.confirm`) cross-checks 5-UNSAT / 6-SAT with
+   `symbreak=True`. Every symmetry-broken UNSAT solve can emit a DRAT proof via
+   `solve_color(..., proof_path=...)` (pysat `with_proof`), so a found in-class
+   $\chi \ge 6$ witness is recorded certificate-grade; the E14b/E14c success paths
+   and E15 `confirm` write the proof automatically. The break also makes proofs
+   far smaller: $M^3(C_5)$ $k=5$ UNSAT is 13,263 DRAT lines with the break vs
+   879,467 without (~66x), and $M^4(C_5)$ $k=6$ UNSAT yields a complete 1.94M-line
+   proof in 26 s. Honest scope: the proof certifies the SYMMETRY-BROKEN CNF is
+   UNSAT; the symmetry clauses are sound by construction, so this entails
+   non-colorability, but it is not a DRAT proof of the naive CNF (which is
+   intractable, the point). Instances Cadical closes in preprocessing leave an
+   empty trace and no file is written.
 
 ## 7. Bottom line
 
