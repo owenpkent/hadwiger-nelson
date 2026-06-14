@@ -547,6 +547,17 @@ the chromatic number is forced upward. Whether that class forces $\chrom \ge 6$ 
 some attainable order, or instead caps at $\chrom = 5$ (the UDG analogue of
 $\chrom(\Q^2) = 2$), is the open question this framing isolates.
 
+A preliminary computational probe of this question is suggestive but
+inconclusive. A local search (simulated annealing over graphs kept $K_4$-free and
+$K_{2,3}$-free, minimizing the number of proper $5$-colorings) over orders
+$26 \le n \le 40$, with on the order of $20{,}000$ restarts, reaches in-class
+$\chrom = 5$ at orders as small as $n = 29$ but never reaches $\chrom = 6$, with
+the edge density plateauing near $84\%$ of the codegree
+ceiling~\eqref{eq:codeg-ceiling} at every $n$. This is only heuristic evidence,
+not a non-existence result: a $\chrom \ge 6$ in-class graph may live at larger $n$
+or at the denser configurations the search does not reach. It does indicate that
+the target object, if it exists in this range, is not easily constructed.
+
 \section*{Acknowledgments}
 % TODO: acknowledgments. This is a computational program note; the census and
 % criticality scans were run with standard SAT solvers on a single workstation.
