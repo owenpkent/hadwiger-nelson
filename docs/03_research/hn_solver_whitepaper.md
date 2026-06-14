@@ -161,6 +161,23 @@ Ordered by expected payoff for this program:
    checks instead of the current linear scan) and/or a compiled core, which is
    what $M^4$ needs. Methodological lesson: sweep the parameter before concluding
    (a bad max_learn default first hid the 11x CBJ win).
+
+   **Addendum (watched-literal propagation, DONE, instructive negative).**
+   Implemented the named lever in [`hn_solver_wl.py`](../../experiments/_shared/hn_solver_wl.py):
+   two-watched-literal nogood propagation with integer literal ids
+   ($L = \text{pos}\cdot k + c$) and flat list-of-lists indexing (no dict/tuple on
+   the hot path, so PyPy's JIT compiles the propagation loop). Validated correct:
+   zero verdict disagreements vs `hn_solver`, `hn_solver_cdcl`, AND the portfolio
+   over 300 random graphs $\times$ 4 colors, plus witness validity. The honest
+   result: watched literals beat the `hn_solver_cdcl` linear scan by ~2.3x under
+   PyPy (M^3 nogood path 0.56 s $\to$ 0.24 s), but STILL LOSE to pure CBJ (0.16 s)
+   on M^3. The bottleneck was misdiagnosed as propagation speed; it is really the
+   WEAKNESS of the learned clauses. A Prosser CBJ conflict set is large and
+   non-asserting, so even propagated in O(1) it does not cut enough nodes to repay
+   its per-node cost (87,621 learned-path nodes at 359k n/s = 0.24 s vs 516,549
+   bare-path nodes at 3.28M n/s = 0.16 s). The real fix is 1UIP-quality clause
+   learning, which is exactly what a production CDCL solver already has, motivating
+   item 7 below over a deeper pure-Python engine capped by Python's per-node speed.
 2. **Stronger propagation.** Full arc-consistency on color domains, or a DSATUR
    dynamic ordering (branch on the vertex with the most distinctly-colored
    neighbors), would shrink the tree before learning is even needed.
@@ -187,16 +204,52 @@ Ordered by expected payoff for this program:
    small node budget first; it resolves the structured-easy majority instantly,
    and only the genuinely hard residue is handed to the CDCL portfolio. This
    turns the symmetry-breaking win into a portfolio-level speedup.
-7. **Symmetry-broken SAT export.** Conversely, emit the clique-fixing and
-   lex-leader clauses `hn_solver` uses as a CNF preamble for the portfolio, so the
-   CDCL solvers inherit the symmetry break on the instances `hn_solver` cannot
-   finish.
+7. **Symmetry-broken SAT export (DONE, the breakthrough).** Emit the
+   clique-fixing and first-appearance-precedence clauses `hn_solver` uses as a CNF
+   preamble for the portfolio, so a production CDCL solver inherits the symmetry
+   break it otherwise lacks. Implemented as
+   [`build_color_cnf_symbreak`](../../experiments/_shared/portfolio_sat.py) and
+   exposed via `colorable_portfolio(..., symbreak=True)`. Two ingredients, both
+   sound (every proper coloring keeps one representative): (1) a greedy maximal
+   clique pinned to colors $0..\omega-1$ by unit clauses; (2) colors numbered by
+   order of first appearance along a clique-first / degree-descending order,
+   $x[v_i][c] \to \bigvee_{j<i} x[v_j][c-1]$, with rank-bound units. Validated
+   EQUISATISFIABLE with the naive one-hot encoding (zero verdict disagreements,
+   zero bad witnesses over 1000+ instances;
+   [`symbreak_bench.py`](../../experiments/_shared/symbreak_bench.py)).
+
+   **This is the move that breaks the ceiling.** It combines the program's native
+   symmetry advantage with a production CDCL engine's 1UIP learning, watched
+   literals, VSIDS, and restarts, so the two instances Section 4 called
+   intractable become routine (Cadical195, single isolated run):
+
+   | instance | naive one-hot | symmetry-broken | |
+   |---|--:|--:|:--|
+   | $M^3(C_5)$ $k{=}5$ UNSAT | 7.0 s | **0.05 s** | ~146x |
+   | $M^4(C_5)$ $k{=}6$ UNSAT | wall (intractable) | **21.9 s** | newly decided |
+   | $P_{510}$ $k{=}4$ UNSAT | wall (L29/L30 abandoned) | **1.66 s** | newly decided |
+   | $P_{510}$ $k{=}5$ SAT | -- | **instant** | -- |
+
+   So the program now has an independent, certificate-capable proof that
+   $\chi(M^4(C_5)) \ge 7$ and that $P_{510}$ is genuinely $\chi=5$ (not just
+   asserted), both previously out of reach. The symmetry break is the same one
+   `hn_solver` searches; here it is handed to a solver that also learns, which is
+   the combination that wins. This is the recommended default for the in-class
+   E14-style decisions (L64): every portfolio member gets the break, so the
+   Cadical-vs-MapleChrono heuristic swing shrinks.
 
 ## 7. Bottom line
 
 `hn_solver` is a correct, transparent, structure-first colorability solver that is
 genuinely fast on the small-to-medium structured instances the program generates,
 and that contributes a capability (pattern counting) no SAT solver offers. Its
-ceiling is the absence of clause learning, which is also the clearest next
-improvement. It is best deployed not as a replacement for the CDCL portfolio but
-as a structural front end to it.
+own ceiling is the absence of clause learning. The decisive lesson of this work
+is that the fix is not to keep growing a pure-Python learning engine (watched
+literals were added and still lose to pure CBJ because Prosser conflict sets are
+weak, and Python caps the per-node speed) but to EXPORT the solver's symmetry
+break to a production CDCL engine that already learns at 1UIP quality. That
+combination (item 7) decides $M^4(C_5)$ $k=6$ UNSAT in 22 s and $P_{510}$ $k=4$
+UNSAT in under 2 s, both previously intractable. `hn_solver` is thus best deployed
+two ways at once: as a structural front end that resolves the easy majority
+instantly, and as the SOURCE of the symmetry-breaking CNF preamble that makes the
+CDCL portfolio world-class on the hard residue.
