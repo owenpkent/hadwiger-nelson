@@ -81,7 +81,10 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Geombinatorics-style paper draft `paper/main.tex` (compiles clean, census total corrected to 1,955,948 = nine chi-5 graphs)
 - [ ] **E14 verdict**: let e14c overshoot resolve to UNSAT (first in-class chi-6 graph), STUCK (class caps below 6 from this seed), or the edge budget
 - [ ] **E15-v2**: find a small in-class chi-6 graph by violation-minimization from a NON-critical 6-chromatic seed (greedy-from-empty failed); a witness would be a new object directly feeding the paper
-- [ ] **hn_solver #1 improvement**: add conflict/nogood learning (the no-learning ceiling is why $M^4(C_5)$ / lineage-scale UNSAT are out of reach); then deploy it as a structural front end to the portfolio
+- [x] **hn_solver clause learning** (L66): CBJ + nogood learning in `_shared/hn_solver_cdcl.py`, validated correct. Backjumping is the real win (~15x vs MRV on $M^3$); nogoods cut nodes 6.3x but wall-time payoff is gated on watched literals. PyPy 3.11 adds 5.0x free; $M^3$ now ~78x faster than the old solver, all in Python. $M^4(C_5)$ k=6 still does not finish (node-count-bound)
+- [ ] **hn_solver watched-literal nogood propagation**: O(1) nogood checks instead of the current linear scan, so learning's 6.3x node reduction pays off in wall time; the lever needed before $M^4$ is reachable in Python (then optionally a Rust/PyO3 core, NOT C; GPU is the wrong tool)
+- [ ] **hn_solver as portfolio front-end**: run it with a small node budget first (resolves the structured-easy majority instantly), hand the hard residue to the CDCL portfolio
+- [ ] **PyPy deployment**: run pure-Python solver-heavy experiments (E15-style) under PyPy (~5x); keep pysat-dependent work (portfolio, census) on CPython. PyPy path + caveats saved in project memory
 - [ ] **Paper finishing**: author block, acknowledgments, verify BibTeX volume/pages; decide on Geombinatorics submission
 
 ## Architecture 2: Measurable / spectral
