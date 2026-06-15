@@ -261,6 +261,28 @@ Ordered by expected payoff for this program:
    intractable, the point). Instances Cadical closes in preprocessing leave an
    empty trace and no file is written.
 
+   **Capability battery and the regime boundary (measured).** With the break, the
+   entire known $\chi(\mathbb{R}^2) \ge 5$ computational program is now
+   self-certifiable on one machine: **de Grey's 1585-vertex graph $k=4$ UNSAT in
+   19.5 min** (an independent, from-the-graph confirmation that
+   $\chi(\mathbb{R}^2) \ge 5$), all nine $\chi$-5 lineage graphs (510, 517, 529,
+   553, 610, 633, 803, 826, 874) $k=4$ UNSAT in **1.5-9 s each**, and $M^4(C_5)$
+   $k=6$ in 22 s, each with an optional DRAT certificate. The HONEST boundary: this
+   speed is for STRUCTURED UNSAT (sparse, clearly-unsatisfiable graphs). It does
+   NOT extend to PHASE-TRANSITION hardness. The E14 overshoot instances
+   ($P_{510}$ plus $\sim$1000 codegree/$K_4$-safe edges at $k=5$, sitting on the
+   5-SAT/5-UNSAT boundary) are a money pit for BOTH encodings: naive Cadical did
+   not finish in $\sim$100 min, and the symmetry-broken encoding hit BUDGET at
+   500k / 2M / 10M conflicts (29 s / 157 s / 1387 s, undecided). So symmetry
+   breaking certifies everything KNOWN but does not unblock the search for a NEW
+   small in-class $\chi \ge 6$ object; that obstruction is intrinsic (consistent
+   with L67's "liquid" class never reaching $\chi=6$ in 19,330 restarts), not a
+   solver artifact. Operational note: the E14 "money pit" was partly a solver bug,
+   not mathematics. MapleChrono does not honor pysat's `conf_budget` on these
+   instances (it ran 45 min on a 2M-conflict probe), so E14b/E14c now default to
+   Cadical195, which respects the budget and returns BUDGET cleanly, letting the
+   overshoot jump past the hard band instead of hanging.
+
 ## 7. Bottom line
 
 `hn_solver` is a correct, transparent, structure-first colorability solver that is
