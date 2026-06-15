@@ -70,6 +70,7 @@ MAX_REWIRE_TRIES = int(os.environ.get("E16_REWIRE_TRIES", 12))  # candidates/edg
 RESTARTS = int(os.environ.get("E16_RESTARTS", 1))
 USE_TRADES = os.environ.get("E16_TRADES", "0") == "1"   # allow trade rewires
 USE_SPLITS = os.environ.get("E16_SPLITS", "0") == "1"   # allow vertex-split grow
+USE_SPARSIFY = os.environ.get("E16_SPARSIFY", "0") == "1"  # redundant-edge remove
 
 
 # ---------------------------------------------------------------------------
@@ -401,6 +402,27 @@ def try_rewire(st, rng, stats, scan, attempts, safe_only):
     return None
 
 
+def try_sparsify(st, rng, stats, scan):
+    """Remove a REDUNDANT (chi-preserving) edge to break the criticality rigidity
+    that blocks the violating-edge sweep. The L69 floor sits ABOVE the
+    Kostochka-Yancey 6-critical floor, so non-critical (removable) edges exist;
+    deleting one drops m toward that floor and can make a previously-critical
+    violating edge removable next round. Prefer edges incident to high total-
+    codegree vertices so the sparsification concentrates where the violations are
+    (this is the 'remove a non-violating edge that frees a violating one'
+    operator). Removal never raises excess, so the descent stays monotone."""
+    codeg_load = [sum(st.C[u]) for u in range(st.n)]
+    edges = st.edges()
+    edges.sort(key=lambda e: -(codeg_load[e[0]] + codeg_load[e[1]]))
+    for (a, b) in edges[:scan]:
+        st.remove(a, b)
+        stats["chi_calls"] += 1
+        if chi_ge6(st):
+            return ("sparsify", (a, b))
+        st.add(a, b)
+    return None
+
+
 def find_compensator(st, rng, stats, excess_cap):
     """When the current graph is 5-colorable (chi dropped to 5), find one
     forced-same, K4-safe edge to add that restores chi to 6 with excess <
@@ -493,7 +515,8 @@ def run(deadline, rng):
     # confirm the seed is chi=6 (5-UNSAT and 6-SAT)
     assert chi_ge6(st), "seed not chi>=6"
     best = {"excess": st.excess, "m": st.m, "n": st.n, "edges": st.edges()}
-    stats = {"chi_calls": 0, "removes": 0, "rewires": 0, "splits": 0}
+    stats = {"chi_calls": 0, "removes": 0, "rewires": 0, "splits": 0,
+             "sparsifies": 0}
     step = 0
     SCAN = 80                # violating edges scanned per cheap pass
     REWIRE_SCAN = 40         # violating edges considered for rewiring
@@ -516,6 +539,10 @@ def run(deadline, rng):
                            safe_only=True)
             if r is None:
                 r = try_rewire(st, rng, stats, 10 ** 9, 10 ** 9, safe_only=True)
+            # SPARSIFY (E16 follow-up): remove a redundant non-violating edge to
+            # break criticality rigidity, freeing the violating-edge sweep.
+            if r is None and USE_SPARSIFY:
+                r = try_sparsify(st, rng, stats, 10 ** 9)
             # Opt-in escapes (default off): TRADE rewires that create a smaller
             # violation, and vertex-split GROWTH. Empirically these only reach a
             # denser local minimum, so they are not part of the canonical run.
@@ -532,11 +559,13 @@ def run(deadline, rng):
             kind = r[0]
             if kind == "remove":
                 stats["removes"] += 1
+            elif kind == "sparsify":
+                stats["sparsifies"] += 1
             elif kind in ("split", "split+comp"):
                 stats["splits"] += 1
             else:
                 stats["rewires"] += 1
-        if st.excess < best["excess"]:
+        if (st.excess, st.m) < (best["excess"], best["m"]):  # min excess, then m
             best = {"excess": st.excess, "m": st.m, "n": st.n, "edges": st.edges()}
         if step % 10 == 0:
             summary = {
@@ -550,8 +579,9 @@ def run(deadline, rng):
             (OUT / "BEST.json").write_text(json.dumps(best, indent=1))
             print(f"step {step} ({kind}) excess {st.excess} m {st.m} n {st.n} "
                   f"vpairs {len(st.violating_pairs())} | rew {stats['rewires']} "
-                  f"rem {stats['removes']} spl {stats['splits']} "
-                  f"calls {stats['chi_calls']} ({time.time()-t0:.0f}s)", flush=True)
+                  f"rem {stats['removes']} spa {stats['sparsifies']} "
+                  f"spl {stats['splits']} calls {stats['chi_calls']} "
+                  f"({time.time()-t0:.0f}s)", flush=True)
     # final
     summary = {
         "seed_n": n, "start_excess": start_excess, "cur_excess": st.excess,
@@ -592,7 +622,8 @@ def main():
         floors.append({"restart": r, "stall_excess": s["cur_excess"],
                        "stall_m": s["cur_m"], "stall_n": s["cur_n"],
                        "best_excess": best["excess"], "best_m": best["m"]})
-        if best_overall is None or best["excess"] < best_overall["excess"]:
+        if best_overall is None or (best["excess"], best["m"]) < (
+                best_overall["excess"], best_overall["m"]):
             best_overall = best
             # the deepest in-class-repaired graph: K4-free, chi=6, minimum
             # residual codegree excess. Committable artifact (the "repair floor").
