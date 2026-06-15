@@ -70,6 +70,18 @@ def build_operator(X, dc, edges, k, congruence_reduce=False):
     else:
         keyfn = lambda kk: _orbit_rep(kk, k)
 
+    # keyfn is a pure function of the merged key but is invoked D^2 times on far
+    # fewer distinct keys; memoize it (a safe speedup, identical result) so the
+    # X_23-scale build (D ~ 6206, D^2 ~ 38M entries) is tractable.
+    keycache = {}
+
+    def kf(key):
+        r = keycache.get(key)
+        if r is None:
+            r = keyfn(key)
+            keycache[key] = r
+        return r
+
     orbit_positions = defaultdict(list)
     one_positions = []
     for a in range(D):
@@ -81,7 +93,7 @@ def build_operator(X, dc, edges, k, congruence_reduce=False):
             if key == "one":
                 one_positions.append((a, b))
                 continue
-            orbit_positions[keyfn(key)].append((a, b))
+            orbit_positions[kf(key)].append((a, b))
 
     orbits = list(orbit_positions)
     one_a = np.array([a for (a, _) in one_positions], dtype=int)
@@ -93,11 +105,14 @@ def build_operator(X, dc, edges, k, congruence_reduce=False):
     blocks = _symmetry_adapted_blocks(basis, k)   # list of (F_list, d)
     fblocks = [(np.stack(F_list, axis=0), d) for (F_list, d) in blocks]  # (mult,D,d)
 
+    oindex = {o: idx for idx, o in enumerate(orbits)}
     return {
         "n": n, "k": k, "D": D, "n_orb": len(orbits),
         "one_a": one_a, "one_b": one_b, "orbit_ab": orbit_ab,
         "fblocks": fblocks,
         "block_mults": [F.shape[0] for (F, _) in fblocks],
+        # exposed for the matrix-free solver (e3u) to build the linear constraints
+        "oindex": oindex, "keyfn": keyfn, "edges": edges,
     }
 
 
