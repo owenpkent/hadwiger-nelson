@@ -88,7 +88,8 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [ ] **hn_solver watched-literal nogood propagation**: O(1) nogood checks instead of the current linear scan, so learning's 6.3x node reduction pays off in wall time; the lever needed before $M^4$ is reachable in Python (then optionally a Rust/PyO3 core, NOT C; GPU is the wrong tool)
 - [ ] **hn_solver as portfolio front-end**: run it with a small node budget first (resolves the structured-easy majority instantly), hand the hard residue to the CDCL portfolio
 - [ ] **PyPy deployment**: run pure-Python solver-heavy experiments (E15-style) under PyPy (~5x); keep pysat-dependent work (portfolio, census) on CPython. PyPy path + caveats saved in project memory
-- [ ] **Paper finishing**: author block, acknowledgments, verify BibTeX volume/pages; decide on Geombinatorics submission
+- [x] **Paper finishing pass** (commit 1843e37): author block (Owen Kent), acknowledgments, folded in L69 (codegree violations intrinsic to the 6-critical core) + three-direction outlook; compiles clean (10 pp, 0 undefined refs/citations). Submission-ready draft `paper/main.tex`
+- [ ] **Before submission**: CONFIRM author name/affiliation (currently inferred "Owen Kent" from git/email); double-check the BibTeX volume/pages against the actual sources (deGrey Geombinatorics 28(1):18-31, KostochkaYancey JCTB 109:73-101, Folkman value F_v(2,2,2,2,2;4)=16 in Xu-Liang-Radziszowski, Polymath16 citable archival ref); decide Geombinatorics submission
 
 ## Architecture 2: Measurable / spectral
 
