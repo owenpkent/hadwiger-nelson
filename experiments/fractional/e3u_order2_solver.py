@@ -178,13 +178,35 @@ def solve(op, lin, rho=1.0, max_iters=4000, tol=1e-7, verbose=False,
     L = _op_norm_sq(op)
     tau = 0.9 / (rho * max(L, 1e-12))
 
-    # parametrized x-update QP (cvxpy DPP): solved each iteration, no re-canon.
-    vec = cp.Variable(N, nonneg=True)
-    grad = cp.Parameter(N)
-    vprev = cp.Parameter(N)
-    obj = (cp.sum(cp.abs(S @ vec)) + grad @ vec
-           + (1.0 / (2.0 * tau)) * cp.sum_squares(vec - vprev))
-    prob = cp.Problem(cp.Minimize(obj), [G @ vec == g])
+    # x-update QP via OSQP-DIRECT (no cvxpy canonicalization, which OOMs at X_23:
+    # a 48342-var DPP quad-form materializes a ~35 GiB dense coeff array). The QP is
+    #   min  grad.x + (1/2tau)||x - xprev||^2 + sum t
+    #   s.t. G x = g,  x >= 0,  t >= S x,  t >= -S x      (t = epigraph of |S x|)
+    # Its P and A are CONSTANT across ADMM iterations; only q changes, so OSQP
+    # factorizes once and each iteration is a q-update + warm-started solve.
+    import osqp
+    m_s = S.shape[0]
+    Nz = N + m_s
+    Pqp = sp.diags(np.concatenate([np.full(N, 1.0 / tau), np.zeros(m_s)])).tocsc()
+    I_N = sp.eye(N, format="csr")
+    Z_Nm = sp.csr_matrix((N, m_s))
+    Z_eqm = sp.csr_matrix((G.shape[0], m_s))
+    I_ms = sp.eye(m_s, format="csr")
+    A_qp = sp.vstack([
+        sp.hstack([G, Z_eqm]),            # G x = g
+        sp.hstack([I_N, Z_Nm]),           # x >= 0
+        sp.hstack([S, -I_ms]),            # S x - t <= 0
+        sp.hstack([-S, -I_ms]),           # -S x - t <= 0
+    ]).tocsc()
+    INF = np.inf
+    l_qp = np.concatenate([g, np.zeros(N), np.full(m_s, -INF), np.full(m_s, -INF)])
+    u_qp = np.concatenate([g, np.full(N, INF), np.zeros(m_s), np.zeros(m_s)])
+    qp = osqp.OSQP()
+    # Inexact inner solves are fine for the outer ADMM; loosen tol + drop polish
+    # for ~2x faster iterations (validation verdict is unchanged at 1e-5).
+    qp.setup(P=Pqp, q=np.zeros(Nz), A=A_qp, l=l_qp, u=u_qp, verbose=False,
+             eps_abs=1e-5, eps_rel=1e-5, max_iter=8000, polish=False,
+             warm_start=True)
 
     x = np.zeros(N)
     P = [np.zeros((F.shape[0], F.shape[0])) for (F, _) in op["fblocks"]]
@@ -197,14 +219,15 @@ def solve(op, lin, rho=1.0, max_iters=4000, tol=1e-7, verbose=False,
         AY = apply_A(op, y)
         resid_blocks = [AY[b] - (P[b] - U[b]) for b in range(len(P))]
         gy = rho * apply_AT(op, resid_blocks)
-        gvec = np.zeros(N)
-        gvec[:n_orb] = gy
-        grad.value = gvec
-        vprev.value = x
-        prob.solve(solver=cp.CLARABEL, warm_start=True)
-        if vec.value is None:
+        qx = np.zeros(Nz)
+        qx[:n_orb] = gy - (1.0 / tau) * x[:n_orb]
+        qx[n_orb:N] = -(1.0 / tau) * x[n_orb:N]
+        qx[N:] = 1.0                       # sum t
+        qp.update(q=qx)
+        res = qp.solve()
+        if res.x is None or not np.all(np.isfinite(res.x)):
             return {"status": "x_update_failed", "iter": it}
-        x = np.asarray(vec.value)
+        x = np.asarray(res.x[:N])
 
         y = x[:n_orb]
         AY = apply_A(op, y)
