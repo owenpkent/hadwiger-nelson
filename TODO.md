@@ -106,7 +106,9 @@ Task tracker for the Hadwiger-Nelson research repo.
   - [x] S_k-block-diagonalized order-2 SDP (Murota multiplicity alignment), reproduces e3n exactly, runs Moser where e3n OOMs (e3q, L47)
   - [x] O(2)-congruence variable reduction (== size-<=4 IEC, structurally), validated (e3q `congruence_reduce`, L49)
   - [x] Probe: order-2 never strictly beats order-1 at runnable scale -> no shortcut to validate the lift (intermediate_probe, L50)
-  - [ ] **THE prerequisite (L48/L49/L50):** custom SPARSE conic backend (de Laat-Vallentin / DeCorte-Oliveira-Vallentin style, never forms dense affine maps). Both symmetry reductions are insufficient together for X_23 order-2 in dense cvxpy (48342 vars x blocks up to 735). Only then can k=4 retest >= 5 and k=5 open the >= 6 frontier
+  - [x] **Blocker diagnosis (L70, e3r)**: both shortcuts ruled out. $X_{23}$ has TRIVIAL geometric symmetry ($\|\mathrm{Aut}\|=1$, beam-search-found, asymmetric) so blocks cannot shrink below the $S_k$ size (~735); the $S_k$-reduced affine map is 100% DENSE (Murota basis $F$ dense, $C_o=F^\top E_o F$ full), so a `scipy.sparse` assembly is ~292 GiB > the ~195 GiB dense largest block. Probe `fractional/e3r_order2_sparsity_probe.py`
+  - [ ] **THE prerequisite, sharpened (L70):** the backend must be MATRIX-FREE (operator form: recompute $Ay$/$A^\top z$ each iteration from $F$ + orbit incidence, never materialize the ~195 GiB affine map), not sparse-matrix. Weeks of work AND speculative (order-2's value at X_23 unknown until run; L50 shows no separation below X_23). Only then can k=4 retest >= 5 and k=5 open the >= 6 frontier
+  - [ ] Alternative to the matrix-free build: find a SYMMETRIC config that crosses $1/4$ (so the de Laat-Vallentin symmetry collapse applies and order-2 becomes cheap). Sidesteps the wall but is itself the hard problem X_23's asymmetry already solved for the single-class bound
 
 ## Architecture 3: Fractional / Lovász theta
 
