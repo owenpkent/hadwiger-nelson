@@ -119,12 +119,10 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] Shot 1: 5-chromatic UDG (Polymath 510) in LP — NEGATIVE structural result; Bessel sums cancel across spread-out 510 vertices (e3f, LEARNINGS L10)
 - [x] Ambrus 2023 IE-LP framework: confirmed 1-particle LP with inclusion-exclusion atoms, NOT a 2-particle SDP (e3g, LEARNINGS L12)
 - [x] Beam search over IE-LP configurations: reached $m_1 \leq 0.2584$ at 17 vertices, matches KMOR 2015 (e3h, LEARNINGS L13)
-- [ ] Break the 0.258 greedy plateau toward Ambrus 2023 $m_1 \leq 0.2470$ (would give integer $\chi_m \geq 5$):
-  - [ ] Beam width >= 2 in e3h (keep top-K branches)
-  - [ ] Vertex-swap local search starting from the 17-pt configuration
-  - [ ] Restart from alternate seeds (Moser spindle, Heule fragments)
-  - [ ] Constructive candidate pool (generate unit-distance neighbors in Q(sqrt 3, sqrt 11) lattice instead of fixed Polymath 510)
-- [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP
+- [x] Break the 0.258 plateau toward Ambrus 2023 $m_1 \leq 0.2470$: DONE via IEC, not beam search (e3j, LEARNINGS L36). KEY DIAGNOSIS: $0.2584$ is the IE1+IE2 LP CEILING -- the IE1+IE2 primal gives $0.25840$ even on Ambrus's EXACT optimal $X_{23}$ config (e3i), identical to the e3h beam plateau on Polymath 510, so NO better configuration could have broken it; the beam sub-approaches below were structurally moot. The only lever was the (IEC) congruence constraints. e3j adds them and self-certifies (repo's own primal + cvxpy dual, gap ~machine precision): IEC size 3 $\to0.250245$, size 4 $\to0.247468$, size 5 $\to$ **$0.246894 < 1/4$**, giving a $\nu$-free integer $\chi_m(\mathbb{R}^2)\ge5$. Size-3 rung re-verified live 2026-06-15.
+  - ~~Beam width >= 2 / vertex-swap / alternate seeds / constructive pool~~ (moot: cannot beat the IE1+IE2 ceiling, only IEC can)
+- [x] **CEILING (L36/L37)**: the single-class density route is PROVABLY CAPPED at $\chi_m\ge5$ (Croft floor $m_1\ge0.22936>1/5$, so $1/m_1\le4.36<5$). $\chi_m\ge6$ needs either the multi-class order-2 SDP (Arch-2 sparse conic backend, L48/L50) or the Arch-1 rigid 5-chromatic object (L33). No further integer-bound payoff from improving the single-class $m_1$ upper bound below 0.2469.
+- [ ] Reproduce MRVZ chi_f(R^2) >= 4 via their 27-vertex graph + symmetric LP (the remaining FRESH Arch-3 LP task; distinct fractional-chromatic route, needs the MRVZ graph)
 - [ ] Architecture 3 dossier: docs/research_atlas/arch3_fractional_lp_lineage.md (currently spread across LEARNINGS L5-L13)
 
 ## Architecture 4: Set-theoretic / axiomatic
