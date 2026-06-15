@@ -36,7 +36,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from e14_udg_class_host import (build_clauses, adj_sets, codegree_matrix,
                                 k4_safe, codeg_safe, apply_edge)
 from f1pt_lib import parse_vtx, parse_edges, VTX, EDGE, CACHE
-from pysat.solvers import MapleChrono, Glucose42
+from pysat.solvers import MapleChrono, Glucose42, Cadical195
 from portfolio_sat import build_color_cnf_symbreak, solve_color  # L68
 
 OUT = CACHE / "e14_udg_class"
@@ -49,12 +49,17 @@ BATCH = 15
 BUDGETS = [3_000_000, 12_000_000, 50_000_000]
 
 
-def budgeted_solve(n, edges, budget, solver_cls=MapleChrono, model=False,
+def budgeted_solve(n, edges, budget, solver_cls=Cadical195, model=False,
                    symbreak=True):
-    # L68: the in-class decisive solve runs on the symmetry-broken encoding so the
-    # near-boundary 5-UNSAT proof (the ~2 CPU-hour cost) is cheap; var(v,c) is the
-    # same v*5+c+1, so model decoding is unchanged. A canonical model still yields
-    # valid same-color overshoot pairs.
+    # L68: default solver is Cadical195, which RESPECTS conf_budget. MapleChrono
+    # does NOT reliably honor it on these near-boundary in-class instances (it ran
+    # 45 min on a 2M-conflict probe), which is the real cause of the E14 "money
+    # pit" -- not the encoding. Cadical returns BUDGET cleanly so the overshoot
+    # can jump further past the hard band instead of hanging.
+    # The symmetry-broken encoding helps structured UNSAT (lineage / tower / de
+    # Grey, all certified in seconds-minutes) but does NOT tame the phase-boundary
+    # overshoot instances (P510 + ~1000 edges, k=5: BUDGET even at 10M conflicts /
+    # 23 min). var(v,c) is the same v*5+c+1, so model decoding is unchanged.
     cl, var = (build_color_cnf_symbreak(n, edges, 5) if symbreak
                else build_clauses(n, edges))
     s = solver_cls(bootstrap_with=cl)

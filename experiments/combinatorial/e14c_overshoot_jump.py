@@ -32,7 +32,7 @@ from e14_udg_class_host import (build_clauses, adj_sets, codegree_matrix,
                                 k4_safe, codeg_safe, apply_edge)
 from e14b_overshoot import budgeted_solve, safe_batch, model_pairs, all_pairs
 from f1pt_lib import parse_vtx, parse_edges, VTX, EDGE, CACHE
-from pysat.solvers import MapleChrono, Glucose42
+from pysat.solvers import MapleChrono, Glucose42, Cadical195
 from portfolio_sat import solve_color  # L68: DRAT certificate of the 5-UNSAT
 
 OUT = CACHE / "e14_udg_class"
@@ -118,8 +118,8 @@ def main():
               f"(m={len(edges)}); solving (budget {b // 1_000_000}M)...",
               flush=True)
         t0 = time.time()
-        res, model = budgeted_solve(n, edges, b, solver_cls=MapleChrono,
-                                    model=True)
+        res, model = budgeted_solve(n, edges, b, solver_cls=Cadical195,
+                                    model=True)   # L68: Cadical respects the budget
         dt = time.time() - t0
         if res is False:
             print(f"  *** 5-UNSAT at {cur_added()} added edges ({dt:.0f} s) ***",
