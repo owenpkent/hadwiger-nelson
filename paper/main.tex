@@ -30,10 +30,10 @@
 \title{Forcing-sterility of the realizable unit-distance lineage\\
 and a codegree obstruction to $\chi \ge 6$}
 
-% TODO: author block. Filled with a placeholder; replace before submission.
-\author{Hadwiger-Nelson computational program\\
-\small (working note)}
-\date{June 13, 2026}
+% TODO before submission: confirm author name spelling and affiliation.
+\author{Owen Kent\thanks{Independent researcher.
+  Correspondence: \texttt{owenpkent@gmail.com}.}}
+\date{June 2026}
 
 \begin{document}
 \maketitle
@@ -437,6 +437,24 @@ Such graphs cannot be planar UDGs; the violation is structural (it persists for
 edge-critical cores, which have no slack to remove), not an artifact of any
 particular construction heuristic.
 
+\paragraph{The violations are intrinsic to the critical core.} One might hope that
+the $K_{2,3}$ violations of a manufactured host are removable ``padding'' that a
+careful sparsification could shed while preserving $\chrom = 6$. A top-down probe
+indicates otherwise. Starting from $M^3(C_5)$ (the $47$-vertex $\chrom = 6$
+Mycielskian above, with $434$ violating pairs) and repeatedly deleting edges while
+holding $\chrom = 6$ as a hard constraint---re-establishing $6$-chromaticity by a
+compensating forced-same edge whenever a deletion would drop it---drives the graph
+down to $m = 131$ edges, essentially the Kostochka-Yancey $6$-critical floor
+$2.8 \cdot 47 - 1.8 = 129.8$. Yet the codegree excess does not fall to zero: the
+resulting edge-critical, $K_4$-free, $\chrom = 6$ graph still has $166$ vertex pairs
+of common-neighbor count $\ge 3$. Sparsifying all the way to the critical floor
+removes none of the $K_{2,3}$ violations; they live entirely in the $6$-critical
+core. For this construction, then, the chromatic obstruction and the codegree
+obstruction are the \emph{same} substructure: one cannot shed the codegree
+violations without destroying the very $6$-chromaticity they accompany. (This is a
+heuristic observation about the $M^3(C_5)$-derived family, obtained by local search,
+not a theorem about all $6$-critical graphs.)
+
 \paragraph{A rigorous core-size floor.} The $K_4$-free assumption can be dropped
 for a clean lower bound on the order of the $6$-critical core. The
 Kostochka-Yancey theorem~\cite{KostochkaYancey2014} states that every
@@ -547,20 +565,37 @@ the chromatic number is forced upward. Whether that class forces $\chrom \ge 6$ 
 some attainable order, or instead caps at $\chrom = 5$ (the UDG analogue of
 $\chrom(\Q^2) = 2$), is the open question this framing isolates.
 
-A preliminary computational probe of this question is suggestive but
-inconclusive. A local search (simulated annealing over graphs kept $K_4$-free and
+Preliminary computational probes of this question are suggestive but
+inconclusive, and they approach the target object from three independent
+directions, none of which reaches it. \emph{(i) Growth from below.} A greedy
+search that grows a graph from the empty graph by adding only codegree-safe and
+$K_4$-safe edges caps at $\chrom = 4$ across orders $17 \le n \le 64$: it never
+even reaches $\chrom = 5$. \emph{(ii) Annealing.} A local search with both edge
+additions and deletions (simulated annealing over graphs kept $K_4$-free and
 $K_{2,3}$-free, minimizing the number of proper $5$-colorings) over orders
 $26 \le n \le 40$, with on the order of $20{,}000$ restarts, reaches in-class
-$\chrom = 5$ at orders as small as $n = 29$ but never reaches $\chrom = 6$, with
-the edge density plateauing near $84\%$ of the codegree
-ceiling~\eqref{eq:codeg-ceiling} at every $n$. This is only heuristic evidence,
-not a non-existence result: a $\chrom \ge 6$ in-class graph may live at larger $n$
-or at the denser configurations the search does not reach. It does indicate that
-the target object, if it exists in this range, is not easily constructed.
+$\chrom = 5$ at orders as small as $n = 29$ but never $\chrom = 6$, with the edge
+density plateauing near $84\%$ of the codegree
+ceiling~\eqref{eq:codeg-ceiling} at every $n$. \emph{(iii) Repair from above.} The
+top-down probe of Section~\ref{sec:codegree}, which starts from a genuine
+$\chrom = 6$ graph ($M^3(C_5)$) and repairs its codegree violations while holding
+$\chrom = 6$, stalls with the violations intact in the $6$-critical core. All
+three are heuristic, not non-existence results: a $\chrom \ge 6$ in-class graph may
+live at larger $n$, or at configurations none of the three local searches reach.
+But together they triangulate the same conclusion---the target object, if it
+exists in this range, is not easily constructed by local moves from any natural
+seed.
 
 \section*{Acknowledgments}
-% TODO: acknowledgments. This is a computational program note; the census and
-% criticality scans were run with standard SAT solvers on a single workstation.
+This is a note from an ongoing computational program on the Hadwiger-Nelson
+problem. The realizable lineage graphs studied here derive from the
+de~Grey~\cite{deGrey2018} and Polymath16~\cite{Polymath16} constructions. The
+exhaustive forcing census and the criticality scans were carried out on a single
+workstation using standard complete SAT solvers (CaDiCaL, MapleChrono, and
+Glucose, invoked through the PySAT toolkit) together with a purpose-built
+symmetry-breaking colorability solver; the local searches of
+Section~\ref{sec:discussion} were run under PyPy. No external funding supported
+this work.
 
 \bibliographystyle{plain}
 \bibliography{refs}
