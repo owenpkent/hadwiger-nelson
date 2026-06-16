@@ -42,16 +42,17 @@ several of them have been reported as practically intractable. We report a simpl
 but decisive engineering result: exporting a sound symmetry break (clique-fixing
 plus first-appearance color precedence) as a CNF preamble lets an off-the-shelf
 CDCL solver decide all of them, each with an optional machine-checkable DRAT
-proof. Concretely, $M^4(C_5)$ at $k=6$ (UNSAT, $22$ s), the $510$-vertex
-Polymath16 graph at $k=4$ (UNSAT, $1.66$ s, previously abandoned as
-SAT-intractable), and de Grey's $1585$-vertex graph at $k=4$ (UNSAT, $19.5$ min)
-all become routine, where the naive encoding hits a wall. The entire known
+proof. Concretely, $M^4(C_5)$ at $k=6$ (UNSAT) is intractable under the naive
+encoding but a $22$ s solve once broken; the $510$-vertex Polymath16 graph at
+$k=4$ (UNSAT) drops from $\sim\!110$ s to $1.66$ s; and de Grey's $1585$-vertex
+graph at $k=4$ (UNSAT), the actual $\chrom(\R^2) \ge 5$ certificate, from
+$\sim\!92$ min to $18$ min. The entire known
 $\chrom(\R^2) \ge 5$ computational program is thereby \emph{self-certifiable on a
 single workstation}. We pair this with two methodological findings. First, a
 \emph{portfolio law}: near the colorability phase boundary, single-solver runtime
 is heavy-tailed and misleading; on one identical in-class instance CaDiCaL did not
-finish in $12$ hours while MapleChrono returned SAT in $155$ seconds, a
-$\ge\!280\times$ swing. Second, an honest \emph{regime boundary}: the symmetry
+finish in $12$ hours while MapleChrono returned SAT in $155$ seconds (a factor
+exceeding $270$). Second, an honest \emph{regime boundary}: the symmetry
 break crushes \emph{structured} UNSAT but does \emph{not} tame
 \emph{phase-transition} hardness, so it certifies everything currently known and
 does \emph{not} shortcut the search for a new $\chrom \ge 6$ object. The symmetry
@@ -67,8 +68,10 @@ The Hadwiger-Nelson problem asks for the chromatic number $\chrom(\R^2)$ of the
 unit-distance graph on the Euclidean plane. The classical bounds
 $5 \le \chrom(\R^2) \le 7$ have stood for decades; the lower bound was raised from
 $4$ to $5$ only recently, by de Grey~\cite{deGrey2018}, who exhibited a finite
-unit-distance graph (UDG) on $1581$ vertices that is not $4$-colorable, verified
-by SAT~\cite{Heule2018verify}. The Polymath16 project~\cite{Polymath16} and
+unit-distance graph (UDG) that is not $4$-colorable, verified
+by SAT~\cite{Heule2018verify}. (De Grey's paper reports $1581$ vertices; the graph
+as distributed and certified in this note has $1585$.) The Polymath16
+project~\cite{Polymath16} and
 Parts~\cite{Parts2020} subsequently reduced the order of such graphs to roughly
 $510$ vertices. Every step of this lower-bound program reduces to the same
 computational question:
@@ -85,10 +88,11 @@ encoding has a structural defect for graph coloring: it carries the full
 color-permutation symmetry, so every proper coloring appears $k!$ times in the
 search space. A solver must either rediscover the symmetry or waste exponential
 effort exploring symmetric subtrees. In practice this makes several of the
-program's own instances awkward or intractable: the $510$-vertex graph at $k=4$
-was at one point set aside as ``SAT-intractable,'' and $M^4(C_5)$ at $k=6$ (a
-$95$-vertex triangle-free Mycielskian whose non-$6$-colorability certifies
-$\chrom(M^4(C_5)) \ge 7$) was never completed by the naive route.
+program's own instances slow or intractable: $M^4(C_5)$ at $k=6$ (a $95$-vertex
+triangle-free Mycielskian whose non-$6$-colorability certifies
+$\chrom(M^4(C_5)) \ge 7$) was never completed by the naive route within budget,
+and even routine certificates pay a heavy tax (de Grey's graph at $k=4$ takes
+$\sim\!92$ minutes naively).
 
 This note records that the obstruction is an encoding artifact, not a genuine
 hardness, and that removing it is cheap. We describe a structure-first
@@ -225,19 +229,20 @@ did not finish within the budget under the naive encoding.
 
 \begin{table}[ht]
 \centering
-\caption{Walls crossed by the symmetry-broken export. The naive one-hot encoding
-does not finish on the two middle rows; the symmetry-broken encoding decides them
-in seconds.}
+\caption{Effect of the symmetry-broken export. The naive one-hot encoding does not
+finish on the $M^4(C_5)$ row within a $\sim\!120$ s conflict budget (a genuine
+wall, newly crossed); on the other rows it finishes but the break gives one to
+three orders of magnitude.}
 \label{tab:walls}
 \begin{tabular}{l r r l}
 \toprule
 Instance & Naive one-hot & Symmetry-broken & Note \\
 \midrule
-$M^3(C_5)$ $k{=}5$ UNSAT & $7.0$ s & $\mathbf{0.05}$ s & $\sim\!146\times$ \\
+$M^3(C_5)$ $k{=}5$ UNSAT & $7.0$ s & $\mathbf{0.05}$ s & $\sim\!140\times$ \\
 $M^4(C_5)$ $k{=}6$ UNSAT & wall & $\mathbf{21.9}$ s & newly decided
   ($\chrom(M^4(C_5)) \ge 7$) \\
-$P_{510}$ $k{=}4$ UNSAT & wall & $\mathbf{1.66}$ s & newly decided
-  ($P_{510}$ genuinely $\chrom = 5$) \\
+$P_{510}$ $k{=}4$ UNSAT & $\sim\!110$ s & $\mathbf{1.66}$ s & $\sim\!66\times$
+  (independently re-certified $\chrom = 5$) \\
 $P_{510}$ $k{=}5$ SAT & --- & instant & $5$-coloring witness \\
 \bottomrule
 \end{tabular}
@@ -246,8 +251,9 @@ $P_{510}$ $k{=}5$ SAT & --- & instant & $5$-coloring witness \\
 \paragraph{The whole lower-bound program, on one machine.} With the export, every
 certificate the $\chrom(\R^2) \ge 5$ program depends on is reproducible on a
 single workstation (Table~\ref{tab:battery}). In particular, de Grey's
-$1585$-vertex graph is independently confirmed not $4$-colorable in $19.5$
-minutes, a from-the-graph re-derivation of $\chrom(\R^2) \ge 5$, and all nine
+$1585$-vertex graph is independently confirmed not $4$-colorable in $18$
+minutes (against $\sim\!92$ minutes for the naive encoding), a from-the-graph
+re-derivation of $\chrom(\R^2) \ge 5$, and all nine
 $\chrom = 5$ lineage graphs are certified in seconds each.
 
 \begin{table}[ht]
@@ -258,7 +264,7 @@ $\chrom = 5$ lineage graphs are certified in seconds each.
 \toprule
 Certificate & Time \\
 \midrule
-de Grey $1585$ $k{=}4$ UNSAT \quad ($\chrom(\R^2) \ge 5$) & $19.5$ min \\
+de Grey $1585$ $k{=}4$ UNSAT \quad ($\chrom(\R^2) \ge 5$) & $18.1$ min \\
 nine lineage graphs ($510,517,529,553,610,633,803,826,874$) $k{=}4$ UNSAT &
   $1.5$--$9$ s each \\
 $M^4(C_5)$ $k{=}6$ UNSAT \quad ($\chrom(M^4(C_5)) \ge 7$) & $22$ s \\
@@ -270,7 +276,8 @@ $M^4(C_5)$ $k{=}6$ UNSAT \quad ($\chrom(M^4(C_5)) \ge 7$) & $22$ s \\
 emits a DRAT proof~\cite{WetzlerHeuleHunt2014}. The break also shrinks the proofs
 dramatically: $M^3(C_5)\,k{=}5$ UNSAT is $13{,}263$ DRAT lines with the break
 versus $879{,}467$ without (a $\sim\!66\times$ reduction), and $M^4(C_5)\,k{=}6$
-UNSAT yields a complete $1{,}944{,}586$-line proof in $26$ s. We stress the honest
+UNSAT yields a complete $1{,}944{,}586$-line proof in $26$ s (the $4$ s over the
+$22$ s solve of Table~\ref{tab:battery} is the proof emission). We stress the honest
 reading: the proof certifies that the \emph{symmetry-broken} CNF is unsatisfiable.
 Because the symmetry clauses are sound, this entails non-colorability of the
 graph; it is not a DRAT proof of the naive CNF, which is exactly the intractable
@@ -292,8 +299,8 @@ disagreement on a single fixed instance (a $470$-edge augmentation, DIMACS
 persisted):
 \begin{quote}
 \textbf{CaDiCaL did not decide it in $12{+}$ hours, while MapleChrono returned
-SAT in $155$ seconds} --- a $\ge\!280\times$ heuristic-dependent swing on the
-\emph{identical} CNF.
+SAT in $155$ seconds} --- a heuristic-dependent swing of more than $270\times$ on
+the \emph{identical} CNF.
 \end{quote}
 This is the heavy-tailed runtime behavior expected of $k$-colorability instances
 sitting at a satisfiability phase boundary, where the verdict is decided by a

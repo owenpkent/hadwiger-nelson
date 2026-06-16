@@ -187,9 +187,24 @@ C4-C6 are honest but not independently publishable as they stand.
   bibliography web-verified (SURVEYOR, all 10 entries against primary sources;
   Heule2018verify upgraded to its published Geombinatorics 28(1):32-50 venue, PySAT
   filled to LNCS 10929:428-437; no TODO-VERIFY markers remain, recompiles clean);
-  (b) an ADVERSARY pass + re-check every headline timing against its cache/log;
+  (b) DONE - ADVERSARY pass run. **Soundness of the symmetry break is WATERTIGHT**
+  (exhaustive model-count: the broken CNF has exactly one satisfying assignment per
+  coloring-up-to-permutation; 0 false-UNSAT over thousands of SAT+UNSAT instances).
+  Most timings reproduce against caches. Found + FIXED: A2 (de Grey 1581 vs 1585
+  reconciled), B1 (P510 k=4 is NOT a wall and NOT the historically-abandoned
+  instance - it solves naively in ~110s; reframed to ~110s->1.66s ~66x; the genuine
+  wall is M^4 k=6; misattribution traced L29/L30->L68->paper), B2 (M^4 26s vs 22s =
+  proof emission, flagged), B3 (swing stated as >270x, was >=280x). Blocker A1 =
+  the flagship "de Grey 1585 k=4 19.5 min" had NO backing artifact (only a 92-min
+  NAIVE cache existed): **RESOLVED** by an actual symmetry-broken solve = **18.1
+  min** (1088 s, Cadical195, UNSAT, clique 3; vs 92.2 min naive), persisted +
+  reproducible via `combinatorial/e1u_degrey_symbreak_k4.py` (cache gitignored per
+  convention; the measured value is recorded in the paper, LEARNINGS L68, and here).
+  Paper updated 19.5 -> 18 min in all three places; recompiles clean (7pp).
   (c) decide arXiv cs.DM vs SAT workshop (author already confirmed, shared with C1).
-- **Verdict**: DEVELOP, P2.
+- **Verdict**: DEVELOP, P2. **All C3 adversary findings cleared** (soundness
+  watertight; all numbers now backed). Remaining to SHIP: the venue call
+  (arXiv cs.DM vs SAT workshop) and building its arXiv bundle (mirror C1).
 
 ### C4 - Matrix-free order-2 measurable SDP, route closed at $X_{23}$
 - **Source**: LEARNINGS L70 (blocker diagnosis), L71 (matrix-free solver), L72
@@ -274,3 +289,10 @@ Append-only, dated. One line per decision.
   no-bibtex, 10pp) with paste-ready metadata. C3 SAT bibliography web-verified by
   SURVEYOR (all 10 entries, primary sources; Heule->Geombinatorics 28(1):32-50,
   PySAT->LNCS 10929). Both "both" tasks done.
+- 2026-06-16 - C3 ADVERSARY pass: soundness WATERTIGHT (exhaustive model-count),
+  but 2 blockers + 3 should-fix on number substantiation/framing. Applied A2/B1/B2/
+  B3/C3 text fixes (recompiles clean 7pp). A1 (unbacked de Grey 19.5 min, vs a
+  92-min naive cache) RESOLVED: real symmetry-broken de Grey 1585 k=4 run = 18.1 min
+  (e1u, persisted), paper updated 19.5->18 min, LEARNINGS L68 corrected. All C3
+  adversary findings now cleared; C3 is adversary-clean, pending only the venue call
+  + its arXiv bundle.
