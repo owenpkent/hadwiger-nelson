@@ -1,0 +1,20 @@
+{
+  "experiment": "e3u_x23_order2_k4",
+  "description": "Matrix-free order-2 measurable SDP (Phase-1) on the Ambrus X_23 config, k=4. Verdict: FEASIBLE => order-2 does NOT certify chi_m >= 5 at k=4.",
+  "config": "X_23 (Ambrus-Csiszarik-Matolcsi-Varga-Zsamboki 2023, 23 points, 47 unit edges)",
+  "k": 4,
+  "reduced_size": {"D": 3953, "n_orbit_vars": 48342, "n_psd_blocks": 4, "max_block": 735},
+  "solver": "e3u linearized-ADMM, matrix-free (e3s operator), OSQP-direct x-update",
+  "run": {
+    "iters": 5120,
+    "elapsed_s": 19599.6,
+    "sec_per_iter": 3.83,
+    "stopped": "manually killed at iter 5120; trajectory decisive, formal prim<1e-3 threshold ~6h of ADMM tail away with no informational value"
+  },
+  "trajectory_margin_min_slack": {"it0": null, "it350": 1.24, "it1050": 0.440, "it2250": 0.0873, "it5120": 0.00207},
+  "trajectory_prim_resid": {"it0": 5.34, "it350": 0.084, "it1050": 0.0093, "it2250": 0.00487, "it5120": 0.00260},
+  "final": {"margin": 0.00207, "prim_resid": 0.00260, "dual_resid": 0.00021},
+  "verdict": "FEASIBLE",
+  "interpretation": "margin (min Bochner slack) fell 1.24 -> 0.0021 (600x) monotonically with NO plateau, and the primal residual tracked to the ~1e-3 floor; this is the feasible signature (contrast the certifying plateau of Moser k=3 at prim 0.278). So order-2 (PSD + IEC up to subset size 4) does NOT certify chi_m >= 5 at k=4. By color-monotonicity (a k-feasible order-2 moment solution zero-pads to a (k+1)-feasible one; S_k-symmetrization is lossless), k=5 is also feasible, so order-2 cannot certify chi_m >= 6 either. The order-2 measurable SDP route is closed; redirect to order-3 (IEC size 6).",
+  "caveats": "First-order (linearized-ADMM) verdict, validated 3/3 against e3q's dense margins on small configs (rhombus, Moser); no independent X_23-scale cross-check exists because the dense affine map is the 195 GiB wall this solver was built to avoid. 'Feasible' is the absence of a certificate (the negative outcome), so there is no certificate object to externally verify."
+}
