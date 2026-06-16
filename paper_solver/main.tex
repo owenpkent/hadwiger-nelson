@@ -1,0 +1,391 @@
+\documentclass[11pt]{article}
+
+% Standard, non-exotic packages only (mirrors the C1 paper preamble).
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\chrom}{\chi}
+\newcommand{\Myc}{M}
+
+\title{Symmetry-broken SAT self-certifies the plane's
+  $\chrom \ge 5$ lower bound\\(and where it stops)}
+
+\author{Owen Kent\thanks{Independent researcher.
+  Correspondence: \texttt{owenpkent@gmail.com}.}}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The lower bound $\chrom(\R^2) \ge 5$ on the chromatic number of the plane rests
+on certifying that specific finite unit-distance graphs (UDGs) are not
+$4$-colorable. These certifications are $k$-colorability SAT instances whose
+naive one-hot encoding carries the full $k!$ color-permutation symmetry, and
+several of them have been reported as practically intractable. We report a simple
+but decisive engineering result: exporting a sound symmetry break (clique-fixing
+plus first-appearance color precedence) as a CNF preamble lets an off-the-shelf
+CDCL solver decide all of them, each with an optional machine-checkable DRAT
+proof. Concretely, $M^4(C_5)$ at $k=6$ (UNSAT, $22$ s), the $510$-vertex
+Polymath16 graph at $k=4$ (UNSAT, $1.66$ s, previously abandoned as
+SAT-intractable), and de Grey's $1585$-vertex graph at $k=4$ (UNSAT, $19.5$ min)
+all become routine, where the naive encoding hits a wall. The entire known
+$\chrom(\R^2) \ge 5$ computational program is thereby \emph{self-certifiable on a
+single workstation}. We pair this with two methodological findings. First, a
+\emph{portfolio law}: near the colorability phase boundary, single-solver runtime
+is heavy-tailed and misleading; on one identical in-class instance CaDiCaL did not
+finish in $12$ hours while MapleChrono returned SAT in $155$ seconds, a
+$\ge\!280\times$ swing. Second, an honest \emph{regime boundary}: the symmetry
+break crushes \emph{structured} UNSAT but does \emph{not} tame
+\emph{phase-transition} hardness, so it certifies everything currently known and
+does \emph{not} shortcut the search for a new $\chrom \ge 6$ object. The symmetry
+break itself is standard; the contribution is wiring it into the
+Hadwiger-Nelson pipeline, measuring that it crosses the specific walls, and
+mapping where it stops.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+The Hadwiger-Nelson problem asks for the chromatic number $\chrom(\R^2)$ of the
+unit-distance graph on the Euclidean plane. The classical bounds
+$5 \le \chrom(\R^2) \le 7$ have stood for decades; the lower bound was raised from
+$4$ to $5$ only recently, by de Grey~\cite{deGrey2018}, who exhibited a finite
+unit-distance graph (UDG) on $1581$ vertices that is not $4$-colorable, verified
+by SAT~\cite{Heule2018verify}. The Polymath16 project~\cite{Polymath16} and
+Parts~\cite{Parts2020} subsequently reduced the order of such graphs to roughly
+$510$ vertices. Every step of this lower-bound program reduces to the same
+computational question:
+\begin{quote}
+\emph{Given a finite graph $G$ and an integer $k$, is $G$ $k$-colorable?}
+\end{quote}
+A $\chrom \ge 5$ certificate is a $4$-UNSAT verdict on a UDG; a reduction step is a
+$5$-SAT witness on a smaller graph. The whole edifice is a stack of colorability
+decisions.
+
+These decisions are routinely handed to a black-box CDCL SAT solver through the
+standard one-hot encoding (one Boolean $x_{v,c}$ per vertex-color pair). That
+encoding has a structural defect for graph coloring: it carries the full
+color-permutation symmetry, so every proper coloring appears $k!$ times in the
+search space. A solver must either rediscover the symmetry or waste exponential
+effort exploring symmetric subtrees. In practice this makes several of the
+program's own instances awkward or intractable: the $510$-vertex graph at $k=4$
+was at one point set aside as ``SAT-intractable,'' and $M^4(C_5)$ at $k=6$ (a
+$95$-vertex triangle-free Mycielskian whose non-$6$-colorability certifies
+$\chrom(M^4(C_5)) \ge 7$) was never completed by the naive route.
+
+This note records that the obstruction is an encoding artifact, not a genuine
+hardness, and that removing it is cheap. We describe a structure-first
+colorability solver built for the program (Section~\ref{sec:solver}); the
+sound symmetry break it searches natively, exported as a CNF preamble for a
+production CDCL engine (Section~\ref{sec:export}); the resulting
+\emph{self-certification} of the entire $\chrom(\R^2) \ge 5$ program on one machine
+(Section~\ref{sec:results}); and two methodological findings that the program
+paid for in compute and that we believe transfer to any UDG-colorability effort:
+a portfolio law and a structured-versus-phase-transition regime boundary
+(Section~\ref{sec:methodology}).
+
+\paragraph{Contributions and honest scope.} (1) A from-scratch structure-first
+colorability solver, validated against a production SAT backend with zero verdict
+disagreements, that additionally counts colorings \emph{up to color permutation}
+(a quantity SAT solvers do not expose). (2) A symmetry-broken CNF export that, on
+the program's own instances, crosses two specific walls
+($M^4(C_5)\,k{=}6$ and $P_{510}\,k{=}4$) and makes the de Grey lower bound
+self-certifiable in $19.5$ minutes, each with an optional DRAT proof. (3) A
+portfolio law and a regime boundary, stated as measured facts. We claim
+\textbf{no} new bound on $\chrom(\R^2)$ and \textbf{no} novelty in the symmetry
+break itself, which is the standard lex-leader / clique-fixing
+construction~\cite{CrawfordSymmetry1996, SakallahSymmetry2009}. The contribution
+is its application, the measurement that it crosses these particular walls, and
+the honest delineation of where it does not help. Everything here is reproducible
+on a single workstation with open-source solvers.
+
+\section{Background}
+\label{sec:background}
+
+\paragraph{The one-hot encoding and its symmetry.} The standard CNF encoding of
+$k$-colorability introduces a Boolean variable $x_{v,c}$ for each vertex
+$v \in V(G)$ and color $c \in \{1,\dots,k\}$, with an at-least-one clause
+$\bigvee_c x_{v,c}$ per vertex and an edge clause
+$\overline{x_{u,c}} \vee \overline{x_{v,c}}$ for each edge $uv$ and color $c$
+(at-most-one clauses per vertex are optional). Any permutation $\sigma \in S_k$ of
+the colors maps a satisfying assignment to another satisfying assignment; the
+$k!$ images are distinct points of the search space encoding the same coloring.
+For UNSAT instances this multiplies the proof effort; for SAT instances it
+scatters witnesses across symmetric frames.
+
+\paragraph{Breaking the symmetry.} A standard remedy is a symmetry-breaking
+predicate that keeps exactly one representative per orbit
+\cite{CrawfordSymmetry1996, SakallahSymmetry2009}. For color symmetry two
+ingredients suffice and are sound (every proper coloring retains exactly one
+representative):
+\begin{itemize}
+  \item \textbf{Clique fixing.} A clique $Q = \{q_1,\dots,q_\omega\}$ must receive
+        $\omega$ distinct colors; pin $q_i$ to color $i$ by unit clauses
+        $x_{q_i,i}$. If $\omega > k$ this is an immediate UNSAT certificate.
+  \item \textbf{First-appearance precedence.} Order the vertices $v_1,v_2,\dots$
+        (clique first, then degree-descending) and require that color $c$ may
+        first appear only after color $c-1$ has appeared:
+        $x_{v_i,c} \rightarrow \bigvee_{j<i} x_{v_j,\,c-1}$, with rank-bound unit
+        clauses forbidding $v_i$ from using colors above $i$. This is the
+        lex-leader break specialized to color values.
+\end{itemize}
+The two together collapse the $k!$ relabelings to a single canonical coloring.
+
+\paragraph{Checkable certificates.} A modern CDCL solver can emit a DRAT
+proof~\cite{WetzlerHeuleHunt2014} of an UNSAT verdict, independently checkable by
+a trusted tool. A symmetry-broken UNSAT proof certifies that the
+\emph{symmetry-broken} CNF is unsatisfiable; since the added clauses are sound (an
+orbit representative always survives), this entails that the original graph is not
+$k$-colorable.
+
+\section{A structure-first colorability solver}
+\label{sec:solver}
+
+We first built a colorability decision procedure from scratch, in pure Python,
+specialized to the program's graphs (triangle-rich UDGs, Mycielskians, and
+near-critical graphs). It is not a general SAT solver and is not meant to compete
+with CDCL on industrial instances; it exists to make the program's structure
+explicit and to serve as the source of the symmetry break exported in
+Section~\ref{sec:export}.
+
+\paragraph{Design.} Four ingredients, all from scratch with no SAT backend.
+(i) \emph{Color-class symmetry breaking}: a vertex may introduce color $c$ only if
+$c \le 1 + (\text{max color used so far})$, baking the canonical frame of
+Section~\ref{sec:background} directly into the search. (ii) \emph{Clique seeding}:
+a clique is colored $1..\omega$ up front, giving an instant $\omega > k$ UNSAT
+certificate. (iii) \emph{MRV branching with forward checking}: branch on the
+uncolored vertex with the fewest available colors, backtracking immediately on a
+domain wipeout. (iv) \emph{Pattern counting}: the number of proper $k$-colorings
+\emph{up to color permutation}, which SAT solvers do not provide and which
+directly measures the ``liquidity'' of a graph's coloring space. A node budget
+bounds every search so the solver never hangs.
+
+\paragraph{Correctness by cross-validation.} The solver is validated, not
+trusted. Across $84$ instance/$k$ pairs (a $60$-graph random self-test plus a
+$24$-instance benchmark) its verdict agrees with a production SAT backend
+(MapleChrono via PySAT~\cite{IgnatievPySAT}) on \emph{every} instance: zero
+disagreements. Every returned coloring is checked proper, and the pattern counter
+matches brute-force orbit counts on small graphs (e.g. $C_5$ has exactly $5$
+three-coloring patterns).
+
+\paragraph{The ceiling.} The solver has no clause learning, so on hard UNSAT
+instances the search tree explodes: $882$ nodes at $M^2(C_5)$ but $447{,}720$ at
+$M^3(C_5)$, and $M^4(C_5)\,k{=}6$ and $P_{510}\,k{=}4$ are out of reach in pure
+Python within budget. Adding conflict-directed backjumping~\cite{Prosser1993} is a
+large free win on hard structured instances (on $M^3(C_5)\,k{=}5$ UNSAT, $13.3$ s
+$\to$ $1.2$ s, and a further $5\times$ under PyPy, $\sim\!78\times$ total), but
+nogood learning without watched-literal propagation does not pay off in pure
+Python, and $M^4(C_5)$ remains node-count-bound. The lesson is decisive: rather
+than grow a pure-Python learning engine, \emph{export} the symmetry break to a
+solver that already learns at full $1$UIP quality.
+
+\section{Exporting the symmetry break to CDCL}
+\label{sec:export}
+
+The export emits the clique-fixing and first-appearance-precedence clauses of
+Section~\ref{sec:background} as a preamble to the one-hot CNF, then hands the
+result to a production CDCL solver (CaDiCaL~\cite{BiereCadical},
+Glucose~\cite{AudemardSimon2009}, or MapleChrono, through
+PySAT~\cite{IgnatievPySAT}). The solver inherits the color-symmetry break it
+otherwise lacks, on top of its own learning, watched literals, VSIDS, and
+restarts. A refinement pins an \emph{exact} maximum clique on the high-degree
+core (cheap because the program's graphs are sparse, $K_4$-free, or
+triangle-free) for a stronger immediate fix, falling back to a greedy clique.
+
+\paragraph{Soundness and validation.} The added clauses are an orbit-selecting
+predicate, so the symmetry-broken CNF is satisfiable iff $G$ is $k$-colorable. We
+validated this empirically as well: over $1000+$ instances the symmetry-broken and
+naive encodings returned identical verdicts with zero bad witnesses
+(equisatisfiability check).
+
+\section{Self-certifying the $\chrom(\R^2) \ge 5$ program}
+\label{sec:results}
+
+The export turns the program's hardest colorability decisions from walls into
+seconds-to-minutes solves. All timings below are single isolated runs of
+CaDiCaL~\cite{BiereCadical} on one workstation; ``wall'' marks an instance that
+did not finish within the budget under the naive encoding.
+
+\begin{table}[ht]
+\centering
+\caption{Walls crossed by the symmetry-broken export. The naive one-hot encoding
+does not finish on the two middle rows; the symmetry-broken encoding decides them
+in seconds.}
+\label{tab:walls}
+\begin{tabular}{l r r l}
+\toprule
+Instance & Naive one-hot & Symmetry-broken & Note \\
+\midrule
+$M^3(C_5)$ $k{=}5$ UNSAT & $7.0$ s & $\mathbf{0.05}$ s & $\sim\!146\times$ \\
+$M^4(C_5)$ $k{=}6$ UNSAT & wall & $\mathbf{21.9}$ s & newly decided
+  ($\chrom(M^4(C_5)) \ge 7$) \\
+$P_{510}$ $k{=}4$ UNSAT & wall & $\mathbf{1.66}$ s & newly decided
+  ($P_{510}$ genuinely $\chrom = 5$) \\
+$P_{510}$ $k{=}5$ SAT & --- & instant & $5$-coloring witness \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The whole lower-bound program, on one machine.} With the export, every
+certificate the $\chrom(\R^2) \ge 5$ program depends on is reproducible on a
+single workstation (Table~\ref{tab:battery}). In particular, de Grey's
+$1585$-vertex graph is independently confirmed not $4$-colorable in $19.5$
+minutes, a from-the-graph re-derivation of $\chrom(\R^2) \ge 5$, and all nine
+$\chrom = 5$ lineage graphs are certified in seconds each.
+
+\begin{table}[ht]
+\centering
+\caption{Self-certification battery (symmetry-broken encoding, CaDiCaL).}
+\label{tab:battery}
+\begin{tabular}{l r}
+\toprule
+Certificate & Time \\
+\midrule
+de Grey $1585$ $k{=}4$ UNSAT \quad ($\chrom(\R^2) \ge 5$) & $19.5$ min \\
+nine lineage graphs ($510,517,529,553,610,633,803,826,874$) $k{=}4$ UNSAT &
+  $1.5$--$9$ s each \\
+$M^4(C_5)$ $k{=}6$ UNSAT \quad ($\chrom(M^4(C_5)) \ge 7$) & $22$ s \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Machine-checkable proofs.} Each symmetry-broken UNSAT solve optionally
+emits a DRAT proof~\cite{WetzlerHeuleHunt2014}. The break also shrinks the proofs
+dramatically: $M^3(C_5)\,k{=}5$ UNSAT is $13{,}263$ DRAT lines with the break
+versus $879{,}467$ without (a $\sim\!66\times$ reduction), and $M^4(C_5)\,k{=}6$
+UNSAT yields a complete $1{,}944{,}586$-line proof in $26$ s. We stress the honest
+reading: the proof certifies that the \emph{symmetry-broken} CNF is unsatisfiable.
+Because the symmetry clauses are sound, this entails non-colorability of the
+graph; it is not a DRAT proof of the naive CNF, which is exactly the intractable
+object the break avoids.
+
+\section{Two methodological findings}
+\label{sec:methodology}
+
+The program paid for the following two facts in compute; we state them as measured
+results because we expect them to transfer to any unit-distance colorability
+effort.
+
+\subsection{A portfolio law near the phase boundary}
+\label{sec:portfolio}
+
+While probing whether a $510$-vertex in-class UDG, augmented with several hundred
+codegree-safe edges, becomes non-$5$-colorable, we hit a striking solver
+disagreement on a single fixed instance (a $470$-edge augmentation, DIMACS
+persisted):
+\begin{quote}
+\textbf{CaDiCaL did not decide it in $12{+}$ hours, while MapleChrono returned
+SAT in $155$ seconds} --- a $\ge\!280\times$ heuristic-dependent swing on the
+\emph{identical} CNF.
+\end{quote}
+This is the heavy-tailed runtime behavior expected of $k$-colorability instances
+sitting at a satisfiability phase boundary, where the verdict is decided by a
+handful of branching choices and different heuristics land on wildly different
+trees. It retroactively explains an earlier instance abandoned as
+``SAT-intractable'' after $66$ CaDiCaL-minutes: it was very likely tractable for a
+different solver and was never re-tried. The operational law:
+
+\begin{quote}
+\textbf{Portfolio law.} Near-threshold $k$-colorability instances in the
+unit-distance program must be run as a \emph{solver portfolio} (CaDiCaL for DRAT
+certification; MapleChrono / Glucose for discovery), never a single solver. A
+single-solver timeout is not evidence of hardness.
+\end{quote}
+
+\subsection{The regime boundary: structured UNSAT versus phase-transition hardness}
+\label{sec:boundary}
+
+It is tempting to read Section~\ref{sec:results} as ``symmetry breaking makes
+these instances easy.'' That is true only for \emph{structured} UNSAT: sparse,
+clearly-unsatisfiable graphs (the lineage, the Mycielski tower, de Grey's graph),
+where the break removes the dominant redundancy and a learning solver finishes
+fast. It does \emph{not} tame \emph{phase-transition} hardness. Concretely, the
+``overshoot'' instances --- $P_{510}$ plus $\sim\!1000$ codegree-safe and
+$K_4$-safe edges at $k=5$, deliberately pushed onto the $5$-SAT / $5$-UNSAT
+boundary --- are a money pit for \emph{both} encodings: naive CaDiCaL did not
+finish in $\sim\!100$ minutes, and the symmetry-broken encoding hit its conflict
+budget at $500$k / $2$M / $10$M conflicts ($29$ s / $157$ s / $1387$ s,
+undecided).
+
+The consequence matters for the larger program. Symmetry breaking certifies
+everything currently \emph{known} about $\chrom(\R^2) \ge 5$, but it does
+\emph{not} unblock the search for a \emph{new} small $\chrom \ge 6$ object: that
+obstruction is intrinsic to the colorability landscape, not an artifact of the
+encoding. Distinguishing ``structured UNSAT'' from ``phase-transition hardness''
+is the practical lesson; conflating them (as we briefly did) produces false
+optimism about what a better encoding can buy.
+
+\section{Reproducibility and honest limitations}
+\label{sec:repro}
+
+\paragraph{Reproducibility.} Everything above runs on a single workstation with
+open-source components: the one-hot and symmetry-broken encoders, the structure-
+first solver, and the PySAT~\cite{IgnatievPySAT} interface to
+CaDiCaL~\cite{BiereCadical}, Glucose~\cite{AudemardSimon2009}, and MapleChrono.
+The graphs are the published de Grey~\cite{deGrey2018} and
+Polymath16~\cite{Polymath16, Parts2020} UDGs and the standard Mycielskians of
+$C_5$~\cite{Mycielski1955}. UNSAT solves emit DRAT
+proofs~\cite{WetzlerHeuleHunt2014} on request.
+
+\paragraph{Limitations.}
+\begin{enumerate}
+  \item \emph{The symmetry break is standard.} Clique-fixing and lex-leader color
+        precedence are textbook~\cite{CrawfordSymmetry1996, SakallahSymmetry2009}.
+        We claim no novelty in the construction, only in its application to these
+        instances and the measurement that it crosses these walls.
+  \item \emph{Timings are single isolated runs}, not averaged benchmarks; the
+        portfolio law of Section~\ref{sec:portfolio} is precisely why per-instance
+        single-solver times must be read with care. The qualitative gap (wall
+        versus seconds) is robust; the exact constants are not claimed to be.
+  \item \emph{No bound on $\chrom(\R^2)$ moved.} This is tooling and
+        certification, not a new mathematical result. The regime boundary of
+        Section~\ref{sec:boundary} is explicit that the search for $\chrom \ge 6$
+        is not advanced by faster decision procedures.
+  \item \emph{The structure-first solver is a research instrument}, correct and
+        transparent, not a competitor to CDCL at scale; its value is as the source
+        of the exported break and as a pattern counter.
+\end{enumerate}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The lower-bound side of the Hadwiger-Nelson problem is a stack of
+$k$-colorability certificates, and the naive one-hot encoding handicaps every one
+of them with the $k!$ color symmetry. Exporting a sound symmetry break to a
+production CDCL solver removes the handicap and makes the \emph{entire} known
+$\chrom(\R^2) \ge 5$ program self-certifiable on a single workstation, with
+machine-checkable DRAT proofs, including instances previously reported
+intractable. The same exercise yields two transferable lessons: run a portfolio
+near the phase boundary, and do not mistake structured-UNSAT speed for progress on
+phase-transition hardness. The break certifies what is known; finding the next
+bound remains a mathematical problem, not a solver-engineering one.
+
+\section*{Acknowledgments}
+This note arose from an ongoing computational program on the Hadwiger-Nelson
+problem. The graphs studied derive from the de Grey~\cite{deGrey2018} and
+Polymath16~\cite{Polymath16} constructions. All computation was carried out on a
+single workstation using open-source SAT solvers (CaDiCaL, MapleChrono, Glucose)
+through the PySAT toolkit, with the pure-Python components run under PyPy. No
+external funding supported this work.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

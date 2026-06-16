@@ -30,7 +30,6 @@
 \title{Forcing-sterility of the realizable unit-distance lineage\\
 and a codegree obstruction to $\chi \ge 6$}
 
-% TODO before submission: confirm author name spelling and affiliation.
 \author{Owen Kent\thanks{Independent researcher.
   Correspondence: \texttt{owenpkent@gmail.com}.}}
 \date{June 2026}
@@ -160,10 +159,11 @@ Let $G$ be a $5$-chromatic graph and let $(s,t)$ be a pair of distinct,
 \end{definition}
 
 A clamp (Definition~\ref{def:clamp}) is exactly a forced-different non-adjacent
-pair. A forced-same pair is no weaker as a route to $\chrom \ge 6$: adding a
-single unit edge across a forced-same pair produces a forced-different pattern
-elsewhere (a splice argument), so forced-same and forced-different are
-interconvertible as $\chrom \ge 6$ ingredients. For the purposes of this note the
+pair. A forced-same pair is no weaker as a route to $\chrom \ge 6$: it is
+\emph{already} a $\chrom \ge 6$ certificate, since if every proper $5$-coloring of
+$G$ assigns $c(s) = c(t)$, then adding the edge $st$ (when the geometry realizes
+it as a unit distance) yields a graph with no proper $5$-coloring at all, i.e.
+$\chrom \ge 6$. For the purposes of this note the
 relevant dichotomy is simply \emph{forced} versus \emph{free}: a single forced
 pair anywhere in the lineage would be a candidate $\chrom \ge 6$ ingredient.
 
@@ -199,14 +199,15 @@ anywhere.
 \label{sec:lemma}
 
 The following lemma is elementary and essentially known. Its corollary, that a
-vertex-critical $k$-chromatic graph admits no forced non-adjacent pair, appears
-as Theorem~3.17 (``there are no implicit relations in critical graphs'') of
+vertex-critical $k$-chromatic graph admits no forced non-adjacent pair, is
+implicit in standard critical-graph theory (Dirac and Gallai; see Jensen and
+Toft~\cite{JensenToft1995}). It also appears explicitly as Theorem~3.17
+(``there are no implicit relations in critical graphs'') of
 Martin~\cite{Martin2009}, where forced-different and forced-same pairs are termed
 \emph{implicit-edges} and \emph{implicit-identities}; the single-deletion form we
-state is a one-line sharpening of his Theorems~3.2 and~3.17. The result is also
-implicit in standard critical-graph theory (Dirac and Gallai; see Jensen and
-Toft~\cite{JensenToft1995}). We state and prove it for self-containedness and
-make no priority claim; the proof uses only the definition of a proper coloring.
+state is a one-line sharpening of his Theorems~3.2 and~3.17. We state and prove it
+for self-containedness and make no priority claim; the proof uses only the
+definition of a proper coloring.
 
 \begin{lemma}[Essential-Pair Lemma]
 \label{lem:essential}
@@ -333,7 +334,8 @@ Equivalently: in the realizable lineage, every non-adjacent pair admits both a
 same-colored and a differently-colored proper $5$-coloring. All color forcing is
 \emph{adjacency-local}. A single non-free pair would have been a candidate
 $\chrom \ge 6$ ingredient (a forced-different pair is a clamp directly; a
-forced-same pair yields one by a splice). None exists.
+forced-same pair certifies $\chrom \ge 6$ by adding the realized edge $st$). None
+exists.
 
 \section{The criticality explanation}
 \label{sec:criticality}
@@ -384,10 +386,11 @@ procedure aimed at $\chrom \ge 6$ must \emph{preserve} redundancy: it must
 \textbf{not} minimize toward criticality. Equivalently, any forcing sweep can be
 pre-filtered by an $O(n)$ criticality scan (keep only redundant vertices) rather
 than testing all $O(n^2)$ pairs, since forcing can only occur at redundant
-endpoints. We note one caveat carried from prior work: redundancy is necessary
-but not sufficient. There exist non-minimal $5$-chromatic graphs (for instance a
-particular $C_6$-closure on $1155$ vertices) that are forcing-free despite having
-redundant vertices.
+endpoints. We note one caveat: redundancy is necessary
+but not sufficient. We have observed non-minimal $5$-chromatic graphs (for
+instance a particular $C_6$-closure on $1155$ vertices, an unpublished
+computational observation from the present program) that are forcing-free despite
+having redundant vertices.
 
 \section{A codegree obstruction to small dense hosts}
 \label{sec:codegree}
@@ -538,10 +541,10 @@ $n$, so a graph that respects~\eqref{eq:codeg-ceiling} need not be realizable.
 \paragraph{Honest limitations.} We list the caveats explicitly.
 \begin{enumerate}
   \item \emph{The Essential-Pair Lemma is elementary and known.} Its corollary is
-        Theorem~3.17 of Martin~\cite{Martin2009} (phrased there via
-        ``implicit-edges'' and ``implicit-identities''), and it is implicit in
-        standard critical-graph theory~\cite{JensenToft1995}. We include a proof
-        only for self-containedness and make no priority claim.
+        implicit in standard critical-graph theory~\cite{JensenToft1995} and
+        appears explicitly as Theorem~3.17 of Martin~\cite{Martin2009} (phrased
+        there via ``implicit-edges'' and ``implicit-identities''). We include a
+        proof only for self-containedness and make no priority claim.
   \item \emph{The $K_{2,3}$-free fact is classical.} It is the basis of the
         Spencer-Szemer\'edi-Trotter unit-distance edge bound. The novelty of
         Section~\ref{sec:codegree} is the synthesis with Kostochka-Yancey and the

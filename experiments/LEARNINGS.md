@@ -4,6 +4,8 @@ Synthesis surface for cross-architecture findings on the Hadwiger-Nelson problem
 
 Format: one entry per finding. **Newest entries at the top.** Lead with the finding, then context.
 
+Publication triage of these findings lives in [`PUBLICATIONS.md`](PUBLICATIONS.md) (registry + rubric). When an entry could be cited outside this repo, score it there.
+
 ---
 
 ### L72. The order-2 measurable SDP RAN on $X_{23}$ (the matrix-free solver of L71 did what dense never could) and returned a DECISIVE NEGATIVE: at $k=4$ it is FEASIBLE, so order-2 does not certify even $\chi_m\ge5$; by color-monotonicity it cannot certify $\chi_m\ge6$ at $k=5$ either. The order-2 route to a new measurable bound is CLOSED. This settles, with a measured answer, the question left open since L41/L43/L48/L50: "does the order-2 lift help at $X_{23}$ scale?" -- NO. Run: e3u matrix-free linearized-ADMM on $X_{23}$ $k=4$ ($D=3953$, $n_{\text{orb}}=48342$, 4 PSD blocks, max side 735), 5120 iterations / 5.4 h at 3.8 s/iter. The Phase-1 margin (minimum total Bochner slack) fell **$1.24\to0.0021$, a 600x MONOTONE drop with no plateau**, and the primal residual tracked $5.34\to0.0026$ to the $\sim10^{-3}$ floor -- the unambiguous FEASIBLE signature (contrast the CERTIFYING plateau of the validation case Moser $k=3$, whose residual stuck at $0.278$). Killed at iter 5120 once the trajectory was decisive; the formal $\text{prim}<10^{-3}$ crossing was $\sim6$ h of pure ADMM tail away with no informational value. Verdict record `combinatorial/../fractional/e3u_x23_k4_verdict.json`.

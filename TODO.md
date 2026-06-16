@@ -165,3 +165,11 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] First session record landed at `experiments/orchestrator_sessions/session_001_bootstrap.md`
 - [x] Write `docs/research_atlas/README.md` master landscape
 - [x] Write `experiments/PROOF_ARCHITECTURES_PLAN.md`
+
+### Publication tracking
+
+- [x] Publication ledger `experiments/PUBLICATIONS.md`: registry + rubric (V/N/S, verdict, priority) for evaluating publishable discoveries. Initial scoring C1-C6 at L72. C1 (forcing-sterility + codegree note) = SHIP/P1; C3 (solver + symmetry-broken export) = DEVELOP/P2; C2 (portfolio inversion) folds into C1/C3
+- [ ] **C1 SHIP**: ADVERSARY pass DONE (passed, 0 blockers, SHOULD-FIX edits applied, recompiles clean 10pp). Remaining = two human decisions: confirm author/affiliation, decide Geombinatorics vs arXiv-first, then submit (see `paper/main.tex` + PUBLICATIONS.md C1 dossier)
+- [x] **C3 develop**: white paper reshaped into a 7-pp paper draft `paper_solver/main.tex` (compiles clean, 0 undefined refs); C2 portfolio law folded in as the methodology section
+- [ ] **C3 SHIP**: web-verify SAT bib (refs.bib TODO-VERIFY markers), ADVERSARY pass + re-check headline timings against caches, decide arXiv cs.DM vs SAT workshop
+- [ ] **When a new L_N lands**: evaluate it in `experiments/PUBLICATIONS.md` (candidate or not), score, log the decision

@@ -1,0 +1,264 @@
+# PUBLICATIONS
+
+Publication ledger for the Hadwiger-Nelson program: the place where candidate
+publishable discoveries are **tracked** (a registry) and **evaluated** (a rubric).
+
+This is a peer to [`LEARNINGS.md`](LEARNINGS.md) (the raw findings log) and
+[`PROOF_ARCHITECTURES_PLAN.md`](PROOF_ARCHITECTURES_PLAN.md) (the experimental
+plan). LEARNINGS records *what was found*; this file decides *what is worth
+writing up, where, and in what order*. Maintained by SYNTHESIZER.
+
+The discipline mirrors the program's existing honesty: every candidate carries
+an explicit scope and the same adversarial scrutiny (wrong-approach detectors,
+an ADVERSARY pass) before it ships. We do not over-claim. Most findings here are
+honest negatives, diagnostics, or syntheses of known pieces; that is fine, and
+the rubric scores it as such rather than inflating it.
+
+---
+
+## How to use this file
+
+1. **A finding lands in LEARNINGS (L_N).** Ask: could anyone outside this repo
+   want to cite it? If plausibly yes, give it a candidate ID (C_k) and add a row.
+2. **Score it on the rubric** (V, N, S below). Scoring is a judgment call, not a
+   computed metric. Be honest: the program's credibility rests on it.
+3. **Assign a verdict and priority.** SHIP / DEVELOP / FOLD / PARK / ARCHIVE.
+4. **Before SHIP**, a candidate must pass: (a) the relevant wrong-approach
+   detector ($\mathbb{Q}^2$, $L^\infty$, $\mathbb{R}^1$), or be explicitly N/A;
+   (b) an ADVERSARY pass hunting for the smallest counterexample / overclaim;
+   (c) a correctness re-check of every headline number against its cache.
+5. **Log the decision** in the Decision log at the bottom (dated, append-only).
+
+---
+
+## The rubric
+
+Three scored axes (each 0-3), plus readiness, venue, verdict, and priority.
+
+### V - Verification (how decisively is it established?)
+- **3** - machine-checked (Lean, sorry-free) **or** solver-certified UNSAT with a
+  checkable DRAT proof.
+- **2** - rigorous pen-and-paper proof, **or** a computation cross-validated by
+  two independent methods/solvers.
+- **1** - single-method computation or a heuristic with a strong, clean signal.
+- **0** - conjecture / suggestive only.
+
+### N - Novelty (is it new?)
+- **3** - new result, not in the literature.
+- **2** - new *synthesis* or *framing* of known pieces, or a new computational
+  record (a wall crossed for the first time).
+- **1** - independent reproduction of a known result.
+- **0** - known / elementary; no priority claim.
+
+### S - Significance (does anyone outside care?)
+- **3** - moves a bound on $\chi(\mathbb{R}^2)$ or settles a stated open question.
+- **2** - a clean decisive negative that *closes a route*, or a citable
+  methodological law.
+- **1** - a reusable diagnostic or tool others would adopt.
+- **0** - internal-only; no external interest.
+
+### Readiness (pipeline stage)
+`idea -> notes -> draft -> submission-ready -> submitted -> published`
+
+### Verdict
+- **SHIP** - ready or nearly; push to a venue now.
+- **DEVELOP** - real content, but needs a write-up or one more result to stand alone.
+- **FOLD** - strongest as a section/remark inside another candidate, not its own paper.
+- **PARK** - genuine but premature; revisit when its mass or strength grows.
+- **ARCHIVE** - recorded for completeness; not independently publishable
+  (reproduction / known / internal).
+
+### Priority
+- **P1** - act now. Submission-ready or one decision away, with $S \ge 2$,
+  $N \ge 2$, no fatal caveat.
+- **P2** - next. Solid ($V \ge 2$ or $S \ge 2$) but needs writing or a decision.
+- **P3** - later. Reproduction, low novelty, or weakened by a load-bearing caveat.
+
+---
+
+## Registry
+
+| ID | Title | V | N | S | Ready | Venue (target) | Verdict | Pri |
+|----|-------|---|---|---|-------|----------------|---------|-----|
+| C1 | Forcing-sterility of the realizable lineage + codegree obstruction | 2 | 2 | 2 | submission-ready | arXiv math.CO + Geombinatorics | SHIP | P1 |
+| C2 | Portfolio inversion at the SAT phase boundary (Cadical 12h vs Maple 155s) | 2 | 2 | 2 | notes | fold into C3 (decided) | FOLD->C3 | P2 |
+| C3 | Structure-first solver + symmetry-broken CNF export (walls crossed) | 3 | 2 | 2 | draft (paper, 7pp, compiles) | arXiv cs.DM tool note / SAT workshop | DEVELOP | P2 |
+| C4 | Matrix-free order-2 measurable SDP closes the route at $X_{23}$ | 1 | 2 | 2 | notes + verdict JSON | measurable-chromatic methods note | PARK | P3 |
+| C5 | IE-LP + congruence (IEC) self-certification of $\chi_m \ge 5$ | 2 | 1 | 1 | notes | none (reproduction) | ARCHIVE | P3 |
+| C6 | Lean formalization of the covering / list-coloring / triple-lift lemmas | 3 | 1 | 1 | code (sorry-free) | formalization note (when mass grows) | PARK | P3 |
+
+Composite read: **C1 is the one live paper.** C2 and C3 are the two real
+secondary products; both are stronger *attached* to or *alongside* C1 than alone.
+C4-C6 are honest but not independently publishable as they stand.
+
+---
+
+## Candidate dossiers
+
+### C1 - Forcing-sterility + codegree obstruction
+- **Source**: LEARNINGS L57-L59 (forcing census), L63 (codegree wall), L69 (core
+  intrinsics). Drafted in [`paper/main.tex`](../paper/main.tex).
+- **One line**: the realizable $\chi=5$ UDG lineage is forcing-sterile *by
+  construction* (vertex-critical, so no forced non-adjacent pair, by the
+  Essential-Pair Lemma), confirmed by an exhaustive $1{,}955{,}948$-pair SAT
+  census; and the missing $\chi \ge 6$ object is pinched between the
+  Kostochka-Yancey floor and the $K_{2,3}$-free codegree ceiling.
+- **V=2**: exhaustive solver census (multi-solver), Lemma has an elementary pen
+  proof. **N=2**: the Lemma is known (Martin 2009 Thm 3.17, honestly attributed);
+  novelty is the *synthesis* + the by-construction observation + the codegree
+  pincer. **S=2**: clean negative that reframes the search; no new bound.
+- **Wrong-approach detector**: PASS. The codegree argument is genuinely Euclidean
+  (two-circle rigidity, fails under $L^\infty$); the Lemma claims no bound, so
+  $\mathbb{Q}^2$ is not in tension.
+- **Caveats (load-bearing, already in the paper)**: no bound on $\chi(\mathbb{R}^2)$
+  moves; the Lemma is elementary/known; the $m/n \approx 4.2$ density figure is
+  empirical over ~35 cores, not a theorem.
+- **ADVERSARY pass (2026-06-16): PASSED, zero blockers.** Every headline number
+  independently re-derived from source and exact (census total 1,955,948, all nine
+  Table 1 rows, codegree ceiling at n=16 (=48) and n=18 (floor 57), KY crossover at
+  n=13, M^3(C5) 434 violations / max codeg 11, the m=131 / 166-violation floor).
+  The Essential-Pair Lemma proof is airtight under line-by-line audit; no overclaim;
+  wrong-approach detector passes. SHOULD-FIX items applied: clarified the
+  forced-same -> chi>=6 certificate (was an overcomplicated "splice"), led the
+  priority attribution with the refereed Jensen-Toft over the unrefereed Martin
+  preprint, marked the 1155-vertex caveat as an unpublished program observation,
+  deleted the stale build.log. Recompiles clean (10 pp).
+- **Decisions (2026-06-16)**: author confirmed "Owen Kent / Independent
+  researcher / owenpkent@gmail.com" (TODO comment removed from the .tex). Venue =
+  **both**: arXiv math.CO for the public record + Geombinatorics submission.
+- **Remaining to submit**: arXiv account/endorsement check; format/upload to arXiv;
+  Geombinatorics submission (email-based; confirm current editor/process).
+- **Verdict**: SHIP, P1. Adversary-cleared, author + venue set.
+
+### C2 - Portfolio inversion at the SAT phase boundary
+- **Source**: LEARNINGS L64; write-up
+  [`docs/03_research/E14_UDG_class_and_portfolio_findings.md`](../docs/03_research/E14_UDG_class_and_portfolio_findings.md).
+  Persisted DIMACS for the 470-edge instance.
+- **One line**: on one identical near-threshold $k$-colorability instance,
+  **Cadical ran 12+ h without deciding while MapleChrono returned SAT in 155 s**
+  (a $\ge 280\times$ heuristic swing), the heavy-tailed behavior expected at a SAT
+  phase boundary; the operational law is "run a solver *portfolio*, never a single
+  solver" near threshold.
+- **V=2** (reproducible, persisted instance). **N=2** (a concrete, citable
+  methodological observation in the UDG-SAT setting). **S=2** (a law others doing
+  UDG colorability would adopt; retroactively explains the L29/L30 "intractable"
+  abandonment).
+- **Why FOLD**: too thin for a standalone paper, but a strong subsection of C3's
+  tool note. It is the most citable methodological nugget the program has.
+- **Decision (2026-06-16)**: fold into **C3**, not C1. C1 is a bound-free
+  structural note and is submission-ready; a SAT-methodology remark would dilute
+  its focus and disturb a clean draft. The portfolio law is solver methodology =
+  C3's territory.
+- **Verdict**: FOLD into C3, P2.
+
+### C3 - Structure-first solver + symmetry-broken CNF export
+- **Source**: LEARNINGS L65 (hn_solver), L66 (CBJ + nogoods + PyPy), L68
+  (watched-literal negative + the symmetry-broken export win). White paper:
+  [`docs/03_research/hn_solver_whitepaper.md`](../docs/03_research/hn_solver_whitepaper.md).
+- **One line**: a from-scratch, color-symmetry-breaking colorability solver, plus
+  a symmetry-broken CNF *export* that lets a production CDCL engine cross walls the
+  naive encoding could not - **$M^4(C_5)$ k=6 UNSAT in 22 s, $P_{510}$ k=4 UNSAT in
+  1.66 s, de Grey 1585 k=4 UNSAT in 19.5 min**, each with an optional DRAT proof;
+  the entire known $\chi(\mathbb{R}^2) \ge 5$ program is now self-certifiable on one
+  workstation.
+- **V=3** (DRAT-certified, equisat-validated over 1000+ instances, zero verdict
+  disagreements). **N=2** (the symmetry break is a standard sound construction,
+  honestly flagged; novelty is wiring the program's native break into a portfolio
+  and *measuring* that it crosses the walls, plus the self-certification capability).
+  **S=2** (reusable tooling; an independent from-the-graph confirmation of the
+  $\chi \ge 5$ lineage).
+- **Honest boundary (must stay in any write-up)**: symmetry breaking crushes
+  *structured* UNSAT but does **not** tame *phase-transition* hardness (the E14
+  overshoot instances remain a money pit). Do not conflate the two difficulties.
+- **Why DEVELOP not SHIP**: the white paper is a draft and a tooling artifact;
+  a publishable version wants a clean benchmark table, the C2 portfolio law folded
+  in, and a sharp framing (applied SAT, or an arXiv tool note). Decide venue.
+- **Progress (2026-06-16)**: paper draft built at
+  [`paper_solver/main.tex`](../paper_solver/main.tex) (7 pp, compiles clean, 0
+  undefined refs). C2 folded in as Section "Two methodological findings" (portfolio
+  law + regime boundary). Framing: arXiv cs.DM tool note, with the SAT workshop
+  (Pragmatics of SAT) as an alternate. Remaining to SHIP: (a) web-verify the SAT
+  bibliography (refs.bib has TODO-VERIFY markers on solver/PySAT entries); (b) an
+  ADVERSARY pass + re-check every headline timing against its cache/log; (c) decide
+  arXiv vs workshop and confirm author/affiliation.
+- **Verdict**: DEVELOP, P2.
+
+### C4 - Matrix-free order-2 measurable SDP, route closed at $X_{23}$
+- **Source**: LEARNINGS L70 (blocker diagnosis), L71 (matrix-free solver), L72
+  (the $X_{23}$ k=4 FEASIBLE verdict). Verdict JSON
+  `fractional/e3u_x23_k4_verdict.json`.
+- **One line**: a matrix-free linearized-ADMM order-2 measurable SDP solver
+  (removing the ~195 GiB RAM wall) RAN on Ambrus's $X_{23}$ and returned a decisive
+  negative - order-2 (IEC up to subset size 4) does not certify even
+  $\chi_m \ge 5$, and by color-monotonicity cannot reach $\chi_m \ge 6$; **the
+  order-2 measurable route is closed.**
+- **V=1** (first-order ADMM verdict; validated 3/3 on small configs, but *no
+  independent $X_{23}$-scale cross-check* exists - the dense map is the wall the
+  solver was built to avoid; "feasible" = absence of a certificate, so there is no
+  certificate object to externally verify). **N=2** (the matrix-free build is real;
+  the closure is a new negative). **S=2** (closes a route several entries chased).
+- **Why PARK**: the V=1 caveat is load-bearing for a *publication* - a referee
+  would want either an independent verification or a certifying outcome, and this is
+  neither. It is a strong *internal* redirect (throws weight back to the Arch-1
+  object) but a weak standalone paper. Revisit if the engineering (matrix-free
+  conic solver for symmetry-trivial SDPs) is itself framed as the contribution.
+- **Wrong-approach detector**: N/A (O(2)-averaged Euclidean SDP; the e3i/e3j 1D
+  control guards the LP lineage).
+- **Verdict**: PARK, P3.
+
+### C5 - IE-LP + IEC self-certification of $\chi_m \ge 5$
+- **Source**: LEARNINGS L36 (e3j). Self-certified ($m_1 \le 0.246894 < 1/4$,
+  repo primal + cvxpy dual at machine precision).
+- **V=2** (self-certified, dual gap ~machine precision). **N=1** (independent
+  reproduction of Ambrus 2023). **S=1**.
+- **Why ARCHIVE**: clean and verified, but it reproduces a published bound; no
+  priority. Valuable internally as a checked re-derivation, not as a paper.
+- **Verdict**: ARCHIVE, P3.
+
+### C6 - Lean formalizations
+- **Source**: TODO "Lean substrate"; `lean/HadwigerNelson/L21CoveringLemma.lean`,
+  `L22ListColoring.lean`, plus the triple-lift bridge (memory: L24, DeGreyLowerBound).
+- **V=3** (machine-checked, sorry-free). **N=1-2** (formalizing known/own lemmas).
+  **S=1**.
+- **Why PARK**: a formalization note needs more mass (e.g. the HN-4 $\chi \ge 5$
+  bridge end-to-end, or the $\mathbb{Q}^2$ / $L^\infty$ controls formalized) before
+  it is a standalone ITP/CPP-style contribution. The corpus is growing in the right
+  direction.
+- **Verdict**: PARK, P3.
+
+---
+
+## What is NOT a candidate (and why)
+
+Tracked so the bar stays honest. These are real findings that are *not*
+independently publishable:
+- The reverse-engineering of de Grey 1585 / Polymath 510 structure (L15-L25):
+  internal understanding, no external claim.
+- The W3 / clamp factorization and the long forcing-search lineage (L51-L62):
+  the route's *output* (forcing-sterility) is C1; the intermediate probes are not.
+- The host-factory / in-class construction negatives (L63-L69): the *conclusion*
+  (codegree wall) is in C1; the individual heuristic negatives are not standalone.
+
+---
+
+## Decision log
+
+Append-only, dated. One line per decision.
+
+- 2026-06-16 - Ledger created. Initial scoring of C1-C6 from program state at
+  L72. C1 = the live paper (SHIP/P1). C2 folds into C1 or C3. C3 is the strongest
+  secondary product (DEVELOP/P2). C4-C6 parked/archived with reasons recorded.
+- 2026-06-16 - Owen: pursue C1 (ship) + C3 (develop). C2 fold decided -> into C3
+  (keep C1 bound-free and undisturbed). Tracks opened: C1 ADVERSARY read + number
+  re-verify + blocker resolution; C3 tool-note development with C2 as a subsection.
+- 2026-06-16 - C3 developed: white paper reshaped into a 7-pp paper draft
+  (`paper_solver/main.tex`, compiles clean), C2 folded in as the methodology
+  section. C1 ADVERSARY pass launched (background). C3 still needs bib verification
+  + an ADVERSARY pass + venue decision before SHIP.
+- 2026-06-16 - C1 ADVERSARY pass returned: PASSED, zero blockers, all numbers
+  re-derived exact, Lemma airtight. SHOULD-FIX items applied (splice -> direct
+  certificate, Jensen-Toft-led attribution, 1155-vtx caveat marked unpublished,
+  build.log removed); recompiles clean (10 pp). C1 now adversary-cleared; only the
+  two human decisions (author/affiliation, venue) remain before submit.
+- 2026-06-16 - Owen decisions: author confirmed as-is (TODO removed from both
+  .tex); C1 venue = arXiv math.CO + Geombinatorics (both). Session work committed.
