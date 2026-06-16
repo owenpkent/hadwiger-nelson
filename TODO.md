@@ -173,5 +173,6 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [x] **C3 develop**: white paper reshaped into a 7-pp paper draft `paper_solver/main.tex` (compiles clean, 0 undefined refs); C2 portfolio law folded in as the methodology section
 - [x] **C3 bib verified**: SAT bibliography web-verified (SURVEYOR, 10 entries vs primary sources; Heule->Geombinatorics 28(1):32-50, PySAT->LNCS 10929:428-437; no TODO-VERIFY left)
 - [x] **C3 ADVERSARY pass**: soundness watertight (exhaustive model-count, 0 false-UNSAT); 2 blockers + 3 should-fix found and all FIXED. A1 (unbacked de Grey "19.5 min") resolved by a real symbreak run = **18.1 min** (`e1u_degrey_symbreak_k4.py`, persisted), paper + L68 updated to the measured value; B1 P510-not-a-wall misattribution corrected; recompiles clean 7pp
-- [ ] **C3 SHIP**: decide arXiv cs.DM vs SAT workshop, then build its arXiv bundle (mirror C1)
+- [x] **C3 arXiv bundle**: built + validated `paper_solver/arxiv/symmetry-broken-sat-arxiv.tar.gz` (standalone no-bibtex compile, 7pp) + `ARXIV_SUBMISSION.md` (cs.DM + math.CO metadata)
+- [ ] **C3 SHIP**: decide arXiv cs.DM (default) vs SAT workshop, then upload (human action)
 - [ ] **When a new L_N lands**: evaluate it in `experiments/PUBLICATIONS.md` (candidate or not), score, log the decision

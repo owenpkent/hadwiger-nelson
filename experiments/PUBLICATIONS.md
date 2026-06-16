@@ -202,9 +202,13 @@ C4-C6 are honest but not independently publishable as they stand.
   convention; the measured value is recorded in the paper, LEARNINGS L68, and here).
   Paper updated 19.5 -> 18 min in all three places; recompiles clean (7pp).
   (c) decide arXiv cs.DM vs SAT workshop (author already confirmed, shared with C1).
-- **Verdict**: DEVELOP, P2. **All C3 adversary findings cleared** (soundness
-  watertight; all numbers now backed). Remaining to SHIP: the venue call
-  (arXiv cs.DM vs SAT workshop) and building its arXiv bundle (mirror C1).
+- **arXiv bundle READY (2026-06-16)**: `paper_solver/arxiv/symmetry-broken-sat-arxiv.tar.gz`
+  (flat: main.tex + refs.bib + main.bbl), validated to compile standalone without
+  bibtex, 7 pp / 0 undefined. Paste-ready metadata (cs.DM primary + math.CO cross,
+  MSC, abstract) in `paper_solver/arxiv/ARXIV_SUBMISSION.md`.
+- **Verdict**: DEVELOP -> SHIP-ready, P2. **All C3 adversary findings cleared**
+  (soundness watertight; all numbers backed), bundle built. Remaining: the venue
+  call (arXiv cs.DM default vs SAT workshop) and Owen's upload action.
 
 ### C4 - Matrix-free order-2 measurable SDP, route closed at $X_{23}$
 - **Source**: LEARNINGS L70 (blocker diagnosis), L71 (matrix-free solver), L72
@@ -289,6 +293,9 @@ Append-only, dated. One line per decision.
   no-bibtex, 10pp) with paste-ready metadata. C3 SAT bibliography web-verified by
   SURVEYOR (all 10 entries, primary sources; Heule->Geombinatorics 28(1):32-50,
   PySAT->LNCS 10929). Both "both" tasks done.
+- 2026-06-16 - C3 arXiv bundle built + validated (paper_solver/arxiv/, standalone
+  no-bibtex compile, 7pp) with paste-ready cs.DM+math.CO metadata. Both papers now
+  have validated arXiv bundles; C3 is SHIP-ready pending the venue call + upload.
 - 2026-06-16 - C3 ADVERSARY pass: soundness WATERTIGHT (exhaustive model-count),
   but 2 blockers + 3 should-fix on number substantiation/framing. Applied A2/B1/B2/
   B3/C3 text fixes (recompiles clean 7pp). A1 (unbacked de Grey 19.5 min, vs a
