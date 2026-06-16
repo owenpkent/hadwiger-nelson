@@ -3,9 +3,10 @@
 %
 % VERIFICATION STATUS: shared entries (deGrey2018, Polymath16, Parts2020) are
 % carried verbatim from the C1 paper, whose bib was web-verified in June 2026.
-% The SAT-specific entries below are standard references but their exact
-% volume/page details should get the same web-verification pass C1 received
-% before submission. Items flagged TODO-VERIFY need a check.
+% The SAT-specific entries below were web-verified in June 2026 to the same
+% standard (authors, title, venue, volume/number, pages, year, DOI/arXiv id).
+% Any field that could not be confirmed against a primary source is marked
+% UNVERIFIED rather than guessed.
 
 @article{deGrey2018,
   author  = {de Grey, Aubrey D. N. J.},
@@ -39,7 +40,7 @@
   pages   = {137--166}
 }
 
-% --- SAT solving and certificates (TODO-VERIFY details before submission) ---
+% --- SAT solving and certificates (web-verified June 2026) ---
 
 @inproceedings{BiereCadical,
   author    = {Biere, Armin and Fazekas, Katalin and Fleury, Mathias and
@@ -48,19 +49,24 @@
                entering the {SAT} Competition 2020},
   booktitle = {Proc. of SAT Competition 2020 -- Solver and Benchmark
                Descriptions},
+  editor    = {Balyo, Tomas and Froleyks, Nils and Heule, Marijn and
+               Iser, Markus and J\"{a}rvisalo, Matti and Suda, Martin},
   series    = {Department of Computer Science Report Series B},
+  volume    = {B-2020-1},
   publisher = {University of Helsinki},
   year      = {2020},
-  note      = {CaDiCaL solver. TODO-VERIFY volume/pages}
+  pages     = {50--53},
+  note      = {CaDiCaL solver description}
 }
 
-@article{AudemardSimon2009,
+@inproceedings{AudemardSimon2009,
   author    = {Audemard, Gilles and Simon, Laurent},
   title     = {Predicting learnt clauses quality in modern {SAT} solvers},
-  journal   = {Proc. IJCAI},
+  booktitle = {Proceedings of the 21st International Joint Conference on
+               Artificial Intelligence (IJCAI 2009)},
   year      = {2009},
   pages     = {399--404},
-  note      = {Glucose solver. TODO-VERIFY exact pages}
+  note      = {Glucose solver}
 }
 
 @inproceedings{WetzlerHeuleHunt2014,
@@ -72,7 +78,8 @@
   volume    = {8561},
   publisher = {Springer},
   year      = {2014},
-  pages     = {422--429}
+  pages     = {422--429},
+  doi       = {10.1007/978-3-319-09284-3_31}
 }
 
 @incollection{SakallahSymmetry2009,
@@ -86,6 +93,7 @@
   volume    = {185},
   year      = {2009},
   pages     = {289--338},
+  doi       = {10.3233/978-1-58603-929-5-289},
   note      = {Survey of symmetry breaking in SAT; lex-leader predicates}
 }
 
@@ -120,18 +128,28 @@
   pages   = {161--162}
 }
 
-@misc{Heule2018verify,
-  author       = {Heule, Marijn J. H.},
-  title        = {Computing small unit-distance graphs with chromatic number 5},
-  year         = {2018},
-  howpublished = {arXiv:1805.12181 [math.CO]},
-  note         = {SAT verification and reduction of de Grey's graph}
+@article{Heule2018verify,
+  author  = {Heule, Marijn J. H.},
+  title   = {Computing small unit-distance graphs with chromatic number 5},
+  journal = {Geombinatorics},
+  year    = {2018},
+  volume  = {28},
+  number  = {1},
+  pages   = {32--50},
+  note    = {SAT verification and reduction of de Grey's graph.
+             Preprint: arXiv:1805.12181 [math.CO]}
 }
 
-@misc{IgnatievPySAT,
-  author       = {Ignatiev, Alexey and Morgado, Antonio and Marques-Silva, Joao},
-  title        = {{PySAT}: A {Python} toolkit for prototyping with {SAT} oracles},
-  year         = {2018},
-  howpublished = {SAT 2018; \texttt{https://pysathq.github.io}},
-  note         = {TODO-VERIFY LNCS volume/pages}
+@inproceedings{IgnatievPySAT,
+  author    = {Ignatiev, Alexey and Morgado, Antonio and
+               Marques-Silva, Joao},
+  title     = {{PySAT}: A {Python} toolkit for prototyping with {SAT} oracles},
+  booktitle = {Theory and Applications of Satisfiability Testing (SAT 2018)},
+  editor    = {Beyersdorff, Olaf and Wintersteiger, Christoph M.},
+  series    = {LNCS},
+  volume    = {10929},
+  publisher = {Springer},
+  year      = {2018},
+  pages     = {428--437},
+  doi       = {10.1007/978-3-319-94144-8_26}
 }

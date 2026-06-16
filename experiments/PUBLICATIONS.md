@@ -126,9 +126,15 @@ C4-C6 are honest but not independently publishable as they stand.
 - **Decisions (2026-06-16)**: author confirmed "Owen Kent / Independent
   researcher / owenpkent@gmail.com" (TODO comment removed from the .tex). Venue =
   **both**: arXiv math.CO for the public record + Geombinatorics submission.
-- **Remaining to submit**: arXiv account/endorsement check; format/upload to arXiv;
-  Geombinatorics submission (email-based; confirm current editor/process).
-- **Verdict**: SHIP, P1. Adversary-cleared, author + venue set.
+- **arXiv bundle READY (2026-06-16)**: `paper/arxiv/forcing-sterility-arxiv.tar.gz`
+  (flat: main.tex + refs.bib + main.bbl), validated to compile standalone WITHOUT
+  bibtex (arXiv AutoTeX does not run bibtex), 10 pp / 0 undefined. Form metadata
+  (title, abstract, math.CO + math.MG, MSC, comments) in
+  `paper/arxiv/ARXIV_SUBMISSION.md`.
+- **Remaining to submit (human steps)**: upload the tarball to arXiv (may need a
+  one-time math.CO endorsement on a new account); email the same main.pdf to
+  Geombinatorics (confirm current editor/process).
+- **Verdict**: SHIP, P1. Adversary-cleared, author + venue set, arXiv bundle built.
 
 ### C2 - Portfolio inversion at the SAT phase boundary
 - **Source**: LEARNINGS L64; write-up
@@ -177,10 +183,12 @@ C4-C6 are honest but not independently publishable as they stand.
   [`paper_solver/main.tex`](../paper_solver/main.tex) (7 pp, compiles clean, 0
   undefined refs). C2 folded in as Section "Two methodological findings" (portfolio
   law + regime boundary). Framing: arXiv cs.DM tool note, with the SAT workshop
-  (Pragmatics of SAT) as an alternate. Remaining to SHIP: (a) web-verify the SAT
-  bibliography (refs.bib has TODO-VERIFY markers on solver/PySAT entries); (b) an
-  ADVERSARY pass + re-check every headline timing against its cache/log; (c) decide
-  arXiv vs workshop and confirm author/affiliation.
+  (Pragmatics of SAT) as an alternate. Remaining to SHIP: (a) DONE - SAT
+  bibliography web-verified (SURVEYOR, all 10 entries against primary sources;
+  Heule2018verify upgraded to its published Geombinatorics 28(1):32-50 venue, PySAT
+  filled to LNCS 10929:428-437; no TODO-VERIFY markers remain, recompiles clean);
+  (b) an ADVERSARY pass + re-check every headline timing against its cache/log;
+  (c) decide arXiv cs.DM vs SAT workshop (author already confirmed, shared with C1).
 - **Verdict**: DEVELOP, P2.
 
 ### C4 - Matrix-free order-2 measurable SDP, route closed at $X_{23}$
@@ -262,3 +270,7 @@ Append-only, dated. One line per decision.
   two human decisions (author/affiliation, venue) remain before submit.
 - 2026-06-16 - Owen decisions: author confirmed as-is (TODO removed from both
   .tex); C1 venue = arXiv math.CO + Geombinatorics (both). Session work committed.
+- 2026-06-16 - C1 arXiv bundle built + validated (paper/arxiv/, standalone compile
+  no-bibtex, 10pp) with paste-ready metadata. C3 SAT bibliography web-verified by
+  SURVEYOR (all 10 entries, primary sources; Heule->Geombinatorics 28(1):32-50,
+  PySAT->LNCS 10929). Both "both" tasks done.

@@ -169,7 +169,8 @@ Task tracker for the Hadwiger-Nelson research repo.
 ### Publication tracking
 
 - [x] Publication ledger `experiments/PUBLICATIONS.md`: registry + rubric (V/N/S, verdict, priority) for evaluating publishable discoveries. Initial scoring C1-C6 at L72. C1 (forcing-sterility + codegree note) = SHIP/P1; C3 (solver + symmetry-broken export) = DEVELOP/P2; C2 (portfolio inversion) folds into C1/C3
-- [ ] **C1 SHIP**: ADVERSARY pass DONE (passed, 0 blockers, SHOULD-FIX edits applied, recompiles clean 10pp). Remaining = two human decisions: confirm author/affiliation, decide Geombinatorics vs arXiv-first, then submit (see `paper/main.tex` + PUBLICATIONS.md C1 dossier)
+- [x] **C1 SHIP-ready**: ADVERSARY pass passed (0 blockers, SHOULD-FIX applied, 10pp clean); author + venue (arXiv math.CO + Geombinatorics) set; **arXiv bundle built + validated** `paper/arxiv/forcing-sterility-arxiv.tar.gz` + `ARXIV_SUBMISSION.md`. Remaining = human upload steps (arXiv endorsement if new account; email Geombinatorics)
 - [x] **C3 develop**: white paper reshaped into a 7-pp paper draft `paper_solver/main.tex` (compiles clean, 0 undefined refs); C2 portfolio law folded in as the methodology section
-- [ ] **C3 SHIP**: web-verify SAT bib (refs.bib TODO-VERIFY markers), ADVERSARY pass + re-check headline timings against caches, decide arXiv cs.DM vs SAT workshop
+- [x] **C3 bib verified**: SAT bibliography web-verified (SURVEYOR, 10 entries vs primary sources; Heule->Geombinatorics 28(1):32-50, PySAT->LNCS 10929:428-437; no TODO-VERIFY left)
+- [ ] **C3 SHIP**: ADVERSARY pass + re-check headline timings against caches, decide arXiv cs.DM vs SAT workshop, then build its arXiv bundle (mirror C1)
 - [ ] **When a new L_N lands**: evaluate it in `experiments/PUBLICATIONS.md` (candidate or not), score, log the decision
