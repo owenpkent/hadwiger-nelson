@@ -34,7 +34,7 @@ Symmetry-broken SAT self-certifies the plane's chi >= 5 lower bound (and where i
 
 **Authors**
 ```
-Owen Kent
+Owen P. Kent
 ```
 (Independent researcher. Correspondence: owenpkent@gmail.com.)
 

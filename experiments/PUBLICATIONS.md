@@ -123,7 +123,7 @@ C4-C6 are honest but not independently publishable as they stand.
   priority attribution with the refereed Jensen-Toft over the unrefereed Martin
   preprint, marked the 1155-vertex caveat as an unpublished program observation,
   deleted the stale build.log. Recompiles clean (10 pp).
-- **Decisions (2026-06-16)**: author confirmed "Owen Kent / Independent
+- **Decisions (2026-06-16)**: author = "Owen P. Kent / Independent
   researcher / owenpkent@gmail.com" (TODO comment removed from the .tex). Venue =
   **both**: arXiv math.CO for the public record + Geombinatorics submission.
 - **arXiv bundle READY (2026-06-16)**: `paper/arxiv/forcing-sterility-arxiv.tar.gz`
@@ -303,3 +303,6 @@ Append-only, dated. One line per decision.
   (e1u, persisted), paper updated 19.5->18 min, LEARNINGS L68 corrected. All C3
   adversary findings now cleared; C3 is adversary-clean, pending only the venue call
   + its arXiv bundle.
+- 2026-06-16 - Author name finalized to **Owen P. Kent** (was "Owen Kent"). Updated
+  both papers + both ARXIV_SUBMISSION.md; PDFs rebuilt and both arXiv tarballs
+  regenerated.

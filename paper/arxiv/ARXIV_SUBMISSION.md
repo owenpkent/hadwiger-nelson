@@ -33,7 +33,7 @@ Forcing-sterility of the realizable unit-distance lineage and a codegree obstruc
 
 **Authors**
 ```
-Owen Kent
+Owen P. Kent
 ```
 (Independent researcher. Correspondence: owenpkent@gmail.com.)
 
