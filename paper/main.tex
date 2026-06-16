@@ -85,7 +85,7 @@ $7$-pattern). The lower bound $\chrom(\R^2) \ge 5$ is recent and computational:
 de Grey~\cite{deGrey2018} constructed a finite unit-distance graph on $1581$
 vertices with $\chrom \ge 5$, verified by a SAT proof, and the Polymath16
 project~\cite{Polymath16} subsequently reduced the order of such graphs to
-roughly $510$ vertices. We refer to this family of explicitly realized $\chrom=5$
+roughly $510$ vertices~\cite{Parts2020}. We refer to this family of explicitly realized $\chrom=5$
 UDGs as the \emph{realizable lineage}. For background on the problem and its
 history see Soifer~\cite{Soifer2009}.
 
@@ -486,10 +486,12 @@ $F_v(2,2,2,2,2;4)$. The literature settles this at
 \[
   F_v(2,2,2,2,2;4) = 16
 \]
-(see Xu-Liang-Radziszowski~\cite{XuLiangRadziszowski2018}). Its only $16$-vertex
-witnesses are the two Ramsey $(4,4)$-graphs (Paley-type), which have $m \approx 60$.
-Both violate the codegree ceiling, since~\eqref{eq:codeg-ceiling} gives exactly
-$48$ at $n = 16$ and $60 > 48$. Therefore the UDG-necessary class, that is, the
+(Lathrop and Radziszowski~\cite{LathropRadziszowski2011}). Its only $16$-vertex
+witnesses are the two Ramsey $(4,4)$-graphs (no $K_4$, no independent $4$-set),
+which are dense: as a complementary pair they satisfy
+$m + \bar m = \binom{16}{2} = 120$, about $60$ edges each (average degree
+$\sim\!7.5$). Both violate the codegree ceiling, since~\eqref{eq:codeg-ceiling}
+gives exactly $48$ at $n = 16$ and $60 > 48$. Therefore the UDG-necessary class, that is, the
 class of graphs that are simultaneously $K_4$-free \emph{and} $K_{2,3}$-free, has
 no member at the Folkman floor. Because the ceiling~\eqref{eq:codeg-ceiling} only
 reaches average degree $7.5$ (the density of the Ramsey $(4,4)$-graphs) around

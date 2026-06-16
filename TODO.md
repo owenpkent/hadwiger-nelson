@@ -89,7 +89,8 @@ Task tracker for the Hadwiger-Nelson research repo.
 - [ ] **hn_solver as portfolio front-end**: run it with a small node budget first (resolves the structured-easy majority instantly), hand the hard residue to the CDCL portfolio
 - [ ] **PyPy deployment**: run pure-Python solver-heavy experiments (E15-style) under PyPy (~5x); keep pysat-dependent work (portfolio, census) on CPython. PyPy path + caveats saved in project memory
 - [x] **Paper finishing pass** (commit 1843e37): author block (Owen Kent), acknowledgments, folded in L69 (codegree violations intrinsic to the 6-critical core) + three-direction outlook; compiles clean (10 pp, 0 undefined refs/citations). Submission-ready draft `paper/main.tex`
-- [ ] **Before submission**: CONFIRM author name/affiliation (currently inferred "Owen Kent" from git/email); double-check the BibTeX volume/pages against the actual sources (deGrey Geombinatorics 28(1):18-31, KostochkaYancey JCTB 109:73-101, Folkman value F_v(2,2,2,2,2;4)=16 in Xu-Liang-Radziszowski, Polymath16 citable archival ref); decide Geombinatorics submission
+- [x] **Bibliography verified** (web-checked June 2026): deGrey Geombinatorics 28(1):18-31, KostochkaYancey JCTB 109:73-101, Woodall JCTA 14:187-200, Spencer-Szemeredi-Trotter (Bollobas ed.) 293-303 all CONFIRMED. CORRECTED: Folkman value F_v(2,2,2,2,2;4)=16 now cited to its PRIMARY source Lathrop-Radziszowski JCMCC 78:119-128 (2011), not the mis-cited Xu-Liang-Radziszowski; the 510-vertex graph now cites Parts 2020 Geombinatorics 29(3):137-166; "Paley-type" descriptor of the witnesses removed (wrong; 16 is not a Paley order) and replaced with the complementary-pair density argument (m+m_bar=120 => ~60 each > ceiling 48)
+- [ ] **Before submission (remaining)**: CONFIRM author name/affiliation (currently inferred "Owen Kent" from git/email); decide Geombinatorics submission
 
 ## Architecture 2: Measurable / spectral
 
