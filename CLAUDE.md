@@ -58,6 +58,7 @@ hadwiger-nelson/
 ├── experiments/
 │   ├── PROOF_ARCHITECTURES_PLAN.md  the test plan with per-architecture status
 │   ├── LEARNINGS.md             cross-cutting findings synthesis
+│   ├── PUBLICATIONS.md          publication ledger: registry + rubric for publishable discoveries
 │   ├── _shared/                 UDG interface, wrong-approach detectors, smoke test
 │   ├── combinatorial/           Arch 1 (SAT-driven finite UDG search)
 │   ├── measurable/              Arch 2 (Falconer-style, Fourier-analytic)
@@ -65,6 +66,8 @@ hadwiger-nelson/
 │   ├── axiomatic/               Arch 4 (Shelah-Soifer, Borel χ)
 │   └── orchestrator_sessions/   per-session ORCHESTRATOR plans
 ├── lean/                        Lean 4 / Mathlib formal verification skeleton
+├── paper/                       C1 note (forcing-sterility + codegree) + arxiv/ bundle
+├── paper_solver/                C3 note (symmetry-broken SAT self-certification) + arxiv/ bundle
 ├── .claude/agents/              Agent role specs (cloned from zeta repo conventions)
 ├── sources/                     source PDFs (de Grey, Soifer, Falconer, etc.)
 ├── visualizations/              manim scenes
