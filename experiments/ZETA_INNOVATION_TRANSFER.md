@@ -197,3 +197,24 @@ the ADVERSARY spec). Treat it as adopted-in-spirit, not as a new artifact.
    autonomy safety).
 8. Lower priority: the prompt twins, the obstruction-map survey paper, the bridge-finder oracle, and the
    README Status changelog (the last is mostly cosmetic parity, not research leverage).
+
+## Addendum: the toy sandbox (missed in the first pass)
+
+The initial six-cluster audit did not scan `experiments/toy/`, so it missed one of the zeta repo's
+strongest innovations. The zeta toy is a checkable training ground: function fields are a world where RH
+is a theorem with the same proof skeleton, so a proposed proof-move is graded right or wrong
+(reproduce-Weil / reject-fakes / k1-clean / DH-immune), manufacturing the value-signal that is provably
+absent on the real problem.
+
+HN status: MISSING, now BUILT (`experiments/toy/`). A battery of finite graphs with KNOWN chi (SAT is the
+answer key) grades a proposed chi-lower-bound TECHNIQUE on four flags: reproduces-target / rejects-fakes /
+control-immune / k1-clean. The reference (exact-chi-by-SAT) scores all green; demo candidates
+`clique_lower_bound` (omega, fails reproduces-target on triangle-free M^3(C5)) and `max_degree_plus_one`
+(fails control-immune on the L^infty grid) show the grader has teeth. The three controls are the firewall,
+the exact analog of the zeta toy's Davenport-Heilbronn firewall.
+
+Key difference, honestly noted: in HN the abstract chi is SAT-decidable, so Architecture 1 already has a
+cheap gradient and the toy's value concentrates on Architecture 2/3/4 heuristic techniques (spectral,
+topological, measure). The shared caveat is identical: the toy grades the technique on finite graphs, it
+cannot contain the W3 realizability obstruction. The delta between a green scorecard and an actual planar
+UDG is the compass.

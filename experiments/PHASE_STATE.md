@@ -30,8 +30,13 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 > edge and rolls back clean). (3) This file, `STATE_OF_THE_PROGRAM.md`,
 > `FREEZE_LIST.md`, `LOAD_BEARING_FACTS.md`, `TOKEN_EFFICIENCY.md`, a NIGHT_PLAN
 > template, the PUBLICATIONS K1 circularity gate, and attack-prompt twins.
-> Consequence: the program is now resumable from one surface and structurally
-> self-auditing. No mathematical state changed.
+> (4) `toy/` sandbox (the zeta toy analog, flagged after the first pass): a battery
+> of known-chi finite graphs (SAT answer key) that GRADES a proposed chi-lower-bound
+> technique on reproduce-target / reject-fakes / control-immune / k1-clean. Reference
+> (exact-chi-by-SAT) all green; the clique and degree+1 demo candidates are caught;
+> the controls are the firewall. Honest caveat: grades the technique, not the W3
+> realizability lift. Consequence: the program is now resumable from one surface,
+> structurally self-auditing, and technique-grading. No mathematical state changed.
 
 > **Update (2026-06-15): L69-L72, the order-2 measurable verdict.** CLOSED the
 > order-2 measurable route: at Ambrus's X_23, matrix-free order-2 (IEC up to
