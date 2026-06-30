@@ -19,6 +19,23 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-06-30): L73, the gradient-descent attack surface.** New
+> [`gradient/`](gradient/) thread maps where continuous optimization can bite on
+> $\chi(\mathbb{R}^2)$. Governing constraint stated: GD is local + one-sided, so it
+> builds / finds upper bounds but never a $\chi\ge6$ lower bound (needs a SAT/dual
+> certificate); a pure soft-coloring objective lifts to $\mathbb{Q}^2$ ($\chi=2$) and
+> is excluded by design. Built + calibrated: shared torch core (`diff_udg.py`),
+> (B) the legal-UDG realizer (`realize.py`, adds the non-edge margin the legacy
+> realizer omits; Moser + triangular patch return LEGAL UDGs, $K_4$ fails),
+> (D) the flexible-but-color-rigid gadget kill-test (`gadget_search.py`; flexible
+> clamps exist at $k=2$, vanish below $k=5$, the kill-test cell stays empty),
+> (A) the adversarial coordinate$\leftrightarrow$coloring co-optimization
+> (`adversarial.py`; inner colorability oracle validated exactly on triangle/$K_5$;
+> honest negative: naive GDA from a random seed builds a 46-edge near-unit graph but
+> only $\chi=3$). (C) first-order spectral push spec'd against `fractional/`, not
+> duplicated. No bound moved; runnable, firewalled infrastructure. Next: point B at
+> the L63 host candidates, seed A from P510, build C in `fractional/`.
+
 > **Update (2026-06-30): meta-infrastructure transfer from the zeta repo.**
 > Audited the zeta-function repo for transferable methodology and adopted the real
 > gaps (report: [`ZETA_INNOVATION_TRANSFER.md`](ZETA_INNOVATION_TRANSFER.md)).

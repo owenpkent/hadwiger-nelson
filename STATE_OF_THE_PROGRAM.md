@@ -38,6 +38,18 @@ objects, or it is structurally wrong. These are enforced, not advisory:
 - $L^\infty$ plane: $\chi = 4$ (Chilakamarri). Geometric content must use Euclidean rigidity.
 - $\mathbb{R}^1$: $\chi = 2$. Measure-theoretic content must use the rotation group $O(2)$.
 
+## Where gradient descent fits (and does not)
+
+A continuous attack surface is now built ([`experiments/gradient/`](experiments/gradient/),
+L73). The governing fact: GD is local and one-sided, so it builds / finds upper bounds
+but never a $\chi \ge 6$ lower bound (that needs a SAT/dual certificate); a soft-coloring
+objective that ignores coordinates lifts to $\mathbb{Q}^2$ and is wrong. Its concrete
+roles: the **legal-UDG realizer** is the continuous realizability gate any host candidate
+passes (it independently corroborated the L63 codegree wall by refusing every manufactured
+host on rigidity grounds alone), and the **adversarial co-optimization** is the GD form of
+route ii. Neither moved a bound; both map exactly where continuous methods can and cannot
+help, and feed candidates back to the SAT firewall.
+
 ## Honest odds
 
 Sub-1% that this program resolves the conjecture. The realistic outputs are the
