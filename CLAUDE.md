@@ -57,23 +57,32 @@ hadwiger-nelson/
 │   └── research_atlas/          master research map; all approaches, failures, ML directions
 ├── experiments/
 │   ├── PROOF_ARCHITECTURES_PLAN.md  the test plan with per-architecture status
-│   ├── LEARNINGS.md             cross-cutting findings synthesis
-│   ├── PUBLICATIONS.md          publication ledger: registry + rubric for publishable discoveries
-│   ├── _shared/                 UDG interface, wrong-approach detectors, smoke test
-│   ├── combinatorial/           Arch 1 (SAT-driven finite UDG search)
-│   ├── measurable/              Arch 2 (Falconer-style, Fourier-analytic)
-│   ├── fractional/              Arch 3 (χ_f, Lovász ϑ, spectral)
-│   ├── axiomatic/               Arch 4 (Shelah-Soifer, Borel χ)
-│   └── orchestrator_sessions/   per-session ORCHESTRATOR plans
-├── lean/                        Lean 4 / Mathlib formal verification skeleton
-├── paper/                       C1 note (forcing-sterility + codegree) + arxiv/ bundle
-├── paper_solver/                C3 note (symmetry-broken SAT self-certification) + arxiv/ bundle
-├── .claude/agents/              Agent role specs (cloned from zeta repo conventions)
-├── sources/                     source PDFs (de Grey, Soifer, Falconer, etc.)
-├── visualizations/              manim scenes
-├── CLAUDE.md                    this file
-├── README.md                    project overview
-└── TODO.md                      task tracking
+│   ├── PHASE_STATE.md          resumable operational state (read first on a cold session)
+│   ├── LEARNINGS.md            cross-cutting findings synthesis
+│   ├── PUBLICATIONS.md         publication ledger: registry + rubric (incl. the K1 circularity gate)
+│   ├── FREEZE_LIST.md          dead proposal shapes (do not re-propose)
+│   ├── LOAD_BEARING_FACTS.md   settled facts the program builds on (do not re-derive)
+│   ├── TOKEN_EFFICIENCY.md     cost playbook + pre-fan-out checklist
+│   ├── ZETA_INNOVATION_TRANSFER.md  the methodology-transfer audit + adoptions
+│   ├── _shared/                UDG interface, wrong-approach detectors, smoke_test gate
+│   ├── lemma_db/               proof-dependency DAG + control-object firewall (build_db.py)
+│   ├── toy/                    known-chi battery that grades chi-lower-bound techniques
+│   ├── combinatorial/          Arch 1 (SAT-driven finite UDG search)
+│   ├── measurable/             Arch 2 (Falconer-style, Fourier-analytic)
+│   ├── fractional/             Arch 3 (χ_f, Lovász ϑ, spectral)
+│   ├── axiomatic/              Arch 4 (Shelah-Soifer, Borel χ)
+│   └── orchestrator_sessions/  per-session ORCHESTRATOR plans + NIGHT_PLAN template
+├── lean/                       Lean 4 / Mathlib formal verification skeleton
+├── paper/                      C1 note (forcing-sterility + codegree) + arxiv/ bundle
+├── paper_solver/               C3 note (symmetry-broken SAT self-certification) + arxiv/ bundle
+├── prompts/                    creative-attack brief twins (no-repo, paste-ready chat)
+├── .claude/agents/             Agent role specs (cloned from zeta repo conventions)
+├── sources/                    source PDFs + graph files (de Grey, Heule, Polymath, etc.)
+├── visualizations/             manim scenes
+├── STATE_OF_THE_PROGRAM.md     one-page strategic snapshot
+├── CLAUDE.md                   this file
+├── README.md                   project overview
+└── TODO.md                     task tracking
 ```
 
 ## Tech stack

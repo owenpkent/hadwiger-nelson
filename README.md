@@ -64,22 +64,30 @@ hadwiger-nelson/
 │   └── research_atlas/          master research map
 ├── experiments/
 │   ├── PROOF_ARCHITECTURES_PLAN.md
+│   ├── PHASE_STATE.md           resumable operational state (read first on a cold session)
 │   ├── LEARNINGS.md
-│   ├── PUBLICATIONS.md          publication ledger: registry + rubric
-│   ├── _shared/                 UDG interface; wrong-approach detectors (Q², L∞)
+│   ├── PUBLICATIONS.md          publication ledger: registry + rubric (incl. K1 circularity gate)
+│   ├── FREEZE_LIST.md           dead proposal shapes; LOAD_BEARING_FACTS.md  settled facts
+│   ├── TOKEN_EFFICIENCY.md      cost playbook; ZETA_INNOVATION_TRANSFER.md  methodology audit
+│   ├── _shared/                 UDG interface; wrong-approach detectors (Q², L∞); smoke_test gate
+│   ├── lemma_db/                proof-dependency DAG + control-object firewall (build_db.py)
+│   ├── toy/                     known-χ battery that grades χ-lower-bound techniques
 │   ├── combinatorial/           Arch 1: finite UDG construction + SAT
 │   ├── measurable/              Arch 2: measure-theoretic
 │   ├── fractional/              Arch 3: fractional χ, spectral, Lovász ϑ
-│   └── axiomatic/               Arch 4: set-theoretic / Shelah-Soifer
+│   ├── axiomatic/               Arch 4: set-theoretic / Shelah-Soifer
+│   └── orchestrator_sessions/   per-session plans + NIGHT_PLAN template
 ├── lean/                        Lean 4 / Mathlib formal verification skeleton
 ├── paper/                       C1 note (main.tex + refs.bib + arxiv/ bundle)
 ├── paper_solver/                symmetry-broken-SAT tool note (main.tex + arxiv/ bundle)
+├── prompts/                     creative-attack brief twins (no-repo, paste-ready chat)
 ├── sources/                     source data + reference library
 │   ├── LIBRARY.md               annotated catalog of 26 source texts
 │   ├── notes/                   deep per-text reading notes + synthesis
 │   ├── cnp-sat/                 Polymath16/Heule graph + SAT data
 │   └── *.dimacs / *.vtx / ...   de Grey / Heule / Polymath16 graph files
 ├── visualizations/              manim scenes
+├── STATE_OF_THE_PROGRAM.md      one-page strategic snapshot
 ├── CLAUDE.md                    project instructions for Claude Code
 ├── README.md                    this file
 └── TODO.md                      task tracking
@@ -109,15 +117,29 @@ Implementation: `experiments/_shared/wrong_approach_detectors.py`.
 # Install Python deps (once)
 pip install -r requirements.txt
 
-# Smoke test the shared infrastructure
+# Gate 1: detector + calibration. Colors the controls and asserts known chi
+# (Moser=4, Q^2=2, L^inf=4, R^1=2, triangle=3). --full adds a chi>=5 anchor.
 python -m experiments._shared.smoke_test
-#   expect: 6/6 tests passed (Moser spindle 7 vertices 11 edges; Q^2, L^infty, R^1 controls)
+python -m experiments._shared.smoke_test --full   # + Heule-826 UNSAT at k=4 (~6s)
+
+# Gate 2: control-object firewall over the proof-dependency DAG.
+python -m experiments.lemma_db.build_db           # 0 violations = clean
+python -m experiments.lemma_db.build_db --frontier   # open nodes ready to attack
+
+# The toy sandbox: grade a chi-lower-bound technique on a known-chi battery.
+python -m experiments.toy.play
 
 # Build the Lean substrate (once elan is installed)
 cd lean
 lake exe cache get   # fetches Mathlib v4.13.0 oleans
 lake build           # 1859 modules
 ```
+
+Both gates exit non-zero on failure and are the structural CI for the program: a
+new solver or encoding is not trusted until it reproduces the smoke-test baseline,
+and the firewall fails if a control-blind argument becomes load-bearing. See
+[`STATE_OF_THE_PROGRAM.md`](STATE_OF_THE_PROGRAM.md) for the one-page snapshot and
+[`experiments/PHASE_STATE.md`](experiments/PHASE_STATE.md) for the resumable state.
 
 See [`experiments/PROOF_ARCHITECTURES_PLAN.md`](experiments/PROOF_ARCHITECTURES_PLAN.md) for the full slate of experiments (Arch 1: e1a-e1y, h1-h7, f1pt; Arch 2/3: e2a-e2c, e3a-e3n all landed).
 
