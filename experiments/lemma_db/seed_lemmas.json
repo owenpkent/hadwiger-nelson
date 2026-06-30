@@ -1,0 +1,78 @@
+{
+  "_README": "The HN proof-dependency DAG. Nodes = lemmas/results/conjectures/targets; edges = depends_on/specializes (load-bearing) or motivates/constrains/refutes/would_prove (annotation). control_buildable lists controls on which a node's argument is ALSO valid (empty = genuinely Euclidean). Edit this file, then run build_db.py to rebuild and re-audit. Keep it in sync with LEARNINGS.md and PUBLICATIONS.md.",
+
+  "controls": [
+    {"name": "Q2",   "known_chi": 2, "note": "rational plane unit-distance graph is bipartite (Woodall 1973)"},
+    {"name": "Linf", "known_chi": 4, "note": "L^infty unit-distance graph on R^2 has chi=4 exactly (Chilakamarri)"},
+    {"name": "R1",   "known_chi": 2, "note": "the line has chi=2 trivially; blind to the rotation group O(2)"}
+  ],
+
+  "nodes": [
+    {"id": "chi_r2_ge6", "title": "chi(R^2) >= 6 (the goal)", "kind": "target", "arch": "shared", "status": "open", "claims_bound": 6, "learnings": "", "note": "Program thesis: most likely terminal answer is chi=6 via a finite UDG (L54 backward-from-2050)."},
+    {"id": "chi_r2_ge5", "title": "chi(R^2) >= 5 (de Grey 2018)", "kind": "result", "arch": "arch1", "status": "external", "claims_bound": 5, "learnings": "de Grey 2018", "note": "1581-vertex UDG, k=4 UNSAT; verified by Heule."},
+    {"id": "chi_r2_le7", "title": "chi(R^2) <= 7 (Isbell hexagonal coloring)", "kind": "result", "arch": "shared", "status": "external", "claims_bound": null, "learnings": "Isbell ~1950", "note": "Upper bound; carries no lower-bound claim, so out of firewall scope."},
+
+    {"id": "degrey_witness", "title": "de Grey 1581-vtx UDG is k=4 UNSAT", "kind": "result", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "de Grey 2018; L68", "note": "Independently reconfirmed in-repo via symmetry-broken portfolio (18.1 min)."},
+    {"id": "degrey_selfcert", "title": "Symmetry-broken self-certification of the chi>=5 lineage", "kind": "result", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L68 (C3)", "note": "M4(C5) k=6, P510 k=4, de Grey 1585 k=4 all UNSAT with optional DRAT; whole chi>=5 program self-certifiable on one workstation."},
+
+    {"id": "clamp_abstract", "title": "Abstract flexible color-clamp exists", "kind": "lemma", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L51-L53", "note": "Split a vertex w of a K4-free 6-critical graph into non-adjacent s~A, t~B forced different in every 5-coloring; SAT-verified 48-vtx triangle-free witness. Contracting s=t gives chi>=6."},
+    {"id": "theorem_R", "title": "Theorem R: exact realizability criterion for the clamp", "kind": "theorem", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L51-L53", "note": "The clamp realizes IFF H-w realizes with neighbor-sets A,B each on a radius-1 circle with DISTINCT centers. Reduces W3 to cocircularity."},
+    {"id": "w3_realizable", "title": "W3: the clamp is unit-distance realizable in R^2 (THE missing object)", "kind": "conjecture", "arch": "arch1", "status": "open", "claims_bound": null, "learnings": "L51-L62", "note": "All difficulty of the chi>=6 program localizes here. Decidable (Tarski) but computationally walled beyond ~14 vtx (Groebner)."},
+
+    {"id": "forcing_sterile", "title": "Forcing-sterility of the realizable lineage", "kind": "result", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L57-L59 (C1)", "note": "All ~2.29M non-adjacent pairs across the 12 known chi-5 UDGs are FREE; all forcing is adjacency-local. The missing object cannot come from the known lineage."},
+    {"id": "codegree_wall", "title": "K_{2,3}-free codegree ceiling excludes manufactured hosts", "kind": "result", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L63 (C1)", "note": "UDG-realizability forces K_{2,3}-freeness (two unit circles meet in <=2 points). Genuinely Euclidean: FAILS under L^infty, so control_buildable is empty."},
+    {"id": "monoid_obstruction", "title": "Single-vertex-port chains confined to the primitive monoid", "kind": "result", "arch": "arch1", "status": "proven", "claims_bound": null, "learnings": "L55", "note": "S_k color symmetry pins single-vertex-port relations to {0, I, J-I, J}; no color-shifter relations. Forces the clamp question into route (i) forced-same [dead] or route (ii) wide imprimitive interface."},
+    {"id": "route_ii_wide_interface", "title": "Wide (>=2) imprimitive boundary interface", "kind": "conjecture", "arch": "arch1", "status": "open", "claims_bound": null, "learnings": "L55-L56", "note": "The only live combinatorial route: a width>=2 boundary whose coloring transfer matrix is imprimitive."},
+    {"id": "new_chi5_outside_lineage", "title": "A new chi-5 UDG outside the P510 lineage", "kind": "conjecture", "arch": "arch1", "status": "open", "claims_bound": null, "learnings": "L57", "note": "Built on a different principle (random rotation-closed rings, Cayley graphs of rotation subgroups) and carrying imprimitive structure. The most-leveraged next move."},
+
+    {"id": "chim_ge5", "title": "chi_m(R^2) >= 5 (Falconer)", "kind": "result", "arch": "arch2", "status": "external", "claims_bound": null, "learnings": "Falconer 1981", "note": "Measurable chromatic number. claims_bound is NULL by design: chi_m bounds do NOT load-bear ordinary-chi targets (see bridge_chim_chi)."},
+    {"id": "iec_chim5", "title": "IE-LP + IEC self-certifies chi_m >= 5", "kind": "result", "arch": "arch2", "status": "proven", "claims_bound": null, "learnings": "L36 (C5)", "note": "Self-certified m1 <= 0.2469 < 1/4 at machine precision; reproduces Ambrus 2023."},
+    {"id": "order2_closed", "title": "Order-2 measurable SDP at X_23 is FEASIBLE => route closed", "kind": "result", "arch": "arch2", "status": "proven", "claims_bound": null, "learnings": "L70-L72 (C4)", "note": "Matrix-free order-2 (IEC up to subset size 4) does not even certify chi_m>=5, so by monotonicity cannot reach chi_m>=6. The order-2 measurable route is closed."},
+    {"id": "chim6_via_order2", "title": "chi_m >= 6 via order-2 Lasserre on X_23", "kind": "conjecture", "arch": "arch2", "status": "refuted", "claims_bound": null, "learnings": "L72", "note": "Refuted by order2_closed."},
+    {"id": "bridge_chim_chi", "title": "chi <= chi_m; chi_m>=6 does NOT imply chi>=6", "kind": "note", "arch": "shared", "status": "external", "claims_bound": null, "learnings": "", "note": "The K1 circularity guard in narrative form: measurable lower bounds only transfer to ordinary chi via a separate transfer principle, never automatically. No load-bearing edge runs from a chi_m node to chi_r2_ge6."},
+
+    {"id": "se2_harmonic", "title": "Noncommutative SE(2) spectral bound for chi_m >= 6", "kind": "conjecture", "arch": "arch3", "status": "open", "claims_bound": null, "learnings": "", "note": "Bessel-realized irreps of the motion group beyond the O(2)-averaged abelian shadow; smallest computable instance unknown."},
+    {"id": "spectral_stuck", "title": "Fractional / Lovasz-theta spectral bounds plateau", "kind": "result", "arch": "arch3", "status": "open", "claims_bound": null, "learnings": "", "note": "chi_f and theta-type operator bounds have not crossed the classical line at runnable scale."},
+
+    {"id": "borel_chiB", "title": "Borel chromatic chi_B route via rotation-group ergodicity", "kind": "conjecture", "arch": "arch4", "status": "open", "claims_bound": null, "learnings": "L54", "note": "Dark horse: the right question may be chi_B, not chi. Euclidean content must enter via irrational rotations / unique ergodicity, NOT norm-blind Steinhaus."},
+    {"id": "shelah_soifer", "title": "chi(R^2) depends on the choice axioms (Shelah-Soifer)", "kind": "result", "arch": "arch4", "status": "external", "claims_bound": null, "learnings": "", "note": "Under ZF+DC without full AC, chi(R^2) can differ from its ZFC value."},
+
+    {"id": "kill_norm_blind_borel", "title": "KILL: norm-blind Borel / Steinhaus lower bound", "kind": "kill", "arch": "arch4", "status": "refuted", "claims_bound": null, "control_buildable": ["Linf"], "learnings": "", "note": "Would over-prove chi>=7 where L^infty has chi=4. Listed as control_buildable[Linf]; if ever re-wired as load-bearing for a chi>=5/6 target, the firewall fires."},
+    {"id": "kill_q2_naive_lift", "title": "KILL: combinatorial forcing that lifts naively to Q^2", "kind": "kill", "arch": "arch1", "status": "refuted", "claims_bound": null, "control_buildable": ["Q2"], "learnings": "L45/L56/L57", "note": "Any forcing argument that would also prove chi(Q^2)>=3. Euclidean content must enter through topology/density/rigidity of R."},
+    {"id": "kill_rg_eigenvalue", "title": "KILL: RG leading-eigenvalue as a forcing diagnostic", "kind": "kill", "arch": "arch1", "status": "refuted", "claims_bound": null, "control_buildable": [], "learnings": "L55", "note": "lambda_1 of the transfer matrix is coloring ENTROPY, the opposite of forcing; the right diagnostic is imprimitivity. Wrong but not control-blind."},
+    {"id": "kill_dof_counting", "title": "KILL: DOF / over-determination counting for realizability", "kind": "kill", "arch": "arch1", "status": "refuted", "claims_bound": null, "control_buildable": [], "learnings": "L52", "note": "Invalidated by P510 at +1487 over-determination, degree 36, yet realizable."},
+    {"id": "kill_map_type_6coloring", "title": "KILL: polygonal map-type 6-coloring of the plane", "kind": "kill", "arch": "arch1", "status": "refuted", "claims_bound": null, "control_buildable": [], "learnings": "", "note": "Collides with Voronov: map-type colorings of the plane need 7 colors. A non-map 6-coloring (if chi=6) must be non-polygonal."}
+  ],
+
+  "edges": [
+    {"src": "chi_r2_ge6", "dst": "clamp_abstract", "rel": "depends_on", "note": "the chi>=6 certificate is the contracted clamp"},
+    {"src": "chi_r2_ge6", "dst": "theorem_R", "rel": "depends_on", "note": "realizability is governed by Theorem R"},
+    {"src": "chi_r2_ge6", "dst": "w3_realizable", "rel": "depends_on", "note": "the one open prerequisite"},
+    {"src": "theorem_R", "dst": "clamp_abstract", "rel": "depends_on", "note": "the iff is about the abstract clamp"},
+    {"src": "w3_realizable", "dst": "clamp_abstract", "rel": "depends_on", "note": "W3 realizes the abstract clamp"},
+    {"src": "w3_realizable", "dst": "theorem_R", "rel": "depends_on", "note": "W3 = the realizable side of Theorem R"},
+
+    {"src": "chi_r2_ge5", "dst": "degrey_witness", "rel": "depends_on", "note": "de Grey's lower bound rests on the 1581-vtx witness"},
+    {"src": "degrey_selfcert", "dst": "degrey_witness", "rel": "specializes", "note": "self-certification of the same witness"},
+
+    {"src": "route_ii_wide_interface", "dst": "w3_realizable", "rel": "specializes", "note": "route (ii) is one realizability avenue"},
+    {"src": "route_ii_wide_interface", "dst": "new_chi5_outside_lineage", "rel": "depends_on", "note": "needs a fresh host UDG"},
+    {"src": "iec_chim5", "dst": "chim_ge5", "rel": "specializes", "note": "in-repo self-certified reproduction"},
+
+    {"src": "forcing_sterile", "dst": "w3_realizable", "rel": "constrains", "note": "the missing object is not in the known lineage"},
+    {"src": "codegree_wall", "dst": "w3_realizable", "rel": "constrains", "note": "K_{2,3}-free ceiling pinches the host search"},
+    {"src": "monoid_obstruction", "dst": "route_ii_wide_interface", "rel": "motivates", "note": "kills single-vertex ports, forces the wide-interface route"},
+    {"src": "forcing_sterile", "dst": "new_chi5_outside_lineage", "rel": "motivates", "note": "look outside the lineage"},
+    {"src": "order2_closed", "dst": "chim6_via_order2", "rel": "refutes", "note": "FEASIBLE verdict closes the route"},
+    {"src": "bridge_chim_chi", "dst": "chi_r2_ge6", "rel": "constrains", "note": "chi_m results do not automatically transfer to chi"},
+    {"src": "se2_harmonic", "dst": "chim_ge5", "rel": "motivates", "note": "noncommutative route past the abelian shadow"},
+    {"src": "borel_chiB", "dst": "chi_r2_ge6", "rel": "constrains", "note": "alternative target framing (the definability split)"},
+    {"src": "shelah_soifer", "dst": "borel_chiB", "rel": "motivates", "note": "the choice-axiom dependence motivates the descriptive route"},
+
+    {"src": "kill_norm_blind_borel", "dst": "chi_r2_ge6", "rel": "would_prove", "note": "REFUTED: would over-prove on L^infty; annotation only, never load-bearing"},
+    {"src": "kill_q2_naive_lift", "dst": "chi_r2_ge6", "rel": "would_prove", "note": "REFUTED: would over-prove on Q^2; annotation only"},
+    {"src": "kill_rg_eigenvalue", "dst": "w3_realizable", "rel": "refutes", "note": "dead forcing diagnostic"},
+    {"src": "kill_dof_counting", "dst": "w3_realizable", "rel": "refutes", "note": "dead realizability heuristic"},
+    {"src": "kill_map_type_6coloring", "dst": "chi_r2_le7", "rel": "constrains", "note": "a chi=6 coloring, if it exists, must be non-map-type"}
+  ]
+}

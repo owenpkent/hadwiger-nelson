@@ -26,7 +26,18 @@ the rubric scores it as such rather than inflating it.
 4. **Before SHIP**, a candidate must pass: (a) the relevant wrong-approach
    detector ($\mathbb{Q}^2$, $L^\infty$, $\mathbb{R}^1$), or be explicitly N/A;
    (b) an ADVERSARY pass hunting for the smallest counterexample / overclaim;
-   (c) a correctness re-check of every headline number against its cache.
+   (c) a correctness re-check of every headline number against its cache;
+   (d) the **circularity (K1) test** below.
+4b. **The circularity (K1) test.** For a candidate $X$, ask both directions: does
+   $X$ provably imply $\chi(\mathbb{R}^2) \ge 6$, **and** does $\chi(\mathbb{R}^2)
+   \ge 6$ provably imply $X$? If **both**, $X$ is a *reformulation*, not progress;
+   it is publishable only as an explicitly-labeled equivalence, never as a step
+   toward the bound. Apply this especially to Architecture 4 (Borel / Shelah-Soifer
+   restatements) and Architecture 2 ($\chi_m$-SDP restatements), where a relabeling
+   can pass (a), (b), and (c) while being circular. This pairs with the
+   `bridge_chim_chi` node in [`lemma_db`](lemma_db/) (a $\chi_m$ bound does not
+   load-bear an ordinary-$\chi$ target) and the bridge-vs-mirror test in
+   [`../docs/researcher_mindset.md`](../docs/researcher_mindset.md).
 5. **Log the decision** in the Decision log at the bottom (dated, append-only).
 
 ---

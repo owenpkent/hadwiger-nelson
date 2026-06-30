@@ -134,3 +134,21 @@ This repo can be operated using the same six-agent role spec as the zeta repo (S
 - The atlas (`docs/research_atlas/README.md`) is the master reference for what's been tried and what's stuck.
 - The plan (`experiments/PROOF_ARCHITECTURES_PLAN.md`) is the master reference for the experimental thread.
 - The wrong-approach detector ($\mathbb{Q}^2$ has $\chi = 2$; $L^\infty$ on $\mathbb{R}^2$ has $\chi = 4$) is the structural sanity check.
+- [`STATE_OF_THE_PROGRAM.md`](STATE_OF_THE_PROGRAM.md) is the one-page strategic snapshot; [`experiments/PHASE_STATE.md`](experiments/PHASE_STATE.md) is the resumable operational state (start here on a cold session).
+
+## Gates and calibration discipline
+
+Two runnable gates enforce the structural discipline. Run them before trusting a
+new solver, encoding, or lower-bound argument, and wire them into CI.
+
+- **Detector + calibration gate**: `python -m experiments._shared.smoke_test`
+  actually *colors* the controls and asserts their known values (Moser $\chi=4$,
+  $\mathbb{Q}^2$ $\chi=2$, $L^\infty$ $\chi=4$, $\mathbb{R}^1$ $\chi=2$, unit
+  triangle $\chi=3$). `--full` adds the $\chi \ge 5$ anchor (a published
+  5-chromatic UDG must be UNSAT at $k=4$). **Calibration rule: a new solver or
+  encoding is not trusted until it reproduces this baseline.** Non-zero exit = a
+  baseline broke.
+- **Control-object firewall**: `python -m experiments.lemma_db.build_db` fails if
+  any node whose argument is also valid on a control sits on a load-bearing path to
+  a larger $\chi$ claim (it would over-prove on the control). `--frontier` lists the
+  open nodes ready to attack; `--deps chi_r2_ge6` lists the goal's prerequisites.

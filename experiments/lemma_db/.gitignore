@@ -1,0 +1,2 @@
+# Build artifact; rebuilt deterministically from schema.sql + seed_lemmas.json.
+_cache/

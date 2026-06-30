@@ -14,6 +14,13 @@ export const meta = {
 // 2. Synthesizer receives a TRIMMED projection of the material, not the full gen+adv JSON.
 // 3. All prompts carry an explicit brevity instruction (thinking is the bulk of output spend).
 // 4. Never pause mid-phase: in-flight agents are not checkpointed and re-run from zero on resume.
+//
+// SINGLE SOURCE OF TRUTH for the two static blocks below:
+//   CURRENT FRONTIER  -> experiments/LOAD_BEARING_FACTS.md
+//   KNOWN KILLS       -> experiments/FREEZE_LIST.md
+// The DEFAULT_BRIEF inlines a synced gist of both (the workflow needs them in one
+// string), but those files are canonical. When a negative lands in LEARNINGS,
+// update the file first, then mirror the one-liner here.
 
 const DEFAULT_BRIEF = `
 PROBLEM. Hadwiger-Nelson: chromatic number chi(R^2) of the unit-distance graph on the plane. Known: 5 <= chi <= 7 (de Grey 2018 lower via 1581-vtx UDG; Isbell hex upper). This repo (c:/Users/Owen/dev/hadwiger-nelson) is a research program; experiments/LEARNINGS.md is the ledger (update this brief from its top entries before each round).
