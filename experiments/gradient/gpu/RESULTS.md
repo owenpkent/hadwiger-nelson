@@ -106,6 +106,44 @@ this smooth density/colorability pressure from either random or hard-core-seeded
 consistent with the L73/L74 governing fact. Checkpoint `_cache/gamma_results.json`, log
 `_cache/gamma_run.log`.
 
+## Campaign delta: fixed-skeleton + candidate-edge growth (the L74 lever)
+
+L74's open lever: gamma showed a global soft-adjacency objective *dilutes* a hard core
+into χ=3 lattice as it densifies, so it cannot add a hardening unit edge without
+dissolving the core. Delta builds the edge model that can: pin a rigid χ=4 core (the
+Moser spindle, 11 edges = 2n−3, isostatic → its shape cannot dissolve once its edges are
+at unit), attach m free new vertices, and pull each toward unit distance from vertices it
+currently *shares a color with* (the differentiable proxy for a hardening edge). Every
+unit pair is an intended edge (core, or accepted candidate), so the graph is a legal UDG
+by construction — no faithfulness trap. This is de Grey's construction principle as a
+continuous, batched search. SAT decides the exact χ of what grew.
+
+**The mechanism solves the dilution problem completely.**
+
+| m (new vtx) | n | runs holding core | best added edges (new) | χ |
+|---|---|---|---|---|
+| 2 | 9 | **4096/4096** | +6 | 4 |
+| 4 | 11 | **4096/4096** | +11 | 4 |
+| 6 | 13 | **4096/4096** | +11 | 4 |
+| 8 | 15 | **4096/4096** | +16 | 4 |
+| 10 | 17 | **4096/4096** | +17 | 4 |
+| 12 | 19 | **4096/4096** | +19 | 4 |
+
+Across all 8 core sizes, **every one of 4096 runs held the Moser core intact**
+(96/96 verified `core_ok=True`), while adding up to +19 hardening unit edges. Contrast
+gamma, where the global objective dissolved 79 of 96 grown configs to χ=3. Delta
+dissolves **zero**: you *can* pin a rigid χ≥4 core and grow unit edges onto it.
+
+**But χ stays exactly 4** (histogram {4: 96}, uniform over every m, n up to 19). This is
+not a method failure: **the smallest known χ=5 unit-distance graph is ~500 vertices**
+(Polymath16), and no small χ=5 UDG is known to exist. Growth to n≤19 cannot reach χ=5
+because no such object exists at that size. Delta's contribution is the correct
+realizability-preserving growth primitive (100% core-hold), not a χ=5 finder at toy
+scale. Reaching χ=5 needs a ~500-vertex de Grey-style linkage, which undirected random
+growth will not reconstruct; the productive path to χ=5/χ=6 remains SAT-based
+construction, with delta available as the continuous realizability gate for any grown
+candidate. Checkpoint `_cache/delta_results.json`, log `_cache/delta_run.log`.
+
 ## Reproduce
 
 ```
@@ -113,4 +151,5 @@ python -m experiments.gradient.gpu.validate           # core gate, must pass fir
 python -m experiments.gradient.gpu.campaign_alpha      # realizer sweep
 python -m experiments.gradient.gpu.campaign_beta       # adversarial generator
 python -m experiments.gradient.gpu.campaign_gamma      # beta seeded from Moser/P510
+python -m experiments.gradient.gpu.campaign_delta      # fixed-core + candidate-edge growth
 ```
