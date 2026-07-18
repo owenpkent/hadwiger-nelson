@@ -57,7 +57,7 @@ os.makedirs(CACHE, exist_ok=True)
 def adversarial_gda(n, target_degree, tau, *, k=4, B=2048, rounds=60,
                     inner_steps=25, outer_steps=8, device=None, seed=0,
                     lr_color=0.08, lr_coord=0.02, w_deg=3.0, w_spread=2.0,
-                    w_crisp=1.5, scale=1.6):
+                    w_crisp=1.5, scale=1.6, coords_init=None):
     """B parallel adversarial runs. Returns (coords_cpu (B,n,2) float64,
     hardness (B,) = achieved coloring_loss@k at the inner optimum).
 
@@ -71,8 +71,13 @@ def adversarial_gda(n, target_degree, tau, *, k=4, B=2048, rounds=60,
     """
     device = device or bc.pick_device()
     gen = torch.Generator(device=device).manual_seed(seed)
-    coords = bc.random_coords(B, n, device, dtype=torch.float32, scale=scale,
-                              generator=gen)
+    if coords_init is not None:
+        # seeded start (e.g. the Moser/P510 lineage): use the given (B,n,2) init
+        coords = coords_init.to(device=device, dtype=torch.float32).clone()
+        coords.requires_grad_(True)
+    else:
+        coords = bc.random_coords(B, n, device, dtype=torch.float32, scale=scale,
+                                  generator=gen)
     logits = torch.randn(B, n, k, device=device, generator=gen).requires_grad_(True)
     opt_color = torch.optim.Adam([logits], lr=lr_color)
     opt_coord = torch.optim.Adam([coords], lr=lr_coord)

@@ -73,10 +73,44 @@ every one is χ=3, and no χ≥5 candidate was flagged. No bound moved.
 
 Checkpoint: `_cache/beta_results.json`, per-config log `_cache/beta_run.log`.
 
+## Campaign gamma: beta seeded from the χ≥4 lineage
+
+Beta's χ=3 monolith admits two readings: the generator (i) cannot represent χ≥4 in its
+verify pipeline, or (ii) random init never reaches χ≥4 structure (which is geometrically
+isolated). Gamma separates them by seeding from known-hard configurations.
+
+**E1 — representation.** Extract the unit-distance edges from the true Moser (χ=4) and
+P510 (χ=5) embeddings and SAT them: **Moser → χ=4** (|E|=11), **P510 → χ=5** (|E|=3353 at
+tol 0.02; the near-unit-non-edge thickening of L73 follow-up 2, χ unchanged). Reading (i)
+is dead: the pipeline represents χ≥4 fine.
+
+**E2 — preservation under pressure.** Seed the adversarial GDA *at* the Moser spindle
+(B=2048 jittered copies, 3 seeds) and run the full outer pressure. Every seed:
+pre-pressure ~240/256 are χ=4 (jitter knocks a few to χ=3), **post-pressure 2048/2048 →
+χ=4**, at median non-edge gap 0.263 (Moser's own gap — clean, intact spindles). The
+pressure does not relax χ=4 to χ=3; it *repairs* jittered-down copies back to χ=4. So the
+beta χ=3 monolith is a **reachability wall, not a representational limit**: GD *holds*
+χ=4 when it starts there, it just cannot *find* it from scratch.
+
+**E3 — scaffold growth.** Seed a Moser core (7 vtx, χ=4) plus (n−7) free vertices
+(n∈{10,12,15,18}, 24 configs, B=4096) and let the adversary grow it. Of the 96 densest
+survivors: **{χ=3: 79, χ=4: 17}, best legal χ=4, never χ=5.** Among the 25 that legalized
+into clean UDGs: {χ=3: 20, χ=4: 5}; densest legal grown χ=4 is n=18, |E|=58. Growing a
+χ=4 core under density/colorability pressure does not climb to χ=5, and usually *dilutes*
+the Moser rigidity back to χ=3 lattice as it densifies. GD can **hold** a hard core but
+cannot **grow** hardness.
+
+Together: the continuous surface can represent and preserve χ=4, but neither builds it
+from scratch (beta) nor grows it past χ=4 (gamma E3). The χ≥5 UDGs are unreachable by
+this smooth density/colorability pressure from either random or hard-core-seeded starts,
+consistent with the L73/L74 governing fact. Checkpoint `_cache/gamma_results.json`, log
+`_cache/gamma_run.log`.
+
 ## Reproduce
 
 ```
 python -m experiments.gradient.gpu.validate           # core gate, must pass first
 python -m experiments.gradient.gpu.campaign_alpha      # realizer sweep
 python -m experiments.gradient.gpu.campaign_beta       # adversarial generator
+python -m experiments.gradient.gpu.campaign_gamma      # beta seeded from Moser/P510
 ```
