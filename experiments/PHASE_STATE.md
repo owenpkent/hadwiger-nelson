@@ -19,6 +19,26 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-07-18): L74, the gradient thread SCALED TO GPU (RTX 5090).** New
+> [`gradient/gpu/`](gradient/gpu/) module: a batched, device-parameterized `(B,n,2)`
+> core (float32 GPU search into float64 CPU refine, the SAT firewall intact), validated
+> against the same `diff_udg` calibration answers. Env facts settled: the 5090 (sm_120)
+> needs `torch==2.11.0+cu128` (no 2.12 cu128 build); `python-sat` was silently missing
+> (so `sat_chi` returned `None`), now installed and the core smoke gate passes 9/9. Four
+> firewalled campaigns map the continuous surface exhaustively. **alpha** (realizer sweep,
+> 16k starts/host): every E13/E13b host AND the $n{=}29$ $\chi{=}5$ in-class graph refuse
+> to realize as legal UDGs (over-determined $+43$ to $+51$), a GPU-scale corroboration of
+> the L63 rigidity wall. **beta** ($\sim$221k adversarial runs): densest 96 survivors all
+> $\chi=3$, never even $\chi=4$ (GD builds lattice, not hardness). **gamma** (seeded from
+> Moser/P510): the $\chi=3$ monolith is a REACHABILITY wall, not representational -- GD
+> HOLDS a seeded $\chi=4$ ($2048/2048$ preserved) but GROWING it dilutes back to $\chi=3$.
+> **delta** (the L74 lever, fixed rigid core + candidate-edge growth = de Grey's principle
+> continuous): dilution SOLVED ($4096/4096$ core-hold at every size, $+19$ hardening edges
+> onto the Moser core) yet $\chi$ stays $4$ -- the true ceiling is that the smallest known
+> $\chi=5$ UDG is $\sim$500 vertices, out of reach of undirected growth. Net: the
+> continuous surface can represent / preserve / grow-onto a hard core but cannot
+> manufacture $\chi\ge5$; the path there stays SAT-based construction. No bound moved.
+
 > **Update (2026-06-30): L73, the gradient-descent attack surface.** New
 > [`gradient/`](gradient/) thread maps where continuous optimization can bite on
 > $\chi(\mathbb{R}^2)$. Governing constraint stated: GD is local + one-sided, so it
@@ -113,8 +133,11 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Last verified state
 
-- **Commit:** `2675776` (master, pushed; in sync with origin as of 2026-06-30).
-- **Latest finding:** L72 (order-2 measurable route CLOSED).
+- **Commit:** `5338492` (master; the GPU-thread commits bb3f21c/6bef845/5338492, pushed
+  with this doc sync as of 2026-07-18).
+- **Latest finding:** L74 (gradient thread scaled to GPU; the continuous surface can hold
+  but not manufacture $\chi\ge5$; realizer/delta as SAT-gate). L72 remains the latest
+  measurable verdict.
 - **Lean:** sorry-free (incremental build with cached Mathlib oleans).
 - **Canonical SAT witness state:** the whole chi>=5 lineage is self-certifiable on
   one workstation via the symmetry-broken portfolio (M^4(C5) k=6, P510 k=4, de Grey

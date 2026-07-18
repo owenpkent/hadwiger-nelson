@@ -41,14 +41,24 @@ objects, or it is structurally wrong. These are enforced, not advisory:
 ## Where gradient descent fits (and does not)
 
 A continuous attack surface is now built ([`experiments/gradient/`](experiments/gradient/),
-L73). The governing fact: GD is local and one-sided, so it builds / finds upper bounds
+L73) and SCALED TO GPU ([`experiments/gradient/gpu/`](experiments/gradient/gpu/), L74,
+RTX 5090). The governing fact: GD is local and one-sided, so it builds / finds upper bounds
 but never a $\chi \ge 6$ lower bound (that needs a SAT/dual certificate); a soft-coloring
 objective that ignores coordinates lifts to $\mathbb{Q}^2$ and is wrong. Its concrete
 roles: the **legal-UDG realizer** is the continuous realizability gate any host candidate
-passes (it independently corroborated the L63 codegree wall by refusing every manufactured
-host on rigidity grounds alone), and the **adversarial co-optimization** is the GD form of
-route ii. Neither moved a bound; both map exactly where continuous methods can and cannot
-help, and feed candidates back to the SAT firewall.
+passes (it corroborated the L63 codegree wall by refusing every manufactured host on
+rigidity grounds alone, now under 16k GPU starts/host including the $n{=}29$ $\chi{=}5$
+graph), and the **adversarial co-optimization** is the GD form of route ii. The GPU thread
+maps the continuous surface exhaustively via four batched campaigns: **beta** ($\sim$221k
+runs) shows GD builds only $\chi=3$ lattice from scratch, never even $\chi=4$; **gamma**
+localizes this as a REACHABILITY wall (GD holds a seeded $\chi=4$ but growing it dilutes
+back to $\chi=3$); **delta** (the L74 lever, de Grey's construction principle continuous)
+solves the dilution ($4096/4096$ core-hold, $+19$ hardening edges onto a rigid Moser core)
+yet $\chi$ stays $4$, isolating the true ceiling: the smallest known $\chi=5$ UDG is
+$\sim$500 vertices, out of reach of undirected growth. Net: the continuous surface can
+represent, preserve, and grow-onto a hard core but cannot manufacture $\chi\ge5$ rigidity;
+the path there stays SAT-based construction, with the realizer/delta as its continuous
+gate. No bound moved; every hard claim routed back to the SAT firewall.
 
 ## Honest odds
 

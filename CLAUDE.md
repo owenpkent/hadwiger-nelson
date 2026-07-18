@@ -68,6 +68,7 @@ hadwiger-nelson/
 │   ├── lemma_db/               proof-dependency DAG + control-object firewall (build_db.py)
 │   ├── toy/                    known-chi battery that grades chi-lower-bound techniques
 │   ├── gradient/               GD attack surface (realizer, adversarial co-opt, gadget kill-test); L73
+│   │   └── gpu/                GPU-scaled batched multi-start search (alpha/beta/gamma/delta); L74
 │   ├── combinatorial/          Arch 1 (SAT-driven finite UDG search)
 │   ├── measurable/             Arch 2 (Falconer-style, Fourier-analytic)
 │   ├── fractional/             Arch 3 (χ_f, Lovász ϑ, spectral)
