@@ -377,3 +377,10 @@ Append-only, dated. One line per decision.
   independent second enumerator; (ii) the two counting lemmas are
   formalization-ready but not yet Lean-proved. The amend-C1-vs-ship-as-is decision
   remains with Owen.
+- 2026-07-23 - Owen chose (A) AMEND. C1 (`paper/main.tex`) folded in the E17
+  exhaustive result: new Section 7 (Theorem 2, Lemma 2 maxdeg cap, Table 2,
+  calibration + epistemic-status paragraphs carrying both caveats verbatim). A
+  fresh ADVERSARY pass on the paper diff returned SHIP with 0 blockers
+  (`paper/E17_AMENDMENT_ADVERSARY.md`); recompiles clean at 12 pp, arXiv bundle
+  rebuilt and verified standalone. Committed `aaf27c0`. C7 is now FOLDED into C1.
+  Remaining human action: the arXiv upload of C1 (then C3).
