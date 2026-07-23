@@ -11,10 +11,14 @@ Planned framing: arXiv `cs.DM` primary + `math.CO` cross-list; the SAT workshop
 - `refs.bib` - the bibliography database (web-verified)
 - `main.bbl` - the **compiled** bibliography
 
-**Why the `.bbl` is included.** arXiv's AutoTeX runs LaTeX but does **not** run
-BibTeX; the bibliography comes from the shipped `main.bbl`. The bundle was
-validated to compile standalone with `pdflatex` alone (no bibtex): **7 pages, zero
-undefined references or citations.** Upload the tarball as-is.
+**Why the `.bbl` is included.** arXiv's current processing (the "Submission 1.5"
+system, since April 2025) uses the shipped `main.bbl` if present, and otherwise
+auto-detects and runs a bib-compiler. Shipping the compiled `.bbl` is the safe,
+recommended practice (required for non-standard bib processors); the `.bbl`
+basename must match the main `.tex`. The bundle was validated to compile
+standalone with `pdflatex` alone (no bibtex): **7 pages, zero undefined references
+or citations.** Upload the tarball as-is.
+Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 
 To regenerate after any edit to the paper:
 ```
@@ -77,8 +81,14 @@ mapping where it stops.
 
 ## Notes
 
-- A first-time arXiv submission to `cs.DM` may require **endorsement** unless the
-  account is already endorsed for the category. One-time human step.
+- A first-time arXiv submission to `cs.DM` requires **endorsement** unless the
+  account is already endorsed for that domain (endorsement is per-domain and does
+  not carry over from `math.CO`). As of 2026-01-21 an academic email alone no
+  longer auto-endorses: a first-time author with no prior accepted arXiv paper in
+  the domain needs a personal endorsement from an established author. Submitting C1
+  first does NOT clear `cs.DM` (different domain), though it would clear the
+  `math.CO` cross-list. Sources: https://info.arxiv.org/help/endorsement.html ,
+  https://blog.arxiv.org/2026/01/21/attention-authors-updated-endorsement-policy/
 - **Reproducibility**: all timings are from open-source components (PySAT ->
   CaDiCaL / MapleChrono / Glucose) on one workstation. The de Grey 18.1 min figure
   is backed by `experiments/combinatorial/e1u_degrey_symbreak_k4.py` (cached). The

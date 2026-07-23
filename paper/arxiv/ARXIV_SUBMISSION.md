@@ -10,10 +10,14 @@ Venue decision (2026-06-16): **arXiv + Geombinatorics** (both).
 - `refs.bib` - the bibliography database
 - `main.bbl` - the **compiled** bibliography
 
-**Why the `.bbl` is included.** arXiv's AutoTeX runs LaTeX but does **not** run
-BibTeX. The bibliography therefore comes from the shipped `main.bbl`. The bundle
-was validated to compile standalone with `pdflatex` alone (no bibtex):
-**12 pages, zero undefined references or citations.** Upload the tarball as-is.
+**Why the `.bbl` is included.** arXiv's current processing (the "Submission 1.5"
+system, since April 2025) uses the shipped `main.bbl` if present, and otherwise
+auto-detects and runs a bib-compiler (bibtex/biber). Shipping the compiled `.bbl`
+is the safe, recommended practice (and is strictly required for non-standard bib
+processors); the `.bbl` basename must match the main `.tex`. The bundle was
+validated to compile standalone with `pdflatex` alone (no bibtex): **12 pages,
+zero undefined references or citations.** Upload the tarball as-is.
+Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 
 To regenerate the tarball after any edit to the paper:
 ```
@@ -83,10 +87,19 @@ arXiv non-exclusive default is also fine). Owen's call.
 
 ## arXiv account note
 
-A first-time arXiv submission to `math.CO` may require **endorsement** unless the
-account is already endorsed for the category. If prompted, that is a one-time
-human step (request endorsement from an established author or via an institutional
-email). Nothing in this bundle can resolve it.
+A first-time arXiv submission to `math.CO` requires **endorsement** unless the
+account is already endorsed for the category. Endorsement is per endorsement
+domain and does not carry across archives.
+
+**Policy change to know (verified 2026-07-23).** As of 2026-01-21 (and 2025-12-10
+for Mathematics specifically), an institutional/academic email **alone no longer
+auto-endorses** a new author. Automatic endorsement now requires BOTH an academic
+email AND prior authorship on an accepted arXiv paper in that domain. A genuinely
+first-time author (no prior arXiv paper) will therefore need a **personal
+endorsement from an established `math.CO` author**, even with a university email.
+Line this up before submitting. Nothing in this bundle can resolve it.
+Sources: https://info.arxiv.org/help/endorsement.html ,
+https://blog.arxiv.org/2026/01/21/attention-authors-updated-endorsement-policy/
 
 ## Geombinatorics (the parallel submission)
 
