@@ -26,8 +26,18 @@ cd paper_solver
 pdflatex main && bibtex main && pdflatex main && pdflatex main   # refresh main.bbl
 cd arxiv
 tar czf symmetry-broken-sat-arxiv.tar.gz ../main.tex ../refs.bib ../main.bbl --transform 's,.*/,,'
-# (or copy the three files in flat and tar them; the archive must be flat, no leading dir)
+# flat archive with main.tex at top level. arXiv also accepts subdirectories,
+# but flat is cleanest and is what this bundle ships.
 ```
+
+## Submission procedure
+
+The step-by-step (login, license, source-not-PDF upload, AutoTeX preview,
+moderation queue, and the 14:00/20:00 US Eastern announcement schedule) is
+identical to the C1 packet: see the "Step-by-step submission procedure" section
+in `paper/arxiv/ARXIV_SUBMISSION.md` (all facts verified 2026-07-23). The two
+`cs.DM`-specific differences are the category (below) and the endorsement domain
+(the note at the bottom). Size cap 50 MB; this bundle is ~11 KB.
 
 ## Form fields (paste these)
 
@@ -77,7 +87,10 @@ the Hadwiger-Nelson pipeline, measuring that it crosses the specific walls, and
 mapping where it stops.
 ```
 
-**License:** choose at submission (CC BY 4.0 recommended). Owen's call.
+**License:** choose at submission. Owen's call. Full option set (verified
+2026-07-23, https://info.arxiv.org/help/license/index.html): arXiv non-exclusive
+1.0 (default), **CC BY 4.0** (recommended), CC BY-SA 4.0, CC BY-NC-SA 4.0,
+CC BY-NC-ND 4.0, CC0 1.0.
 
 ## Notes
 

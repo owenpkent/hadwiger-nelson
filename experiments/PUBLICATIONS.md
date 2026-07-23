@@ -384,3 +384,14 @@ Append-only, dated. One line per decision.
   (`paper/E17_AMENDMENT_ADVERSARY.md`); recompiles clean at 12 pp, arXiv bundle
   rebuilt and verified standalone. Committed `aaf27c0`. C7 is now FOLDED into C1.
   Remaining human action: the arXiv upload of C1 (then C3).
+- 2026-07-23 - Submission requirements re-verified online against arXiv's live
+  help pages; both packets (`paper/arxiv/ARXIV_SUBMISSION.md`,
+  `paper_solver/arxiv/ARXIV_SUBMISSION.md`) updated with the full step-by-step
+  procedure, the complete license set, announcement schedule, moderation step,
+  and the verified Geombinatorics editor/email. Two corrections folded in: the
+  `.bbl` rationale (AutoTeX was replaced by Submission-1.5, which does run a
+  bib-compiler; shipping `.bbl` stays the safe practice) and, load-bearing, the
+  **endorsement gate**: as of 2026-01-21 an academic email alone no longer
+  auto-endorses, so the genuinely-first-time upload of C1 (`math.CO`) and C3
+  (`cs.DM`, a separate domain) each need a **personal endorser** lined up before
+  submitting. That endorsement is now the gating step on both uploads.

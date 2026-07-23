@@ -25,8 +25,43 @@ cd paper
 pdflatex main && bibtex main && pdflatex main && pdflatex main   # refresh main.bbl
 cd arxiv
 tar czf forcing-sterility-arxiv.tar.gz ../main.tex ../refs.bib ../main.bbl --transform 's,.*/,,'
-# (or copy the three files in flat and tar them; the archive must be flat, no leading dir)
+# flat archive with main.tex at the top level. arXiv also accepts subdirectories,
+# but flat is cleanest and is what this bundle ships.
 ```
+
+## Step-by-step submission procedure (verified 2026-07-23)
+
+All facts below were checked against arXiv's live help pages on 2026-07-23;
+source URLs are inline. This is the primary/first submission, so the endorsement
+step is the one that can actually block you: settle it first.
+
+0. **Endorsement, before anything else.** See the account note below. A first-time
+   `math.CO` author now needs a personal endorser (the academic-email shortcut was
+   removed 2026-01-21). Arrange one, or start the submission and use the code arXiv
+   shows you to request it.
+1. **Log in / register** at https://arxiv.org with `owenpkent@gmail.com`.
+2. **Start a new submission**, agree to the license terms, and pick a **license**
+   (full option set below; CC BY 4.0 recommended).
+3. **Upload the source**, not the PDF. arXiv rejects PDF built from LaTeX source;
+   submit `forcing-sterility-arxiv.tar.gz` as-is
+   (https://info.arxiv.org/help/submit/index.html). Total-size cap is 50 MB; this
+   bundle is ~16 KB (https://info.arxiv.org/help/sizes.html).
+4. **Let AutoTeX/Submission-1.5 build** and inspect the arXiv-generated PDF preview.
+   Expect one benign hyperref warning from the `$\ge 6$` in the title; zero
+   undefined refs/citations otherwise.
+5. **Paste the form fields** (title, authors, categories, MSC, comments, abstract)
+   from the "Form fields" section below.
+6. **Submit.** The paper enters a **moderation queue**; moderators may reclassify
+   the category or place a hold before it appears
+   (https://info.arxiv.org/help/moderation/index.html). You get an identifier at
+   submission; public listing happens at the next announcement.
+7. **Announcement timing**: deadline **14:00 US Eastern**, announced **20:00 US
+   Eastern**, Sunday through Thursday (nothing Fri/Sat; a submission in the Thu
+   14:00 to Fri 14:00 window rolls to Sunday 20:00). A holiday freeze calendar
+   applies, confirm the date on
+   https://info.arxiv.org/help/availability.html .
+8. **Then Geombinatorics** (parallel, by email) once the arXiv ID exists, so the
+   preprint can be referenced. See that section below.
 
 ## Form fields (paste these)
 
@@ -82,8 +117,14 @@ graph, if one exists, has at least 17 vertices; density heuristics place it
 closer to order 26 or beyond. We claim no new bound on $\chi(\mathbb{R}^2)$.
 ```
 
-**License:** choose at submission (CC BY 4.0 recommended for maximum reuse; the
-arXiv non-exclusive default is also fine). Owen's call.
+**License:** choose at submission. Owen's call. Full current option set
+(https://info.arxiv.org/help/license/index.html, verified 2026-07-23):
+1. arXiv.org perpetual non-exclusive license 1.0 (the "distribute" default)
+2. **CC BY 4.0** (recommended for maximum reuse)
+3. CC BY-SA 4.0
+4. CC BY-NC-SA 4.0
+5. CC BY-NC-ND 4.0
+6. CC0 1.0 (public-domain dedication)
 
 ## arXiv account note
 
@@ -104,7 +145,14 @@ https://blog.arxiv.org/2026/01/21/attention-authors-updated-endorsement-policy/
 ## Geombinatorics (the parallel submission)
 
 Geombinatorics submits by **email to the editor** (it is not an online-portal
-journal). The deliverable is the same `paper/main.pdf`. Confirm the current
-editor and submission instructions on the journal page before sending; the de
-Grey (2018) and Parts (2020) papers in this lineage both appeared there, so it is
-the natural home for this note.
+journal). Verified 2026-07-23 on https://geombina.uccs.edu/editors-page :
+- **Editor and Publisher:** Alexander Soifer (University of Colorado, Colorado
+  Springs).
+- **Send:** the PDF (`paper/main.pdf`) to **asoifer@uccs.edu**, together with a
+  hand-signed copyright form (emailed as a JPEG attachment, or mailed).
+- The journal is active as of 2026 (up to ~Vol. XXXVI). The de Grey (2018) and
+  Parts (2020) papers in this lineage both appeared there, so it is the natural
+  home for this note.
+- Do this after the arXiv ID exists, so the preprint can be referenced.
+- Re-confirm the copyright-form format and any current instructions on the
+  editors page before sending.
