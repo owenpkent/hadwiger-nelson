@@ -13,7 +13,7 @@ Venue decision (2026-06-16): **arXiv + Geombinatorics** (both).
 **Why the `.bbl` is included.** arXiv's AutoTeX runs LaTeX but does **not** run
 BibTeX. The bibliography therefore comes from the shipped `main.bbl`. The bundle
 was validated to compile standalone with `pdflatex` alone (no bibtex):
-**10 pages, zero undefined references or citations.** Upload the tarball as-is.
+**12 pages, zero undefined references or citations.** Upload the tarball as-is.
 
 To regenerate the tarball after any edit to the paper:
 ```
@@ -42,7 +42,7 @@ Owen P. Kent
 
 **MSC class:** 05C15, 52C10 (optionally 05C10)
 
-**Comments:** `10 pages`
+**Comments:** `12 pages`
 
 **Abstract** (plain text; arXiv accepts inline `$...$`):
 ```
@@ -69,8 +69,13 @@ $K_{2,3}$-free, so its edge count is bounded by $m \le n(1+\sqrt{8n-7})/4$;
 combined with the Kostochka-Yancey lower bound for 6-critical graphs and the
 vertex Folkman number $F_v(2,2,2,2,2;4) = 16$, this excludes every small dense
 Folkman-type host. The missing object must lie in the class of graphs that are
-simultaneously $K_4$-free and $K_{2,3}$-free, of order at least roughly 26. We
-claim no new bound on $\chi(\mathbb{R}^2)$.
+simultaneously $K_4$-free and $K_{2,3}$-free. For that class we prove an
+exhaustive negative: a custom-pruned geng enumeration over the full edge window
+between the Kostochka-Yancey floor and the codegree ceiling shows that the class
+contains no member with chromatic number at least 6 on at most 16 vertices (all
+11,315 candidates in the order-16 window are 5-colorable), so the smallest such
+graph, if one exists, has at least 17 vertices; density heuristics place it
+closer to order 26 or beyond. We claim no new bound on $\chi(\mathbb{R}^2)$.
 ```
 
 **License:** choose at submission (CC BY 4.0 recommended for maximum reuse; the

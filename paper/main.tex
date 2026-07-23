@@ -32,7 +32,7 @@ and a codegree obstruction to $\chi \ge 6$}
 
 \author{Owen P. Kent\thanks{Independent researcher.
   Correspondence: \texttt{owenpkent@gmail.com}.}}
-\date{June 2026}
+\date{July 2026}
 
 \begin{document}
 \maketitle
@@ -63,7 +63,13 @@ $m \le n\bigl(1 + \sqrt{8n-7}\bigr)/4$; combined with the Kostochka-Yancey lower
 bound for $6$-critical graphs and the vertex Folkman number
 $F_v(2,2,2,2,2;4) = 16$, this excludes every small dense Folkman-type host. The
 missing object must lie in the class of graphs that are simultaneously $K_4$-free
-and $K_{2,3}$-free, of order at least roughly $26$. We claim no new bound on
+and $K_{2,3}$-free. For that class we prove an exhaustive negative: a
+custom-pruned \texttt{geng} enumeration over the full edge window between the
+Kostochka-Yancey floor and the codegree ceiling shows that the class contains no
+member with chromatic number at least $6$ on at most $16$ vertices (all
+$11{,}315$ candidates in the order-$16$ window are $5$-colorable), so the
+smallest such graph, if one exists, has at least $17$ vertices; density
+heuristics place it closer to order $26$ or beyond. We claim no new bound on
 $\chrom(\R^2)$.
 \end{abstract}
 
@@ -114,18 +120,22 @@ through one elementary lemma (Section~\ref{sec:lemma}), confirm it with an
 exhaustive computational census (Section~\ref{sec:census}), explain it
 structurally by way of vertex-criticality (Section~\ref{sec:criticality}), and
 then reframe the search for the genuinely missing object through a codegree
-obstruction (Section~\ref{sec:codegree}). Section~\ref{sec:discussion}
-synthesizes the picture and states the target object honestly.
+obstruction (Section~\ref{sec:codegree}), and settle the small-order cases of
+the resulting class by exhaustive enumeration (Section~\ref{sec:exhaustive}).
+Section~\ref{sec:discussion} synthesizes the picture and states the target
+object honestly.
 
 \paragraph{Scope and honesty.} This is a negative, explanatory note. We move no
-bound on $\chrom(\R^2)$. The contribution is threefold: (a) the observation that
+bound on $\chrom(\R^2)$. The contribution is fourfold: (a) the observation that
 the realizable lineage is forcing-sterile \emph{by construction}, obtained by
 applying a known elementary lemma to its vertex-criticality; (b) an exhaustive
-computational census confirming it across the entire lineage; and
+computational census confirming it across the entire lineage;
 (c) a codegree framing that locates the missing $\chrom \ge 6$ object outside the
 reach of both the realizable lineage and the small dense graphs one would
-naively manufacture. None of the three ingredients is individually deep; the
-synthesis is the point.
+naively manufacture; and (d) an exhaustive enumeration showing that the class
+the codegree framing isolates contains no $\chrom \ge 6$ member on at most $16$
+vertices, so the missing object has order at least $17$. None of the four
+ingredients is individually deep; the synthesis is the point.
 
 \section{Preliminaries}
 \label{sec:prelim}
@@ -189,9 +199,10 @@ and a satisfying assignment is an explicit certificate of freeness on that side.
 of the program. The unit-distance graph on $\Q^2$ has chromatic number $2$
 (Woodall~\cite{Woodall1973}); any purely combinatorial argument for
 $\chrom(\R^2) \ge 5$ must use the topology of $\R$ in a way that fails on $\Q^2$.
-The codegree obstruction of Section~\ref{sec:codegree} is genuinely Euclidean:
-it uses two-circle rigidity, which fails under the sup-norm (where unit
-``circles'' are squares and can share a segment). The Essential-Pair Lemma of
+The codegree obstruction of Section~\ref{sec:codegree}, and the class
+enumeration of Section~\ref{sec:exhaustive} built on it, are genuinely
+Euclidean: they use two-circle rigidity, which fails under the sup-norm (where
+unit ``circles'' are squares and can share a segment). The Essential-Pair Lemma of
 Section~\ref{sec:lemma}, by contrast, is pure graph theory and claims no bound
 anywhere.
 
@@ -445,8 +456,8 @@ the $K_{2,3}$ violations of a manufactured host are removable ``padding'' that a
 careful sparsification could shed while preserving $\chrom = 6$. A top-down probe
 indicates otherwise. Starting from $M^3(C_5)$ (the $47$-vertex $\chrom = 6$
 Mycielskian above, with $434$ violating pairs) and repeatedly deleting edges while
-holding $\chrom = 6$ as a hard constraint---re-establishing $6$-chromaticity by a
-compensating forced-same edge whenever a deletion would drop it---drives the graph
+holding $\chrom = 6$ as a hard constraint (re-establishing $6$-chromaticity by a
+compensating forced-same edge whenever a deletion would drop it) drives the graph
 down to $m = 131$ edges, essentially the Kostochka-Yancey $6$-critical floor
 $2.8 \cdot 47 - 1.8 = 129.8$. Yet the codegree excess does not fall to zero: the
 resulting edge-critical, $K_4$-free, $\chrom = 6$ graph still has $166$ vertex pairs
@@ -510,10 +521,147 @@ $\chrom \ge 6$ object simultaneously below by criticality (Kostochka-Yancey),
 above by planarity-of-incidence ($K_{2,3}$-freeness), and at the abstract floor
 by Folkman, to conclude that the object cannot be a small dense host.
 
+\section{An exhaustive enumeration of the class through order 16}
+\label{sec:exhaustive}
+
+Section~\ref{sec:codegree} pins the missing object inside the UDG-necessary
+class of simultaneously $K_4$-free and $K_{2,3}$-free graphs. It is natural to
+ask whether that class contains \emph{any} $6$-chromatic member at small order,
+UDG-realizable or not. Local searches (reported in
+Section~\ref{sec:discussion}) never find one, but a heuristic miss is not
+evidence of absence. At small orders the question can be settled outright, and
+this section records the exhaustive answer.
+
+\begin{theorem}
+\label{thm:exhaustive}
+The class of $K_4$-free, $K_{2,3}$-free graphs contains no member with
+$\chrom \ge 6$ on at most $16$ vertices. Hence the smallest such graph, if one
+exists, has order at least $17$.
+\end{theorem}
+
+The proof is an exhaustive computer enumeration, made feasible by four
+search-space reductions with short proofs. It suffices to look for a
+\emph{$6$-critical} member of the class: any $\chrom \ge 6$ member contains a
+$6$-critical subgraph, and both defining properties are closed under taking
+subgraphs, so the critical subgraph lies in the class at some order no larger.
+The reductions then constrain that critical subgraph: (i) a $6$-critical graph
+is $2$-connected and has minimum degree at least $5$ (standard critical-graph
+theory~\cite{JensenToft1995}); (ii) it satisfies the Kostochka-Yancey floor
+$m \ge 2.8\,n - 1.8$~\cite{KostochkaYancey2014}; (iii) as a member of the class
+it satisfies the codegree ceiling~\eqref{eq:codeg-ceiling}, so its edge count
+is confined to a narrow per-order window (at $n = 16$: $43 \le m \le 48$); and
+(iv) it obeys the following maximum-degree cap.
+
+\begin{lemma}[Maximum-degree cap]
+\label{lem:maxdeg}
+Every $K_{2,3}$-free graph on $n$ vertices with minimum degree at least $5$ has
+maximum degree at most $(n-1)/2$.
+\end{lemma}
+
+\begin{proof}
+Fix a vertex $a$ and count the edges that leave its neighborhood, grouping them
+by their far endpoint. Each neighbor $w$ of $a$ sends $\deg w - 1 \ge 4$ edges
+to vertices other than $a$; on the other side, a vertex $x \ne a$ receives one
+such edge for each common neighbor of $a$ and $x$, of which there are at most
+$2$ by $K_{2,3}$-freeness. Hence
+\[
+  4 \deg a \;\le\; \sum_{w \sim a} \bigl(\deg w - 1\bigr)
+  \;=\; \sum_{x \ne a} \bigl|N(a) \cap N(x)\bigr|
+  \;\le\; 2(n-1),
+\]
+and $\deg a \le (n-1)/2$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:exhaustive}]
+By the reductions above, it suffices to enumerate, for each $n \le 16$, all
+$2$-connected $K_4$-free, $K_{2,3}$-free graphs with minimum degree at least
+$5$, maximum degree at most $\lfloor (n-1)/2 \rfloor$, and edge count in the
+window
+$\lceil 2.8\,n - 1.8 \rceil \le m \le \lfloor n(1 + \sqrt{8n-7})/4 \rfloor$,
+and to check each for $5$-colorability: any $\chrom \ge 6$ member of the class
+on at most $16$ vertices would contain a $6$-critical subgraph appearing in
+this enumeration at its own order, and that subgraph would not be
+$5$-colorable. The window is empty for $n \le 12$ (the floor-ceiling
+comparison in the proof of Proposition~\ref{prop:core13}), and the Folkman
+number $F_v(2,2,2,2,2;4) = 16$~\cite{LathropRadziszowski2011} already rules
+out $n \le 15$; the orders $n = 13, 14, 15$ were nonetheless enumerated in
+full as consistency checks.
+
+The enumeration was carried out with the \texttt{geng} generator of the
+\texttt{nauty} package~\cite{McKayPiperno2014}, extended by a custom pruning
+plugin that rejects any partial graph containing a $K_4$ or a $K_{2,3}$. The
+prune is sound and complete because both forbidden subgraphs persist under
+\texttt{geng}'s vertex-augmentation order: once present in a partial graph
+they are present in every completion, so rejecting at first appearance loses
+no member of the class. (A further counting-based prune, a cherry-budget
+inequality derived from the same double count as~\eqref{eq:codeg-ceiling},
+accelerates the search.) Table~\ref{tab:e17} summarizes the outcome. The
+orders $13$ and $14$ contain no class member in the window at all; order $15$
+contains $11$, all $5$-colorable; order $16$ contains $11{,}315$, all
+$5$-colorable ($11{,}291$ colored directly by DSATUR; the remaining $24$
+decided satisfiable by a complete SAT solver, and each independently
+reconfirmed by the solvers CaDiCaL, Glucose, and MiniSat). Every
+enumerated graph is $5$-colorable, so no
+$6$-critical member of the class exists on at most $16$ vertices, and hence no
+$\chrom \ge 6$ member either.
+\end{proof}
+
+\begin{table}[ht]
+\centering
+\caption{Exhaustive enumeration of the UDG-necessary class ($K_4$-free and
+$K_{2,3}$-free) over the per-order edge window from the Kostochka-Yancey floor
+to the codegree ceiling~\eqref{eq:codeg-ceiling}, restricted to $2$-connected
+graphs with minimum degree $\ge 5$ and maximum degree
+$\le \lfloor (n-1)/2 \rfloor$. Every enumerated graph is $5$-colorable.}
+\label{tab:e17}
+\begin{tabular}{r c r r r r}
+\toprule
+$n$ & Edge window & Class members & By DSATUR & By SAT & $\chrom \ge 6$ \\
+\midrule
+13 & $[35, 35]$ & 0 & 0 & 0 & 0 \\
+14 & $[38, 39]$ & 0 & 0 & 0 & 0 \\
+15 & $[41, 43]$ & 11 & 9 & 2 & 0 \\
+16 & $[43, 48]$ & 11{,}315 & 11{,}291 & 24 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Calibration.} The exhaustiveness claim is only as good as the
+generator and the prune, so both were calibrated against independent
+implementations. At $n = 7, 8, 9$ the pruned generator's output was compared
+with an unpruned enumeration passed through a separately written membership
+filter (disjoint code): the counts of $K_4$-free, $K_{2,3}$-free graphs agree
+exactly ($352$, $2{,}001$, and $15{,}481$), and at $n = 9$ the two canonically
+labeled output \emph{sets} are identical. At the extremal cell $n = 16$,
+$m = 48$, where the codegree ceiling~\eqref{eq:codeg-ceiling} is met with
+equality, the enumeration emits exactly one graph: the Shrikhande strongly
+regular graph $\mathrm{srg}(16,6,2,2)$, in which every pair of vertices has
+exactly $2$ common neighbors; it has $\chrom = 4$ and is correctly passed
+over. Finally, the sweep reproduces the Folkman floor of Lathrop and
+Radziszowski~\cite{LathropRadziszowski2011} from inside the smaller class: no
+$6$-chromatic $K_4$-free graph appears below order $16$. Beyond calibration,
+the headline counts and colorings were re-derived after the fact under
+independent code paths (a second membership filter, fresh SAT encodings under
+a different solver, re-enumeration of sampled parts of the order-$16$ run),
+and the pruning plugin was fuzz-tested without ever cutting a valid
+completion.
+
+\paragraph{Epistemic status.} Two caveats, stated plainly. First, enumeration
+completeness at $n = 15, 16$ rests on \texttt{geng} together with the verified
+prune lemmas; no independent second enumerator was run at those orders. This
+is the same epistemic position as the Folkman-number
+literature~\cite{LathropRadziszowski2011}. Second, the two counting lemmas
+behind the search-space reductions (Lemma~\ref{lem:maxdeg} and the
+cherry-budget inequality) are elementary, formalization-ready double-counting
+arguments, but they have not yet been machine-verified in a proof assistant.
+As with the rest of this note, Theorem~\ref{thm:exhaustive} bounds the
+abstract class only: it moves no bound on $\chrom(\R^2)$ and says nothing
+about UDG-realizability.
+
 \section{Discussion and the target object}
 \label{sec:discussion}
 
-The two preceding lines of argument pincer the missing ingredient from opposite
+The preceding lines of argument pincer the missing ingredient from three
 sides.
 \begin{itemize}
   \item It cannot live in the realizable lineage
@@ -522,13 +670,17 @@ sides.
   \item It cannot be a small dense Folkman-type host
         (Section~\ref{sec:codegree}): such hosts violate the codegree bound that
         every planar UDG must satisfy.
+  \item It cannot be an in-class graph on at most $16$ vertices
+        (Section~\ref{sec:exhaustive}): exhaustive enumeration finds every
+        candidate there $5$-colorable.
 \end{itemize}
 What remains is a single sharpened target.
 
 \begin{quote}
 \textbf{Target object.} A $6$-chromatic graph in the \emph{UDG-necessary class}
-(simultaneously $K_4$-free and $K_{2,3}$-free), of order at least roughly $26$,
-together with an explicit unit-distance embedding in $\R^2$.
+(simultaneously $K_4$-free and $K_{2,3}$-free), of order at least $17$
+(Theorem~\ref{thm:exhaustive}) and heuristically of order at least roughly
+$26$, together with an explicit unit-distance embedding in $\R^2$.
 \end{quote}
 
 In-class membership ($K_4$-free and $K_{2,3}$-free) is a \emph{necessary}
@@ -553,8 +705,10 @@ $n$, so a graph that respects~\eqref{eq:codeg-ceiling} need not be realizable.
         $K_4$-free $6$-critical hosts sit at $m/n \approx 4.2$ is an observation
         over roughly $35$ cores from one construction family, not a theorem about
         all $K_4$-free $6$-critical graphs. Only the $n \le 12$ exclusion
-        (Proposition~\ref{prop:core13}) and the Folkman-floor exclusion are
-        rigorous.
+        (Proposition~\ref{prop:core13}), the Folkman-floor exclusion, and the
+        exhaustive $n \le 16$ enumeration (Theorem~\ref{thm:exhaustive},
+        computer-assisted, with the caveats stated in
+        Section~\ref{sec:exhaustive}) are rigorous.
   \item \emph{No bound on $\chrom(\R^2)$ moved.} This note is negative and
         explanatory. It tightens the description of where the missing object can
         live; it does not produce the object.
@@ -570,9 +724,9 @@ the chromatic number is forced upward. Whether that class forces $\chrom \ge 6$ 
 some attainable order, or instead caps at $\chrom = 5$ (the UDG analogue of
 $\chrom(\Q^2) = 2$), is the open question this framing isolates.
 
-Preliminary computational probes of this question are suggestive but
-inconclusive, and they approach the target object from three independent
-directions, none of which reaches it. \emph{(i) Growth from below.} A greedy
+Computational probes of this question approach the target object from three
+heuristic directions and, at small orders, one exhaustive one.
+\emph{(i) Growth from below.} A greedy
 search that grows a graph from the empty graph by adding only codegree-safe and
 $K_4$-safe edges caps at $\chrom = 4$ across orders $17 \le n \le 64$: it never
 even reaches $\chrom = 5$. \emph{(ii) Annealing.} A local search with both edge
@@ -584,12 +738,20 @@ density plateauing near $84\%$ of the codegree
 ceiling~\eqref{eq:codeg-ceiling} at every $n$. \emph{(iii) Repair from above.} The
 top-down probe of Section~\ref{sec:codegree}, which starts from a genuine
 $\chrom = 6$ graph ($M^3(C_5)$) and repairs its codegree violations while holding
-$\chrom = 6$, stalls with the violations intact in the $6$-critical core. All
-three are heuristic, not non-existence results: a $\chrom \ge 6$ in-class graph may
-live at larger $n$, or at configurations none of the three local searches reach.
-But together they triangulate the same conclusion---the target object, if it
-exists in this range, is not easily constructed by local moves from any natural
-seed.
+$\chrom = 6$, stalls with the violations intact in the $6$-critical core. The
+three local searches are heuristic, not non-existence results, and they probe
+orders up to $64$. For $n \le 16$, however, Theorem~\ref{thm:exhaustive} now
+closes the question outright: the class simply contains no $\chrom \ge 6$ member
+there. The in-class negative is thus exhaustive for $n \le 16$ and heuristic
+for $n$ up to $64$. Extending the exhaustive frontier is a measured compute
+wall rather than a conjecture: four sampled parts of a $4096$-way split of the
+$n = 17$ window each exceeded $1{,}700$ cpu-seconds without finishing, putting
+the full $n = 17$ enumeration above roughly $80$ cpu-days on the workstation
+used here, with per-order cost multipliers of roughly $29\times$ to $100\times$
+along the ladder. Together the probes and the enumeration triangulate one
+conclusion: the target object, if it exists, lives at orders that local moves
+do not reach from any natural seed and that exhaustive enumeration does not
+yet reach at all.
 
 \section*{Acknowledgments}
 This is a note from an ongoing computational program on the Hadwiger-Nelson
@@ -599,8 +761,10 @@ exhaustive forcing census and the criticality scans were carried out on a single
 workstation using standard complete SAT solvers (CaDiCaL, MapleChrono, and
 Glucose, invoked through the PySAT toolkit) together with a purpose-built
 symmetry-breaking colorability solver; the local searches of
-Section~\ref{sec:discussion} were run under PyPy. No external funding supported
-this work.
+Section~\ref{sec:discussion} were run under PyPy. The exhaustive enumeration of
+Section~\ref{sec:exhaustive} used the \texttt{geng} generator of the
+\texttt{nauty} package~\cite{McKayPiperno2014} with a custom pruning plugin, on
+the same workstation. No external funding supported this work.
 
 \bibliographystyle{plain}
 \bibliography{refs}
