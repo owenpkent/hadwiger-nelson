@@ -97,10 +97,13 @@ Three scored axes (each 0-3), plus readiness, venue, verdict, and priority.
 | C4 | Matrix-free order-2 measurable SDP closes the route at $X_{23}$ | 1 | 2 | 2 | notes + verdict JSON | measurable-chromatic methods note | PARK | P3 |
 | C5 | IE-LP + congruence (IEC) self-certification of $\chi_m \ge 5$ | 2 | 1 | 1 | notes | none (reproduction) | ARCHIVE | P3 |
 | C6 | Lean formalization of the covering / list-coloring / triple-lift lemmas | 3 | 1 | 1 | code (sorry-free) | formalization note (when mass grows) | PARK | P3 |
+| C7 | E17 exhaustive both-free enumeration: no $\chi \ge 6$ member at $n \le 16$ | 2 | 2 | 2 | notes (e17_results.md) | fold into C1 (amend) or C1 follow-up | FOLD->C1 | P1 |
 
 Composite read: **C1 is the one live paper.** C2 and C3 are the two real
 secondary products; both are stronger *attached* to or *alongside* C1 than alone.
-C4-C6 are honest but not independently publishable as they stand.
+C4-C6 are honest but not independently publishable as they stand. C7 is a direct
+strengthening of C1's codegree-wall pillar; whether it amends C1 pre-upload or
+becomes a follow-up is an Owen decision (see the C7 dossier and the decision log).
 
 ---
 
@@ -264,6 +267,45 @@ C4-C6 are honest but not independently publishable as they stand.
   direction.
 - **Verdict**: PARK, P3.
 
+### C7 - E17 exhaustive both-free enumeration (no $\chi \ge 6$ member at $n \le 16$)
+- **Source**: LEARNINGS L75. Report + verification/adversary target lists in
+  [`combinatorial/e17_results.md`](combinatorial/e17_results.md); artifacts
+  `combinatorial/e17_*.{py,c,sh}`, `combinatorial/_cache/e17/` (run log, checkpoint),
+  `~/.local/bin/geng_hn` (rebuildable via `e17_build_geng.sh`).
+- **One line**: with nauty newly buildable (Linux/gcc host), a custom-pruned geng
+  exhaustively enumerated the UDG-necessary both-free class ($K_4$-free AND
+  $K_{2,3}$-free) per $n$: **NO $\chi \ge 6$ member exists on $n \le 16$** (the
+  $n=16$ window holds 11,315 both-free graphs, every one 5-colorable); the smallest
+  such graph, if any, has $n \ge 17$; measured feasibility wall at $n=17$
+  ($> 80$ cpu-days on this host).
+- **V=2**: exhaustive enumeration with a calibrated generator, cross-checked by an
+  independent pure-Python membership filter (exact agreement at $n=7/8/9$, identical
+  canonical sets at $n=9$; Shrikhande extremal-cell and Folkman-floor gates pass).
+  Not V=3: no end-to-end machine-checked certificate of enumeration COMPLETENESS
+  (the two counting lemmas are Lean-suitable and queued for VERIFIER).
+- **N=2**: a new computational floor for a class the literature does not treat (the
+  Folkman lineage covers $K_4$-free alone; the $K_{2,3}$-free refinement is this
+  program's UDG-necessary framing). Arguably N=3 if framed as a standalone
+  Folkman-style class result; scored conservatively.
+- **S=2**: upgrades C1's codegree-wall pillar from three heuristic negatives
+  (L65/L67/L69) to a theorem-grade exhaustive statement for $n \le 16$, and closes
+  the small-$n$ in-class search route.
+- **Wrong-approach detector**: PASS (Euclidean strict-convexity premise; dissolves
+  in $L^\infty$, empty on $\mathbb{R}^1$, no $\mathbb{Q}^2$ lift; see L75).
+- **K1 circularity**: clean. The result neither implies nor is implied by
+  $\chi(\mathbb{R}^2) \ge 6$; it bounds a necessary class of hosts.
+- **Why FOLD**: exactly the shape of a C1 strengthening (one theorem-grade
+  statement + a small table), not a standalone paper.
+- **Gate before folding**: SATISFIED. The VERIFIER + ADVERSARY passes listed in
+  e17_results.md have both COMPLETED, both GREEN (`e17_verification.md`: VERIFIED,
+  4/5 targets VERIFIED + 1 VERIFIED-WITH-CAVEAT, zero blocking findings;
+  `e17_adversary.md`: PASS, five attack surfaces SOUND). SYNTHESIZER still does not
+  edit `paper/main.tex`; the amend-C1-vs-ship-as-is choice remains an Owen decision
+  (see decision log).
+- **Verdict**: FOLD into C1, P1 (it gates the C1 upload decision, flagged for Owen:
+  (A) amend C1 pre-upload after the E17 verifier/adversary passes, or (B) ship C1
+  as-is and fold L75 into a follow-up note).
+
 ---
 
 ## What is NOT a candidate (and why)
@@ -317,3 +359,21 @@ Append-only, dated. One line per decision.
 - 2026-06-16 - Author name finalized to **Owen P. Kent** (was "Owen Kent"). Updated
   both papers + both ARXIV_SUBMISSION.md; PDFs rebuilt and both arXiv tarballs
   regenerated.
+- 2026-07-23 - L75 (E17 exhaustive both-free enumeration: no $\chi \ge 6$ member at
+  $n \le 16$, wall at $n=17$) evaluated and registered as **C7**: V=2 N=2 S=2, verdict
+  **FOLD into C1**, P1. It strengthens C1's codegree-wall pillar from three heuristic
+  negatives to an exhaustive $n \le 16$ statement. DECISION FLAGGED FOR OWEN before
+  the C1 upload: (A) amend C1 (`paper/main.tex`) with the exhaustive statement first
+  (small delta; requires the queued E17 VERIFIER/ADVERSARY passes to clear), or
+  (B) ship C1 as-is and fold L75 into a follow-up note. No edit made to
+  `paper/main.tex`; C1 remains SHIP/P1 with its built arXiv bundle, not yet uploaded.
+- 2026-07-23 - E17 VERIFIER + ADVERSARY passes both returned GREEN
+  (`combinatorial/e17_verification.md`: VERIFIED, 4/5 targets VERIFIED + 1
+  VERIFIED-WITH-CAVEAT, zero blocking findings; `combinatorial/e17_adversary.md`:
+  PASS, five attack surfaces SOUND, closed the residue-persistence caveat by
+  re-deriving all 24 SAT residues with 0 disagreements). C7's fold gate is now
+  SATISFIED. Two caveats carry verbatim into any fold text: (i) enumeration
+  completeness at $n=15,16$ relies on geng + the verified prune lemmas, no
+  independent second enumerator; (ii) the two counting lemmas are
+  formalization-ready but not yet Lean-proved. The amend-C1-vs-ship-as-is decision
+  remains with Owen.

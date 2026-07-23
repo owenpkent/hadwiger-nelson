@@ -19,6 +19,35 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-07-23): L75, E17 exhaustive nauty enumeration of the both-free class.**
+> nauty 2.8.9 now BUILDS on this host (Linux/gcc), so the L69 "blocked on nauty" door is
+> open and E17 walked through it: a custom-pruned geng (`geng_hn`, PRUNE/PREPRUNE plugin
+> `combinatorial/e17_prune.c`: incremental $K_4$/$K_{2,3}$ rejection + cherry budget) plus
+> two new sound caps proved for the class (maxdeg $\le(n-1)/2$; 2-connectivity via
+> 6-criticality) enumerates ALL candidate $\chi\ge6$ members of the UDG-necessary class
+> per $n$. Calibrated five-for-five: independent-filter agreement 352/2001/15481 at
+> $n=7/8/9$ (identical canonical sets at $n=9$); the $n=16$, $m=48$ extremal cell emits
+> exactly the Shrikhande srg(16,6,2,2), $\chi=4$, rejected; Folkman floor reproduced
+> ($n=13,14$ empty, $n=15$: 11 graphs, all 5-colorable); smoke 9/9; hit path
+> pre-validated on $M^3(C_5)$. **VERDICT: the both-free class contains NO $\chi\ge6$
+> member on $n\le16$, EXHAUSTIVELY** ($n=16$ window 43..48: 11,315 both-free graphs,
+> every one 5-colorable, 66.3 cpu-h / 4.4 h wall, 0 hits); the smallest, if any, has
+> $n\ge17$. Upgrades the L65/L67/L69 heuristic negatives to a theorem-grade statement
+> for $n\le16$ and confirms L69 from the inside ($K_{2,3}$ violations load-bearing).
+> Measured wall: $n=17$ $>80$ cpu-days on this host (no mod=4096 sample part finished
+> in 1,700 cpu-s); needs ~100x compute or a 6-critical/Gallai-structure prune inside
+> the generator. Bounds the CLASS, not $\chi(\mathbb{R}^2)$; W3/realizability unchanged.
+> VERIFIER + ADVERSARY passes are now COMPLETE, both GREEN: `combinatorial/e17_verification.md`
+> (VERIFIED, 4/5 targets VERIFIED + 1 VERIFIED-WITH-CAVEAT, zero blocking findings) and
+> `combinatorial/e17_adversary.md` (PASS, five attack surfaces SOUND, closed the
+> residue-persistence caveat by re-deriving all 24 SAT residues, 0 disagreements). The 24
+> residues are now tracked in `combinatorial/e17_n16_sat_residues.json`; the driver was
+> patched to persist `sat_residue_g6` going forward. Two caveats carry into any fold: (i)
+> enumeration completeness at $n=15,16$ rests on geng + the verified prune lemmas, no
+> independent second enumerator; (ii) the two counting lemmas are formalization-ready but
+> not yet Lean-proved. PUBLICATIONS: registered as C7, FOLD into C1, fold gate now
+> SATISFIED; Owen decision still open (amend C1 before upload vs ship as-is + follow-up).
+
 > **Update (2026-07-18): L74, the gradient thread SCALED TO GPU (RTX 5090).** New
 > [`gradient/gpu/`](gradient/gpu/) module: a batched, device-parameterized `(B,n,2)`
 > core (float32 GPU search into float64 CPU refine, the SAT firewall intact), validated
@@ -108,7 +137,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 | Arch | Approach | Current wall | Status |
 |------|----------|--------------|--------|
-| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage | OPEN, the live route (route ii: wide imprimitive interface) |
+| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage. In-class enumeration is now exhaustively CLOSED for n<=16 (L75: no chi>=6 member exists; any host has n>=17), with a measured generator wall at n=17 (>80 cpu-days). The W3 wall itself is unchanged | OPEN, the live route (route ii: wide imprimitive interface) |
 | 2 measurable | chi_m>=6 via SDP | order-2 at X_23 is FEASIBLE; route CLOSED. Higher order or noncommutative SE(2) is the only remaining measurable lever | CLOSED (order-2); SE(2) open |
 | 3 fractional/spectral | chi_f, Lovász theta | plateau at the classical line at runnable scale | OPEN, no live increment |
 | 4 axiomatic | Borel chromatic chi_B | needs a local finite-UDG statement that pushes chi_B>=6 via the rotation group (not norm-blind Steinhaus) | OPEN, dark horse |
@@ -117,7 +146,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 - order-2 measurable certifies chi_m>=5 at X_23 -> **TRIGGERED-CLOSED (L72): it is FEASIBLE, route closed.**
 - a forced non-adjacent pair found anywhere in the known lineage -> NOT-TRIGGERED (L57: exhaustively free).
-- a manufactured K4-free 6-critical host that is also K_{2,3}-free -> NOT-TRIGGERED (L63: codegree wall).
+- a manufactured K4-free 6-critical host that is also K_{2,3}-free -> NOT-TRIGGERED, and now EXHAUSTIVE for n<=16 (L63: codegree wall; L75: no such host exists at all on n<=16, so any future trigger lives at n>=17).
 - the firewall (`lemma_db`) reports a violation -> NOT-TRIGGERED (audit clean as of 2026-06-30).
 
 ## Recommended next deployments
@@ -129,15 +158,25 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 3. Measurable: the noncommutative SE(2) spectral bound, if a smallest computable
    instance can be pinned (the abelian shadow is exhausted).
 
+(L75/E17 does not reorder this list: closing the small-n in-class enumeration door
+reinforces move 1's premise that the missing object needs a NEW construction
+principle, not more search at small n.)
+
 ---
 
 ## Last verified state
 
-- **Commit:** `5338492` (master; the GPU-thread commits bb3f21c/6bef845/5338492, pushed
-  with this doc sync as of 2026-07-18).
-- **Latest finding:** L74 (gradient thread scaled to GPU; the continuous surface can hold
-  but not manufacture $\chi\ge5$; realizer/delta as SAT-gate). L72 remains the latest
-  measurable verdict.
+- **Commit:** `9cc8c5f` (master, the L74 doc sync). The E17 artifacts
+  (`combinatorial/e17_*.{py,c,sh,md}`, including `e17_verification.md`,
+  `e17_adversary.md`, and the promoted `e17_n16_sat_residues.json`) and this ledger
+  sync (L75 into LEARNINGS / PHASE_STATE / TODO / PUBLICATIONS / STATE_OF_THE_PROGRAM)
+  are UNCOMMITTED, pending Owen's authorization.
+- **Latest finding:** L75 (E17: exhaustive both-free enumeration, no $\chi\ge6$ member
+  at $n\le16$, wall at $n=17$; VERIFIER/ADVERSARY passes now COMPLETE, both GREEN).
+  L72 remains the latest measurable verdict.
+- **Host:** this session ran on the Linux/gcc box (venv `.venv`, `geng_hn` in
+  `~/.local/bin`); earlier "no compiler / nauty absent" host notes are superseded on
+  this machine.
 - **Lean:** sorry-free (incremental build with cached Mathlib oleans).
 - **Canonical SAT witness state:** the whole chi>=5 lineage is self-certifiable on
   one workstation via the symmetry-broken portfolio (M^4(C5) k=6, P510 k=4, de Grey
@@ -147,4 +186,6 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
   `smoke_test --full` confirms Heule-826 UNSAT at k=4 (~6s).
 - **Papers:** C1 (forcing-sterility + codegree) SHIP/P1, arXiv bundle built. C3
   (symmetry-broken solver) DEVELOP->SHIP-ready/P2, arXiv bundle built. Both pending
-  Owen's upload action.
+  Owen's upload action. NEW Owen decision flagged (PUBLICATIONS 2026-07-23): amend
+  C1 with L75's exhaustive strengthening before upload, or ship as-is and fold L75
+  into a follow-up.

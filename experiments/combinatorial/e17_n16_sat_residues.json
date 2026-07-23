@@ -1,0 +1,255 @@
+{
+ "what": "The 24 n=16 both-free graphs that DSATUR failed to 5-color in the E17 exhaustive run (the SAT-residue set). All confirmed 5-colorable by four independent deciders (ADVERSARY pass, 2026-07-23); re-derived from the run's res/mod parts because the original pipeline persisted only counts (fixed in e17_nauty_host_search.py the same day).",
+ "n": 16,
+ "window": "43..48",
+ "count": 24,
+ "fields": {
+  "res": "res/mod-128 part of the E17 n=16 run containing the graph",
+  "graph6": "canonical graph6 string",
+  "m": "edge count",
+  "glucose5/minisat5/cadical5/greedy5": "5-colorable per that decider",
+  "four_colorable": "4-colorable (all are; chi <= 4)"
+ },
+ "graphs": [
+  {
+   "res": 43,
+   "graph6": "O?`@C`SIfAT`RcLhRMAeS",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 25,
+   "graph6": "O?`DA_wguaRaYILgHwJGk",
+   "m": 44,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 36,
+   "graph6": "O?bB@_Wt?jSWY_UKot`YS",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 65,
+   "graph6": "O?`@CrOHeWMCEoDksibS[",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 58,
+   "graph6": "O?`D@bAERIBaTHj`E[URo",
+   "m": 44,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 1,
+   "graph6": "O?BD?pSId`WgYEFkMWcQ[",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 16,
+   "graph6": "O?BDA_gfBPXPkWPwBYJgo",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 16,
+   "graph6": "O?BDA_gfCRES]OcrHefKC",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 15,
+   "graph6": "O?`@EaKKfOswPkNGJWKbc",
+   "m": 44,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 61,
+   "graph6": "O?`D@`ae@XIaboolEharC",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 47,
+   "graph6": "O?bB@`QISwLQE[hoIdCTE",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 76,
+   "graph6": "O?`CR?ofEEJCKwZ`SfAic",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 106,
+   "graph6": "O?`D@bGSiiFGb_wqLc_kk",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 35,
+   "graph6": "O?`D@aWXEQIoJSwkQX_xK",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 35,
+   "graph6": "O?`D@aWXAYTI[cdgJDPMQ",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 35,
+   "graph6": "O?bB@_WxAUEMigTgrhAPw",
+   "m": 45,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 72,
+   "graph6": "O?`@EaaF@okocwrKLH_kk",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 18,
+   "graph6": "O?ABAagFCk[aJWUSEXUTQ",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 77,
+   "graph6": "O?`D@`WbfOEKdQXoDeedA",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 78,
+   "graph6": "O?`@f?keAcEsWYdTXp?ps",
+   "m": 44,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 116,
+   "graph6": "O?`D@_qTBPPggUFJZQBMG",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 126,
+   "graph6": "O?`D@aQQPWEwwSPiZ__rq",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 111,
+   "graph6": "O?AB?rOJCk[giKUWEXQ[q",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  },
+  {
+   "res": 114,
+   "graph6": "O?`D@bGF@EigMKpeTgadK",
+   "m": 43,
+   "glucose5": true,
+   "minisat5": true,
+   "cadical5": true,
+   "greedy5": true,
+   "four_colorable": true
+  }
+ ]
+}

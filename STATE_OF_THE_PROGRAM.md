@@ -22,7 +22,7 @@ Known bounds: $5 \le \chi(\mathbb{R}^2) \le 7$ (de Grey 2018 lower; Isbell hex u
 
 | Architecture | The wall | Live? |
 |--------------|----------|-------|
-| 1. Combinatorial / UDG | W3: realize the clamp. The host must be K4-free 6-critical, K_{2,3}-free (codegree wall L63), and outside the P510 lineage (forcing-sterility L57). | **Yes** - the main bet. Route ii: a wide imprimitive interface. |
+| 1. Combinatorial / UDG | W3: realize the clamp. The host must be K4-free 6-critical, K_{2,3}-free (codegree wall L63), and outside the P510 lineage (forcing-sterility L57). Exhaustive now, not just heuristic: no such host exists at $n \le 16$ at all (E17/L75, nauty built); any host has $n \ge 17$, and enumeration walls at $n = 17$. | **Yes** - the main bet. Route ii: a wide imprimitive interface. |
 | 2. Measurable / spectral | order-2 SDP at $X_{23}$ is FEASIBLE, so it cannot reach $\chi_m \ge 6$ (L72). | Closed at order-2. Only SE(2)-noncommutative survives. |
 | 3. Fractional / Lovász $\vartheta$ | spectral bounds plateau at the classical line at runnable scale. | Stalled, no live increment. |
 | 4. Set-theoretic / Borel | needs a local finite-UDG statement forcing $\chi_B \ge 6$ via the rotation group. | Dark horse. |
