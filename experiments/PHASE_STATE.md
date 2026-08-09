@@ -31,7 +31,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 > EXHAUSTED the $n=15$ cell and matched geng graph-for-graph (1,989 models $\to$ 11
 > classes), and at $n=16$ FOUND all 11,315 classes with **only-in-SAT 0 and 0 property
 > violations** (proved-exhausted coverage 11,312/11,315: five of six cells complete,
-> only $m{=}43$ outstanding at 3/8 branches). Cost model: the binding quantity is models-per-class,
+> only $m{=}43$ outstanding, PARKED after a measured wall: blocking-clause enumeration dies at ~$10^5$ clauses per solver at BOTH 8-way and 64-way splits, so the fix is SAT modulo symmetries, not more compute). Cost model: the binding quantity is models-per-class,
 > ~250-370 unsplit but **~14 when a cell is split on the HIGHEST-indexed vertex pairs**
 > (splitting on the lowest is useless -- lex-leader already pins them). (3) **NEGATIVE,
 > calibrated 5/5: the Gallai low-vertex structure L75 named as the way past $n=17$ is
@@ -200,8 +200,9 @@ principle, not more search at small n.)
   `e17_build_geng_msys.sh`, the `e17_results.md` gate-(a) mode fix, this block, the
   L76 LEARNINGS entry, `orchestrator_sessions/NIGHT_PLAN_2026-08-08.md`) are
   UNCOMMITTED pending Owen's authorization. Second host is now calibrated (all gates
-  green) and has a working `geng_hn`. Outstanding compute, resumable: 5/8 $m=43$
-  SAT branches (all other cells proved exhausted; census at 11,312/11,315) (`bash experiments/combinatorial/e18_n16_run.sh` covers the
+  green) and has a working `geng_hn`. Outstanding compute, resumable: the $m=43$ cell
+  (all other cells proved exhausted; census parked at 11,312/11,315, zero contradictions).
+  Do NOT retry with blocking clauses; use SAT modulo symmetries (see TODO) (`bash experiments/combinatorial/e18_n16_run.sh` covers the
   cells; then `e18_merge.py` + `e18_n16_compare.py`), and the two `gold_*` runs.
 - **Commit:** `9cc8c5f` (master, the L74 doc sync). The E17 artifacts
   (`combinatorial/e17_*.{py,c,sh,md}`, including `e17_verification.md`,

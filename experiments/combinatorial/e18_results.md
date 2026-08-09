@@ -240,6 +240,35 @@ branches converts this to a full independent $n=16$ census; the run script and
 merge step are in place to do it unattended
 ([`e18_n16_run.sh`](e18_n16_run.sh), [`e18_merge.py`](e18_merge.py)).
 
+### The blocking-tail wall, measured (why the census stopped at 11,312)
+
+Finishing the last 3 classes was attempted twice, and failing twice produced the
+most transferable number in this experiment: **enumeration-by-blocking dies at
+roughly $10^5$ blocking clauses per solver, no matter how the cell is divided.**
+
+| split of the $m=43$ cell | per-branch outcome | rate |
+|---|---|---|
+| 8-way (3 pairs) | 2 branches closed at 156k and 543k models; 5 ran past 540k-760k without closing | decayed 68 -> 7-10 models/s |
+| 64-way (6 pairs) | 4 branches closed at 32-42k models (780-1720 s); the rest crossed 100k and stalled | decayed 50-70 -> 8-23 models/s |
+
+The pattern is the same at both granularities and the crossover is the same:
+branches that finish below ~50k models run at full speed, and any solver that
+carries ~100k+ blocking clauses collapses to under ~10 models/s. Splitting moves
+where a branch sits in that distribution but does not change the threshold, so a
+finer split only helps if it puts *every* branch under the knee. It did not: even
+at 64 ways the cell has a heavy tail of large branches.
+
+Consequence, and it is a real conclusion rather than an implementation excuse: the
+blocking-clause tail is an artefact of enumerating each isomorphism class's ~250
+lex-surviving labellings one at a time, so the fix is not more compute or a finer
+split but an enumerator that never produces duplicate labellings at all -- **SAT
+modulo symmetries** (Kirchweger-Szeider), which does canonicity checking inside the
+solver. That is the tool to reach for before any $n=17$ attempt from the SAT side.
+
+The census was therefore parked at **11,312 / 11,315 with zero contradictions**
+rather than ground out. What remains uncovered is 3 classes of one cell, and the
+run is fully resumable (see TODO).
+
 ### What the cost model says about $n = 17$
 
 The branch split is the transferable finding. Unsplit, a cell's tail is
@@ -266,8 +295,9 @@ larger there, and nothing here shrinks the $\Sigma_2$ colorability half.
   and it reproduced geng's $n=15$ cell exactly), but is not yet re-derived
   break-free. Re-running these on an idle machine is cheap and is the first
   follow-up.
-- **5 of 8 $m=43$ branches** were still running when this was written, which is
-  why the $n=16$ SAT census sits at 11,312 of 11,315. Every other cell ($m=44$
+- **The $m=43$ cell was not exhausted**, which is why the $n=16$ SAT census sits at
+  11,312 of 11,315. It was attempted at 8-way and 64-way splits and PARKED rather
+  than ground out, for the measured reason above. Every other cell ($m=44$
   through $m=48$) is proved exhausted. Re-running
   [`e18_merge.py`](e18_merge.py) then [`e18_n16_compare.py`](e18_n16_compare.py)
   after the remaining branches close is all that is needed to finish the census.
