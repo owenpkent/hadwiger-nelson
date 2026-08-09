@@ -63,7 +63,10 @@ All four queued tasks green; nothing went to `_NIGHT_FINDINGS.md` (no gate faile
 Findings recorded as **L76**. Two items did not finish and are logged as TODOs
 rather than claimed: the `gold_*` no-symmetry-breaking re-derivations of $n=13,14$
 (one retired at 2.15 GB when host free memory hit 1.9 GB, which put the
-enumeration branches at risk of an OOM cascade), and 5 of 8 $m=43$ SAT branches.
+enumeration branches at risk of an OOM cascade), and the $m=43$ cell of the
+$n=16$ SAT census, which was PARKED after the blocking-clause wall was measured
+at two split granularities (see `e18_results.md`); the census stands at
+11,312/11,315 classes with zero contradictions.
 
 Headline numbers, all reproduced on this host from a bare start:
 

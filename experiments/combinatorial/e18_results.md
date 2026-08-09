@@ -219,11 +219,10 @@ count but by the models-per-class ratio, and splitting collapses it.
 **Status at the end of the run: the SAT side has FOUND all 11,315 classes**
 ($10{,}583 + 645 + 75 + 10 + 1 + 1$, matching geng exactly). Formal *exhaustion*
 is proved for **five of the six cells** ($m = 44, 45, 46, 47, 48$; $m=44$ via all
-8 of its branches), leaving only $m = 43$, where 3 of 8 branches have closed and
-the rest were still running when this was written. The entire outstanding gap is
-that one cell, and it has shrunk to **3 classes** as successive branches close
-(11,270 after one branch, 11,312 after three). The comparison against geng on
-what is proved:
+8 of its branches), leaving only $m = 43$, which was PARKED for the reason measured
+in the next section. The entire outstanding gap is that one cell, and it is
+**3 classes** (coverage rose 11,270 to 11,312 as successive branches closed). The
+comparison against geng on what is proved:
 
 ```
 geng side: 11315 graphs      SAT side: 11312 graphs
@@ -235,10 +234,9 @@ VERDICT: CONSISTENT, PARTIAL -- no contradictions, 3 geng classes not yet covere
 The asymmetry is the honest reading: **zero classes the SAT side produced are
 absent from geng, and zero property violations**, so the two methods do not
 contradict each other anywhere they overlap; the 3-class shortfall is missing
-coverage from branches still running, not a disagreement. Finishing those
-branches converts this to a full independent $n=16$ census; the run script and
-merge step are in place to do it unattended
-([`e18_n16_run.sh`](e18_n16_run.sh), [`e18_merge.py`](e18_merge.py)).
+coverage from an unfinished cell, not a disagreement. Closing it would convert this
+to a full independent $n=16$ census, but **not by re-running the same enumerator**:
+see the wall below, and use SAT modulo symmetries instead.
 
 ### The blocking-tail wall, measured (why the census stopped at 11,312)
 
