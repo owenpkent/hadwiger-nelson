@@ -283,6 +283,17 @@ becomes a follow-up is an Owen decision (see the C7 dossier and the decision log
   canonical sets at $n=9$; Shrikhande extremal-cell and Folkman-floor gates pass).
   Not V=3: no end-to-end machine-checked certificate of enumeration COMPLETENESS
   (the two counting lemmas are Lean-suitable and queued for VERIFIER).
+- **V update (2026-08-09, E18/L76)**: the evidence behind V=2 is materially stronger,
+  though the score does not change (V=3 still wants the Lean completeness certificate).
+  The whole result now REPLICATES on an independent host, toolchain and OS: all gates
+  exact, $n=16$ returns exactly 11,315, the coloring verdict reproduces to the residue
+  (11,291 DSATUR / 24 SAT / 0 hits), and those 24 residues are isomorphic to the
+  committed set 24/24. More to the point for caveat (i), a SECOND ENUMERATOR on
+  different technology (CDCL + blocking clauses, not canonical augmentation) exhausted
+  the $n=15$ cell and matched geng graph-for-graph, and at $n=16$ reached
+  11,312/11,315 classes with **only-in-SAT 0 and 0 property violations**. So caveat (i)
+  is closed at $n=15$ and all but three classes at $n=16$. See
+  [`combinatorial/e18_results.md`](combinatorial/e18_results.md).
 - **N=2**: a new computational floor for a class the literature does not treat (the
   Folkman lineage covers $K_4$-free alone; the $K_{2,3}$-free refinement is this
   program's UDG-necessary framing). Arguably N=3 if framed as a standalone
@@ -305,6 +316,13 @@ becomes a follow-up is an Owen decision (see the C7 dossier and the decision log
 - **Verdict**: FOLD into C1, P1 (it gates the C1 upload decision, flagged for Owen:
   (A) amend C1 pre-upload after the E17 verifier/adversary passes, or (B) ship C1
   as-is and fold L75 into a follow-up note).
+- **Bearing of E18/L76 on that decision**: it strengthens option (A) without changing
+  the choice. If C1 is amended, the caveat sentence L75 says to carry verbatim can now
+  be weakened honestly, from "no independent second enumerator" to "independently
+  re-derived at $n=15$ by a SAT-side enumerator and at $n=16$ up to three classes, with
+  no contradictions", and the replication on a second host/OS is a referee-facing
+  robustness point. Caveat (ii) (the two counting lemmas not yet Lean-proved) is
+  untouched and remains the thing standing between V=2 and V=3.
 
 ---
 

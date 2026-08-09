@@ -19,6 +19,36 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-09): L76, E18 -- a second enumerator, and the Gallai prune killed.**
+> Overnight run on a SECOND host (Windows laptop, 32 cores, msys/ucrt64 gcc; not the
+> Linux box of L75), which began with no venv, no packages, no nauty. Three results.
+> (1) **E17 replicates on an independent host/toolchain/OS**: all gates exact
+> (352/2001/15481; $n=13,14$ empty; $n=15\to11$; $m=48\to$ Shrikhande), $n=16$ returns
+> **exactly 11,315**, and coloring them reproduces the verdict to the residue
+> (11,291 DSATUR / **24** SAT / 0 hits) with those 24 **isomorphic to the committed
+> `e17_n16_sat_residues.json`, 24/24**. (2) **L75 caveat (i) is half-closed**: a
+> SAT-side enumerator (CDCL + blocking clauses, not canonical augmentation)
+> EXHAUSTED the $n=15$ cell and matched geng graph-for-graph (1,989 models $\to$ 11
+> classes), and at $n=16$ FOUND all 11,315 classes with **only-in-SAT 0 and 0 property
+> violations** (proved-exhausted coverage 11,312/11,315: five of six cells complete,
+> only $m{=}43$ outstanding at 3/8 branches). Cost model: the binding quantity is models-per-class,
+> ~250-370 unsplit but **~14 when a cell is split on the HIGHEST-indexed vertex pairs**
+> (splitting on the lowest is useless -- lex-leader already pins them). (3) **NEGATIVE,
+> calibrated 5/5: the Gallai low-vertex structure L75 named as the way past $n=17$ is
+> ~2 orders of magnitude too weak** -- still SAT at $n=15..18$, and as a filter it
+> prunes only 18% of the $n=15$ cell against the ~99% needed; it also cannot go inside
+> geng (degrees only grow during augmentation, so "low" is only decidable at
+> $n=\text{maxn}$, i.e. a post-filter over cheap coloring calls, not over generation).
+> Reading: the $n=17$ wall is the $\Sigma_2$ colorability half, not missing local
+> structure. NEW FACT along the way: the both-free class with $\delta\ge5$ is empty
+> through $n=11$ and **first nonempty at $n=12$** (E17 never asked; its small-$n$
+> emptiness is about 6-critical candidates via KY, not about the class).
+> **No bound moved**; W3/realizability untouched; caveat (ii) untouched. Incomplete:
+> the two `gold_*` no-symmetry-breaking re-derivations of $n=13,14$ (one retired at
+> 2.15 GB when host free memory hit 1.9 GB) and the outstanding branches -- both cheap
+> to finish on an idle machine. Artifacts: `combinatorial/e18_*.{py,md,json}`,
+> `e17_build_geng_msys.sh`, `orchestrator_sessions/NIGHT_PLAN_2026-08-08.md`.
+
 > **Update (2026-07-23): L75, E17 exhaustive nauty enumeration of the both-free class.**
 > nauty 2.8.9 now BUILDS on this host (Linux/gcc), so the L69 "blocked on nauty" door is
 > open and E17 walked through it: a custom-pruned geng (`geng_hn`, PRUNE/PREPRUNE plugin
@@ -166,6 +196,13 @@ principle, not more search at small n.)
 
 ## Last verified state
 
+- **2026-08-09 (L76/E18):** the E18 artifacts (`combinatorial/e18_*.{py,md,json,sh}`,
+  `e17_build_geng_msys.sh`, the `e17_results.md` gate-(a) mode fix, this block, the
+  L76 LEARNINGS entry, `orchestrator_sessions/NIGHT_PLAN_2026-08-08.md`) are
+  UNCOMMITTED pending Owen's authorization. Second host is now calibrated (all gates
+  green) and has a working `geng_hn`. Outstanding compute, resumable: 5/8 $m=43$
+  SAT branches (all other cells proved exhausted; census at 11,312/11,315) (`bash experiments/combinatorial/e18_n16_run.sh` covers the
+  cells; then `e18_merge.py` + `e18_n16_compare.py`), and the two `gold_*` runs.
 - **Commit:** `9cc8c5f` (master, the L74 doc sync). The E17 artifacts
   (`combinatorial/e17_*.{py,c,sh,md}`, including `e17_verification.md`,
   `e17_adversary.md`, and the promoted `e17_n16_sat_residues.json`) and this ledger
