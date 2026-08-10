@@ -300,6 +300,46 @@ larger there, and nothing here shrinks the $\Sigma_2$ colorability half.
   [`e18_merge.py`](e18_merge.py) then [`e18_n16_compare.py`](e18_n16_compare.py)
   after the remaining branches close is all that is needed to finish the census.
 
+## Addendum (2026-08-09): the census is CLOSED by SAT modulo symmetries
+
+The follow-up the parking called for happened the next night, on this same host.
+Kirchweger-Szeider SMS (`smsg`) was built under msys/ucrt64 (bundled
+`cadical_sms`; two portability patches: the `mobical` test binary is skipped
+(`sys/mman.h`) and two POSIX `random()` calls in an unused coloring propagator
+became `rand()`), and [`e18_sms_cell.py`](e18_sms_cell.py) drives it over the
+SAME relaxation-gated cell CNF with NO lex-leader clauses -- SMS does canonicity
+checking inside the solver, so it never emits duplicate labellings at all.
+
+Calibration before trust, 8/8 exact, models-per-class = 1.0 throughout:
+
+| cell | expected | SMS | time |
+|---|---|---|---|
+| $n=15$, $m=41/42/43$ | 9 / 2 / 0 (11 graphs match [`e18_n15_class.json`](e18_n15_class.json) 11/11) | **9 / 2 / 0**, EXHAUSTED | ~1 s each |
+| $n=16$, $m=44..48$ | 645 / 75 / 10 / 1 / 1 | **645 / 75 / 10 / 1 / 1**, all EXHAUSTED | 1.8-16.2 s |
+
+The outstanding cell: **$m=43$ EXHAUSTED in 45.4 s -- 10,583 solutions, one per
+class, 0 property violations** (the disjoint-code filter re-checked every graph),
+0 non-biconnected. The same cell had defeated the 8-way and 64-way blocking
+splits for hours; the measured ~$10^5$-blocking-clause wall is not moved by SMS,
+it is made irrelevant.
+
+With the cell closed, `e18_merge` reports **CENSUS COMPLETE** and
+`e18_n16_compare` returns:
+
+```
+geng side: 11315 graphs      SAT side: 11315 graphs
+property re-check: 0 violations
+matched: 11315   only in geng: 0   only in SAT: 0
+VERDICT: AGREE (independent enumerations identical)
+```
+
+**L75 caveat (i) is now FULLY closed at $n=16$**: two enumerators of genuinely
+different technology agree graph for graph. The redundant blocking-clause
+branches still running on this host were retired once the census closed. SMS is
+the validated SAT-side enumerator for any $n=17$ attempt; what it does not
+change is the ~100x class growth at $n=17$ and the $\Sigma_2$ colorability half.
+Logged as L77.
+
 ## Honest scope
 
 - E18 re-derives the **enumeration** half of E17 independently at $n \le 15$

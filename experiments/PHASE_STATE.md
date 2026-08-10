@@ -19,6 +19,27 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-09, late): L77 -- SAT modulo symmetries closes the E18 census.**
+> Kirchweger-Szeider `smsg` built on this host (msys/ucrt64; `cadical_sms` static
+> lib; minor portability patches), driven by `e18_sms_cell.py` over the SAME
+> relaxation-gated cell CNF with NO lex-leader clauses (SMS owns canonicity,
+> inside the solver). Calibration 8/8 exact before trust: $n=15$ cells 9/2/0 with
+> 11/11 graph-for-graph vs the committed artifact; $n=16$ $m=44..48$ =
+> 645/75/10/1/1, all EXHAUSTED, seconds each, models-per-class 1.0 throughout.
+> **The parked $m=43$ cell: EXHAUSTED in 45.4 s** (10,583 solutions, one per
+> class, 0 violations) -- the cell the blocking approach could not close at any
+> split. Merge: **CENSUS COMPLETE**; compare: **11,315 vs 11,315, matched
+> 11,315, only-in-geng 0, only-in-SAT 0, AGREE**. So **L75 caveat (i) is FULLY
+> closed at $n=16$** (two independent enumerators, different technology,
+> identical answer). The leftover blocking-clause branches grinding on this host
+> were retired once the census closed. SMS is now the validated SAT-side
+> enumerator for any $n=17$ attempt; the $n=17$ walls that remain are class size
+> (~100x, L75) and the $\Sigma_2$ colorability half -- not enumeration tooling.
+> Gold runs ($n=13,14$ break-free): relaunched with ~7 GB free; outcome recorded
+> below when they land. Artifacts: `combinatorial/e18_sms_cell.py`,
+> `combinatorial/_cache/e18/sms_*`, the L77 LEARNINGS entry, the
+> `e18_results.md` addendum.
+
 > **Update (2026-08-09): L76, E18 -- a second enumerator, and the Gallai prune killed.**
 > Overnight run on a SECOND host (Windows laptop, 32 cores, msys/ucrt64 gcc; not the
 > Linux box of L75), which began with no venv, no packages, no nauty. Three results.
@@ -167,7 +188,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 | Arch | Approach | Current wall | Status |
 |------|----------|--------------|--------|
-| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage. In-class enumeration is now exhaustively CLOSED for n<=16 (L75: no chi>=6 member exists; any host has n>=17), with a measured generator wall at n=17 (>80 cpu-days). The W3 wall itself is unchanged | OPEN, the live route (route ii: wide imprimitive interface) |
+| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage. In-class enumeration is now exhaustively CLOSED for n<=16 (L75: no chi>=6 member exists; any host has n>=17), independently confirmed by a full second-enumerator census at n=16 (L77: SMS, 11,315/11,315 AGREE), with a measured generator wall at n=17 (>80 cpu-days). The W3 wall itself is unchanged | OPEN, the live route (route ii: wide imprimitive interface) |
 | 2 measurable | chi_m>=6 via SDP | order-2 at X_23 is FEASIBLE; route CLOSED. Higher order or noncommutative SE(2) is the only remaining measurable lever | CLOSED (order-2); SE(2) open |
 | 3 fractional/spectral | chi_f, Lovász theta | plateau at the classical line at runnable scale | OPEN, no live increment |
 | 4 axiomatic | Borel chromatic chi_B | needs a local finite-UDG statement that pushes chi_B>=6 via the rotation group (not norm-blind Steinhaus) | OPEN, dark horse |
@@ -196,22 +217,18 @@ principle, not more search at small n.)
 
 ## Last verified state
 
-- **2026-08-09 (L76/E18):** the E18 artifacts (`combinatorial/e18_*.{py,md,json,sh}`,
-  `e17_build_geng_msys.sh`, the `e17_results.md` gate-(a) mode fix, this block, the
-  L76 LEARNINGS entry, `orchestrator_sessions/NIGHT_PLAN_2026-08-08.md`) are
-  UNCOMMITTED pending Owen's authorization. Second host is now calibrated (all gates
-  green) and has a working `geng_hn`. Outstanding compute, resumable: the $m=43$ cell
-  (all other cells proved exhausted; census parked at 11,312/11,315, zero contradictions).
-  Do NOT retry with blocking clauses; use SAT modulo symmetries (see TODO) (`bash experiments/combinatorial/e18_n16_run.sh` covers the
-  cells; then `e18_merge.py` + `e18_n16_compare.py`), and the two `gold_*` runs.
-- **Commit:** `9cc8c5f` (master, the L74 doc sync). The E17 artifacts
-  (`combinatorial/e17_*.{py,c,sh,md}`, including `e17_verification.md`,
-  `e17_adversary.md`, and the promoted `e17_n16_sat_residues.json`) and this ledger
-  sync (L75 into LEARNINGS / PHASE_STATE / TODO / PUBLICATIONS / STATE_OF_THE_PROGRAM)
-  are UNCOMMITTED, pending Owen's authorization.
-- **Latest finding:** L75 (E17: exhaustive both-free enumeration, no $\chi\ge6$ member
-  at $n\le16$, wall at $n=17$; VERIFIER/ADVERSARY passes now COMPLETE, both GREEN).
-  L72 remains the latest measurable verdict.
+- **2026-08-09 late (L77):** the SMS closure artifacts (`combinatorial/e18_sms_cell.py`,
+  `_cache/e18/sms_*`, the closed `enum_n16_m43.json`, the L77 LEARNINGS entry, the
+  `e18_results.md` addendum, this block) are UNCOMMITTED pending Owen's authorization.
+  The E17/E18 artifact sets of the earlier blocks ARE committed and pushed
+  (`8e21aa5..d2e45ee`; the previous "UNCOMMITTED" note here was stale the moment those
+  commits landed). The $n=16$ census is COMPLETE and AGREE (11,315/11,315); no
+  outstanding $m=43$ compute exists. Remaining compute: the two `gold_*` break-free
+  runs ($n=13,14$), relaunched this session. `smsg` lives at
+  `~/.local/src/sat-modulo-symmetries/build/src/smsg.exe` (needs
+  `C:\Tools\msys\ucrt64\bin` on PATH; rebuild = cmake+ninja per L77).
+- **Latest finding:** L77 (SMS closes the E18 census; caveat (i) of L75 fully closed
+  at $n=16$). L72 remains the latest measurable verdict.
 - **Host:** this session ran on the Linux/gcc box (venv `.venv`, `geng_hn` in
   `~/.local/bin`); earlier "no compiler / nauty absent" host notes are superseded on
   this machine.
