@@ -775,10 +775,25 @@ order-$17$ half of Theorem~\ref{thm:exhaustive} rests on unsatisfiability
 answers from a solver carrying two propagators, and we did not extract
 machine-checkable proof certificates for them; what stands behind them instead is
 the calibration above, the agreement of the same procedure with the independently
-enumerated orders $15$ and $16$, and the non-vacuity and ablation controls. A
-certified version is possible in principle (the solver used can emit LRAT), and we
-regard it as the natural next hardening rather than as a gap in the argument's
-shape. Second, the two counting lemmas
+enumerated orders $15$ and $16$, and the non-vacuity and ablation controls. It is
+worth being exact about what a certificate here could even mean, because the
+obvious answer is wrong. One cannot certify these answers with a DRAT or LRAT
+checker against $\Phi_{n,m}$, and not for want of tooling: $\Phi_{n,m}$ is
+\emph{satisfiable}: its models are precisely the class members at that order and
+edge count, which is what the non-vacuity control exhibits. The unsatisfiability
+being reported is that of $\Phi_{n,m}$ together with a semantic side condition
+that is not part of the formula, so no propositional refutation of $\Phi_{n,m}$
+exists to be checked. (We confirmed this concretely: the solver emits an LRAT file,
+an independent checker rejects it, and a plain solver run on $\Phi_{n,m}$ without
+the propagators returns a model.) What a certificate must instead do is discharge
+the two clause families separately: each coloring clause is justified by exhibiting
+the $5$-coloring that generated it, which is checkable in $O(n^2)$ by confirming
+that the pairs it lists are exactly the monochromatic non-adjacent pairs of that
+coloring; and the minimality clauses are justified once and for all by the
+lexicographic-minimality theorem of~\cite{KirchwegerSzeider2021} rather than per
+run. A fully certified version therefore wants either that hybrid format or a
+reformulation as a $2$-QBF, $\exists G \forall c$, which is the natural shape of
+the question and which the solver also supports. Second, the two counting lemmas
 behind the search-space reductions (Lemma~\ref{lem:maxdeg} and the
 cherry-budget inequality) are elementary, formalization-ready double-counting
 arguments, but they have not yet been machine-verified in a proof assistant.
