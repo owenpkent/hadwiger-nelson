@@ -74,6 +74,7 @@ import os
 import pathlib
 import subprocess
 import sys
+import threading
 import time
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -93,6 +94,16 @@ CACHE = HERE / "_cache" / "e20"
 
 SMSG = os.environ.get("SMSG", str(pathlib.Path.home() / ".local" / "bin" / "smsg"))
 SAT, UNSAT, UNKNOWN = "SAT", "UNSAT", "UNKNOWN"
+
+# Recursive splitting nests thread pools, so worker count is not a usable bound on
+# how many solvers run at once. This semaphore is: it is taken only around an smsg
+# invocation, never while a parent waits on its children, so it cannot deadlock.
+_SLOTS = None
+
+
+def set_parallelism(n):
+    global _SLOTS
+    _SLOTS = threading.Semaphore(n)
 
 
 # ------------------------------------------------------------------ encodings
@@ -168,20 +179,26 @@ def run_smsg(n, dimacs, chi, connected=True, timeout=None, all_graphs=False,
 
     t0 = time.time()
     models, tail, result = [], [], UNKNOWN
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                         text=True, bufsize=1)
-    lines = []
-    for line in p.stdout:
-        s = line.strip()
-        lines.append(s)
-        if s.startswith("[") and s.endswith("]"):
-            models.append(ast.literal_eval(s) if s != "[]" else [])
-        else:
-            tail.append(s)
-            if s.startswith("Result:"):
-                code = s.split()[-1]
-                result = {"10": SAT, "20": UNSAT}.get(code, UNKNOWN)
-    p.wait()
+    if _SLOTS:
+        _SLOTS.acquire()
+    try:
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                             text=True, bufsize=1)
+        lines = []
+        for line in p.stdout:
+            s = line.strip()
+            lines.append(s)
+            if s.startswith("[") and s.endswith("]"):
+                models.append(ast.literal_eval(s) if s != "[]" else [])
+            else:
+                tail.append(s)
+                if s.startswith("Result:"):
+                    code = s.split()[-1]
+                    result = {"10": SAT, "20": UNSAT}.get(code, UNKNOWN)
+        p.wait()
+    finally:
+        if _SLOTS:
+            _SLOTS.release()
     if result is UNKNOWN and models:
         result = SAT
     if log:
@@ -438,6 +455,50 @@ def sweep(n, chi=6, jobs=None, **kw):
     return 2 if hits else (1 if unknown else 0)
 
 
+def decide_with_split(n, m, jobs, timeout, split_bits=5, max_depth=3,
+                      t=0, idx=0, **kw):
+    """Decide one cell, splitting recursively for as long as branches time out.
+
+    A branch is a pair (t, idx): the t highest-indexed vertex pairs are pinned to
+    the bits of idx by unit clauses. This is an exact partition of the model space,
+    because each isomorphism class's lex-minimal labelling has definite values on
+    those pairs, so every class is reached by exactly one branch. Splitting a
+    branch again keeps its own pins: the last t pairs of the deeper slice are the
+    parent's pairs, so the child index is (idx << split_bits) | j.
+
+    Recursion is what keeps a hard cell from being misreported as a wall. A branch
+    that times out is not a verdict, it is a request to split further; only
+    exhausting `max_depth` is a wall. Splitting on the HIGHEST-indexed pairs is
+    deliberate (L76: splitting on the lowest is useless, lex-minimality has already
+    pinned them).
+    """
+    spec = f"{t}:{idx}" if t else None
+    r = decide_cell(n, m, split=spec, timeout=timeout, quiet=True, **kw)
+    if r["result"] != UNKNOWN:
+        return r
+    if max_depth <= 0:
+        return r
+    kids = [((idx << split_bits) | j) for j in range(2 ** split_bits)]
+    ct = t + split_bits
+    print(f"    {'  ' * (3 - max_depth)}n={n} m={m} "
+          f"{'branch ' + spec if spec else 'cell'} timed out -> "
+          f"{len(kids)} sub-branches at depth {ct}", flush=True)
+    with futures.ThreadPoolExecutor(max_workers=jobs) as ex:
+        subs = list(ex.map(lambda j: decide_with_split(
+            n, m, jobs, timeout, split_bits, max_depth - 1, ct, j, **kw), kids))
+    if any(s["result"] == SAT for s in subs):
+        hit = next(s for s in subs if s["result"] == SAT)
+        return {**hit, "split_depth": ct}
+    if all(s["result"] == UNSAT for s in subs):
+        return {"n": n, "m": m, "result": UNSAT, "split_depth": ct,
+                "elapsed_s": round(sum(s["elapsed_s"] for s in subs), 1),
+                "branches": len(kids)}
+    return {"n": n, "m": m, "result": UNKNOWN, "split_depth": ct,
+            "elapsed_s": round(sum(s["elapsed_s"] for s in subs), 1),
+            "stuck_branches": [s.get("split") for s in subs
+                               if s["result"] == UNKNOWN]}
+
+
 def climb(n_from, n_to=None, jobs=None, timeout=None, split_bits=5, **kw):
     """The always-on ladder: decide every cell of n = n_from, n_from+1, ... .
 
@@ -449,6 +510,7 @@ def climb(n_from, n_to=None, jobs=None, timeout=None, split_bits=5, **kw):
     survives even the split, and records where it stopped.
     """
     jobs = jobs or (os.cpu_count() or 1)
+    set_parallelism(jobs)
     n_to = n_to or 99
     ladder = {}
     for n in range(n_from, n_to + 1):
@@ -465,25 +527,12 @@ def climb(n_from, n_to=None, jobs=None, timeout=None, split_bits=5, **kw):
         stuck = [m for m, r in zip(cells, res) if r["result"] == UNKNOWN]
         branch_totals = {}
         for m in stuck:
-            print(f"  n={n} m={m} timed out -> splitting {2 ** split_bits} ways",
-                  flush=True)
-            idxs = list(range(2 ** split_bits))
-            with futures.ThreadPoolExecutor(max_workers=jobs) as ex:
-                br = list(ex.map(lambda i: decide_cell(
-                    n, m, split=f"{split_bits}:{i}", timeout=timeout,
-                    quiet=True, **kw), idxs))
-            counts = {}
-            for b in br:
-                counts[b["result"]] = counts.get(b["result"], 0) + 1
-            branch_totals[m] = counts
-            print(f"    branches: {counts}", flush=True)
-            res[cells.index(m)] = {
-                "result": (SAT if counts.get(SAT) else
-                           UNSAT if counts.get(UNSAT) == len(idxs) else UNKNOWN),
-                "elapsed_s": sum(b["elapsed_s"] for b in br), "m": m, "n": n,
-                "split_branches": counts,
-                "hit": next((b["hit"] for b in br if "hit" in b), None),
-            }
+            r = decide_with_split(n, m, jobs, timeout, split_bits, **kw)
+            branch_totals[m] = {"depth": r.get("split_depth"),
+                                "branches": r.get("branches")}
+            print(f"  n={n} m={m}: {r['result']} after splitting to depth "
+                  f"{r.get('split_depth')} ({r['elapsed_s']}s)", flush=True)
+            res[cells.index(m)] = {"m": m, "n": n, **r}
 
         hits = [r for r in res if r["result"] == SAT]
         unknown = [r["m"] for r in res if r["result"] == UNKNOWN]
