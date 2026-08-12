@@ -40,6 +40,19 @@ halt() { echo "$1" > "$STOP"; say "HALT: $1"; exit "${2:-0}"; }
 (
     flock -n 9 || exit 0
 
+    # Reap orphans before doing anything. OBSERVED FAILURE: killing a driver
+    # leaves its solvers running, reparented to init; flock then permits the next
+    # cron tick to start a fresh run alongside them, and the box ends up with
+    # several times more solvers than cores. Load average hit 22 on 8 cores this
+    # way. Holding the lock means no legitimate run is in flight, so any solver
+    # whose parent is init is by definition abandoned.
+    orphans=$(ps -eo pid,ppid,comm | awk '$2 == 1 && $3 == "smsg" {print $1}')
+    if [ -n "$orphans" ]; then
+        say "reaping $(echo "$orphans" | wc -l) orphaned solver(s)"
+        # shellcheck disable=SC2086
+        kill -9 $orphans 2>/dev/null
+    fi
+
     # Step 0: the calibration gate, enforced by the machine rather than by me.
     # Production never runs on an uncalibrated tool. If the gate has not passed,
     # run it; if it fails, halt with GATE so a human sees it instead of a pile of
@@ -81,8 +94,7 @@ _cache/e25/n18_stuck.json for which cubes timed out. n<=17 is unaffected." 1 ;;
     # Step 2: n=19, only once n=18 is genuinely closed.
     if [ -f "$CACHE/e25/n18_done" ] && [ ! -f "$CACHE/e25/n19_done" ]; then
         say "step 2: n=19"
-        $PY -m experiments.combinatorial.e25_n18_stuck --n 19 \
-            --cells 52,53,54,55,56,57,58,59,60 --jobs 7 >> "$LOG" 2>&1
+        $PY -m experiments.combinatorial.e25_n18_stuck --n 19 --jobs 7 >> "$LOG" 2>&1
         rc=$?
         case $rc in
             0) touch "$CACHE/e25/n19_done"; say "n=19 COMPLETE" ;;
