@@ -8,6 +8,18 @@ Publication triage of these findings lives in [`PUBLICATIONS.md`](PUBLICATIONS.m
 
 ---
 
+### L83. E26: the lineage's vector system MEASURED, and it kills the ball methodology. de Grey's 1585-vertex graph uses **78 distinct unit vectors** spanning **23 angle residues mod $60^\circ$**, in $\mathbb{Q}(\sqrt3,\sqrt5,\sqrt7,\sqrt{11})$ (degree 16), NOT the degree-4 $\mathbb{Q}(\sqrt3,\sqrt{11})$ that CLAUDE.md records. E24 supplied 3 residues from one rotor. That is the entire explanation of L82's calibration failure, now quantified rather than suspected.
+
+**A correction to a load-bearing repo fact.** `CLAUDE.md` states "$\mathbb{Q}(\sqrt3,\sqrt{11})$ for Moser spindle and de Grey graphs". True for the spindle, FALSE for de Grey: `sources/degrey_1585_vertices.sage` mentions $\sqrt3$ 7,678 times, $\sqrt5$ 4,008, $\sqrt7$ 2,868 and $\sqrt{11}$ 2,760. The graph needs all four radicals. E24's premise, that the lineage lives in the Moser field, was inherited from that line and was wrong, so every ball it built was inside a degree-4 subfield of the degree-16 field where the target lives. No such ball could ever contain the graph.
+
+**The measurement, calibrated first.** The extractor recovers the Moser spindle's known system exactly: 7 unit vectors, 3 residues ($0^\circ$; the rotor $\arccos(5/6) = 33.557^\circ$; and the half-angle $16.779^\circ$ where the spindle closes), 0 non-unit edges. Only then applied to de Grey: 78 vectors, 23 residues, **0 edges of non-unit length across all 7,909**, which independently validates both the coordinate parse and the edge list. The spindle's $16.779^\circ$ residue reappears in de Grey's list, as it must.
+
+**THE BALL METHODOLOGY IS DEAD, measured not guessed.** BFS on the real graph gives unit-step radius 8 from a base vertex (diameter 12). A ball on 78 generators at radius 8 is up to $(2\cdot78)^8 \approx 3.5\times10^{17}$ points before dedup, against the 1,585 vertices de Grey actually uses. So "grow the ball and colour it" cannot reach $\chi=5$ in the lineage's own field, by a factor of $10^{14}$. E24's approach is not underpowered, it is structurally wrong: the realizable constructions are SPARSE, hand-assembled subgraphs of an astronomically larger ball, and finding them by enumerating the ball is not a strategy.
+
+**Consequence for the frontier.** The ring census as posed (L82's "gating sub-problem: identify the generator set") is now answered, and the answer closes the route rather than opening it. A new $\chi=5$ UDG outside the lineage will not come from ball enumeration in any field. What survives from E24 is the $\chi=4$ finding: the 56-vertex critical graph in $\mathbb{Q}(\sqrt3,\sqrt{35})$, and note $\sqrt{35} = \sqrt5\sqrt7$ sits inside de Grey's field, which is why that field could bind at all. Artifacts: `combinatorial/e26_generator_census.py`, `_cache/e26/census.json`.
+
+---
+
 ### L82. E24 radius 3: **a SECOND field supports a 4-chromatic UDG, and its 4-critical core is a 56-vertex graph that is provably not the Moser spindle and not Golomb.** $\mathbb{Q}(\sqrt3,\sqrt{35})$, with rotor $(\cos,\sin) = (1/6, \sqrt{35}/6)$, reaches $\chi=4$ at radius 3 using only **48 edges more than the inert baseline** (3,990 vs 3,942), where the Moser field needs 4,530. Sparse binding, same effect.
 
 **The object.** Greedy vertex-deletion from the 865-point ball, with the reduction re-verified afterwards (for EVERY vertex $v$, $\chi(H - v) \le 3$): a VERTEX-CRITICAL 4-chromatic unit-distance graph on **56 vertices, 115 edges**, degree sequence $3^{26}4^{17}5^4 6^3 7^3 8^2 9$. Committed as `combinatorial/e24_sqrt35_core.json` (g6 included).

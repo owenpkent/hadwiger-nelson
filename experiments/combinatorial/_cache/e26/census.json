@@ -1,0 +1,51 @@
+{
+  "calibration": {
+    "label": "moser_spindle",
+    "vertices": 7,
+    "edges": 11,
+    "distinct_unit_vectors": 7,
+    "non_unit_edges": 0,
+    "angle_residues_mod60": 3,
+    "residues": [
+      0.0,
+      16.778655,
+      33.55731
+    ],
+    "ok": true
+  },
+  "calibration_passed": true,
+  "degrey": {
+    "label": "degrey_1585",
+    "vertices": 1585,
+    "edges": 7909,
+    "distinct_unit_vectors": 78,
+    "non_unit_edges": 0,
+    "angle_residues_mod60": 23,
+    "residues": [
+      0.0,
+      0.095191,
+      2.512334,
+      9.759226,
+      12.176369,
+      14.361512,
+      16.778655,
+      16.873846,
+      26.44269,
+      26.537881,
+      28.955024,
+      31.140166,
+      33.55731,
+      37.180756,
+      40.804202,
+      43.221345,
+      43.316536,
+      44.477512,
+      45.733679,
+      47.918821,
+      55.397715,
+      57.582857,
+      58.839024
+    ],
+    "ok": true
+  }
+}

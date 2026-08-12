@@ -97,7 +97,7 @@ hadwiger-nelson/
 
 ## Conventions
 
-- **Exact arithmetic** for unit-distance graphs: vertices live in number fields (e.g., $\mathbb{Q}(\sqrt{3})$ for hexagonal lattices, $\mathbb{Q}(\sqrt{3}, \sqrt{11})$ for Moser spindle and de Grey graphs). Use `sympy` for exact symbolic distances; `mpmath` only for floating-point sanity checks.
+- **Exact arithmetic** for unit-distance graphs: vertices live in number fields (e.g., $\mathbb{Q}(\sqrt{3})$ for hexagonal lattices, $\mathbb{Q}(\sqrt{3}, \sqrt{11})$ for the Moser spindle). **The de Grey graph needs more than that**: its coordinates use $\sqrt3, \sqrt5, \sqrt7$ AND $\sqrt{11}$, so it lives in a degree-16 field, and it uses 78 distinct unit vectors across 23 angle residues mod $60^\circ$ (measured in E26/L83; the earlier claim that it lives in $\mathbb{Q}(\sqrt3,\sqrt{11})$ was wrong and cost E24 a whole campaign). Use `sympy` for exact symbolic distances; `mpmath` only for floating-point sanity checks.
 - **Data format**: graphs serialize as JSON (vertices as exact symbolic coords, edges as index pairs) or DIMACS / CNF for SAT instances. Stored alongside the script.
 - **Caching**: SAT runs on large graphs are slow. Cache witnesses (colorings, unsat cores) under `experiments/**/_cache/`.
 - **UDG interface**: every unit-distance graph implements `vertices()`, `edges()`, `chromatic_number_sat(k)` returning a coloring or UNSAT proof.
