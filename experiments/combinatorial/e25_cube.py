@@ -148,10 +148,23 @@ def decide(n, m, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
         return out
 
+    # Stop the moment a cube yields a model. A SAT answer is a HIT (a chi>=6
+    # member of the class), and the remaining cubes cannot change that verdict, so
+    # finishing them would waste hours at exactly the moment the run matters most.
+    # Skipped cubes are recorded as SKIPPED and never counted as UNSAT.
+    found = threading.Event()
+
+    def run_one(L):
+        if found.is_set():
+            return {"line": L, "result": "SKIPPED", "seconds": 0.0}
+        r = solve_cube(n, cnf, cube_path, L, chi, timeout)
+        if r["result"] == SAT:
+            found.set()
+        return r
+
     t0 = time.time()
     with futures.ThreadPoolExecutor(max_workers=jobs) as ex:
-        res = list(ex.map(lambda L: solve_cube(n, cnf, cube_path, L, chi, timeout),
-                          range(1, gen["cubes"] + 1)))
+        res = list(ex.map(run_one, range(1, gen["cubes"] + 1)))
     hits = [r for r in res if r["result"] == SAT]
     unk = [r for r in res if r["result"] == UNKNOWN]
     verdict = SAT if hits else (UNKNOWN if unk else UNSAT)
