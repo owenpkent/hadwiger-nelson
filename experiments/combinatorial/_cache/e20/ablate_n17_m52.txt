@@ -1,0 +1,6 @@
+E20 ablation at n=17, m=52 (chi>=6)
+  class (K4-free + codeg<=2)         -> UNSAT      13.26s
+  drop codeg<=2 (K_{2,3} allowed)    -> UNKNOWN   900.76s
+  drop K4-free                       -> UNSAT      17.88s
+  drop both  [POSITIVE CONTROL]      -> SAT       409.16s g6=P?CiZds]jyN{_?_?o@[?V_G{ verified_chi>=6=True
+  positive control: PASS (search can return SAT here)

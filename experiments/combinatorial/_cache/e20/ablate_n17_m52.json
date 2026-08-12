@@ -1,0 +1,39 @@
+{
+  "n": 17,
+  "m": 52,
+  "rows": [
+    {
+      "ablation": "class (K4-free + codeg<=2)",
+      "k4free": null,
+      "codeg2": null,
+      "result": "UNSAT",
+      "elapsed_s": 13.26,
+      "g6": null
+    },
+    {
+      "ablation": "drop codeg<=2 (K_{2,3} allowed)",
+      "k4free": true,
+      "codeg2": false,
+      "result": "UNKNOWN",
+      "elapsed_s": 900.76,
+      "g6": null
+    },
+    {
+      "ablation": "drop K4-free",
+      "k4free": false,
+      "codeg2": true,
+      "result": "UNSAT",
+      "elapsed_s": 17.88,
+      "g6": null
+    },
+    {
+      "ablation": "drop both  [POSITIVE CONTROL]",
+      "k4free": false,
+      "codeg2": false,
+      "result": "SAT",
+      "elapsed_s": 409.16,
+      "g6": "P?CiZds]jyN{_?_?o@[?V_G{"
+    }
+  ],
+  "control_pass": true
+}

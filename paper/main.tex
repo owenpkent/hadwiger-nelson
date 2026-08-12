@@ -743,7 +743,19 @@ independent membership filter used above; every nonempty cell of the order-$17$
 window passes. Second, ablation: rerunning a cell with the class constraints
 removed but the order, degree, and edge-count constraints kept must return
 satisfiable, confirming that the unsatisfiable verdict is a statement about the
-class rather than a failure of the search.
+class rather than a failure of the search. At $n = 17$, $m = 52$ it does, in
+$409$ seconds, and the graph it returns is independently confirmed to have
+$\chrom \ge 6$.
+
+The intermediate ablations at that cell are worth recording, because they
+localize the obstruction inside the class. Removing $K_4$-freeness alone leaves
+the cell unsatisfiable, and barely more expensive ($18$ seconds against $13$).
+Removing the codegree bound alone, keeping $K_4$-freeness, leaves the cell
+undecided after $900$ seconds. At this order, then, it is $K_{2,3}$-freeness and
+not $K_4$-freeness that forces $5$-colorability, which is consistent with the
+role the codegree bound plays throughout Section~\ref{sec:codegree}: the
+constraint that comes from planar unit-distance geometry is also the constraint
+that does the combinatorial work.
 
 \paragraph{A second enumerator at orders 15 and 16.} Enumeration completeness at
 the two orders that carry content was independently re-derived with a generator

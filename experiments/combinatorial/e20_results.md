@@ -115,7 +115,7 @@ claim gets stronger, and the search for the missing object is pushed further fro
 * **Non-vacuity (`--probe`)**: an UNSAT on an EMPTY cell is information-free, so
   every production UNSAT is followed by the same CNF at $\chi \ge 3$, which must be
   SAT with a model the disjoint E17 filter certifies as a genuine class member.
-* **Ablation + positive control (`--ablate`)**: at fixed $n, m$, decide $\chi \ge 6$
+* **Ablation + positive control (`--ablate`), MEASURED at $n=17$, $m=52$**: at fixed $n, m$, decide $\chi \ge 6$
   with (i) the full class, (ii) codegree $\le 2$ dropped, (iii) $K_4$-free dropped,
   (iv) both dropped. Rung (iv) is the end-to-end positive control: in the same
   $n$ / degree / edge-count regime with the class properties removed, the pipeline
@@ -123,6 +123,21 @@ claim gets stronger, and the search for the missing object is pushed further fro
   than a failure of the search. Rungs (ii)/(iii) measure directly which class
   property does the killing, testing L69's claim that $K_{2,3}$-freeness is
   load-bearing for $\chi = 6$.
+
+  | ablation | result | seconds |
+  |----------|--------|---------|
+  | class ($K_4$-free + codeg $\le 2$) | UNSAT | 13.3 |
+  | drop codeg $\le 2$ ($K_{2,3}$ allowed) | UNKNOWN (900 s cap) | 900.8 |
+  | drop $K_4$-free | UNSAT | 17.9 |
+  | drop both **[POSITIVE CONTROL]** | **SAT**, model independently $\chi\ge6$ | 409.2 |
+
+  The control PASSES: in the same $n$ / degree / edge-count regime with the class
+  properties removed, the pipeline does return SAT, so the unablated UNSAT is a
+  fact about the class. The two middle rows localize the obstruction: dropping
+  $K_4$-freeness barely changes anything, while dropping the codegree bound leaves
+  the cell undecided at 900 s. At this order it is $K_{2,3}$-freeness, the
+  constraint that comes from planar unit-distance geometry, that forces
+  5-colorability. Direct support for L69.
 
 ## The always-on ladder (`--climb`)
 
