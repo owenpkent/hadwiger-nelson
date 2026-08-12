@@ -63,14 +63,18 @@ $m \le n\bigl(1 + \sqrt{8n-7}\bigr)/4$; combined with the Kostochka-Yancey lower
 bound for $6$-critical graphs and the vertex Folkman number
 $F_v(2,2,2,2,2;4) = 16$, this excludes every small dense Folkman-type host. The
 missing object must lie in the class of graphs that are simultaneously $K_4$-free
-and $K_{2,3}$-free. For that class we prove an exhaustive negative: a
-custom-pruned \texttt{geng} enumeration over the full edge window between the
-Kostochka-Yancey floor and the codegree ceiling shows that the class contains no
-member with chromatic number at least $6$ on at most $16$ vertices (all
-$11{,}315$ candidates in the order-$16$ window are $5$-colorable), so the
-smallest such graph, if one exists, has at least $17$ vertices; density
-heuristics place it closer to order $26$ or beyond. We claim no new bound on
-$\chrom(\R^2)$.
+and $K_{2,3}$-free. For that class we prove an exhaustive negative: over the full
+edge window between the Kostochka-Yancey floor and the codegree ceiling, the class
+contains no member with chromatic number at least $6$ on at most $17$ vertices, so
+the smallest such graph, if one exists, has at least $18$ vertices; density
+heuristics place it closer to order $26$ or beyond. Through order $16$ this is a
+custom-pruned \texttt{geng} enumeration, confirmed graph-for-graph by an
+independent second enumerator (all $11{,}315$ candidates in the order-$16$ window
+are $5$-colorable). At order $17$, where enumeration costs more than $80$ core-days,
+we instead decide the question without enumerating: a chromatic-number propagator
+inside a symmetry-breaking SAT solver turns the two-quantifier question into a
+single unsatisfiability proof per edge window cell, and the order-$17$ window
+closes in under one core-hour. We claim no new bound on $\chrom(\R^2)$.
 \end{abstract}
 
 \section{Introduction}
@@ -121,7 +125,7 @@ exhaustive computational census (Section~\ref{sec:census}), explain it
 structurally by way of vertex-criticality (Section~\ref{sec:criticality}), and
 then reframe the search for the genuinely missing object through a codegree
 obstruction (Section~\ref{sec:codegree}), and settle the small-order cases of
-the resulting class by exhaustive enumeration (Section~\ref{sec:exhaustive}).
+the resulting class outright (Section~\ref{sec:exhaustive}).
 Section~\ref{sec:discussion} synthesizes the picture and states the target
 object honestly.
 
@@ -132,9 +136,9 @@ applying a known elementary lemma to its vertex-criticality; (b) an exhaustive
 computational census confirming it across the entire lineage;
 (c) a codegree framing that locates the missing $\chrom \ge 6$ object outside the
 reach of both the realizable lineage and the small dense graphs one would
-naively manufacture; and (d) an exhaustive enumeration showing that the class
-the codegree framing isolates contains no $\chrom \ge 6$ member on at most $16$
-vertices, so the missing object has order at least $17$. None of the four
+naively manufacture; and (d) an exhaustive negative showing that the class
+the codegree framing isolates contains no $\chrom \ge 6$ member on at most $17$
+vertices, so the missing object has order at least $18$. None of the four
 ingredients is individually deep; the synthesis is the point.
 
 \section{Preliminaries}
@@ -521,7 +525,7 @@ $\chrom \ge 6$ object simultaneously below by criticality (Kostochka-Yancey),
 above by planarity-of-incidence ($K_{2,3}$-freeness), and at the abstract floor
 by Folkman, to conclude that the object cannot be a small dense host.
 
-\section{An exhaustive enumeration of the class through order 16}
+\section{The class contains no 6-chromatic member through order 17}
 \label{sec:exhaustive}
 
 Section~\ref{sec:codegree} pins the missing object inside the UDG-necessary
@@ -535,11 +539,20 @@ this section records the exhaustive answer.
 \begin{theorem}
 \label{thm:exhaustive}
 The class of $K_4$-free, $K_{2,3}$-free graphs contains no member with
-$\chrom \ge 6$ on at most $16$ vertices. Hence the smallest such graph, if one
-exists, has order at least $17$.
+$\chrom \ge 6$ on at most $17$ vertices. Hence the smallest such graph, if one
+exists, has order at least $18$.
 \end{theorem}
 
-The proof is an exhaustive computer enumeration, made feasible by four
+The proof is a computer proof in two halves, sharing all four search-space
+reductions below but differing in how the resulting search space is exhausted.
+Through order $16$ the space is small enough to enumerate outright, and we do:
+every candidate is generated and colored. At order $17$ enumeration is no longer
+affordable (see the timings below), so we do not enumerate. Instead we hand the
+whole question, both quantifiers at once, to a single satisfiability solver whose
+unsatisfiability proof \emph{is} the nonexistence statement. The two halves are
+independent, and where they overlap they agree.
+
+Both halves are made feasible by four
 search-space reductions with short proofs. It suffices to look for a
 \emph{$6$-critical} member of the class: any $\chrom \ge 6$ member contains a
 $6$-critical subgraph, and both defining properties are closed under taking
@@ -549,7 +562,8 @@ is $2$-connected and has minimum degree at least $5$ (standard critical-graph
 theory~\cite{JensenToft1995}); (ii) it satisfies the Kostochka-Yancey floor
 $m \ge 2.8\,n - 1.8$~\cite{KostochkaYancey2014}; (iii) as a member of the class
 it satisfies the codegree ceiling~\eqref{eq:codeg-ceiling}, so its edge count
-is confined to a narrow per-order window (at $n = 16$: $43 \le m \le 48$); and
+is confined to a narrow per-order window (at $n = 16$: $43 \le m \le 48$; at
+$n = 17$: $46 \le m \le 52$); and
 (iv) it obeys the following maximum-degree cap.
 
 \begin{lemma}[Maximum-degree cap]
@@ -572,7 +586,7 @@ $2$ by $K_{2,3}$-freeness. Hence
 and $\deg a \le (n-1)/2$.
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{thm:exhaustive}]
+\begin{proof}[Proof of Theorem~\ref{thm:exhaustive}, orders $n \le 16$]
 By the reductions above, it suffices to enumerate, for each $n \le 16$, all
 $2$-connected $K_4$-free, $K_{2,3}$-free graphs with minimum degree at least
 $5$, maximum degree at most $\lfloor (n-1)/2 \rfloor$, and edge count in the
@@ -606,13 +620,72 @@ $6$-critical member of the class exists on at most $16$ vertices, and hence no
 $\chrom \ge 6$ member either.
 \end{proof}
 
+At order $17$ the same strategy is out of reach. The class grows by roughly two
+orders of magnitude per vertex at this scale, and a direct measurement on the
+hardware used here put the order-$17$ enumeration beyond $80$ core-days, with the
+dominant edge-window cell alone holding more than $1.1$ million isomorphism
+classes. What makes that cost avoidable is that the question being asked is not
+``list the class'' but ``does the class contain a graph that is not
+$5$-colorable'', and the second question is a two-quantifier statement whose
+quantifiers need not be separated:
+\[
+  \exists\, G \in \mathcal{C}_n \;\; \forall\, c : V(G) \to [5]
+  \;\; c \text{ is not a proper coloring of } G .
+\]
+Enumerate-then-color answers it by splitting the quantifiers, paying once per
+member of $\mathcal{C}_n$. The following proof does not split them.
+
+\begin{proof}[Proof of Theorem~\ref{thm:exhaustive}, order $n = 17$]
+Fix an edge count $m$ in the window $46 \le m \le 52$ and encode membership in
+the reduced search space as a propositional formula $\Phi_{n,m}$ over the
+$\binom{n}{2}$ edge variables of a labeled graph on $n$ vertices: $K_4$-freeness
+and the codegree bound as forbidden-configuration clauses, minimum degree $5$,
+maximum degree $\lfloor (n-1)/2 \rfloor = 8$, and edge count exactly $m$ through
+reified cardinality counters. A satisfying assignment of $\Phi_{n,m}$ is exactly a
+labeled graph meeting all four reductions at edge count $m$.
+
+Solve $\Phi_{n,m}$ with a conflict-driven clause-learning solver carrying two
+propagators. The first is the isomorphism propagator of \emph{SAT modulo
+symmetries}~\cite{KirchwegerSzeider2021}, which prunes any partial assignment
+extendable only to lexicographically non-minimal adjacency matrices; since it
+removes only non-minimal labelings, at least one labeling of every isomorphism
+class survives. The second is a chromatic-number propagator: whenever the solver
+reaches a total assignment, the propagator searches for a proper $5$-coloring $c$
+of the induced graph, and on finding one returns the clause
+\[
+  \bigvee_{\substack{uv \,\notin\, E(G) \\ c(u) = c(v)}} x_{uv},
+\]
+asserting that at least one currently monochromatic non-edge must become an edge.
+Every graph falsifying that clause admits $c$ as a proper $5$-coloring, so the
+clause is sound; and it is violated by the present assignment, so the solver makes
+progress. Consequently a model of the augmented formula is a member of the class
+at order $n$ and edge count $m$ that is not $5$-colorable, and unsatisfiability of
+the augmented formula is a proof that no such member exists.
+
+For $n = 17$ every cell $m = 46, \dots, 52$ is unsatisfiable, in $2{,}975$ core-seconds
+in total ($1{,}202$ seconds of wall time on seven cores), the per-cell times running
+from $13$ seconds at $m = 52$ to $1{,}200$ seconds at $m = 47$. No graph is emitted
+at any point. Hence no $6$-critical member of the class exists on $17$ vertices,
+and with the previous half of the proof, none on at most $17$ vertices; so the
+class has no $\chrom \ge 6$ member on at most $17$ vertices.
+\end{proof}
+
+The same procedure reproduces the enumerated orders: the order-$15$ window closes
+in $3.6$ seconds and the order-$16$ window in $74.3$ seconds, against the $66.3$
+core-hours the order-$16$ enumeration took. Those two agreements are the reason we
+report the order-$17$ result with the same confidence as the enumerated ones: the
+procedure is not merely faster on the order where we cannot check it, it is faster
+on the orders where we can, and there it returns the answer we already knew.
+
 \begin{table}[ht]
 \centering
-\caption{Exhaustive enumeration of the UDG-necessary class ($K_4$-free and
-$K_{2,3}$-free) over the per-order edge window from the Kostochka-Yancey floor
-to the codegree ceiling~\eqref{eq:codeg-ceiling}, restricted to $2$-connected
-graphs with minimum degree $\ge 5$ and maximum degree
-$\le \lfloor (n-1)/2 \rfloor$. Every enumerated graph is $5$-colorable.}
+\caption{The UDG-necessary class ($K_4$-free and $K_{2,3}$-free) over the
+per-order edge window from the Kostochka-Yancey floor to the codegree
+ceiling~\eqref{eq:codeg-ceiling}, restricted to $2$-connected graphs with minimum
+degree $\ge 5$ and maximum degree $\le \lfloor (n-1)/2 \rfloor$. Orders $13$
+through $16$ are enumerated and every enumerated graph is $5$-colorable. Order
+$17$ is decided without enumeration, one unsatisfiability proof per cell of the
+window, so no member is ever generated and the enumeration columns do not apply.}
 \label{tab:e17}
 \begin{tabular}{r c r r r r}
 \toprule
@@ -622,6 +695,7 @@ $n$ & Edge window & Class members & By DSATUR & By SAT & $\chrom \ge 6$ \\
 14 & $[38, 39]$ & 0 & 0 & 0 & 0 \\
 15 & $[41, 43]$ & 11 & 9 & 2 & 0 \\
 16 & $[43, 48]$ & 11{,}315 & 11{,}291 & 24 & 0 \\
+17 & $[46, 52]$ & \multicolumn{3}{c}{not enumerated (decided directly)} & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -646,14 +720,59 @@ a different solver, re-enumeration of sampled parts of the order-$16$ run),
 and the pruning plugin was fuzz-tested without ever cutting a valid
 completion.
 
-\paragraph{Epistemic status.} Two caveats, stated plainly. First, enumeration
-completeness at $n = 15, 16$ rests on \texttt{geng} together with the verified
-prune lemmas; no independent second enumerator was run at those orders. This
-is the same epistemic position as the Folkman-number
-literature~\cite{LathropRadziszowski2011}. Second, the two counting lemmas
+\paragraph{Calibration of the order-17 procedure.} The order-$17$ half rests on a
+solver returning unsatisfiable, so the propagator that supplies the coloring half
+was calibrated against known answers before it was used, at each of the three
+chromatic thresholds it could be asked about. At threshold $4$: with triangles
+forbidden, the procedure is unsatisfiable at order $10$ and satisfiable at order
+$11$, and the graph it returns at order $11$ is isomorphic to the Gr\"otzsch graph,
+which by Chv\'atal's theorem~\cite{Chvatal1974} is the unique triangle-free
+$4$-chromatic graph of that order. At threshold $5$: with $K_4$ forbidden, unsatisfiable at order $10$ and
+satisfiable at order $11$, agreeing with the minimum order of a $K_4$-free
+$5$-chromatic graph~\cite{JensenRoyle1995}. At threshold $6$, the value actually
+used: with $K_6$ forbidden, unsatisfiable at order $7$ and satisfiable at order
+$8$, as it must be, since a $k$-critical graph has order $k$ or at least $k+2$ but
+never $k+1$, while $C_5 + K_3$ is $6$-chromatic of order $8$ with clique number
+$5$; the returned graph is isomorphic to $C_5 + K_3$. Every satisfiable answer
+above was re-verified by an independent complete solver on a separately generated
+encoding. Two further controls run on the production cells themselves. First,
+non-vacuity: an unsatisfiable answer is uninformative if the cell is empty for
+reasons unrelated to coloring, so each cell was also solved at threshold $3$,
+where it must be satisfiable, and the returned graph was passed through the same
+independent membership filter used above; every nonempty cell of the order-$17$
+window passes. Second, ablation: rerunning a cell with the class constraints
+removed but the order, degree, and edge-count constraints kept must return
+satisfiable, confirming that the unsatisfiable verdict is a statement about the
+class rather than a failure of the search.
+
+\paragraph{A second enumerator at orders 15 and 16.} Enumeration completeness at
+the two orders that carry content was independently re-derived with a generator
+built on different principles. Rather than canonical augmentation, the second
+enumerator solves the same cell formulas $\Phi_{n,m}$ described below with the
+isomorphism propagator of~\cite{KirchwegerSzeider2021}, emitting one graph per
+isomorphism class and terminating in unsatisfiability once the class is
+exhausted; canonicity is enforced inside the solver rather than by the generation
+order. At $n = 15$ it returns the same $11$ graphs as \texttt{geng}, graph for
+graph. At $n = 16$ it returns $11{,}315$ graphs, every cell of the window proved
+exhausted, and matching the \texttt{geng} output graph for graph: $11{,}315$
+matched, none present in only one of the two lists, and no property violations.
+The two enumerations are therefore in exact agreement at both orders.
+
+\paragraph{Epistemic status.} Three caveats, stated plainly. First, the
+order-$17$ half of Theorem~\ref{thm:exhaustive} rests on unsatisfiability
+answers from a solver carrying two propagators, and we did not extract
+machine-checkable proof certificates for them; what stands behind them instead is
+the calibration above, the agreement of the same procedure with the independently
+enumerated orders $15$ and $16$, and the non-vacuity and ablation controls. A
+certified version is possible in principle (the solver used can emit LRAT), and we
+regard it as the natural next hardening rather than as a gap in the argument's
+shape. Second, the two counting lemmas
 behind the search-space reductions (Lemma~\ref{lem:maxdeg} and the
 cherry-budget inequality) are elementary, formalization-ready double-counting
 arguments, but they have not yet been machine-verified in a proof assistant.
+Third, both halves inherit the reductions: if a $6$-critical graph could evade
+one of (i)--(iv), it would evade both halves alike, which is why those four
+statements carry proofs here rather than citations alone.
 As with the rest of this note, Theorem~\ref{thm:exhaustive} bounds the
 abstract class only: it moves no bound on $\chrom(\R^2)$ and says nothing
 about UDG-realizability.
@@ -670,15 +789,16 @@ sides.
   \item It cannot be a small dense Folkman-type host
         (Section~\ref{sec:codegree}): such hosts violate the codegree bound that
         every planar UDG must satisfy.
-  \item It cannot be an in-class graph on at most $16$ vertices
-        (Section~\ref{sec:exhaustive}): exhaustive enumeration finds every
-        candidate there $5$-colorable.
+  \item It cannot be an in-class graph on at most $17$ vertices
+        (Section~\ref{sec:exhaustive}): through order $16$ exhaustive
+        enumeration finds every candidate $5$-colorable, and at order $17$ the
+        question is decided directly, without enumeration.
 \end{itemize}
 What remains is a single sharpened target.
 
 \begin{quote}
 \textbf{Target object.} A $6$-chromatic graph in the \emph{UDG-necessary class}
-(simultaneously $K_4$-free and $K_{2,3}$-free), of order at least $17$
+(simultaneously $K_4$-free and $K_{2,3}$-free), of order at least $18$
 (Theorem~\ref{thm:exhaustive}) and heuristically of order at least roughly
 $26$, together with an explicit unit-distance embedding in $\R^2$.
 \end{quote}
@@ -706,7 +826,7 @@ $n$, so a graph that respects~\eqref{eq:codeg-ceiling} need not be realizable.
         over roughly $35$ cores from one construction family, not a theorem about
         all $K_4$-free $6$-critical graphs. Only the $n \le 12$ exclusion
         (Proposition~\ref{prop:core13}), the Folkman-floor exclusion, and the
-        exhaustive $n \le 16$ enumeration (Theorem~\ref{thm:exhaustive},
+        $n \le 17$ non-existence result (Theorem~\ref{thm:exhaustive},
         computer-assisted, with the caveats stated in
         Section~\ref{sec:exhaustive}) are rigorous.
   \item \emph{No bound on $\chrom(\R^2)$ moved.} This note is negative and
@@ -740,18 +860,23 @@ top-down probe of Section~\ref{sec:codegree}, which starts from a genuine
 $\chrom = 6$ graph ($M^3(C_5)$) and repairs its codegree violations while holding
 $\chrom = 6$, stalls with the violations intact in the $6$-critical core. The
 three local searches are heuristic, not non-existence results, and they probe
-orders up to $64$. For $n \le 16$, however, Theorem~\ref{thm:exhaustive} now
+orders up to $64$. For $n \le 17$, however, Theorem~\ref{thm:exhaustive} now
 closes the question outright: the class simply contains no $\chrom \ge 6$ member
-there. The in-class negative is thus exhaustive for $n \le 16$ and heuristic
-for $n$ up to $64$. Extending the exhaustive frontier is a measured compute
-wall rather than a conjecture: four sampled parts of a $4096$-way split of the
-$n = 17$ window each exceeded $1{,}700$ cpu-seconds without finishing, putting
-the full $n = 17$ enumeration above roughly $80$ cpu-days on the workstation
-used here, with per-order cost multipliers of roughly $29\times$ to $100\times$
-along the ladder. Together the probes and the enumeration triangulate one
+there. The in-class negative is thus decisive for $n \le 17$ and heuristic
+for $n$ up to $64$. It is worth recording what the frontier cost before and
+after, because the change is not one of hardware. Enumeration walls quickly:
+four sampled parts of a $4096$-way split of the $n = 17$ window each exceeded
+$1{,}700$ cpu-seconds without finishing, putting the full $n = 17$ enumeration
+above roughly $80$ cpu-days on the workstation used here, with per-order cost
+multipliers of roughly $29\times$ to $100\times$ along the ladder. Deciding the
+same order without enumerating costs $0.83$ core-hours on that same class of
+machine. The multiplier along the ladder is unchanged; what changed is the
+constant, because the cost no longer scales with the size of the class. Whether
+that buys one more order or several is an empirical question we do not
+prejudge here. Together the probes and the non-existence results triangulate one
 conclusion: the target object, if it exists, lives at orders that local moves
 do not reach from any natural seed and that exhaustive enumeration does not
-yet reach at all.
+reach at all by generation.
 
 \section*{Acknowledgments}
 This is a note from an ongoing computational program on the Hadwiger-Nelson
