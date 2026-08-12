@@ -8,6 +8,18 @@ Publication triage of these findings lives in [`PUBLICATIONS.md`](PUBLICATIONS.m
 
 ---
 
+### L82. E24 radius 3: **a SECOND field supports a 4-chromatic UDG, and its 4-critical core is a 56-vertex graph that is provably not the Moser spindle and not Golomb.** $\mathbb{Q}(\sqrt3,\sqrt{35})$, with rotor $(\cos,\sin) = (1/6, \sqrt{35}/6)$, reaches $\chi=4$ at radius 3 using only **48 edges more than the inert baseline** (3,990 vs 3,942), where the Moser field needs 4,530. Sparse binding, same effect.
+
+**The object.** Greedy vertex-deletion from the 865-point ball, with the reduction re-verified afterwards (for EVERY vertex $v$, $\chi(H - v) \le 3$): a VERTEX-CRITICAL 4-chromatic unit-distance graph on **56 vertices, 115 edges**, degree sequence $3^{26}4^{17}5^4 6^3 7^3 8^2 9$. Committed as `combinatorial/e24_sqrt35_core.json` (g6 included).
+
+**Why it is a different mechanism, not a relabelling.** A 4-CRITICAL graph on 56 vertices cannot contain the 7-vertex Moser spindle or the 10-vertex Golomb graph as a subgraph: either would already force $\chi \ge 4$, so every vertex outside it would be removable and criticality would fail. So this is not the known 4-chromatic lineage embedded in a new field; it is a distinct 4-chromatic mechanism, living outside $\mathbb{Q}(\sqrt3,\sqrt{11})$.
+
+**Why it matters for the frontier.** The lemma_db's top item wants a $\chi=5$ UDG built on a NEW construction principle (L57: the known lineage is forcing-sterile by construction, so filing down what exists cannot produce it). This is that, one $\chi$-level below the target, and it says the search for new principles should be indexed by FIELD. The arithmetic that makes it possible: $c^2 + p = 36$ has solutions $(c,p) = (5,11)$ and $(1,35)$, so the Moser field and this one are the two squarefree denominators-6 rotors, and only they bind at radius 3.
+
+**Scope.** $\chi=4$, not 5; no bound moved; whether this core extends to a $\chi=5$ object in the same field is exactly the open follow-up. The radius-3 sweep otherwise stays negative: 8 fields, **0 reaching $\chi\ge5$**, with the six inert fields all landing on the identical 865-point / 3,942-edge ball.
+
+---
+
 ### L81. E23/E24, two ladders and where each walls. **$f(6) \ge 15$**: no $K_4$-free 6-chromatic graph exists on $\le 14$ vertices, a self-contained result with no unit-distance content (the $\chi\ge5$ analogue is Jensen-Royle's $f(5)=11$). And a sharp negative on the ring side: at radius 2, EIGHT fields $\mathbb{Q}(\sqrt3,\sqrt p)$ give the identical 163-point, 558-edge ball, while $\mathbb{Q}(\sqrt3,\sqrt{11})$ alone gets **594 edges on the same vertices** -- the 36-edge difference is the whole reason it is 4-chromatic.
 
 **E23, $f(6) \ge 15$.** Same $\Sigma_2$ machinery, class constraints replaced by $K_4$-free + $\delta\ge5$ + Kostochka-Yancey floor + Turan ceiling $\lfloor n^2/3\rfloor$ (the E17 maxdeg lemma is NOT available here: its proof used $K_{2,3}$-freeness). Ladder: $n=12$ closed in 68 cpu-s, $n=13$ in 938 cpu-s, $n=14$ in **34,866 cpu-s (9.7 cpu-h)**. The $\sim$14-37x per-order cost growth puts $n=15$ at 100-300 cpu-h, so this walls soon; $f(6)\le47$ from the Mycielskian tower remains the only upper bound. THE CALIBRATION GATE EARNED ITS KEEP: the first run passed $n=10$ vacuously, on an EMPTY window caused by a wrong $k=5$ KY floor. Fixed (general KY bound, asserted against the $k=6$ floor E18 hard-codes; empty windows now reported as vacuous, never counted as checked), after which it reproduces $f(5)=11$ for real with witnesses at $m=29..32$.
