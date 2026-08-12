@@ -31,7 +31,7 @@ fi
     flock -n 9 || exit 0
     echo "=== climb from n=$FROM started $(date -Is) ===" >> "$LOG"
     "$REPO/.venv/bin/python" -m experiments.combinatorial.e20_sigma2 \
-        --climb "$FROM" --jobs 7 --timeout 14400 --split-bits 5 --probe >> "$LOG" 2>&1
+        --climb "$FROM" --jobs 7 --timeout 1800 --split-bits 5 --probe >> "$LOG" 2>&1
     rc=$?
     echo "=== climb exited rc=$rc at $(date -Is) ===" >> "$LOG"
     case $rc in
