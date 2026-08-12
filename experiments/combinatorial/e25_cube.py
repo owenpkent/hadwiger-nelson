@@ -70,11 +70,25 @@ def generate_cubes(n, cnf, cube_path, cutoff, prerun, chi=6, timeout=None):
     t0 = time.time()
     p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     cubes = [ln for ln in p.stdout.splitlines() if ln.startswith("a ")]
-    # A cube phase that solves the cell outright emits a model instead.
+    # A cube phase that solves the cell outright emits a model, or finishes the
+    # whole refutation during the prerun and reports it. Both must be recognised:
+    # the calibration's first run produced zero cubes on an easy cell because the
+    # 20-second prerun had already closed it, and without this the driver reported
+    # UNKNOWN for a cell it had in fact decided.
     models = [ln.strip() for ln in p.stdout.splitlines()
               if ln.startswith("[") and ln.strip().endswith("]")]
+    # smsg announces this case in prose ("Instance already solved during prerun")
+    # rather than with a Result: line, and the prose does not say WHICH way. It is
+    # disambiguated the same way a cube run is: a satisfied instance prints its
+    # model, so prose-without-model means refuted.
+    solved = None
+    for ln in p.stdout.splitlines():
+        if ln.startswith("Result:"):
+            solved = {"10": SAT, "20": UNSAT}.get(ln.split()[-1])
+    if solved is None and "already solved during prerun" in p.stdout:
+        solved = SAT if models else UNSAT
     pathlib.Path(cube_path).write_text("\n".join(cubes) + ("\n" if cubes else ""))
-    return {"cubes": len(cubes), "models": models,
+    return {"cubes": len(cubes), "models": models, "solved_in_prerun": solved,
             "seconds": round(time.time() - t0, 1), "cmd": " ".join(cmd)}
 
 
@@ -119,9 +133,17 @@ def decide(n, m, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
                "hit": hit, "cubes": gen["cubes"], "elapsed_s": gen["seconds"]}
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
         return out
+    if gen["cubes"] == 0 and gen["solved_in_prerun"] == UNSAT:
+        out = {"n": n, "m": m, "result": UNSAT, "cubes": 0,
+               "closed_during_prerun": True, "elapsed_s": gen["seconds"]}
+        (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
+        if not quiet:
+            print(f"  n={n} m={m}: UNSAT during the {prerun}s prerun, before "
+                  f"cubing was needed [{gen['seconds']}s]", flush=True)
+        return out
     if gen["cubes"] == 0:
         out = {"n": n, "m": m, "result": UNKNOWN, "cubes": 0,
-               "why": "cubing produced neither cubes nor a model",
+               "why": "cubing produced neither cubes nor a decided result",
                "elapsed_s": gen["seconds"]}
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
         return out

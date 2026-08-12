@@ -19,6 +19,37 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-12, later): L79-L82 -- four follow-ons, two of them negatives
+> that redirect effort, plus a NEW OBJECT.** (1) **L82, the one to pull on**: the
+> radius-3 ring census found a SECOND binding field. $\mathbb{Q}(\sqrt3,\sqrt{35})$
+> (rotor $(1/6,\sqrt{35}/6)$) reaches $\chi=4$ on 48 edges more than the inert
+> baseline, and its core is a VERTEX-CRITICAL 4-chromatic UDG on **56 vertices /
+> 115 edges** that provably contains neither the Moser spindle nor Golomb (a
+> 4-critical graph on 56 vertices cannot contain a 7- or 10-vertex 4-chromatic
+> subgraph). A distinct 4-chromatic mechanism outside the lineage's field, which is
+> the frontier's "new construction principle" one $\chi$-level below target.
+> Artifact `combinatorial/e24_sqrt35_core.json`. Radius-4 test of whether it
+> extends to $\chi=5$ is RUNNING, with the Moser field at radius 4 as its
+> calibration (de Grey's graph lives in a 4-step ball, so that ball must reach
+> $\chi=5$; if it does not, the generating set is too small and needs more rotors).
+> (2) **L81: $f(6)\ge15$** -- no $K_4$-free 6-chromatic graph on $\le14$ vertices
+> (E23, self-contained, no UDG content; $f(5)=11$ is Jensen-Royle, $f(6)\le47$ from
+> the Mycielskian tower). The $n=15$ rung was STOPPED at a projected 100-300 cpu-h.
+> (3) **L79, E21**: unit-distance geometry forbids odd cycles and $>6$-vertex
+> components inside any neighborhood, which is strictly stronger than the class's
+> $K_4$-free + codegree bound and is verified TIGHT on three real embeddings. It
+> prunes 64% of the class and is still 2x SLOWER, because E20's cost is decoupled
+> from class size. Belongs in `e17_prune.c` (worth ~3x to an enumerator), not in the
+> decider. (4) **L80, E22**: the $n\le17$ verdicts CANNOT be LRAT-certified -- $\Phi$
+> is satisfiable, so no propositional refutation exists to check. C1's caveat was
+> corrected accordingly. (5) **E25**: SMS's native cube-and-conquer wired as the
+> fallback for cells the ladder cannot swallow, calibrating now; sampled cubes on the
+> stuck $n=18$ $m=53$ cell ran 0.11-41.9 s against a 4 h whole-cell budget that never
+> finished. **$n=18$ status, honest**: 4 of 9 cells UNSAT (the dense end, $m=54..57$),
+> the 5 sparse cells $m=49..53$ all UNKNOWN and recursively splitting; the earlier
+> 40x-per-order projection was too optimistic and there is no defensible ETA.
+> $n\le17$ is unaffected and remains the published claim.
+
 > **Update (2026-08-12): L78, E20 -- the $\Sigma_2$ collapse, and $n=17$ is CLOSED.**
 > The colorability half no longer needs its own pass. SMS ships a chromatic-number
 > propagator (`graphPropagators/coloringCheck.cpp`) the program had never used --
