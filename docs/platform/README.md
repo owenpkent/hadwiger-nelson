@@ -151,6 +151,49 @@ beside it:
 8. **Record the honest scope** in the module docstring: what the result does NOT
    establish. The docstring is where a future session learns what it may cite.
 
+## Prior art, internal: the zeta-function repo
+
+Most of what makes this platform work was not invented here. The Riemann-hypothesis
+repo at `~/dev/zeta-function` (356 commits) is the first implementation, and ASSAY
+is its second generation. Credit where it belongs, itemized:
+
+| inherited from the zeta repo | what it is |
+|------------------------------|------------|
+| **The wrong-approach detector** | The single best idea in either repo. The Davenport-Heilbronn $L$-function has a functional equation but no Euler product, and known off-line zeros, so ANY method that does not distinguish $\zeta$ from it is structurally wrong. A control object that a correct method must fail on. Invariant 4 here is a direct port ($\mathbb{Q}^2$, $L^\infty$, $\mathbb{R}^1$ in place of D-H). |
+| `PHASE_STATE.md` | Resumable operational state, read first on a cold session. |
+| `LEARNINGS.md` | Permanent numbered findings log, newest first. |
+| `PUBLICATIONS.md` | Publication triage with a rubric and a circularity gate. |
+| `TOKEN_EFFICIENCY.md` | Explicit cost playbook. |
+| Six-agent role spec | SURVEYOR / BUILDER / VERIFIER / ADVERSARY / SYNTHESIZER / ORCHESTRATOR. |
+| `OVERNIGHT_PLAN.md` | The ancestor of `autorun.sh`: a curated backlog worked autonomously, with an explicit stop condition ("when the high-value backlog is genuinely exhausted, stop and record it rather than generate filler") and a honesty discipline ("negative results are coordinates; no fabricated proofs"). |
+
+The transfer audit that brought these across is
+[`experiments/ZETA_INNOVATION_TRANSFER.md`](../../experiments/ZETA_INNOVATION_TRANSFER.md).
+
+### What is actually new in ASSAY
+
+Two changes, and they are the same change viewed from two sides.
+
+**1. The model leaves the compute loop.** The zeta repo's `OPERATIONS.md` is
+agent-centric: a session deploys 5-10 BUILDERs in parallel, VERIFIERs and
+ADVERSARYs scale with their output, and the loop advances by model inference. That
+is powerful and expensive, and it stops when the session stops. ASSAY moves the
+work to cron and `flock`, where it runs for days at zero token cost, and reserves
+model invocation for the three conditions that genuinely need judgment. The
+zeta repo's overnight loop needed a session; this one needs a machine.
+
+**2. The gates become mechanical rather than dispositional.** The zeta repo states
+its honesty discipline in prose ("every Arch 1/3/4 result must pass the
+Davenport-Heilbronn check") and relies on whoever is driving to apply it. ASSAY
+makes refusal automatic: the queue will not run production on an uncalibrated tool,
+a cell that fails non-vacuity is downgraded without anyone deciding to downgrade
+it, and a failed gate halts the queue rather than logging a warning. The evidence
+that this matters is the table at the top of this document: prose discipline would
+not have caught the typed $n=19$ window, because nobody was going to re-derive it
+by hand.
+
+Everything else here is the zeta repo's methodology with a different control object.
+
 ## Landscape: what already exists, and where this differs
 
 The autonomous-mathematics field in 2026 has three broad families. This platform
@@ -213,8 +256,9 @@ tells you when to come back.
 
 ### The honest positioning
 
-ASSAY is not more capable than any of the above. It is narrower and more paranoid.
-Its contribution is the epistemic layer: **calibration ladders, non-vacuity probes,
+ASSAY is not more capable than any of the above, and most of its methodology is
+inherited from the zeta repo rather than invented. It is narrower and more
+paranoid. Its contribution is the epistemic layer, mechanized: **calibration ladders, non-vacuity probes,
 positive controls, structural firewalls and downgrade-on-doubt semantics, applied
 to computational results that no proof assistant can currently certify.** The
 measured justification is the table at the top of this document.
