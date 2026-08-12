@@ -1,0 +1,49 @@
+{
+  "n": 17,
+  "chi": 6,
+  "cells": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+  ],
+  "jobs": 7,
+  "wall_s": 1202.4,
+  "cpu_s": 2975.3,
+  "per_cell": {
+    "46": [
+      "UNSAT",
+      735.74
+    ],
+    "47": [
+      "UNSAT",
+      1200.39
+    ],
+    "48": [
+      "UNSAT",
+      777.81
+    ],
+    "49": [
+      "UNSAT",
+      170.92
+    ],
+    "50": [
+      "UNSAT",
+      53.4
+    ],
+    "51": [
+      "UNSAT",
+      23.74
+    ],
+    "52": [
+      "UNSAT",
+      13.26
+    ]
+  },
+  "hits": 0,
+  "unknown": [],
+  "verdict": "THEOREM: the both-free class has no chi>=6 member on 17 vertices"
+}

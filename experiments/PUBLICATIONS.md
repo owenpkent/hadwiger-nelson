@@ -98,12 +98,16 @@ Three scored axes (each 0-3), plus readiness, venue, verdict, and priority.
 | C5 | IE-LP + congruence (IEC) self-certification of $\chi_m \ge 5$ | 2 | 1 | 1 | notes | none (reproduction) | ARCHIVE | P3 |
 | C6 | Lean formalization of the covering / list-coloring / triple-lift lemmas | 3 | 1 | 1 | code (sorry-free) | formalization note (when mass grows) | PARK | P3 |
 | C7 | E17 exhaustive both-free enumeration: no $\chi \ge 6$ member at $n \le 16$ | 2 | 2 | 2 | notes (e17_results.md) | fold into C1 (amend) or C1 follow-up | FOLD->C1 | P1 |
+| C8 | E20 $\Sigma_2$ collapse: no $\chi \ge 6$ both-free member at $n \le 17$, without enumeration (~3200x) | 3 | 2 | 2 | notes (e20_results.md) | math half folds into C1; method half into C3 / SAT venue | FOLD->C1+C3 | P1 |
 
 Composite read: **C1 is the one live paper.** C2 and C3 are the two real
 secondary products; both are stronger *attached* to or *alongside* C1 than alone.
 C4-C6 are honest but not independently publishable as they stand. C7 is a direct
 strengthening of C1's codegree-wall pillar; whether it amends C1 pre-upload or
 becomes a follow-up is an Owen decision (see the C7 dossier and the decision log).
+C8 supersedes C7's bound by one order ($n \le 17$) and adds a method the SAT side
+would care about on its own; it splits cleanly, the theorem into C1 alongside C7,
+the technique alongside C3.
 
 ---
 
@@ -323,6 +327,38 @@ becomes a follow-up is an Owen decision (see the C7 dossier and the decision log
   no contradictions", and the replication on a second host/OS is a referee-facing
   robustness point. Caveat (ii) (the two counting lemmas not yet Lean-proved) is
   untouched and remains the thing standing between V=2 and V=3.
+
+### C8 - E20 $\Sigma_2$ collapse (no $\chi \ge 6$ both-free member at $n \le 17$)
+- **Source**: LEARNINGS L78. Report [`combinatorial/e20_results.md`](combinatorial/e20_results.md);
+  artifacts `combinatorial/e20_sigma2.py`, `combinatorial/_cache/e20/`.
+- **One line**: folding SMS's chromatic-number propagator into the same
+  relaxation-gated cell CNF answers "does the both-free class contain a $\chi \ge 6$
+  member on $n$ vertices?" in ONE CDCL run per cell, without enumerating the class:
+  $n=16$ reproduces in 74.3 s against 66.3 cpu-h ($\sim$3200x), and **$n=17$ closes
+  in 0.83 cpu-h** against the $> 80$ cpu-days C7 measured, so any host has $n \ge 18$.
+- **V=3**: the verdict is an UNSAT from a solver whose relevant propagator is
+  calibrated at $k=4$ (Groetzsch, an external uniqueness theorem, model returned
+  isomorphic to it), $k=5$ (Jensen-Royle 10/11), and $k=6$ (the production value:
+  $K_6$-free $\chi\ge6$ UNSAT at $n=7$, SAT at $n=8$ with the model isomorphic to
+  $C_5 + K_3$); it reproduces this repo's OWN $n=15,16$ answers by a third
+  independent route; every cell carries a non-vacuity probe so an UNSAT cannot be an
+  empty-cell artifact; and every SAT model is re-verified by disjoint code. The
+  soundness framing is C7's, unchanged.
+- **N=2**: the ingredients are public (Kirchweger-Szeider SMS, its coloring
+  propagator); the move -- using it to decide a $\Sigma_2$ *class* question instead
+  of enumerating the class, on a UDG-necessary class -- is the new part, and it
+  crosses a wall this program had measured and published as $> 80$ cpu-days.
+- **S=2**: closes the "more compute at small $n$" route decisively (the answer is
+  now cheap and still negative), and the method is a citable pattern for anyone
+  asking $\exists G \in \mathcal{C} : \chi(G) \ge k$.
+- **Caveats, load-bearing**: bounds the CLASS, not $\chi(\mathbb{R}^2)$; W3 and the
+  L63 codegree wall untouched. C7 caveat (ii) (counting lemmas not Lean-proved) is
+  inherited verbatim. The UNSATs are not yet proof-carrying, though `smsg` has
+  `--lrat-output` and that is the obvious next hardening.
+- **Verdict**: FOLD, and it splits: the theorem ($n \le 17$) into C1 next to C7,
+  where it strengthens the same pillar by one order; the technique into C3 (or a
+  standalone SAT-venue note if C3 ships first). P1, because it sharpens the same
+  Owen decision C7 already gates rather than opening a new one.
 
 ---
 

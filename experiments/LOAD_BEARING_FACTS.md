@@ -40,6 +40,15 @@ points here. Keep in sync with the top of [`LEARNINGS.md`](LEARNINGS.md) and the
    6-critical host. The wanted gadget needs all four of: K4-free, 6-critical,
    UDG-realizable-in-plane, not-$K_{2,3}$-excluded.
 
+5b. **The both-free class has no $\chi \ge 6$ member on $n \le 17$**, so any host
+   has $n \ge 18$. Established twice over: exhaustive enumeration to $n \le 16$
+   (L75 geng, L77 a second enumerator agreeing 11,315/11,315 at $n=16$), then
+   L78/E20 deciding the question WITHOUT enumeration by folding SMS's
+   chromatic-number propagator into the cell CNF ($n=17$ in 0.83 cpu-h against the
+   $> 80$ cpu-days the enumerate-then-color route was measured at). Consequence for
+   a creative round: do not propose "search harder at small $n$"; the door is shut
+   and cheap to shut further. An always-on ladder is climbing $n$ from 18.
+
 6. **The measurable thread**: $\chi_m(\mathbb{R}^2) \ge 5$ is classical (Falconer).
    The order-2 Lasserre SDP on Ambrus's $X_{23}$ is FEASIBLE, so it does not certify
    even $\chi_m \ge 5$ and cannot reach $\chi_m \ge 6$: **the order-2 measurable
@@ -55,7 +64,10 @@ points here. Keep in sync with the top of [`LEARNINGS.md`](LEARNINGS.md) and the
 - Stack: Python + python-sat (Cadical/Glucose/Maple) + sympy exact arithmetic +
   networkx + cvxpy; Lean 4 skeleton (sorry-free). PyPy gives ~5x on the pure-Python
   solver (not for pysat code).
-- **No C compiler on host**: nauty / pynauty cannot install.
+- **Host capability (superseded note)**: the old "no C compiler, nauty cannot
+  install" line is dead on the current machines. The Linux research box builds
+  nauty 2.8.9 + `geng_hn`, and `smsg` (SAT modulo symmetries, with its coloring
+  propagator) from source with Boost 1.83 installed user-local, no root.
 - SAT solves on 500-2000 vtx UDGs are routine; the symmetry-broken portfolio
   self-certifies the whole $\chi \ge 5$ lineage (M^4(C5) k=6, P510 k=4, de Grey
   1585 k=4 all UNSAT). Exact Groebner realizability tops out at ~14 vertices.

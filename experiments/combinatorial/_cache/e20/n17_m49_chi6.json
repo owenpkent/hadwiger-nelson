@@ -1,0 +1,29 @@
+{
+  "n": 17,
+  "m": 49,
+  "chi": 6,
+  "gallai": false,
+  "split": null,
+  "connected": true,
+  "vars": 12776,
+  "clauses": 97003,
+  "cmd": "/home/owen/.local/bin/smsg -v 17 --dimacs /home/owen/dev/hadwiger-nelson/experiments/combinatorial/_cache/e20/n17_m49_chi6.cnf --min-chromatic-number 6 --connected",
+  "result": "UNSAT",
+  "elapsed_s": 170.92,
+  "smsg_tail": [
+    "Statistics for MinimalityChecker:",
+    "Calls: 63263",
+    "Time in seconds: 8.5930",
+    "Added clauses: 6683",
+    "Statistics for ConnectedChecker:",
+    "Calls: 58",
+    "Time in seconds: 0.0003",
+    "Added clauses: 0",
+    "Statistics for MinChromaticNumberChecker:",
+    "Calls: 58",
+    "Time in seconds: 0.0016",
+    "Added clauses: 58",
+    "Result: 20",
+    "Total time: 168.926938"
+  ]
+}

@@ -19,6 +19,33 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-12): L78, E20 -- the $\Sigma_2$ collapse, and $n=17$ is CLOSED.**
+> The colorability half no longer needs its own pass. SMS ships a chromatic-number
+> propagator (`graphPropagators/coloringCheck.cpp`) the program had never used --
+> L77's own build note calls it "an unused coloring propagator" while patching it --
+> and folding it into the SAME relaxation-gated cell CNF turns "does the both-free
+> class contain a $\chi\ge6$ member on $n$ vertices?" into ONE CDCL run:
+> `smsg -v n --min-chromatic-number 6 --dimacs <cell>`, `Result: 20` = the theorem.
+> Cost now tracks search difficulty, not class size, and the class is never
+> enumerated. **Calibration ALL RUNGS PASS before any trust**: triangle-free
+> $\chi\ge4$ UNSAT at $n{=}10$ / SAT at $n{=}11$ with the model **isomorphic to
+> Groetzsch** (external uniqueness theorem, both directions); $K_4$-free $\chi\ge5$
+> at 10/11 (Jensen-Royle); per-cell non-vacuity; and the repo's own $n=15$/$n=16$
+> verdicts reproduced by a third route. **Measured: $n=15$ 3.6 s (vs 420 s for the
+> geng gate re-measured here today), $n=16$ 74.3 s (vs 66.3 cpu-h, ~3200x), $n=17$
+> 0.83 cpu-h / 1202 s wall (vs the $>80$ cpu-days L75 measured).** VERDICT:
+> **the both-free class has NO $\chi\ge6$ member on 17 vertices** -- all seven cells
+> $m=46..52$ UNSAT, zero hits, zero unknowns; the dominant $m=46$ cell (E19 measured
+> it at $>1.15$M classes and had to be written as a 64-way branch driver) falls in
+> 736 s without emitting a graph. So **any both-free host, hence any host for a
+> $\chi\ge6$ UDG clamp, has $n \ge 18$**. Bounds the CLASS, not $\chi(\mathbb{R}^2)$;
+> W3 and the L63 codegree wall are untouched, and L75 caveat (ii) (Lean) is untouched.
+> Now running as the always-on job: `--climb 18`, a resumable ladder over
+> $n=18,19,20,\dots$ that auto-splits a timed-out cell into 32 cached branches and
+> stops loudly on the first hit or first genuine wall. Artifacts:
+> `combinatorial/e20_sigma2.py`, `combinatorial/e20_results.md`, `_cache/e20/`.
+> `smsg` now builds on the Linux host too (Boost 1.83 user-local, no root).
+
 > **Update (2026-08-09, late): L77 -- SAT modulo symmetries closes the E18 census.**
 > Kirchweger-Szeider `smsg` built on this host (msys/ucrt64; `cadical_sms` static
 > lib; minor portability patches), driven by `e18_sms_cell.py` over the SAME
@@ -188,7 +215,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 | Arch | Approach | Current wall | Status |
 |------|----------|--------------|--------|
-| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage. In-class enumeration is now exhaustively CLOSED for n<=16 (L75: no chi>=6 member exists; any host has n>=17), independently confirmed by a full second-enumerator census at n=16 (L77: SMS, 11,315/11,315 AGREE), with a measured generator wall at n=17 (>80 cpu-days). The W3 wall itself is unchanged | OPEN, the live route (route ii: wide imprimitive interface) |
+| 1 UDG | finite chi>=6 UDG via the realizable clamp | W3 = unit-distance realizability of the clamp; the host must be K4-free 6-critical AND K_{2,3}-free AND outside the P510 lineage. In-class nonexistence is now CLOSED for n<=17 (L78, the Sigma_2 collapse: no chi>=6 member exists, so any host has n>=18), on top of the n<=16 enumeration (L75) and its independent second-enumerator census (L77: 11,315/11,315 AGREE). The enumeration wall L75 measured at n=17 (>80 cpu-days) is GONE, not scaled: E20 answers the question without enumerating. The W3 wall itself is unchanged | OPEN, the live route (route ii: wide imprimitive interface) |
 | 2 measurable | chi_m>=6 via SDP | order-2 at X_23 is FEASIBLE; route CLOSED. Higher order or noncommutative SE(2) is the only remaining measurable lever | CLOSED (order-2); SE(2) open |
 | 3 fractional/spectral | chi_f, Lovász theta | plateau at the classical line at runnable scale | OPEN, no live increment |
 | 4 axiomatic | Borel chromatic chi_B | needs a local finite-UDG statement that pushes chi_B>=6 via the rotation group (not norm-blind Steinhaus) | OPEN, dark horse |
@@ -197,7 +224,7 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 - order-2 measurable certifies chi_m>=5 at X_23 -> **TRIGGERED-CLOSED (L72): it is FEASIBLE, route closed.**
 - a forced non-adjacent pair found anywhere in the known lineage -> NOT-TRIGGERED (L57: exhaustively free).
-- a manufactured K4-free 6-critical host that is also K_{2,3}-free -> NOT-TRIGGERED, and now EXHAUSTIVE for n<=16 (L63: codegree wall; L75: no such host exists at all on n<=16, so any future trigger lives at n>=17).
+- a manufactured K4-free 6-critical host that is also K_{2,3}-free -> NOT-TRIGGERED, and now EXHAUSTIVE for n<=17 (L63: codegree wall; L75: no such host on n<=16; L78: none on n=17 either, so any future trigger lives at n>=18). The E20 ladder is climbing n and will move this line as it goes.
 - the firewall (`lemma_db`) reports a violation -> NOT-TRIGGERED (audit clean as of 2026-06-30).
 
 ## Recommended next deployments
