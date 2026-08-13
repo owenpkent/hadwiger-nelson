@@ -48,14 +48,15 @@ import json
 import os
 import pathlib
 import subprocess
+import threading
 import sys
 import time
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
-from e20_sigma2 import (build_class_cnf, verify_model, SMSG,   # noqa: E402
-                        SAT, UNSAT, UNKNOWN)
+from e20_sigma2 import (build_class_cnf, build_forbidden_clique_cnf,  # noqa: E402
+                        verify_model, SMSG, SAT, UNSAT, UNKNOWN)
 
 HERE = pathlib.Path(__file__).resolve().parent
 CACHE = HERE / "_cache" / "e25"
@@ -116,33 +117,36 @@ def solve_cube(n, cnf, cube_path, line, chi=6, timeout=None):
             "tail": out.splitlines()[-4:]}
 
 
-def decide(n, m, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
-           k4free=True, codeg2=True, quiet=False):
+def cube_decide(n, cnf, tag, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
+                verify_hit=None, quiet=False):
+    """Run the cube pipeline over an ALREADY-BUILT CNF.
+
+    Split out of `decide` so the calibration's positive control can use a small
+    instance instead of a production cell. The control exists to prove the cube
+    path can return SAT at all, which does not require a hard instance, and using
+    one made the gate take hours and stall the queue.
+    """
     CACHE.mkdir(parents=True, exist_ok=True)
-    abl = ("" if k4free else "_nok4") + ("" if codeg2 else "_nocodeg")
-    tag = f"n{n}_m{m}_chi{chi}{abl}_c{cutoff}"
-    cnf = CACHE / f"{tag}.cnf"
-    build_class_cnf(n, m, cnf, k4free=k4free, codeg2=codeg2)
     cube_path = CACHE / f"{tag}.cubes"
 
     gen = generate_cubes(n, cnf, cube_path, cutoff, prerun, chi=chi)
     if gen["models"]:                       # cubing phase already found one
         edges = ast.literal_eval(gen["models"][-1])
-        hit = verify_model(n, edges, chi, m=m, class_member=k4free and codeg2)
-        out = {"n": n, "m": m, "result": SAT, "found_during_cubing": True,
+        hit = verify_hit(edges) if verify_hit else {"edges": edges}
+        out = {"n": n, "tag": tag, "result": SAT, "found_during_cubing": True,
                "hit": hit, "cubes": gen["cubes"], "elapsed_s": gen["seconds"]}
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
         return out
     if gen["cubes"] == 0 and gen["solved_in_prerun"] == UNSAT:
-        out = {"n": n, "m": m, "result": UNSAT, "cubes": 0,
+        out = {"n": n, "tag": tag, "result": UNSAT, "cubes": 0,
                "closed_during_prerun": True, "elapsed_s": gen["seconds"]}
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
         if not quiet:
-            print(f"  n={n} m={m}: UNSAT during the {prerun}s prerun, before "
+            print(f"  {tag}: UNSAT during the {prerun}s prerun, before "
                   f"cubing was needed [{gen['seconds']}s]", flush=True)
         return out
     if gen["cubes"] == 0:
-        out = {"n": n, "m": m, "result": UNKNOWN, "cubes": 0,
+        out = {"n": n, "tag": tag, "result": UNKNOWN, "cubes": 0,
                "why": "cubing produced neither cubes nor a decided result",
                "elapsed_s": gen["seconds"]}
         (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
@@ -168,20 +172,37 @@ def decide(n, m, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
     hits = [r for r in res if r["result"] == SAT]
     unk = [r for r in res if r["result"] == UNKNOWN]
     verdict = SAT if hits else (UNKNOWN if unk else UNSAT)
-    out = {"n": n, "m": m, "chi": chi, "cutoff": cutoff, "cubes": gen["cubes"],
+    out = {"n": n, "tag": tag, "chi": chi, "cutoff": cutoff, "cubes": gen["cubes"],
            "cubing_s": gen["seconds"], "solve_wall_s": round(time.time() - t0, 1),
            "solve_cpu_s": round(sum(r["seconds"] for r in res), 1),
            "result": verdict, "unknown_cubes": [r["line"] for r in unk],
            "max_cube_s": max((r["seconds"] for r in res), default=0)}
     if hits:
-        out["hit"] = verify_model(n, hits[0]["model"], chi, m=m,
-                                  class_member=k4free and codeg2)
+        out["hit"] = (verify_hit(hits[0]["model"]) if verify_hit
+                      else {"edges": hits[0]["model"]})
     (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
     if not quiet:
-        print(f"  n={n} m={m}: {verdict} via {gen['cubes']} cubes "
+        print(f"  {tag}: {verdict} via {gen['cubes']} cubes "
               f"[cubing {gen['cubing_s'] if 'cubing_s' in gen else gen['seconds']}s, "
               f"solve {out['solve_wall_s']}s wall / {out['solve_cpu_s']}s cpu, "
               f"slowest cube {out['max_cube_s']}s]", flush=True)
+    return out
+
+
+def decide(n, m, chi=6, cutoff=70, prerun=45, jobs=7, timeout=None,
+           k4free=True, codeg2=True, quiet=False):
+    """A production cell: build the class CNF, then run the cube pipeline."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    abl = ("" if k4free else "_nok4") + ("" if codeg2 else "_nocodeg")
+    tag = f"n{n}_m{m}_chi{chi}{abl}_c{cutoff}"
+    cnf = CACHE / f"{tag}.cnf"
+    build_class_cnf(n, m, cnf, k4free=k4free, codeg2=codeg2)
+    out = cube_decide(n, cnf, tag, chi=chi, cutoff=cutoff, prerun=prerun,
+                      jobs=jobs, timeout=timeout, quiet=quiet,
+                      verify_hit=lambda e: verify_model(
+                          n, e, chi, m=m, class_member=k4free and codeg2))
+    out["m"] = m
+    (CACHE / f"{tag}.json").write_text(json.dumps(out, indent=2))
     return out
 
 
