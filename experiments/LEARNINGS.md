@@ -8,6 +8,24 @@ Publication triage of these findings lives in [`PUBLICATIONS.md`](PUBLICATIONS.m
 
 ---
 
+### L85. E29: the new core BINDS ENTHUSIASTICALLY AND ITS RIGIDITY DOES NOT COMPOUND. Iterated assembly on the 56-vertex $\mathbb{Q}(\sqrt3,\sqrt{35})$ core reaches depth 6 (392 points, 4,309 edges, **1,159 binding edges**) with $\chi = 4$ at EVERY depth. Binding is not the scarce ingredient; coupling is.
+
+**The experiment, and why the negative is informative.** E28 tested the weakest version of the assembly move (one rotation: 7 of 8 rotors bound, $\chi$ stayed 4). E29 does what the lineage actually does and iterates, adding at each step the rotated copy that binds most. Three outcomes were specified IN ADVANCE and are distinguishable: $\chi\ge5$ (the object the program wants); $\chi=4$ throughout WITH binding (the core's rigidity does not compound); growth with NO binding (the field is rotor-poor rather than the motif being weak). The measured answer is the second, cleanly: binding grows monotonically 5 $\to$ 1,159 across depths while $\chi$ never moves off 4.
+
+**Reading.** Whatever makes the lineage's field special is NOT reproduced by piling rotations of a 4-critical motif onto itself in another field. Local bindings accumulate without producing global obstruction, which is the same lesson L74 learned continuously (GD can hold and grow a hard core but not manufacture $\chi\ge5$) arriving now by an exact, discrete route. Calibrated throughout: the identity rotor returns $\chi=3$ with every point duplicated, and the Moser rotor on a unit rhombus reassembles the SPINDLE at $\chi=4$ with 5 binding edges, so the procedure demonstrably performs the move before being pointed at anything new. Capped at depth 6 / 900 points so it could not diverge. Artifacts: `combinatorial/e29_iterated_assembly.py`, `_cache/e29/result.json`.
+
+---
+
+### L84. E27: **ALL 23 direction classes of de Grey's graph are ESSENTIAL; ZERO are redundant.** Deleting any single rotor residue mod $60^\circ$ collapses the graph to 4-colorable, INCLUDING the class that contains exactly one edge. L18's "extremely delocalized" is now a measurement rather than an impression: there is no scaffolding in that construction, and no small skeleton for a new one to copy.
+
+**The experiment.** Group the 7,909 edges by the direction they use (L83: 23 residues, largest class 462 edges, smallest 1). Delete one class, ask whether $\chi\ge5$ survives. Run as an `assay.Experiment`, so the guards are structural: the control demands the intact graph be 5-chromatic (L3), the ladder runs both directions (intact $\to$ YES, empty graph $\to$ NO), the non-vacuity probe demands the class be non-empty before its deletion counts as evidence, and any surviving obstruction would have been re-verified by a second solver configuration. Result: 23 ESSENTIAL, 0 redundant.
+
+**The sharpest consequence.** The smallest class holds ONE edge, and deleting it drops $\chi$ to 4. So that single edge lies in EVERY 5-critical subgraph of de Grey's graph. More generally, every one of the 23 rotor residues meets every 5-critical subgraph, which is a far stronger statement than "reductions tend to fail": the construction has no removable part at the granularity of direction.
+
+**What it means for the frontier.** A new $\chi=5$ UDG cannot be obtained by finding a sparse sub-skeleton of the known one and re-realizing it elsewhere, because no such sub-skeleton exists. Together with L85 (binding does not compound) and L83 (balls are $10^{14}$ too big), the three measurements agree: 5-chromaticity here is a GLOBALLY coupled property, not an accumulation of local structure. Artifacts: `combinatorial/e27_direction_ablation.py`, `_cache/e27/summary_residue.json`.
+
+---
+
 ### L83. E26: the lineage's vector system MEASURED, and it kills the ball methodology. de Grey's 1585-vertex graph uses **78 distinct unit vectors** spanning **23 angle residues mod $60^\circ$**, in $\mathbb{Q}(\sqrt3,\sqrt5,\sqrt7,\sqrt{11})$ (degree 16), NOT the degree-4 $\mathbb{Q}(\sqrt3,\sqrt{11})$ that CLAUDE.md records. E24 supplied 3 residues from one rotor. That is the entire explanation of L82's calibration failure, now quantified rather than suspected.
 
 **A correction to a load-bearing repo fact.** `CLAUDE.md` states "$\mathbb{Q}(\sqrt3,\sqrt{11})$ for Moser spindle and de Grey graphs". True for the spindle, FALSE for de Grey: `sources/degrey_1585_vertices.sage` mentions $\sqrt3$ 7,678 times, $\sqrt5$ 4,008, $\sqrt7$ 2,868 and $\sqrt{11}$ 2,760. The graph needs all four radicals. E24's premise, that the lineage lives in the Moser field, was inherited from that line and was wrong, so every ball it built was inside a degree-4 subfield of the degree-16 field where the target lives. No such ball could ever contain the graph.

@@ -1,0 +1,61 @@
+{
+  "result": "NO_HIT",
+  "best_chi": 4,
+  "history": [
+    {
+      "depth": 1,
+      "rotor": 2,
+      "points": 112,
+      "edges": 239,
+      "binding_edges": 9,
+      "duplicate_points": 1,
+      "chi": 4
+    },
+    {
+      "depth": 2,
+      "rotor": 2,
+      "points": 168,
+      "edges": 593,
+      "binding_edges": 239,
+      "duplicate_points": 57,
+      "chi": 4
+    },
+    {
+      "depth": 3,
+      "rotor": 2,
+      "points": 224,
+      "edges": 1177,
+      "binding_edges": 469,
+      "duplicate_points": 113,
+      "chi": 4
+    },
+    {
+      "depth": 4,
+      "rotor": 2,
+      "points": 280,
+      "edges": 1991,
+      "binding_edges": 699,
+      "duplicate_points": 169,
+      "chi": 4
+    },
+    {
+      "depth": 5,
+      "rotor": 2,
+      "points": 336,
+      "edges": 3035,
+      "binding_edges": 929,
+      "duplicate_points": 225,
+      "chi": 4
+    },
+    {
+      "depth": 6,
+      "rotor": 2,
+      "points": 392,
+      "edges": 4309,
+      "binding_edges": 1159,
+      "duplicate_points": 281,
+      "chi": 4
+    }
+  ],
+  "elapsed_s": 545.1
+}

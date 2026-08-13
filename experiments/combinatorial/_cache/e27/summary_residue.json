@@ -1,0 +1,260 @@
+{
+  "by": "residue",
+  "essential": 23,
+  "redundant": 0,
+  "results": [
+    {
+      "verdict": "NO",
+      "unit": 0.0,
+      "seconds": 3.27,
+      "detail": {
+        "deleted_edges": 462,
+        "kept_edges": 7447
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 28.955024,
+      "seconds": 5.8,
+      "detail": {
+        "deleted_edges": 462,
+        "kept_edges": 7447
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 14.361512,
+      "seconds": 2.67,
+      "detail": {
+        "deleted_edges": 462,
+        "kept_edges": 7447
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 43.316536,
+      "seconds": 17.22,
+      "detail": {
+        "deleted_edges": 462,
+        "kept_edges": 7447
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 16.778655,
+      "seconds": 15.51,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 45.733679,
+      "seconds": 10.21,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 43.221345,
+      "seconds": 4.06,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 12.176369,
+      "seconds": 6.43,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 31.140166,
+      "seconds": 10.61,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 0.095191,
+      "seconds": 5.95,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 57.582857,
+      "seconds": 14.73,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 26.537881,
+      "seconds": 5.99,
+      "detail": {
+        "deleted_edges": 408,
+        "kept_edges": 7501
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 26.44269,
+      "seconds": 5.05,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 55.397715,
+      "seconds": 5.09,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 33.55731,
+      "seconds": 6.42,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 2.512334,
+      "seconds": 3.75,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 40.804202,
+      "seconds": 9.12,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 9.759226,
+      "seconds": 3.89,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 47.918821,
+      "seconds": 4.83,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 16.873846,
+      "seconds": 9.49,
+      "detail": {
+        "deleted_edges": 348,
+        "kept_edges": 7561
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 44.477512,
+      "seconds": 3.77,
+      "detail": {
+        "deleted_edges": 6,
+        "kept_edges": 7903
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 58.839024,
+      "seconds": 5.33,
+      "detail": {
+        "deleted_edges": 6,
+        "kept_edges": 7903
+      },
+      "downgraded_from": null,
+      "reason": ""
+    },
+    {
+      "verdict": "NO",
+      "unit": 37.180756,
+      "seconds": 5.8,
+      "detail": {
+        "deleted_edges": 1,
+        "kept_edges": 7908
+      },
+      "downgraded_from": null,
+      "reason": ""
+    }
+  ]
+}

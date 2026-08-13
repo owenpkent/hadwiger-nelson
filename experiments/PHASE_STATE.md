@@ -19,6 +19,29 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-13, overnight): L84-L85, and $n=18$ is PARTIAL with a measured
+> cost curve.** Three results, and they agree with each other. (1) **L84: all 23
+> direction classes of de Grey's graph are ESSENTIAL, none redundant** -- deleting
+> any single rotor residue mod $60^\circ$, including the class holding exactly ONE
+> edge, collapses the graph to 4-colorable. So that edge lies in every 5-critical
+> subgraph, and the construction has no removable part at the granularity of
+> direction. L18's "delocalized" is now measured. (2) **L85: iterated assembly on
+> the new $\mathbb{Q}(\sqrt3,\sqrt{35})$ core reaches depth 6 with 1,159 BINDING
+> EDGES and $\chi=4$ throughout** -- binding is not the scarce ingredient, coupling
+> is; local bindings accumulate without producing a global obstruction (the exact
+> discrete echo of L74's continuous finding). (3) **$n=18$: cube-and-conquer closed
+> $m=53$** (392 cubes, 5.8 cpu-h, 0 timeouts, non-vacuity witness) -- a cell the
+> blind split never touched -- then walled: $m=52$ UNDECIDED after 30 cpu-h with 19
+> of 551 cubes timed out, $m=51$ UNDECIDED after 61 cpu-h with 73 of 390. So **5 of
+> 9 $n=18$ cells are closed** ($m=54..57$ by the E20 ladder, $m=53$ by cubes) and
+> $n=18$ is NOT a theorem. Cost climbs 5-10x per edge removed and the timed-out
+> FRACTION grows (0% $\to$ 3.5% $\to$ 19%), which is the honest signal that the
+> sparse end needs a different idea rather than more hours. $n\le17$ unaffected and
+> remains the published claim. Together L83/L84/L85 say the same thing from three
+> directions: 5-chromaticity here is a GLOBALLY coupled property, not an
+> accumulation of local structure, so neither ball-growing, nor skeleton-copying,
+> nor rotation-piling will produce a new $\chi=5$ UDG.
+
 > **Update (2026-08-12, later): L79-L82 -- four follow-ons, two of them negatives
 > that redirect effort, plus a NEW OBJECT.** (1) **L82, the one to pull on**: the
 > radius-3 ring census found a SECOND binding field. $\mathbb{Q}(\sqrt3,\sqrt{35})$
