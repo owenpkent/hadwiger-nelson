@@ -19,6 +19,21 @@ vocabulary: KILL / MIRROR / PARTIAL / CONFIRMED / CLOSED.
 
 ## Dated update stack (newest first)
 
+> **Update (2026-08-14): L86 -- the $n=18$ wall is ENCODING-INDEPENDENT, and the
+> ladder stops here.** Two structurally different attacks fail on the same sparse
+> cells. CEGAR cube-and-conquer closed $m=53$ (5.8 cpu-h, zero timeouts,
+> non-vacuity witness) and left cubes unfinished on $m=52$, $m=51$, $m=50$; an
+> independent 2-QBF encoding, which reproduces every $n=15$ and $n=16$ cell in
+> seconds and is therefore calibrated, returned UNKNOWN on $m=51$ at a 6-hour cap.
+> $m=49$ skipped deliberately (hardest cell, verdict determined). So **$n=18$ is 6
+> of 9 cells closed and is NOT a theorem**; ~135 cpu-hours bought zero closures on
+> the open four. The wall is a fact about the problem at this order, not about our
+> method, which is the only version of that claim that justifies stopping.
+> **$n\le17$ is unaffected and remains the published claim.** Do not restart $n=18$
+> without a new idea rather than a new budget (better symmetry breaking below the
+> SMS minimality check, a class lemma that prunes the sparse end specifically, or
+> different hardware). The queue is halted with a STOP file saying exactly this.
+
 > **Update (2026-08-13, overnight): L84-L85, and $n=18$ is PARTIAL with a measured
 > cost curve.** Three results, and they agree with each other. (1) **L84: all 23
 > direction classes of de Grey's graph are ESSENTIAL, none redundant** -- deleting

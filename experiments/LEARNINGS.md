@@ -8,6 +8,18 @@ Publication triage of these findings lives in [`PUBLICATIONS.md`](PUBLICATIONS.m
 
 ---
 
+### L86. E30/E25: the $n=18$ wall is ENCODING-INDEPENDENT. Two structurally different attacks on the same sparse cells fail in the same place, so the obstruction is a fact about the problem at that order rather than about CEGAR. **$n=18$ is 6 of 9 cells closed and will not close on this hardware; $n\le17$ stands.**
+
+**The two attacks.** (i) CEGAR cube-and-conquer (E25): the chromatic propagator learns one clause per counterexample colouring, and cube-and-conquer splits along the solver's own decisions. It CLOSED $m=53$ (392 cubes, 5.8 cpu-h, zero timeouts, non-vacuity witness) -- a cell the blind unit-clause split never touched -- and then left cubes unfinished on $m=52$ (19 of 551, 30 cpu-h), $m=51$ (73 of 390, 61 cpu-h) and $m=50$ (36 of 506, 44 cpu-h). (ii) A 2-QBF (E30) that puts the universal half INSIDE the formula, so the solver reasons about colourability instead of sampling it: $\exists$ edges and the class auxiliaries, $\forall$ a colour assignment, matrix = class $\wedge$ (invalid colouring $\vee$ some edge monochromatic). It reproduces EVERY $n=15$ and $n=16$ cell (2.8-4.5 s and 5-44 s respectively, comparable to CEGAR) and then returned UNKNOWN on $m=51$ at a 6-hour cap.
+
+**Why running the second one was worth 6 hours.** "Our method is slow" and "the problem is hard here" are different claims with different consequences, and only the second justifies stopping. A structurally different encoding hitting the same wall is the evidence that separates them. $m=49$ was skipped deliberately: hardest cell, verdict already determined, and spending it would have bought nothing.
+
+**Cost, recorded so nobody re-spends it.** ~135 cpu-hours on the four open cells for zero closures, against 5.8 cpu-h for the one that closed. The per-cell cost climbs 5-10x per edge removed and the timed-out FRACTION grows (0% at $m=53$, 3.5% at $m=52$, 7% at $m=50$, 19% at $m=51$). Any future attempt needs a NEW IDEA, not a larger budget: better symmetry breaking below the SMS minimality check, a stronger class lemma that prunes the sparse end specifically, or genuinely different hardware.
+
+**One honest limit of the gate discipline, found here.** The QBF run crashed WHILE REPORTING its timeout (the timeout branch of `run_qbf` omitted a key the caller reads), so the verdict was correct and unreadable. No calibration rung would have caught it: gates check what a tool CONCLUDES, not whether it can tell you. Reporting paths need ordinary tests, and the platform's invariants do not cover them.
+
+---
+
 ### L85. E29: the new core BINDS ENTHUSIASTICALLY AND ITS RIGIDITY DOES NOT COMPOUND. Iterated assembly on the 56-vertex $\mathbb{Q}(\sqrt3,\sqrt{35})$ core reaches depth 6 (392 points, 4,309 edges, **1,159 binding edges**) with $\chi = 4$ at EVERY depth. Binding is not the scarce ingredient; coupling is.
 
 **The experiment, and why the negative is informative.** E28 tested the weakest version of the assembly move (one rotation: 7 of 8 rotors bound, $\chi$ stayed 4). E29 does what the lineage actually does and iterates, adding at each step the rotated copy that binds most. Three outcomes were specified IN ADVANCE and are distinguishable: $\chi\ge5$ (the object the program wants); $\chi=4$ throughout WITH binding (the core's rigidity does not compound); growth with NO binding (the field is rotor-poor rather than the motif being weak). The measured answer is the second, cleanly: binding grows monotonically 5 $\to$ 1,159 across depths while $\chi$ never moves off 4.

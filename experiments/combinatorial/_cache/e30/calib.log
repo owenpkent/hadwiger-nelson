@@ -1,0 +1,11 @@
+E30 calibration: the QBF encoding against known answers
+  [ok] n=15 m=41 -> UNSAT (want UNSAT) in 4.51s
+  [ok] n=15 m=42 -> UNSAT (want UNSAT) in 3.76s
+  [ok] n=15 m=43 -> UNSAT (want UNSAT) in 2.8s
+  [ok] n=16 m=43 -> UNSAT (want UNSAT) in 41.91s
+  [ok] n=16 m=44 -> UNSAT (want UNSAT) in 43.66s
+  [ok] n=16 m=45 -> UNSAT (want UNSAT) in 23.79s
+  [ok] n=16 m=46 -> UNSAT (want UNSAT) in 10.49s
+  [ok] n=16 m=47 -> UNSAT (want UNSAT) in 7.34s
+  [ok] n=16 m=48 -> UNSAT (want UNSAT) in 5.4s
+calibration: ALL PASS

@@ -159,7 +159,12 @@ def run_qbf(n, qcir, timeout=None):
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired:
-        return {"result": UNKNOWN, "seconds": timeout, "why": "timeout"}
+        # Every branch must return the same keys. The first version omitted
+        # tail/models here, so the run CRASHED while reporting a timeout: the
+        # verdict was correct and unreadable, which is the worst combination.
+        return {"result": UNKNOWN, "seconds": timeout, "why": "timeout",
+                "models": [], "cmd": " ".join(cmd), "tail": ["timeout"],
+                "returncode": None}
     res = UNKNOWN
     for ln in p.stdout.splitlines():
         if ln.startswith("Result:"):
