@@ -5,7 +5,7 @@ project's "Essential-Pair Lemma" is already known. Not a broad survey.
 
 ## The lemma under check
 
-Project statement (see `paper/main.tex`, Section "The Essential-Pair Lemma",
+Project statement (see `paper/forcing-sterility.tex`, Section "The Essential-Pair Lemma",
 Lemma `lem:essential` and Corollary `cor:critical-free`):
 
 > Let G be k-chromatic and (s,t) a non-adjacent pair that is *forced*
@@ -16,7 +16,7 @@ Lemma `lem:essential` and Corollary `cor:critical-free`):
 > Corollary: a vertex-critical k-chromatic graph has no forced non-adjacent pair.
 
 The project currently hedges this as "elementary, we are not aware of the exact
-statement, possibly folklore" (`paper/main.tex` lines 199-204, 512-517).
+statement, possibly folklore" (`paper/forcing-sterility.tex` lines 199-204, 512-517).
 
 ## VERDICT
 
@@ -124,10 +124,10 @@ critical-graph facts (Jensen-Toft 1995)."
 
 ## Discrepancy log
 
-- The project's `paper/main.tex` (lines 199-201, 514-516) and the `% TODO:
+- The project's `paper/forcing-sterility.tex` (lines 199-201, 514-516) and the `% TODO:
   literature check` comments assert "we are not aware of this exact statement."
   This survey contradicts that: the exact statement (corollary form) is
-  Theorem 3.17 of Martin 2009. Flagging, not silently editing main.tex. The
+  Theorem 3.17 of Martin 2009. Flagging, not silently editing forcing-sterility.tex. The
   hedge should be downgraded from "apparently new / folklore" to "known, see
   [Martin 2009]; possibly also folklore in critical-graph theory."
 - The project uses "forced-same / forced-different / clamp"; Martin uses
@@ -139,7 +139,7 @@ critical-graph facts (Jensen-Toft 1995)."
 ## What this enables / what remains open
 
 - **Enables (for the paper / SYNTHESIZER):** the Essential-Pair Lemma can be
-  attributed cleanly. The `% TODO: literature check` comments in `paper/main.tex`
+  attributed cleanly. The `% TODO: literature check` comments in `paper/forcing-sterility.tex`
   can be resolved by inserting the Martin 2009 citation and the Jensen-Toft
   framing. This removes the only open priority hedge in Section "The
   Essential-Pair Lemma."

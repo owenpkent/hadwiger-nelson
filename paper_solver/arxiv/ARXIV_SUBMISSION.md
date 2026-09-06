@@ -7,12 +7,12 @@ Planned framing: arXiv `cs.DM` primary + `math.CO` cross-list; the SAT workshop
 ## The upload file
 
 `symmetry-broken-sat-arxiv.tar.gz` (flat archive, 3 files):
-- `main.tex` - the paper source
+- `symmetry-broken-sat.tex` - the paper source
 - `refs.bib` - the bibliography database (web-verified)
-- `main.bbl` - the **compiled** bibliography
+- `symmetry-broken-sat.bbl` - the **compiled** bibliography
 
 **Why the `.bbl` is included.** arXiv's current processing (the "Submission 1.5"
-system, since April 2025) uses the shipped `main.bbl` if present, and otherwise
+system, since April 2025) uses the shipped `symmetry-broken-sat.bbl` if present, and otherwise
 auto-detects and runs a bib-compiler. Shipping the compiled `.bbl` is the safe,
 recommended practice (required for non-standard bib processors); the `.bbl`
 basename must match the main `.tex`. The bundle was validated to compile
@@ -23,10 +23,10 @@ Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 To regenerate after any edit to the paper:
 ```
 cd paper_solver
-pdflatex main && bibtex main && pdflatex main && pdflatex main   # refresh main.bbl
+pdflatex symmetry-broken-sat && bibtex symmetry-broken-sat && pdflatex symmetry-broken-sat && pdflatex symmetry-broken-sat   # refresh symmetry-broken-sat.bbl
 cd arxiv
-tar czf symmetry-broken-sat-arxiv.tar.gz ../main.tex ../refs.bib ../main.bbl --transform 's,.*/,,'
-# flat archive with main.tex at top level. arXiv also accepts subdirectories,
+tar czf symmetry-broken-sat-arxiv.tar.gz ../symmetry-broken-sat.tex ../refs.bib ../symmetry-broken-sat.bbl --transform 's,.*/,,'
+# flat archive with symmetry-broken-sat.tex at top level. arXiv also accepts subdirectories,
 # but flat is cleanest and is what this bundle ships.
 ```
 

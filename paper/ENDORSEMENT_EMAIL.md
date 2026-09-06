@@ -1,7 +1,7 @@
 # arXiv endorsement request: draft
 
 **To:** Maciej Zworski (zworski@math.berkeley.edu)
-**Re:** C1, `paper/main.tex` -- "Forcing-sterility of the realizable unit-distance
+**Re:** C1, `paper/forcing-sterility.tex` -- "Forcing-sterility of the realizable unit-distance
 lineage and a codegree obstruction to $\chi \ge 6$"
 
 ## Mechanics, so the ask is concrete

@@ -7,7 +7,7 @@ everything is provably stuck. Adapted from the zeta repo's obstruction-map surve
 genre; see [`../../experiments/ZETA_INNOVATION_TRANSFER.md`](../../experiments/ZETA_INNOVATION_TRANSFER.md).
 
 Source material: this atlas ([`README.md`](README.md)), the C1 forcing-sterility +
-codegree note ([`../../paper/main.tex`](../../paper/main.tex)), and
+codegree note ([`../../paper/forcing-sterility.tex`](../../paper/forcing-sterility.tex)), and
 [`../../experiments/LOAD_BEARING_FACTS.md`](../../experiments/LOAD_BEARING_FACTS.md).
 Honesty contract: every claim tagged PROVEN or CONJECTURAL; no claim of progress on
 the bound.

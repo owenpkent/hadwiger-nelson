@@ -115,7 +115,7 @@ the technique alongside C3.
 
 ### C1 - Forcing-sterility + codegree obstruction
 - **Source**: LEARNINGS L57-L59 (forcing census), L63 (codegree wall), L69 (core
-  intrinsics). Drafted in [`paper/main.tex`](../paper/main.tex).
+  intrinsics). Drafted in [`paper/forcing-sterility.tex`](../paper/forcing-sterility.tex).
 - **One line**: the realizable $\chi=5$ UDG lineage is forcing-sterile *by
   construction* (vertex-critical, so no forced non-adjacent pair, by the
   Essential-Pair Lemma), confirmed by an exhaustive $1{,}955{,}948$-pair SAT
@@ -145,12 +145,12 @@ the technique alongside C3.
   researcher / owenpkent@gmail.com" (TODO comment removed from the .tex). Venue =
   **both**: arXiv math.CO for the public record + Geombinatorics submission.
 - **arXiv bundle READY (2026-06-16)**: `paper/arxiv/forcing-sterility-arxiv.tar.gz`
-  (flat: main.tex + refs.bib + main.bbl), validated to compile standalone WITHOUT
+  (flat: forcing-sterility.tex + refs.bib + forcing-sterility.bbl), validated to compile standalone WITHOUT
   bibtex (arXiv AutoTeX does not run bibtex), 10 pp / 0 undefined. Form metadata
   (title, abstract, math.CO + math.MG, MSC, comments) in
   `paper/arxiv/ARXIV_SUBMISSION.md`.
 - **Remaining to submit (human steps)**: upload the tarball to arXiv (may need a
-  one-time math.CO endorsement on a new account); email the same main.pdf to
+  one-time math.CO endorsement on a new account); email the same forcing-sterility.pdf to
   Geombinatorics (confirm current editor/process).
 - **Verdict**: SHIP, P1. Adversary-cleared, author + venue set, arXiv bundle built.
 
@@ -198,7 +198,7 @@ the technique alongside C3.
   a publishable version wants a clean benchmark table, the C2 portfolio law folded
   in, and a sharp framing (applied SAT, or an arXiv tool note). Decide venue.
 - **Progress (2026-06-16)**: paper draft built at
-  [`paper_solver/main.tex`](../paper_solver/main.tex) (7 pp, compiles clean, 0
+  [`paper_solver/symmetry-broken-sat.tex`](../paper_solver/symmetry-broken-sat.tex) (7 pp, compiles clean, 0
   undefined refs). C2 folded in as Section "Two methodological findings" (portfolio
   law + regime boundary). Framing: arXiv cs.DM tool note, with the SAT workshop
   (Pragmatics of SAT) as an alternate. Remaining to SHIP: (a) DONE - SAT
@@ -221,7 +221,7 @@ the technique alongside C3.
   Paper updated 19.5 -> 18 min in all three places; recompiles clean (7pp).
   (c) decide arXiv cs.DM vs SAT workshop (author already confirmed, shared with C1).
 - **arXiv bundle READY (2026-06-16)**: `paper_solver/arxiv/symmetry-broken-sat-arxiv.tar.gz`
-  (flat: main.tex + refs.bib + main.bbl), validated to compile standalone without
+  (flat: symmetry-broken-sat.tex + refs.bib + symmetry-broken-sat.bbl), validated to compile standalone without
   bibtex, 7 pp / 0 undefined. Paste-ready metadata (cs.DM primary + math.CO cross,
   MSC, abstract) in `paper_solver/arxiv/ARXIV_SUBMISSION.md`.
 - **Verdict**: DEVELOP -> SHIP-ready, P2. **All C3 adversary findings cleared**
@@ -315,7 +315,7 @@ the technique alongside C3.
   e17_results.md have both COMPLETED, both GREEN (`e17_verification.md`: VERIFIED,
   4/5 targets VERIFIED + 1 VERIFIED-WITH-CAVEAT, zero blocking findings;
   `e17_adversary.md`: PASS, five attack surfaces SOUND). SYNTHESIZER still does not
-  edit `paper/main.tex`; the amend-C1-vs-ship-as-is choice remains an Owen decision
+  edit `paper/forcing-sterility.tex`; the amend-C1-vs-ship-as-is choice remains an Owen decision
   (see decision log).
 - **Verdict**: FOLD into C1, P1 (it gates the C1 upload decision, flagged for Owen:
   (A) amend C1 pre-upload after the E17 verifier/adversary passes, or (B) ship C1
@@ -386,7 +386,7 @@ Append-only, dated. One line per decision.
   (keep C1 bound-free and undisturbed). Tracks opened: C1 ADVERSARY read + number
   re-verify + blocker resolution; C3 tool-note development with C2 as a subsection.
 - 2026-06-16 - C3 developed: white paper reshaped into a 7-pp paper draft
-  (`paper_solver/main.tex`, compiles clean), C2 folded in as the methodology
+  (`paper_solver/symmetry-broken-sat.tex`, compiles clean), C2 folded in as the methodology
   section. C1 ADVERSARY pass launched (background). C3 still needs bib verification
   + an ADVERSARY pass + venue decision before SHIP.
 - 2026-06-16 - C1 ADVERSARY pass returned: PASSED, zero blockers, all numbers
@@ -417,10 +417,10 @@ Append-only, dated. One line per decision.
   $n \le 16$, wall at $n=17$) evaluated and registered as **C7**: V=2 N=2 S=2, verdict
   **FOLD into C1**, P1. It strengthens C1's codegree-wall pillar from three heuristic
   negatives to an exhaustive $n \le 16$ statement. DECISION FLAGGED FOR OWEN before
-  the C1 upload: (A) amend C1 (`paper/main.tex`) with the exhaustive statement first
+  the C1 upload: (A) amend C1 (`paper/forcing-sterility.tex`) with the exhaustive statement first
   (small delta; requires the queued E17 VERIFIER/ADVERSARY passes to clear), or
   (B) ship C1 as-is and fold L75 into a follow-up note. No edit made to
-  `paper/main.tex`; C1 remains SHIP/P1 with its built arXiv bundle, not yet uploaded.
+  `paper/forcing-sterility.tex`; C1 remains SHIP/P1 with its built arXiv bundle, not yet uploaded.
 - 2026-07-23 - E17 VERIFIER + ADVERSARY passes both returned GREEN
   (`combinatorial/e17_verification.md`: VERIFIED, 4/5 targets VERIFIED + 1
   VERIFIED-WITH-CAVEAT, zero blocking findings; `combinatorial/e17_adversary.md`:
@@ -431,7 +431,7 @@ Append-only, dated. One line per decision.
   independent second enumerator; (ii) the two counting lemmas are
   formalization-ready but not yet Lean-proved. The amend-C1-vs-ship-as-is decision
   remains with Owen.
-- 2026-07-23 - Owen chose (A) AMEND. C1 (`paper/main.tex`) folded in the E17
+- 2026-07-23 - Owen chose (A) AMEND. C1 (`paper/forcing-sterility.tex`) folded in the E17
   exhaustive result: new Section 7 (Theorem 2, Lemma 2 maxdeg cap, Table 2,
   calibration + epistemic-status paragraphs carrying both caveats verbatim). A
   fresh ADVERSARY pass on the paper diff returned SHIP with 0 blockers

@@ -6,28 +6,28 @@ Venue decision (2026-06-16): **arXiv + Geombinatorics** (both).
 ## The upload file
 
 `forcing-sterility-arxiv.tar.gz` (flat archive, 3 files):
-- `main.tex` - the paper source
+- `forcing-sterility.tex` - the paper source
 - `refs.bib` - the bibliography database
-- `main.bbl` - the **compiled** bibliography
+- `forcing-sterility.bbl` - the **compiled** bibliography
 
 **Why the `.bbl` is included.** arXiv's current processing (the "Submission 1.5"
-system, since April 2025) uses the shipped `main.bbl` if present, and otherwise
+system, since April 2025) uses the shipped `forcing-sterility.bbl` if present, and otherwise
 auto-detects and runs a bib-compiler (bibtex/biber). Shipping the compiled `.bbl`
 is the safe, recommended practice (and is strictly required for non-standard bib
 processors); the `.bbl` basename must match the main `.tex`. The bundle was
 validated to compile standalone with `pdflatex` alone (no bibtex): **15 pages,
 zero undefined references or citations.** Upload the tarball as-is.
-Bundle regenerated 2026-09-05 from the current `main.tex` (the n <= 17 amendment
+Bundle regenerated 2026-09-05 from the current `forcing-sterility.tex` (the n <= 17 amendment
 of 2026-08-11); the previous tarball predated it and still proved order >= 17.
 Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 
 To regenerate the tarball after any edit to the paper:
 ```
 cd paper
-pdflatex main && bibtex main && pdflatex main && pdflatex main   # refresh main.bbl
+pdflatex forcing-sterility && bibtex forcing-sterility && pdflatex forcing-sterility && pdflatex forcing-sterility   # refresh forcing-sterility.bbl
 cd arxiv
-tar czf forcing-sterility-arxiv.tar.gz ../main.tex ../refs.bib ../main.bbl --transform 's,.*/,,'
-# flat archive with main.tex at the top level. arXiv also accepts subdirectories,
+tar czf forcing-sterility-arxiv.tar.gz ../forcing-sterility.tex ../refs.bib ../forcing-sterility.bbl --transform 's,.*/,,'
+# flat archive with forcing-sterility.tex at the top level. arXiv also accepts subdirectories,
 # but flat is cleanest and is what this bundle ships.
 ```
 
@@ -156,7 +156,7 @@ Geombinatorics submits by **email to the editor** (it is not an online-portal
 journal). Verified 2026-07-23 on https://geombina.uccs.edu/editors-page :
 - **Editor and Publisher:** Alexander Soifer (University of Colorado, Colorado
   Springs).
-- **Send:** the PDF (`paper/main.pdf`) to **asoifer@uccs.edu**, together with a
+- **Send:** the PDF (`paper/forcing-sterility.pdf`) to **asoifer@uccs.edu**, together with a
   hand-signed copyright form (emailed as a JPEG attachment, or mailed).
 - The journal is active as of 2026 (up to ~Vol. XXXVI). The de Grey (2018) and
   Parts (2020) papers in this lineage both appeared there, so it is the natural

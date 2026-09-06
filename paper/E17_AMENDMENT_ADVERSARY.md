@@ -1,4 +1,4 @@
-# ADVERSARY report: the E17 amendment to the C1 paper (paper/main.tex)
+# ADVERSARY report: the E17 amendment to the C1 paper (paper/forcing-sterility.tex)
 
 Target: the uncommitted working-tree amendment that folds the E17 exhaustive
 enumeration into the forcing-sterility + codegree note. Scope: correctness,
@@ -7,8 +7,8 @@ arXiv upload. Ground truth: `experiments/combinatorial/e17_results.md`,
 `e17_verification.md`, `e17_adversary.md` (all PASSED at code level), and
 `experiments/LEARNINGS.md` L75.
 
-Method: read the full diff (`git diff paper/main.tex paper/refs.bib
-paper/arxiv/ARXIV_SUBMISSION.md`) and the full amended `main.tex` in context;
+Method: read the full diff (`git diff paper/forcing-sterility.tex paper/refs.bib
+paper/arxiv/ARXIV_SUBMISSION.md`) and the full amended `forcing-sterility.tex` in context;
 cross-checked every number against e17_results.md and the two vetting reports;
 re-derived Lemma 2 by hand; re-derived the four search-space reductions and their
 conjunction; extracted and standalone-compiled the arXiv tarball with
@@ -143,7 +143,7 @@ Verdict: **SOUND**.
 
 ## Surface 4 - Citation integrity
 
-- McKayPiperno2014 (new): refs.bib and the shipped main.bbl give "Practical graph
+- McKayPiperno2014 (new): refs.bib and the shipped forcing-sterility.bbl give "Practical graph
   isomorphism, II", J. Symbolic Comput. 60 (2014) 94-112, with a note that geng is
   distributed with nauty. Correct venue, correct pages, correct year; this is the
   canonical nauty reference. geng is indeed the tool used (E17 built geng_hn from
@@ -203,13 +203,13 @@ Verdict: **SOUND** (two optional stylistic/naming items).
 
 ## Surface 6 - Compile and bundle
 
-- paper/main.pdf is 12 pages (pdfinfo), matching the "12 pp" now stated in
+- paper/forcing-sterility.pdf is 12 pages (pdfinfo), matching the "12 pp" now stated in
   ARXIV_SUBMISSION.md (updated from 10 pp in both the validation note and the
   Comments field).
 - The arXiv tarball paper/arxiv/forcing-sterility-arxiv.tar.gz extracts to
-  main.tex, refs.bib, main.bbl. The tarball's main.tex is byte-identical to the
-  working-tree paper/main.tex (diff -q: IDENTICAL); refs.bib likewise IDENTICAL.
-- Critical arXiv check (AutoTeX runs LaTeX, not BibTeX): the shipped main.bbl
+  forcing-sterility.tex, refs.bib, forcing-sterility.bbl. The tarball's forcing-sterility.tex is byte-identical to the
+  working-tree paper/forcing-sterility.tex (diff -q: IDENTICAL); refs.bib likewise IDENTICAL.
+- Critical arXiv check (AutoTeX runs LaTeX, not BibTeX): the shipped forcing-sterility.bbl
   already contains \bibitem{McKayPiperno2014} with the correct nauty reference, and
   all 11 cited keys are present in the bbl. So the new citation will NOT be
   undefined on arXiv.
@@ -238,16 +238,16 @@ to 12 pages with zero undefined references.
 No FIX-FIRST blockers. Three optional, non-blocking refinements (BUILDER may take
 or leave; none affects correctness or honesty of the headline):
 
-1. (Optional, precision) paper/main.tex, Section 7 proof (the sentence "the
+1. (Optional, precision) paper/forcing-sterility.tex, Section 7 proof (the sentence "the
    remaining 24 decided satisfiable by a complete SAT solver, each confirmed by
    three independent solvers"): either name the three (CaDiCaL, Glucose, MiniSat)
    or soften to "each independently reconfirmed 5-colorable by multiple solvers",
    to avoid implying (a) that the original run used three solvers, or (b) that the
    three match the acknowledgments' "CaDiCaL, MapleChrono, and Glucose" (they do
    not; MapleChrono did not touch the E17 residues, MiniSat did).
-2. (Optional, courtesy) paper/main.tex, calibration paragraph in Section 7: add a
+2. (Optional, courtesy) paper/forcing-sterility.tex, calibration paragraph in Section 7: add a
    citation for the Shrikhande graph / srg(16,6,2,2).
-3. (Optional, style) paper/main.tex, Discussion first sentence ("pincer the
+3. (Optional, style) paper/forcing-sterility.tex, Discussion first sentence ("pincer the
    missing ingredient from three sides"): "pincer" reads as a two-sided squeeze;
    consider "hem in ... from three sides" or "corner ... from three sides".
 
