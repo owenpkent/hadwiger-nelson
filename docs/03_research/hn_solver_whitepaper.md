@@ -264,7 +264,7 @@ Ordered by expected payoff for this program:
    **Capability battery and the regime boundary (measured).** With the break, the
    entire known $\chi(\mathbb{R}^2) \ge 5$ computational program is now
    self-certifiable on one machine: **de Grey's 1585-vertex graph $k=4$ UNSAT in
-   19.5 min** (an independent, from-the-graph confirmation that
+   18.1 min** (an independent, from-the-graph confirmation that
    $\chi(\mathbb{R}^2) \ge 5$), all nine $\chi$-5 lineage graphs (510, 517, 529,
    553, 610, 633, 803, 826, 874) $k=4$ UNSAT in **1.5-9 s each**, and $M^4(C_5)$
    $k=6$ in 22 s, each with an optional DRAT certificate. The HONEST boundary: this

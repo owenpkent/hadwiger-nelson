@@ -15,8 +15,17 @@ Lemma `lem:essential` and Corollary `cor:critical-free`):
 >
 > Corollary: a vertex-critical k-chromatic graph has no forced non-adjacent pair.
 
-The project currently hedges this as "elementary, we are not aware of the exact
-statement, possibly folklore" (`paper/forcing-sterility.tex` lines 199-204, 512-517).
+At the time of this survey the project hedged this as "elementary, we are not
+aware of the exact statement, possibly folklore".
+
+**RESOLVED (applied to the paper).** The hedge is gone. `forcing-sterility.tex`
+now attributes the result explicitly in two places: the Essential-Pair Lemma
+section credits Theorem 3.17 of Martin 2009 by name, notes the Dirac-Gallai
+lineage via Jensen and Toft, describes the single-deletion form as "a one-line
+sharpening of his Theorems 3.2 and 3.17", and states that the paper makes no
+priority claim; the "Honest limitations" paragraph of the Discussion repeats the
+attribution. (Anchors given by section rather than line number, which drifts
+every time the paper is amended.)
 
 ## VERDICT
 
@@ -124,8 +133,9 @@ critical-graph facts (Jensen-Toft 1995)."
 
 ## Discrepancy log
 
-- The project's `paper/forcing-sterility.tex` (lines 199-201, 514-516) and the `% TODO:
-  literature check` comments assert "we are not aware of this exact statement."
+- ~~The project's `paper/forcing-sterility.tex` and the `% TODO: literature check`
+  comments assert "we are not aware of this exact statement."~~ **RESOLVED**: the
+  attribution was applied and the hedge removed; see the note above.
   This survey contradicts that: the exact statement (corollary form) is
   Theorem 3.17 of Martin 2009. Flagging, not silently editing forcing-sterility.tex. The
   hedge should be downgraded from "apparently new / folklore" to "known, see
