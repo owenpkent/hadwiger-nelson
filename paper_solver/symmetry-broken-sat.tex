@@ -58,7 +58,12 @@ break crushes \emph{structured} UNSAT but does \emph{not} tame
 does \emph{not} shortcut the search for a new $\chrom \ge 6$ object. The symmetry
 break itself is standard; the contribution is wiring it into the
 Hadwiger-Nelson pipeline, measuring that it crosses the specific walls, and
-mapping where it stops.
+mapping where it stops. Finally we record a $\Sigma_2$ collapse: for the
+two-quantifier question ``does a given graph class contain a $\chrom \ge k$
+member on $n$ vertices?'', moving the universal half inside the solver as a
+chromatic-number propagator decides it without enumerating the class, answering
+at order $17$ in $0.83$ cpu-hours what enumeration measured at more than $80$
+cpu-days. It buys speed at the cost of checkability, and it stops at order $18$.
 \end{abstract}
 
 \section{Introduction}
@@ -111,8 +116,12 @@ disagreements, that additionally counts colorings \emph{up to color permutation}
 (a quantity SAT solvers do not expose). (2) A symmetry-broken CNF export that, on
 the program's own instances, crosses two specific walls
 ($M^4(C_5)\,k{=}6$ and $P_{510}\,k{=}4$) and makes the de Grey lower bound
-self-certifiable in $19.5$ minutes, each with an optional DRAT proof. (3) A
-portfolio law and a regime boundary, stated as measured facts. We claim
+self-certifiable in $18.1$ minutes, each with an optional DRAT proof. (3) A
+portfolio law and a regime boundary, stated as measured facts. (4) A
+$\Sigma_2$ collapse: moving the universal quantifier inside the solver as a
+propagator decides ``does this class contain a $\chrom \ge k$ member on $n$
+vertices?'' without enumerating the class, crossing a wall this program had
+measured at more than $80$ cpu-days. We claim
 \textbf{no} new bound on $\chrom(\R^2)$ and \textbf{no} novelty in the symmetry
 break itself, which is the standard lex-leader / clique-fixing
 construction~\cite{CrawfordSymmetry1996, SakallahSymmetry2009}. The contribution
@@ -339,6 +348,67 @@ encoding. Distinguishing ``structured UNSAT'' from ``phase-transition hardness''
 is the practical lesson; conflating them (as we briefly did) produces false
 optimism about what a better encoding can buy.
 
+Section~\ref{sec:sigma2} qualifies this in the direction that matters. The
+obstruction is indeed not an artifact of the encoding, and a lever that is not an
+encoding change does cross it at small orders. It then stops anyway, which is the
+more informative fact.
+
+\subsection{Moving the quantifier inside the solver}
+\label{sec:sigma2}
+
+Both findings above concern how a \emph{single} colorability question is posed.
+The program's harder questions have another shape. Asking whether a class
+$\mathcal{C}$ contains a member with $\chrom \ge k$ is a two-quantifier question,
+$\exists G \in \mathcal{C}\ \forall c$, and the usual response collapses the
+existential half by brute force: generate every member of the class, test each
+one. The cost is then governed by the \emph{size of the class} rather than by the
+difficulty of any individual instance, which is why questions of this shape become
+hopeless long before the colorability tests inside them do.
+
+A third lever applies, and it is neither a better encoding nor a faster solver.
+SAT modulo symmetries~\cite{KirchwegerSzeider2021} already owns the existential
+half: a minimality propagator inside the CDCL loop rejects every labeling but the
+lexicographic representative of each isomorphism class, so the search generates
+the class up to isomorphism as it goes. A chromatic-number propagator puts the
+universal half in the same place. On a fully defined candidate it looks for a
+$(k-1)$-coloring; on finding one it learns that at least one currently
+monochromatic non-adjacent pair must become an edge, and hands the conflict back
+to CDCL. The $\forall$-half becomes clause learning inside the same solver that is
+deciding the $\exists$-half, and not one member of the class is ever emitted.
+
+On the class this program cares about, the $K_4$-free and $K_{2,3}$-free graphs
+that every planar unit-distance graph must inhabit, the effect is not
+incremental. Measured against this repository's own enumeration cost for the
+identical question: order $15$ falls from $420$ seconds to $3.6$; order $16$ from
+$66.3$ cpu-hours to $74.3$ seconds, a factor near $3{,}200$; and order $17$, which
+enumeration measured at more than $80$ cpu-days, closes in $0.83$ cpu-hours
+($2{,}975$ core-seconds across seven edge-count cells, $1{,}202$ seconds of wall
+time on seven cores). Every verdict is negative, and the negative verdict is
+precisely the one that enumeration makes expensive.
+
+\paragraph{Three things the collapse does not give.} First, the answers are not
+proof-carrying. Writing the same question natively as a $2$-QBF, so that the
+universal block holds a color assignment and the matrix asserts class membership,
+reproduces unsatisfiable on every nonempty order-$17$ cell in $45$ to $579$
+seconds by a route sharing neither propagator with the first; but reproducing a
+verdict is not certifying it, and no machine-checkable object is extracted from
+either. This is a real gap against the DRAT proofs of
+Section~\ref{sec:results}: the propagators are trusted code, and what they buy in
+speed they cost in checkability.
+
+Second, an unsatisfiable answer is uninformative if the cell is empty for reasons
+unrelated to coloring, so vacuity has to be controlled rather than assumed. Of
+the seven order-$17$ cells, five contain members and two are empty; the negative
+result is carried entirely by the five. The control is cheap, it is easy to
+forget, and forgetting it silently converts a theorem into a tautology about
+nothing.
+
+Third, the lever stops. Order $18$ does not close, and it does not close for
+structurally different attacks alike, which locates the obstruction in the
+problem at that order rather than in any one formulation. That is the honest
+shape of the result: a genuine wall was crossed at small orders by moving a
+quantifier, and the next wall did not move.
+
 \section{Reproducibility and honest limitations}
 \label{sec:repro}
 
@@ -379,10 +449,16 @@ of them with the $k!$ color symmetry. Exporting a sound symmetry break to a
 production CDCL solver removes the handicap and makes the \emph{entire} known
 $\chrom(\R^2) \ge 5$ program self-certifiable on a single workstation, with
 machine-checkable DRAT proofs, including instances previously reported
-intractable. The same exercise yields two transferable lessons: run a portfolio
-near the phase boundary, and do not mistake structured-UNSAT speed for progress on
-phase-transition hardness. The break certifies what is known; finding the next
-bound remains a mathematical problem, not a solver-engineering one.
+intractable. The same exercise yields three transferable lessons: run a portfolio
+near the phase boundary; do not mistake structured-UNSAT speed for progress on
+phase-transition hardness; and when the question is really $\exists G\,\forall c$,
+consider moving the inner quantifier into the solver as a propagator rather than
+paying for the class by enumerating it. The third lever is the strongest of the
+three and still runs out: it settles the class question through order $17$ at a
+cost enumeration could not approach, and order $18$ resists it as firmly as it
+resists everything else. The break certifies what is known, and the collapse
+cheapens what can be checked; finding the next bound remains a mathematical
+problem, not a solver-engineering one.
 
 \section*{Acknowledgments}
 This note arose from an ongoing computational program on the Hadwiger-Nelson

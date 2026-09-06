@@ -93,12 +93,12 @@ Three scored axes (each 0-3), plus readiness, venue, verdict, and priority.
 |----|-------|---|---|---|-------|----------------|---------|-----|
 | C1 | Forcing-sterility of the realizable lineage + codegree obstruction | 2 | 2 | 2 | submission-ready | arXiv math.CO + Geombinatorics | SHIP | P1 |
 | C2 | Portfolio inversion at the SAT phase boundary (Cadical 12h vs Maple 155s) | 2 | 2 | 2 | notes | fold into C3 (decided) | FOLD->C3 | P2 |
-| C3 | Structure-first solver + symmetry-broken CNF export (walls crossed) | 3 | 2 | 2 | draft (paper, 7pp, compiles) | arXiv cs.DM tool note / SAT workshop | DEVELOP | P2 |
+| C3 | Structure-first solver + symmetry-broken CNF export (walls crossed) | 3 | 2 | 2 | draft (paper, 8pp, compiles, C8 method folded in) | arXiv cs.DM tool note / SAT workshop | DEVELOP | P2 |
 | C4 | Matrix-free order-2 measurable SDP closes the route at $X_{23}$ | 1 | 2 | 2 | notes + verdict JSON | measurable-chromatic methods note | PARK | P3 |
 | C5 | IE-LP + congruence (IEC) self-certification of $\chi_m \ge 5$ | 2 | 1 | 1 | notes | none (reproduction) | ARCHIVE | P3 |
 | C6 | Lean formalization of the covering / list-coloring / triple-lift lemmas | 3 | 1 | 1 | code (sorry-free) | formalization note (when mass grows) | PARK | P3 |
 | C7 | E17 exhaustive both-free enumeration: no $\chi \ge 6$ member at $n \le 16$ | 2 | 2 | 2 | notes (e17_results.md) | fold into C1 (amend) or C1 follow-up | FOLD->C1 | P1 |
-| C8 | E20 $\Sigma_2$ collapse: no $\chi \ge 6$ both-free member at $n \le 17$, without enumeration (~3200x) | 3 | 2 | 2 | notes (e20_results.md) | math half folds into C1; method half into C3 / SAT venue | FOLD->C1+C3 | P1 |
+| C8 | E20 $\Sigma_2$ collapse: no $\chi \ge 6$ both-free member at $n \le 17$, without enumeration (~3200x) | 3 | 2 | 2 | FOLDED (C1 Thm 4 + C3 Sec 6.3) | math half in C1 (2026-08-11); method half in C3 (2026-09-05) | FOLDED | P1 |
 
 Composite read: **C1 is the one live paper.** C2 and C3 are the two real
 secondary products; both are stronger *attached* to or *alongside* C1 than alone.
@@ -182,7 +182,7 @@ the technique alongside C3.
 - **One line**: a from-scratch, color-symmetry-breaking colorability solver, plus
   a symmetry-broken CNF *export* that lets a production CDCL engine cross walls the
   naive encoding could not - **$M^4(C_5)$ k=6 UNSAT in 22 s, $P_{510}$ k=4 UNSAT in
-  1.66 s, de Grey 1585 k=4 UNSAT in 19.5 min**, each with an optional DRAT proof;
+  1.66 s, de Grey 1585 k=4 UNSAT in 18.1 min**, each with an optional DRAT proof;
   the entire known $\chi(\mathbb{R}^2) \ge 5$ program is now self-certifiable on one
   workstation.
 - **V=3** (DRAT-certified, equisat-validated over 1000+ instances, zero verdict
@@ -341,8 +341,12 @@ the technique alongside C3.
   isomorphic to it), $k=5$ (Jensen-Royle 10/11), and $k=6$ (the production value:
   $K_6$-free $\chi\ge6$ UNSAT at $n=7$, SAT at $n=8$ with the model isomorphic to
   $C_5 + K_3$); it reproduces this repo's OWN $n=15,16$ answers by a third
-  independent route; every cell carries a non-vacuity probe so an UNSAT cannot be an
-  empty-cell artifact; and every SAT model is re-verified by disjoint code. The
+  independent route; and every SAT model is re-verified by disjoint code. The
+  non-vacuity probe this entry originally claimed was NOT run until L87 (2026-09-05);
+  running it showed $m=46..50$ nonempty and $m=51,52$ EMPTY, so two of the seven
+  order-17 cells are exactly the empty-cell artifact the claim denied. The theorem is
+  unaffected (an empty cell holds no $\chi \ge 6$ member) but its content rests on
+  $m=46..50$, where E30's 2-QBF now reproduces the verdict independently. The
   soundness framing is C7's, unchanged.
 - **N=2**: the ingredients are public (Kirchweger-Szeider SMS, its coloring
   propagator); the move -- using it to decide a $\Sigma_2$ *class* question instead
@@ -449,3 +453,23 @@ Append-only, dated. One line per decision.
   auto-endorses, so the genuinely-first-time upload of C1 (`math.CO`) and C3
   (`cs.DM`, a separate domain) each need a **personal endorser** lined up before
   submitting. That endorsement is now the gating step on both uploads.
+- 2026-09-05 - C1 evidential repair (L87). The order-17 non-vacuity control the
+  paper claimed had never been run; running it found cells $m=51,52$ EMPTY, so two
+  of seven cells carried vacuous UNSATs. Theorem unchanged (an empty cell holds no
+  $\chi \ge 6$ member), but the ablation and E25's reproduction had both been sited
+  on $m=52$, i.e. on nothing; ablation re-sited to the content cell $m=49$ and E30's
+  2-QBF added as an independent reproduction on all five content cells. Also found:
+  the C1 tarball, PDF and submission metadata were all still the 2026-07-23 $n\le16$
+  build, three stale artifacts from one commit; all rebuilt (15 pp).
+- 2026-09-05 - C8 method half FOLDED into C3 as Section 6.3, "Moving the quantifier
+  inside the solver": the $\Sigma_2$ collapse, with its three honest limits (no
+  proof object extracted, vacuity must be controlled not assumed, and the order-18
+  wall that does not move). Abstract, contributions and conclusion updated to carry
+  a third lesson; a stale unbacked "19.5 min" de Grey figure in the contributions
+  was corrected to the measured 18.1 min. C3 is now 8 pp / 13 refs, compiles clean.
+  C8 is therefore fully folded and closed. OPEN: C3's venue. cs.DM is a separate
+  endorsement domain from math.CO, so shipping there needs a second endorser;
+  math.CO primary with cs.DM cross-list would ride C1's endorsement instead.
+- 2026-09-05 - Both papers renamed off the ambiguous `main.tex`:
+  `paper/forcing-sterility.tex` and `paper_solver/symmetry-broken-sat.tex`, matching
+  the arXiv bundle slugs already in use.

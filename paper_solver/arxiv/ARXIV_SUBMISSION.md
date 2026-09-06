@@ -16,7 +16,7 @@ system, since April 2025) uses the shipped `symmetry-broken-sat.bbl` if present,
 auto-detects and runs a bib-compiler. Shipping the compiled `.bbl` is the safe,
 recommended practice (required for non-standard bib processors); the `.bbl`
 basename must match the main `.tex`. The bundle was validated to compile
-standalone with `pdflatex` alone (no bibtex): **7 pages, zero undefined references
+standalone with `pdflatex` alone (no bibtex): **8 pages, zero undefined references
 or citations.** Upload the tarball as-is.
 Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 
@@ -58,7 +58,7 @@ Owen P. Kent
 **MSC class:** 05C15, 05C85, 68T20
 **ACM class:** F.2.2, G.2.2
 
-**Comments:** `7 pages`
+**Comments:** `8 pages`
 
 **Abstract** (plain text; arXiv accepts inline `$...$`):
 ```
@@ -84,7 +84,12 @@ structured UNSAT but does not tame phase-transition hardness, so it certifies
 everything currently known and does not shortcut the search for a new chi >= 6
 object. The symmetry break itself is standard; the contribution is wiring it into
 the Hadwiger-Nelson pipeline, measuring that it crosses the specific walls, and
-mapping where it stops.
+mapping where it stops. Finally we record a $\Sigma_2$ collapse: for the
+two-quantifier question "does a given graph class contain a $\chi \ge k$ member
+on $n$ vertices?", moving the universal half inside the solver as a
+chromatic-number propagator decides it without enumerating the class, answering
+at order 17 in 0.83 cpu-hours what enumeration measured at more than 80
+cpu-days. It buys speed at the cost of checkability, and it stops at order 18.
 ```
 
 **License:** choose at submission. Owen's call. Full option set (verified
