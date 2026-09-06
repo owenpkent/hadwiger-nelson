@@ -25,5 +25,10 @@
     "Added clauses: 0",
     "Result: 20",
     "Total time: 12.663141"
-  ]
+  ],
+  "nonvacuity": {
+    "result": "UNSAT",
+    "elapsed_s": 5.33,
+    "nonempty": false
+  }
 }

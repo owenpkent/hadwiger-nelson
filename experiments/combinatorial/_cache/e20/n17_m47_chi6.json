@@ -25,5 +25,12 @@
     "Added clauses: 3690",
     "Result: 20",
     "Total time: 1198.713937"
-  ]
+  ],
+  "nonvacuity": {
+    "result": "SAT",
+    "elapsed_s": 1.95,
+    "nonempty": true,
+    "witness": "P??GhO{PapKWbpceS@ma?xKC",
+    "class_ok": true
+  }
 }

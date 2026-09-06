@@ -664,9 +664,12 @@ the augmented formula is a proof that no such member exists.
 
 For $n = 17$ every cell $m = 46, \dots, 52$ is unsatisfiable, in $2{,}975$ core-seconds
 in total ($1{,}202$ seconds of wall time on seven cores), the per-cell times running
-from $13$ seconds at $m = 52$ to $1{,}200$ seconds at $m = 47$. No graph is emitted
-at any point. Hence no $6$-critical member of the class exists on $17$ vertices,
-and with the previous half of the proof, none on at most $17$ vertices; so the
+from $13$ seconds at $m = 52$ to $1{,}200$ seconds at $m = 47$. The two extremal
+cells $m = 51$ and $m = 52$ are in fact empty, as the non-vacuity control below
+records, so their unsatisfiability is immediate and the substance of the sweep
+lies in $m = 46, \dots, 50$. No graph is emitted at any point. Hence no
+$6$-critical member of the class exists on $17$ vertices, and with the previous
+half of the proof, none on at most $17$ vertices; so the
 class has no $\chrom \ge 6$ member on at most $17$ vertices.
 \end{proof}
 
@@ -737,22 +740,37 @@ $5$; the returned graph is isomorphic to $C_5 + K_3$. Every satisfiable answer
 above was re-verified by an independent complete solver on a separately generated
 encoding. Two further controls run on the production cells themselves. First,
 non-vacuity: an unsatisfiable answer is uninformative if the cell is empty for
-reasons unrelated to coloring, so each cell was also solved at threshold $3$,
-where it must be satisfiable, and the returned graph was passed through the same
-independent membership filter used above; every nonempty cell of the order-$17$
-window passes. Second, ablation: rerunning a cell with the class constraints
-removed but the order, degree, and edge-count constraints kept must return
-satisfiable, confirming that the unsatisfiable verdict is a statement about the
-class rather than a failure of the search. At $n = 17$, $m = 52$ it does, in
-$409$ seconds, and the graph it returns is independently confirmed to have
-$\chrom \ge 6$.
+reasons unrelated to coloring, so every cell of the order-$17$ window was also
+solved at threshold $3$, and the returned graph was passed through the same
+independent membership filter used above. Five of the seven cells,
+$m = 46, \dots, 50$, return a graph the filter certifies as a class member, so
+their threshold-$6$ unsatisfiability is a statement with content. The two
+extremal cells $m = 51$ and $m = 52$ are empty. Re-solved with no chromatic
+constraint at all they enumerate zero graphs, and a disjoint procedure, static
+lexicographic-leader symmetry breaking under an ordinary CDCL solver sharing no
+code with the isomorphism propagator, independently reports the same; their
+unsatisfiability at threshold $6$ is therefore vacuous. This costs
+Theorem~\ref{thm:exhaustive} nothing, since an empty cell contains no member
+that could be $6$-chromatic, but it does locate the entire content of the
+order-$17$ window in $m = 46, \dots, 50$, and controls that bear on the theorem
+belong there rather than on an extremal cell. Second, ablation: rerunning a cell
+with the class constraints removed but the order, degree, and edge-count
+constraints kept must return satisfiable, confirming that the unsatisfiable
+verdict is a statement about the class rather than a failure of the search. At
+$n = 17$, $m = 49$ it does, in $221$ seconds, and the graph it returns is
+independently confirmed to have $\chrom \ge 6$; it carries a $K_4$ and a
+codegree of $5$, so it lies outside the class, which is what the ablation
+intends. We site this control on $m = 49$ rather than on an extremal cell
+because $m = 49$ is nonempty and the extremal cells are not: an ablation on an
+empty cell sets one vacuous unsatisfiability against another and establishes
+nothing.
 
 The intermediate ablations at that cell are worth recording, because they
 localize the obstruction inside the class. Removing $K_4$-freeness alone leaves
-the cell unsatisfiable, and barely more expensive ($18$ seconds against $13$).
+the cell unsatisfiable, and no more expensive ($77$ seconds against $171$).
 Removing the codegree bound alone, keeping $K_4$-freeness, leaves the cell
-undecided after $900$ seconds. At this order, then, it is $K_{2,3}$-freeness and
-not $K_4$-freeness that forces $5$-colorability, which is consistent with the
+undecided after $1{,}800$ seconds. At this order, then, it is $K_{2,3}$-freeness
+and not $K_4$-freeness that forces $5$-colorability, which is consistent with the
 role the codegree bound plays throughout Section~\ref{sec:codegree}: the
 constraint that comes from planar unit-distance geometry is also the constraint
 that does the combinatorial work.
@@ -769,6 +787,23 @@ graph. At $n = 16$ it returns $11{,}315$ graphs, every cell of the window proved
 exhausted, and matching the \texttt{geng} output graph for graph: $11{,}315$
 matched, none present in only one of the two lists, and no property violations.
 The two enumerations are therefore in exact agreement at both orders.
+
+\paragraph{A second encoding at order 17.} The nonempty order-$17$ cells were
+also decided a second time under a structurally different formulation. The
+question $\exists G\, \forall c$ is natively a $2$-QBF, and writing it as one
+moves the universal half inside the formula: the existential block carries the
+edge variables and the encoding's auxiliaries, the universal block a color
+assignment, and the matrix asserts class membership together with the
+requirement that the assignment either fail to be a well-formed color assignment
+or leave some edge monochromatic. The solver then reasons about colorability
+rather than sampling it one counterexample at a time, so this route shares
+neither the coloring propagator nor its clause-learning loop with the procedure
+above. Calibrated first on the enumerated orders, where it returns unsatisfiable
+on every cell of the order-$15$ and order-$16$ windows, it reproduces
+unsatisfiable on all five nonempty cells of the order-$17$ window,
+$m = 46, \dots, 50$, in $45$ to $579$ seconds each. This is an independent
+reproduction of the verdict rather than a certificate: the quantified formula is
+refuted by a solver, and no machine-checkable proof object is extracted from it.
 
 \paragraph{Epistemic status.} Three caveats, stated plainly. First, the
 order-$17$ half of Theorem~\ref{thm:exhaustive} rests on unsatisfiability
@@ -793,7 +828,10 @@ coloring; and the minimality clauses are justified once and for all by the
 lexicographic-minimality theorem of~\cite{KirchwegerSzeider2021} rather than per
 run. A fully certified version therefore wants either that hybrid format or a
 reformulation as a $2$-QBF, $\exists G \forall c$, which is the natural shape of
-the question and which the solver also supports. Second, the two counting lemmas
+the question and which the solver also supports. We carried out that
+reformulation, and it reproduces the order-$17$ verdicts on every nonempty cell,
+but reproducing a verdict is not certifying it: extracting a checkable proof
+object from the quantified formula remains open. Second, the two counting lemmas
 behind the search-space reductions (Lemma~\ref{lem:maxdeg} and the
 cherry-budget inequality) are elementary, formalization-ready double-counting
 arguments, but they have not yet been machine-verified in a proof assistant.

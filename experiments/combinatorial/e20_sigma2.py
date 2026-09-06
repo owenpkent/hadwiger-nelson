@@ -354,6 +354,26 @@ def decide_cell(n, m, chi=6, gallai=False, split=None, connected=True,
     if resume and done.exists():
         cached = json.loads(done.read_text())
         if cached.get("result") in (SAT, UNSAT):
+            # A cached cell must still be able to acquire a control it never ran.
+            # Returning here unconditionally is what let `--sweep --probe` report
+            # a full sweep in which not one probe executed: every cell printed
+            # "[cached]" and the probe block below was never reached, so the
+            # non-vacuity control was claimed and absent at the same time. Do the
+            # missing work and backfill the cache, rather than silently skipping.
+            if (probe and cached["result"] == UNSAT and k4free and codeg2
+                    and "nonvacuity" not in cached):
+                cached["nonvacuity"] = probe_cell(n, m, connected=connected,
+                                                  timeout=timeout)
+                done.write_text(json.dumps(cached, indent=2))
+                if not quiet:
+                    nv_ = cached["nonvacuity"]
+                    print(f"n={n} m={m} chi>={chi}: {cached['result']} [cached] "
+                          f"+ non-vacuity: cell "
+                          f"{'NONEMPTY' if nv_['nonempty'] else 'EMPTY'} "
+                          f"({nv_['result']}, {nv_['elapsed_s']}s"
+                          f"{', witness ' + nv_['witness'] if nv_.get('witness') else ''})",
+                          flush=True)
+                return cached
             if not quiet:
                 print(f"n={n} m={m} chi>={chi}"
                       f"{' split=' + split if split else ''}: {cached['result']} "
