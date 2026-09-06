@@ -15,8 +15,10 @@ system, since April 2025) uses the shipped `main.bbl` if present, and otherwise
 auto-detects and runs a bib-compiler (bibtex/biber). Shipping the compiled `.bbl`
 is the safe, recommended practice (and is strictly required for non-standard bib
 processors); the `.bbl` basename must match the main `.tex`. The bundle was
-validated to compile standalone with `pdflatex` alone (no bibtex): **12 pages,
+validated to compile standalone with `pdflatex` alone (no bibtex): **15 pages,
 zero undefined references or citations.** Upload the tarball as-is.
+Bundle regenerated 2026-09-05 from the current `main.tex` (the n <= 17 amendment
+of 2026-08-11); the previous tarball predated it and still proved order >= 17.
 Source: https://info.arxiv.org/help/submit_tex.html (verified 2026-07-23).
 
 To regenerate the tarball after any edit to the paper:
@@ -81,7 +83,7 @@ Owen P. Kent
 
 **MSC class:** 05C15, 52C10 (optionally 05C10)
 
-**Comments:** `12 pages`
+**Comments:** `15 pages`
 
 **Abstract** (plain text; arXiv accepts inline `$...$`):
 ```
@@ -109,12 +111,18 @@ combined with the Kostochka-Yancey lower bound for 6-critical graphs and the
 vertex Folkman number $F_v(2,2,2,2,2;4) = 16$, this excludes every small dense
 Folkman-type host. The missing object must lie in the class of graphs that are
 simultaneously $K_4$-free and $K_{2,3}$-free. For that class we prove an
-exhaustive negative: a custom-pruned geng enumeration over the full edge window
-between the Kostochka-Yancey floor and the codegree ceiling shows that the class
-contains no member with chromatic number at least 6 on at most 16 vertices (all
-11,315 candidates in the order-16 window are 5-colorable), so the smallest such
-graph, if one exists, has at least 17 vertices; density heuristics place it
-closer to order 26 or beyond. We claim no new bound on $\chi(\mathbb{R}^2)$.
+exhaustive negative: over the full edge window between the Kostochka-Yancey
+floor and the codegree ceiling, the class contains no member with chromatic
+number at least 6 on at most 17 vertices, so the smallest such graph, if one
+exists, has at least 18 vertices; density heuristics place it closer to order 26
+or beyond. Through order 16 this is a custom-pruned geng enumeration, confirmed
+graph-for-graph by an independent second enumerator (all 11,315 candidates in
+the order-16 window are 5-colorable). At order 17, where enumeration costs more
+than 80 core-days, we instead decide the question without enumerating: a
+chromatic-number propagator inside a symmetry-breaking SAT solver turns the
+two-quantifier question into a single unsatisfiability proof per edge window
+cell, and the order-17 window closes in under one core-hour. We claim no new
+bound on $\chi(\mathbb{R}^2)$.
 ```
 
 **License:** choose at submission. Owen's call. Full current option set
