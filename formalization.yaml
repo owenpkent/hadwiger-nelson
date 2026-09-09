@@ -1,0 +1,119 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+
+# formalization.yaml (v0.4): repo-root metadata for formalization projects.
+# Scope note: this file describes ONLY the Lean artifact under lean/.
+# The combinatorial/SAT, spectral, and LP tracks are not formalized and are
+# tracked in experiments/LEARNINGS.md under the separate L-number ledger.
+version: "v0.4"
+
+project:
+  name: "hadwiger-nelson"
+  description: >-
+    Lean 4 formalization supporting a research program on the chromatic number
+    of the plane. Establishes chi(R^2) >= 4 via the Moser spindle, and proves
+    the structural reductions (covering lemma, list-coloring reformulation,
+    triple-coupling lift, and the chi >= 5 bridge theorem) that would convert a
+    suitable finite unit-distance graph into a lower bound.
+  authors:
+    - "Owen Kent"
+  license: "see repository"
+
+classification:
+  msc2020:
+    - "05C15"   # coloring of graphs and hypergraphs
+    - "05C10"   # planar graphs, geometric and topological aspects
+    - "52C10"   # erdos problems and related topics of discrete geometry
+
+status:
+  scope: >-
+    Partial. One unconditional numeric bound (chi >= 4) plus four conditional
+    reductions. The headline open target, an unconditional chi >= 5, is NOT
+    formalized: it is reduced to supplying one non-4-colorable unit-distance
+    graph together with an embedding, both scoped as future work in
+    lean/SHOT4_PLAN.md.
+  sorry_count: 0
+  sorry_in_definitions: 0
+
+  # Trust base is NOT uniform across this project. Read the axioms field on
+  # each result below rather than assuming the standard three.
+  main_results:
+    - description: >-
+        HN-2d. The chromatic number of the plane is at least 4, transferred
+        from the Moser spindle by an explicit unit-distance homomorphism.
+      declaration: "HadwigerNelson.four_le_chromaticNumberOfPlane"
+      file: "lean/HadwigerNelson/MoserBridge.lean"
+      sorry_count: 0
+      axioms:
+        - "propext"
+        - "Classical.choice"
+        - "Quot.sound"
+        - "Lean.ofReduceBool"
+      note: >-
+        Depends on HN-2b (moserSpindle_not_colorable_three), which is proved by
+        native_decide over the 3^7 = 2187 candidate colorings. That trusts the
+        compiled decision procedure as a separate oracle, so this result has a
+        strictly larger trust base than the rest of the project. Replacing it
+        with a kernel-checkable decide, or with a checked certificate, would
+        bring it down to the standard three. See lean/VERIFICATION.md.
+
+    - description: >-
+        HN-L21. Covering lemma. A two-halves-plus-bridges graph is 4-colorable
+        iff the halves admit colorings that disagree on every bridge; the
+        contrapositive gives the chi >= 5 form.
+      declaration: "HadwigerNelson.bridgeGraph_five_chromatic_of_covering"
+      file: "lean/HadwigerNelson/L21CoveringLemma.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+    - description: >-
+        HN-L22. List-coloring reformulation of L21, proved equivalent to it.
+      declaration: "HadwigerNelson.L21_iff_L22"
+      file: "lean/HadwigerNelson/L22ListColoring.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+    - description: >-
+        HN-L24. Triple-coupling lift. The nested three-halves bridge graph
+        fails 5-colorability iff every 5-coloring of the first half leaves a
+        residual pair graph that is not list-colorable from the induced lists.
+        Structural: no concrete instance is discharged.
+      declaration: "HadwigerNelson.Triple.tripleGraph_six_chromatic_of_universal_residual_uncolorable"
+      file: "lean/HadwigerNelson/L24TripleCoupling.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+    - description: >-
+        HN-4. The chi >= 5 bridge theorem. A graph with a homomorphism into the
+        plane unit-distance graph that is not 4-colorable yields chi(R^2) >= 5.
+        A REDUCTION, not a proof of chi >= 5: no such graph is supplied here.
+      declaration: "HadwigerNelson.five_le_chromaticNumberOfPlane_of_hom"
+      file: "lean/HadwigerNelson/DeGreyLowerBound.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+  known_gaps:
+    - "No unconditional chi >= 5. HN-4 needs a non-4-colorable embeddable unit-distance graph, i.e. an LRAT-checked certificate plus a >500-point embedding."
+    - "HN-2d trusts native_decide (Lean.ofReduceBool)."
+    - "lean/HadwigerNelson/MoserBridge.lean sets maxHeartbeats 1000000 for one 49-case dispatch lemma."
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/HadwigerNelson.lean"
+    relationship: "related"
+    note: >-
+      Formal Conjectures carries a third-party statement of the Hadwiger-Nelson
+      problem, plus FormalConjecturesForMathlib/Combinatorics/SimpleGraph/
+      UnitDistancePlaneGraph.lean. Not yet diffed against this project's own
+      planeUnitDistanceGraph. Stating results against the upstream definition
+      would give the independence guarantee that a self-authored statement
+      cannot. Tracked in lean/VERIFICATION.md.
+
+automation:
+  methods:
+    - method: "agent"
+      note: >-
+        AI-assisted under human direction throughout, per CLAUDE.md and
+        prompts/. Specific models and division of labour are not tracked
+        per-declaration.
+
+review:
+  status: "self-assessed"
